@@ -204,6 +204,32 @@ async function loadLocalRegistry(rootDir: string, source: RegistrySource): Promi
   };
 }
 
+/**
+ * Cache writes are best-effort: a read-only container filesystem or a full
+ * disk must not fail a successful registry fetch.
+ */
+async function cacheRegistryResponse({
+  cacheDir,
+  cacheFile,
+  etagFile,
+  text,
+  etag,
+}: {
+  cacheDir: string;
+  cacheFile: string;
+  etagFile: string;
+  text: string;
+  etag: string | null;
+}): Promise<void> {
+  try {
+    await mkdir(cacheDir, { recursive: true, mode: 0o700 });
+    await writeFile(cacheFile, text, { mode: 0o600 });
+    if (etag) await writeFile(etagFile, etag, { mode: 0o600 });
+  } catch {
+    // Serve the fresh registry from memory; caching is an optimization.
+  }
+}
+
 async function loadRemoteRegistry(
   url: string,
   cacheDir: string,
@@ -246,10 +272,13 @@ async function loadRemoteRegistry(
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const text = await response.text();
       const registry = validateRegistry(JSON.parse(text), url);
-      await mkdir(cacheDir, { recursive: true, mode: 0o700 });
-      await writeFile(cacheFile, text, { mode: 0o600 });
-      const nextEtag = response.headers.get("etag");
-      if (nextEtag) await writeFile(etagFile, nextEtag, { mode: 0o600 });
+      await cacheRegistryResponse({
+        cacheDir,
+        cacheFile,
+        etagFile,
+        text,
+        etag: response.headers.get("etag"),
+      });
       return {
         registry,
         source: "remote",

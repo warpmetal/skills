@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createServer, type Server } from "node:http";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, normalize, resolve } from "node:path";
 import test from "node:test";
@@ -111,6 +111,28 @@ test("cached manifest is served stale when the catalog is unreachable", async ()
   } finally {
     await closeServer(staticServer.server).catch(() => undefined);
     await rm(cache, { recursive: true, force: true });
+    await fixture.cleanup();
+  }
+});
+
+test("a failed cache write does not fail a successful fetch", async () => {
+  const fixture = await makeRegistryFixture();
+  const cacheRoot = await mkdtemp(join(tmpdir(), "skills-mcp-cachefile-"));
+  const occupied = join(cacheRoot, "not-a-directory");
+  await writeFile(occupied, "occupied", "utf8");
+  const staticServer = await startStaticServer(fixture.dir);
+  try {
+    const loaded = await loadRegistry({
+      registry: `${staticServer.url}/registry.json`,
+      cacheDir: occupied,
+    });
+    assert.equal(loaded.source, "remote");
+    assert.equal(loaded.stale, false);
+    const skill = await readSkillFile(loaded, "demo");
+    assert.match(skill.text, /# Demo/);
+  } finally {
+    await closeServer(staticServer.server);
+    await rm(cacheRoot, { recursive: true, force: true });
     await fixture.cleanup();
   }
 });
