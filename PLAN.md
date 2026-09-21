@@ -2,7 +2,7 @@
 
 Status: planning complete; implementation ready to execute from a build agent.
 Revision: 2026-09-21, revision 2 (adds repo bootstrap, Docker, CI/CD).
-Companion plan: `coding-env-skill-plan.md` (the `coding-env` skill and `warpmetal env` CLI).
+Companion plan: [`docs/coding-env-skill-plan.md`](docs/coding-env-skill-plan.md) (the `coding-env` skill and `warpmetal env` CLI).
 Workstream: new repository `warpmetal/skills` plus generated channels consumed by agent-kit.
 
 ## 1. Context
@@ -287,7 +287,38 @@ attestations), `packages: write` (GHCR), and `pages: write` for the catalog depl
 OIDC trusted publishing so no long-lived `NPM_TOKEN` exists; if unavailable in P0, use a scoped
 automation token stored as a repository secret.
 
-## 15. Open items
+## 15. Delivery status (2026-09-21)
+
+Completed in this repository:
+
+- [x] Repository bootstrap: public `warpmetal/skills`, `PLAN.md`, README, CONTRIBUTING, SECURITY,
+      LICENSE (UNLICENSED), CODEOWNERS, CI workflows.
+- [x] Registry v1: `registry.json` + `registry.schema.json`, per-file sha256, `warpmetal` skill
+      migrated with recorded checksums.
+- [x] Generated channels: `.omp-plugin/` and `.claude-plugin/` marketplaces, `.agents/plugins/`
+      Codex catalog, `plugins/warpmetal/` plugin, `catalog/` OpenCode catalog, MCP snapshot.
+- [x] `@warpmetal/skills-mcp`: `skill_list`, `skill_search`, `skill_read`, `skill://` resources,
+      checksum verification on read, path/size guards, stdio + Streamable HTTP, remote
+      `--registry`/`--tag` with ETag cache and offline fallback.
+- [x] Docker: multi-stage non-root image (node:22-alpine); local build, `--version`, `/healthz`,
+      and `/readyz` smoke tests pass.
+- [x] CI/CD: `verify.yml` (schema, checksums, drift, secret scan, tests, Docker smoke) and
+      `release.yml` (npm provenance, multi-arch GHCR image, Pages catalog, GitHub release).
+- [x] DeepSeek Harness channel: skills roots and `dsh-mcp-client` snippet documented, `dsh` and
+      `mcp` host metadata on the skill.
+- [x] 15 tests passing locally; green CI on pushes `c11dc49`, `fd4cd7b`, and `bfa70f3`.
+
+Pending, requires org access or later workstreams:
+
+- [ ] `@warpmetal` npm scope + trusted publishing; GitHub Pages enablement; branch protection
+      requiring `verify`; CODEOWNERS team handle.
+- [ ] Live host validation on real installs: omp, Claude Code, Codex, OpenCode, DeepSeek Harness.
+- [ ] First `v*` tag to exercise the release pipeline end to end.
+- [ ] `coding-env` skill content lands in `skills/` when the `warpmetal env` CLI ships
+      ([companion plan](docs/coding-env-skill-plan.md)); agent-kit pins a released registry tag.
+- [ ] Deferred: `@warpmetal/skills` npm snapshot package (agent-kit can pin the git tag meanwhile).
+
+## 16. Open items
 
 - Catalog host and URL scheme; whether to keep `raw.githubusercontent.com` as fallback.
 - Whether `@warpmetal/skills` snapshot is an npm package or a build artifact vendored into

@@ -95,10 +95,12 @@ Content rules are in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Status
 
-- Registry, channels, and the MCP server are bootstrapping in this repository.
-- The `coding-env` skill content arrives with its companion workstream
-  (`coding-env-skill-plan.md`); this repo owns its distribution once it lands.
-- Live validation against omp, Claude Code, Codex, and OpenCode is tracked in `PLAN.md` (P0).
+- Registry, channels, and the MCP server are implemented and verified; see the delivery status in
+  [`PLAN.md`](./PLAN.md#delivery-status-2026-09-21).
+- The `coding-env` skill content lands once the `warpmetal env` CLI ships; its plan is in
+  [`docs/coding-env-skill-plan.md`](./docs/coding-env-skill-plan.md).
+- Remaining before publishing: npm scope + trusted publishing, Pages enablement, branch protection,
+  and live host validation against omp, Claude Code, Codex, OpenCode, and DeepSeek Harness.
 
 ## License
 
