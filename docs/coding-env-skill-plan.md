@@ -241,7 +241,24 @@ writer. Negative tests: traversal, malformed vault, corrupt state, non-TTY setup
 apply. Secret-canary assertions on every artifact. No network in unit tests; live provider probes
 are manual/CI-gated with disposable credentials.
 
-## 13. Interfaces with `skills-mcp-plan.md`
+## 13. Interfaces with the registry plan
+
+### Skill resolution model (decided 2026-09-21)
+
+Two consumers, two transports, one manifest:
+
+- **Agents in a session** use `@warpmetal/skills-mcp` for discovery and reads. MCP is the right
+  protocol there because hosts manage server lifecycles and the model needs on-demand lookup.
+- **The `warpmetal` CLI** (`skill list/show/install/update`) reads the static registry directly:
+  `registry.json` plus files from the catalog URL, a pinned tag, or `--registry <path>`, with
+  checksum verification before writing. No MCP client dependency, deterministic installs, offline
+  from a path or cache, and package-manager-shaped behavior.
+- Both share `registry.json`, the checksum manifest, and the skill layout, so results cannot drift.
+  `skill search` matches the fields already in the manifest (name, tags, description, roles,
+  hosts) instead of depending on the server.
+
+A CLI MCP-client mode is justified only for private or authenticated registries, where a server
+acts as an adapter; it is not part of v1.
 
 - Skill content source is indirection-based: today `agent-kit/skills/<name>/`; after the companion
   migration, a generated snapshot of a pinned registry tag. CLI code must not care which.

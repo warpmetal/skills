@@ -241,6 +241,11 @@ publication, Pages catalog deployment, live host canaries, release notes.
   source; no behavior differences may be observable to users.
 - `warpmetal skill list/install/update` command semantics are frozen by the companion plan; the
   remote resolution is implemented here.
+- Resolution model: agents use this MCP server for discovery and reads; the `warpmetal` CLI reads
+  the static registry directly (`registry.json` + checksums from the catalog URL, a pinned tag, or
+  a local path) rather than acting as an MCP client. Both paths share the same manifest and skill
+  layout, so installed content and MCP reads cannot drift. A CLI MCP-client mode is only for
+  private/authenticated registries later.
 
 ## 14. Repo bootstrap, Docker, and CI/CD
 
