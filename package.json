@@ -1,0 +1,24 @@
+{
+  "name": "@warpmetal/skills-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "description": "WarpMetal skills registry tooling",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "npm run build:registry && npm run build:catalogs",
+    "build:registry": "node scripts/build-registry.mjs",
+    "build:catalogs": "node scripts/build-catalogs.mjs",
+    "verify": "node scripts/verify.mjs",
+    "test": "npm --prefix packages/skills-mcp test",
+    "check": "npm run build && npm run verify && npm test",
+    "pages": "node scripts/build-pages.mjs",
+    "docker:build": "docker build -t ghcr.io/warpmetal/skills-mcp:dev packages/skills-mcp"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1"
+  }
+}

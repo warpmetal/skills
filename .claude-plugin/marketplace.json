@@ -1,0 +1,28 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "warpmetal",
+  "owner": {
+    "name": "WarpMetal"
+  },
+  "metadata": {
+    "description": "WarpMetal Agent Skills: servers, sandboxes, and coding environments.",
+    "version": "0.0.0-dev",
+    "pluginRoot": "plugins"
+  },
+  "plugins": [
+    {
+      "name": "warpmetal",
+      "description": "WarpMetal skills for shell-capable agents.",
+      "source": "./plugins/warpmetal",
+      "homepage": "https://github.com/warpmetal/skills",
+      "repository": "https://github.com/warpmetal/skills",
+      "license": "UNLICENSED",
+      "category": "development",
+      "keywords": [
+        "warpmetal",
+        "agent-skills",
+        "vps"
+      ]
+    }
+  ]
+}

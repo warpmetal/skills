@@ -1,0 +1,43 @@
+{
+  "name": "@warpmetal/skills-mcp",
+  "version": "0.1.0",
+  "description": "Read-only MCP server for WarpMetal Agent Skills discovery",
+  "type": "module",
+  "license": "UNLICENSED",
+  "bin": {
+    "warpmetal-skills-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "snapshot/",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/warpmetal/skills.git"
+  },
+  "homepage": "https://github.com/warpmetal/skills#readme",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "test": "npm run build && node --import tsx --test test/*.test.ts",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}

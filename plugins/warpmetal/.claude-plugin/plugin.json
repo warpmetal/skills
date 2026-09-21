@@ -1,0 +1,16 @@
+{
+  "name": "warpmetal",
+  "description": "WarpMetal Agent Skills",
+  "version": "0.0.0-dev",
+  "author": {
+    "name": "WarpMetal"
+  },
+  "homepage": "https://github.com/warpmetal/skills",
+  "repository": "https://github.com/warpmetal/skills",
+  "license": "UNLICENSED",
+  "keywords": [
+    "warpmetal",
+    "agent-skills",
+    "vps"
+  ]
+}

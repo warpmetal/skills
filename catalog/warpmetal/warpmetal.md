@@ -1,0 +1,352 @@
+---
+name: warpmetal
+description: Safely purchase, renew, and manage WarpMetal VPS servers and Agent Runtime sandboxes with the official warpmetal CLI and x402api Agent Wallet. Use when a shell-capable agent needs live VPS discovery, hostname-based SSH identity creation, x402 payment or refill handling, bounded autonomous renewal, human lifecycle notifications, ordering, provisioning, server management, optional runtime installation, sandbox creation, per-agent SSH access, revocation, or deletion.
+---
+
+# WarpMetal
+
+Use the `warpmetal` CLI as the executable interface. Do not reconstruct its
+credential, idempotency, exact-body retry, SSH signing, or polling behavior
+with ad hoc HTTP commands.
+
+## Start safely
+
+1. Run `warpmetal --version` and require version `0.8.1` or newer for this
+   plugin. If it is missing or older, explain the compatibility requirement,
+   ask before installing or upgrading software, and use only the official npm
+   package from `https://www.npmjs.com/package/warpmetal`.
+2. Use `--json` for every agent-driven command.
+3. Read [references/safety.md](references/safety.md) before preparing an order,
+   authorizing payment, using an SSH identity, or changing a server.
+4. Read [references/cli-reference.md](references/cli-reference.md) when choosing
+   a command or interpreting an exit code.
+5. Read [references/payments.md](references/payments.md) before creating or
+   funding a wallet, authorizing payment, or resolving an ambiguous attempt.
+6. Read [references/runtime.md](references/runtime.md) before requesting,
+   installing, accessing, expiring, or deleting Agent Runtime sandboxes.
+7. Read [references/renewals.md](references/renewals.md) before configuring or
+   executing an autonomous renewal or requesting a wallet refill.
+
+Never read, print, summarize, upload, or commit the WarpMetal state file,
+x402api keystore, password file, payment request envelope, or payment artifact.
+Never read an SSH private-key file. Pass private paths only to commands designed
+to use them. Never request or handle a wallet seed phrase or private key.
+
+WarpMetal provisions and reloads servers with key-only OpenSSH access. Password
+and keyboard-interactive login are disabled, including for root. Never request,
+store, invent, or expect a VPS login password; use the submitted public key and
+its matching private-key path.
+
+## Discover before acting
+
+Run:
+
+```sh
+warpmetal health --json
+warpmetal catalog --json
+```
+
+Stop the current purchase if `purchasingReady` is false. In unattended
+scheduling, recheck after 60 seconds, then double the delay after each failed
+check up to 15 minutes and honor a longer `Retry-After`; never hot-loop. In an
+interactive conversation, report the unavailable state and stop. Select
+`planId` and the exact OS `name` from the live catalog. Do not reuse an OS name
+or price from documentation or a previous session.
+
+## Prepare an order
+
+Confirm the intended plan, exact OS, and actual hostname. In a live human
+conversation, ask before generating a new SSH key pair. In an unattended run,
+generate a dedicated identity only when the automation policy permits creating
+local credentials. Use the actual hostname as the readable key name; the CLI
+adds `warpmetal-` and a short suffix only when a file already exists.
+
+```sh
+warpmetal order prepare \
+  --plan <planId> \
+  --hostname <hostname> \
+  --os '<exact live OS name>' \
+  --generate-ssh-key \
+  --json
+```
+
+Use `--ssh-public-key-file <public-key-path>` instead only when a suitable key
+was explicitly selected. Never run raw `ssh-keygen` for the VPS owner identity.
+The CLI creates and binds `serverId -> key name -> fingerprint -> local paths`.
+Inspect the safe mapping with `warpmetal server identity --server <serverId>
+--json`; do not open the state file.
+
+The CLI saves the generated recovery credential privately and does not print
+it. Preserve the reported task and server IDs in the conversation, but do not
+open the state file to retrieve the credential.
+
+## Authorize payment
+
+Run `warpmetal checkout challenge --task <taskId> --json`. The CLI validates
+the live x402 terms, writes an owner-only credential-free request envelope, and
+returns `paymentTerms` plus exact `paymentWorkflow.authorize.argv` and
+`paymentWorkflow.submit.argv` arrays. Do not reconstruct those commands or
+open either file.
+
+In an interactive initial purchase, the result may also contain
+`humanCheckout`. Offer it as an alternative to the local agent wallet. Show
+`humanCheckout.url` as clickable x402api text. If another-device acquisition
+is useful, render only the identical `humanCheckout.qrPayload` URL as a QR and
+explain that scanning opens the hosted checkout without authorizing payment.
+x402api owns any wallet selection and wallet-specific opening QR inside that
+page; never synthesize a wallet link or render the recipient address as this
+QR. The URL is an expiring bearer capability, so do not log, save, or send it
+anywhere except to the buyer who requested this purchase. If the buyer uses it,
+do not authorize or submit through the agent wallet. Run the
+exact `humanCheckout.afterPayment.argv` command, wait for the server to become
+ready, then follow `ask_human_for_notification_email`: ask the owner for the
+optional lifecycle-notification address and add only the address they provide.
+Ignore this path in unattended purchasing and renewal automation.
+
+Determine payment authority from the current execution context. In an
+interactive conversation, show the human the exact amount, asset, network,
+recipient, profile, and maximum authorization lifetime from `paymentTerms`,
+then obtain confirmation immediately before signing and submission. In an
+unattended autonomous run, do not wait for conversational approval: treat the
+dedicated wallet's available token balance as standing spend authority, bounded
+by its maximum-payment policy and any task or operator limits. Proceed only
+when the exact live terms fit those limits.
+
+Follow [references/payments.md](references/payments.md) to install the exact
+`paymentWorkflow.signerPackage.spec`, verify the V1 machine contract, install
+its matching `x402api-pay` skill, and invoke the returned wallet sequence:
+`wallet setup`, `wallet list`, network-specific `wallet create` only if needed,
+then the exact address, asset-balance, and funding commands. `wallet setup`
+owns the managed unlock file; `X402API_WALLET_PASSWORD_FILE` is only an
+optional x402api override and is never a WarpMetal input. Require
+`agentWalletSupported: true`,
+`sponsoredNetworkFee: true`, and `buyerNativeFeeRequired: false` on the chosen
+live term. Never fall back to a historical buyer-funded or TRON profile.
+Honor an explicit task or operator network and asset preference. Otherwise use
+a compatible sufficiently funded wallet, then the first compatible term in the
+live challenge's order. Never switch terms after authorization. Require the
+wallet's `maximumPaymentAtomic` to cover the live amount without exceeding the
+task or operator limit.
+
+After interactive confirmation or autonomous policy validation, invoke the
+returned authorize argv once. The separate
+`x402api` executable owns the wallet, validates the envelope, and writes the
+payment artifact. The returned `challengeHandle` is opaque merchant
+reconciliation metadata; never copy it into the request envelope or treat it as
+the buyer payment identifier. Then invoke the returned submit argv, equivalent to:
+
+```sh
+warpmetal checkout submit \
+  --task <taskId> \
+  --payment-artifact <owner-only-artifact-path> \
+  --wait \
+  --json
+```
+
+Do not use `x402api pay`, `x402api payment submit`, or `x402api payment
+reconcile` for this checkout. Those commands submit credential-free requests,
+but WarpMetal must add its private owner token locally.
+
+WarpMetal verifies that the artifact matches the exact saved request and an
+advertised sponsored requirement, gas reservation, resource, extensions, and
+buyer payment identifier before sending its signature. The legacy
+`--payment-signature-file` input remains available for another compatible
+external signer. If a signed request returns `payment_rejected`, preserve its
+safe `errorCode` and `requestId` diagnostics and inspect `replacementAllowed`.
+When it is true, run the unsigned challenge flow again and re-evaluate payment
+authority before creating the one permitted replacement authorization. When it
+is false or absent, stop without signing again. On `manual_review` or an
+ambiguous attempt, stop and never create another payment.
+
+WarpMetal continues read-only backend reconciliation for
+`manual_review/stale_payment_outcome`; this is not a client bypass. Re-read the
+task on a later autonomous cycle. Only when it becomes `expired` with
+`failure.code` equal to `payment_expired_unsettled`, `paidAt` null, and
+`retrySafe` true has WarpMetal proved that the prior charge expired unpaid. An
+autonomous workflow may then prepare a new order if the original intent and
+standing authority still apply. Never reuse the old signature or infer safety
+from wallet balance, timeout, `paidAt`, `expired`, or `manual_review` alone.
+
+## Renew autonomously within policy
+
+Configure a bounded server policy before unattended renewal. Require a
+per-payment ceiling and either a maximum renewal count or `renewThrough`; use a
+cumulative ceiling when required by the operator. Bind a local Agent Wallet
+whose network and asset exactly match the policy. See
+[references/renewals.md](references/renewals.md) for commands and the complete
+state machine.
+
+In a live human conversation, disclose the exact renewal terms before signing.
+In an unattended run, do not seek conversational approval when the policy,
+wallet ceiling, exact live challenge, and balance all permit payment. Stop on a
+price, asset, network, count, horizon, or total-budget mismatch.
+
+Run `warpmetal renewal prepare --server <serverId> --json`, then invoke only
+the returned `paymentWorkflow.authorize.argv` and
+`paymentWorkflow.submit.argv`. If authorization reports insufficient balance,
+use `paymentWorkflow.fundingWorkflow` to obtain the public address and balance,
+then show the address as both a QR code and copyable text. Only when
+`refillNotification.available` is true, set the returned
+`refillWorkflow.environment`, invoke its exact argv once, and stop until
+funding arrives. The signed refill intent resolves server-side to the active
+SSH-authorized human recipients;
+never add an email address to it. Never make a partial payment.
+
+After funding, prepare again, authorize exactly once, submit with WarpMetal,
+and require `confirmed: true` before accepting the returned `termEndsAt`.
+Stop payment submission at confirmation even when `finalized` is false. On `reconcile_pending` or
+`manual_review`, do not create another authorization.
+
+## Provision and manage
+
+Poll a prepared or paid order with:
+
+```sh
+warpmetal order status --task <taskId> --wait --json
+```
+
+When the ready response contains
+`nextAction.action: ask_human_for_notification_email`, ask the human whether
+they want renewal and lifecycle notices. If yes, add the supplied address with
+`warpmetal notifications add --server <serverId> --email <address> --json`.
+The server credential is the authorization; there is no email verification
+step. The address receives a branded advisory and can remove itself without
+affecting other recipients. If the human declines, run the returned
+`notifications disable` command so future status checks do not ask again.
+
+`manual_review` remains terminal for payment and mutation attempts. A later
+read-only status check may observe the backend's authoritative reconciliation;
+prepare a replacement only for the exact `retrySafe: true` result described
+above.
+
+After initial provisioning and every OS reload, WarpMetal reapplies the same
+key-only policy: `PasswordAuthentication no`,
+`KbdInteractiveAuthentication no`, `PermitRootLogin prohibit-password`, and
+`AuthenticationMethods publickey`.
+
+The WarpMetal owner SSH account is `root` on every supported image. SSH public
+keys do not bind a login username. Use `root@<server-ip>` for an owner shell and
+pass `--ssh-user root` whenever a CLI command asks for the owner SSH account;
+never infer `ubuntu` or another distribution-default username. This does not
+apply to `sandbox connect`, which uses the gateway username from its connection
+profile.
+
+For routine management, prove possession of the installed SSH key without
+reading it:
+
+```sh
+warpmetal server login --server <serverId> --json
+warpmetal server get --server <serverId> --json
+```
+
+For power changes, state the intended effect and obtain explicit approval,
+then pass the same action as the confirmation:
+
+```sh
+warpmetal server power \
+  --server <serverId> \
+  --action reboot \
+  --confirm reboot \
+  --wait \
+  --json
+```
+
+For a destructive reload, explain that every server-disk file is erased and
+obtain explicit approval. If Agent Runtime is enabled, also explain that every
+sandbox workspace is lost, desired sandboxes return as empty workspaces after
+automatic Runtime setup, and pinned profiles must be refreshed. Then use only
+the guarded command:
+
+```sh
+warpmetal server reload \
+  --server <serverId> \
+  --confirm ERASE \
+  --power-off-first \
+  [--acknowledge-agent-runtime-reset] \
+  [--os '<exact-live-os-name>'] \
+  --wait \
+  --json
+```
+
+The CLI requires the recovery owner credential so it can keep polling after
+reload revokes SSH-derived access tokens. CLI 0.8.8 records a new SSH trust
+epoch only when that exact local reload operation succeeds and reports that the
+owner host key needs refresh. Failed or ambiguous reloads retain the prior pin;
+never bypass a mismatch or delete a pin to force a retry. A provider-console
+pre-seed is the optional higher-assurance path.
+
+After a successful Runtime-enabled reload, WarpMetal performs signed Runtime
+setup automatically. Do not run a separate installation command. Wait with
+`warpmetal runtime get --server <serverId> --wait --json`, then wait for grants
+to become `applied` and refresh every connection profile with
+`sandbox access refresh --confirm REFRESH` before connecting. The successful
+operation created a new owner host-trust epoch, so verify the replacement host
+key before owner SSH. Do not fall back to raw API calls for deletion,
+networking, or another unsupported mutation.
+
+## Use Agent Runtime
+
+Agent Runtime is optional and shares one owner's VPS only among that owner's
+agents. Discover live `agentRuntime` capacity and OS support before choosing
+sizes. Use `--runtime-file` to include sandbox intent in an unpaid order, or
+`warpmetal runtime enable` after the VPS is ready. Supervisor installation is
+separate and requires approval plus `--confirm INSTALL` for initial setup or
+explicit repair; Runtime-enabled OS reloads use automatic signed cloud-init.
+
+With CLI 0.8.8, that confirmation also authorizes managed trust on first use
+when the exact server trust epoch has no pin. The CLI performs only an owner-
+key-authenticated `ssh true`, pins the first observed Ed25519 key, immediately
+reconnects strictly before requesting bootstrap. Later connections
+must match. Explain that TOFU cannot detect an active attacker on the first
+connection; never use `ssh-keyscan`, accept a mismatch, or expose a generic pin
+reset.
+
+Omitted lifetime means persistent. A temporary sandbox requires
+`--confirm TEMPORARY`, expires 15 minutes to 24 hours after first reaching
+running, and permanently deletes its workspace at expiry. Never describe a
+pending HTTP 202 response as applied; poll runtime, sandbox, and grant state.
+
+Every agent must use a distinct sandbox-specific SSH key. Ask before key
+generation, create one access grant for one sandbox, wait for `applied` plus
+pinned host keys, then connect only through `warpmetal sandbox connect`.
+Never give an agent the owner host key, owner token, SSH-derived management
+token, runtime bootstrap, or node token.
+
+CLI 0.8.10 or newer can turn the already-applied token-free profile into a
+standard concrete OpenSSH alias. Read [references/runtime.md](references/runtime.md)
+before installing one. Use a separate keypair and grant for each sandbox, and
+pass the sandbox identity—not the VPS owner management key:
+
+```sh
+warpmetal sandbox access install-ssh \
+  --connection-file <profile-path> \
+  --identity <sandbox-private-key-path> \
+  --alias <alias> --json
+ssh <alias>
+```
+
+The local alias preserves the forced gateway: it cannot open a host shell and
+does not relax forwarding denial. Provider authentication and credentials stay
+inside the sandbox. Install and authenticate Codex, Claude Code, Cursor CLI, or
+Gemini CLI inside the sandbox; use the entry points and compatibility guidance
+in [references/runtime.md](references/runtime.md). After an authenticated
+profile refresh, update the alias only with the explicit second confirmation:
+
+```sh
+warpmetal sandbox access refresh \
+  --server <serverId> --sandbox <sandboxId> --grant <grantId> \
+  --connection-file <profile-path> --confirm REFRESH --wait --json
+warpmetal sandbox access install-ssh \
+  --connection-file <profile-path> \
+  --identity <sandbox-private-key-path> \
+  --alias <alias> --confirm REFRESH --json
+```
+
+Remove it only with
+`warpmetal sandbox access remove-ssh --alias <alias> --confirm REMOVE --json`.
+Do not edit the generated fragment or host pin manually.
+
+If the installed CLI lacks a required runtime command, stop, explain the
+version limitation, and ask before upgrading the official npm package. Do not
+reconstruct runtime changes with raw HTTP, ad hoc SSH, Podman, Docker, or host
+configuration commands.

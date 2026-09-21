@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "registryVersion": "0.0.0-dev",
+  "skills": [
+    {
+      "name": "warpmetal",
+      "version": "0.8.12",
+      "description": "Safely purchase, renew, and manage WarpMetal VPS servers and Agent Runtime sandboxes with the official warpmetal CLI and x402api Agent Wallet. Use when a shell-capable agent needs live VPS discovery, hostname-based SSH identity creation, x402 payment or refill handling, bounded autonomous renewal, human lifecycle notifications, ordering, provisioning, server management, optional runtime installation, sandbox creation, per-agent SSH access, revocation, or deletion.",
+      "path": "skills/warpmetal",
+      "roles": [
+        "operator"
+      ],
+      "hosts": [
+        "codex",
+        "claude",
+        "opencode",
+        "cursor",
+        "agents"
+      ],
+      "minimumWarpmetalCli": "0.8.1",
+      "tags": [
+        "warpmetal",
+        "vps",
+        "sandbox",
+        "ssh",
+        "x402",
+        "renewal"
+      ],
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "04a2f96412f4b520e147195dccf305bed9eff15d4597cb57bfe977076dc7ab6b"
+        },
+        {
+          "path": "references/cli-reference.md",
+          "sha256": "c91a2d85bdc806736281812200886c8b63f68681cfbb3f098b9abc03987525b3"
+        },
+        {
+          "path": "references/payments.md",
+          "sha256": "1273fbb9b4f7399c706ea9feed35a927112aec4446c7385e52d4d42e15a6ea77"
+        },
+        {
+          "path": "references/renewals.md",
+          "sha256": "90ac5430c65f1228a33f6b59d363ad5eeb46aedb68c7387f0dc025cca13b736f"
+        },
+        {
+          "path": "references/runtime.md",
+          "sha256": "db5eaa7c583b3122735f1fddbe4522151e0d7db4ace1caa5a850d082fa558c06"
+        },
+        {
+          "path": "references/safety.md",
+          "sha256": "09ea01bf45f8664a330d306d99e5fb9858f63e92fa4bacc42a02762a62c3d570"
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "6089077ee2119dc356d4499b6e9590e8ee8f08ebc4ee82b206d82183902e4d83"
+        }
+      ]
+    }
+  ]
+}

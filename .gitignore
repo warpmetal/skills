@@ -1,0 +1,7 @@
+node_modules/
+dist/
+coverage/
+public/
+packages/skills-mcp/snapshot/
+.DS_Store
+*.log

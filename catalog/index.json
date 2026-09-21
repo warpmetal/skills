@@ -1,0 +1,17 @@
+{
+  "skills": [
+    {
+      "name": "warpmetal",
+      "version": "0.8.12",
+      "files": [
+        "agents/openai.yaml",
+        "references/cli-reference.md",
+        "references/payments.md",
+        "references/renewals.md",
+        "references/runtime.md",
+        "references/safety.md",
+        "warpmetal.md"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+name: verify
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            packages/skills-mcp/package-lock.json
+
+      - name: Install registry tooling
+        run: npm ci
+
+      - name: Install MCP server
+        run: npm ci --prefix packages/skills-mcp
+
+      - name: Build registry and channels
+        run: npm run build
+
+      - name: Verify schema, checksums, catalogs, and secrets
+        run: npm run verify
+
+      - name: Test MCP server
+        run: npm test
+
+      - name: Drift check
+        run: git diff --exit-code
+
+      - name: Docker smoke test
+        run: |
+          docker build -t skills-mcp:ci packages/skills-mcp
+          docker run --rm skills-mcp:ci --version
+          docker run -d --name skills-mcp -p 8080:8080 skills-mcp:ci --http --port 8080
+          for attempt in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:8080/healthz > /dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8080/readyz
+          docker rm -f skills-mcp
