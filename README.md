@@ -56,6 +56,41 @@ npm --prefix packages/skills-mcp run build
 Catalog URL scheme: `https://skills.warpmetal.com/<tag>/...`, with a `latest/` alias. Releases are
 immutable; installs should pin a tag.
 
+## Using it without publishing
+
+Nothing in this repository requires a release to be useful; a public clone is enough.
+
+- **Agent Skills hosts** (omp, OpenCode, Codex, Cursor, DeepSeek Harness): install straight from git
+  with `omp plugin marketplace add warpmetal/skills`, or copy/link `skills/<name>` into
+  `~/.agents/skills/`.
+- **MCP hosts**: build once and point the host at the local entry with the repository registry:
+
+  ```sh
+  npm ci --prefix packages/skills-mcp
+  npm --prefix packages/skills-mcp run build
+  ```
+
+  ```json
+  {
+    "mcpServers": {
+      "warpmetal-skills": {
+        "command": "node",
+        "args": [
+          "/path/to/skills/packages/skills-mcp/dist/index.js",
+          "--registry",
+          "/path/to/skills"
+        ]
+      }
+    }
+  }
+  ```
+
+- **Docker without GHCR**: `docker build -t skills-mcp packages/skills-mcp`, then run it with a
+  checkout mounted read-only and `--registry /registry`.
+
+Publishing (npm, GHCR, GitHub Pages) only matters when someone who does not clone this repository
+needs a one-line install (`npx @warpmetal/skills-mcp`), a container image, or a hosted catalog URL.
+
 ## DeepSeek Harness, local, and open-source agents
 
 DeepSeek Harness (`dsh`) reads Agent Skills natively: `<projectRoot>/.dsh/skills`,

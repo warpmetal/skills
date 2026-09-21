@@ -33,6 +33,16 @@ docker run --rm -p 8080:8080 ghcr.io/warpmetal/skills-mcp:latest --http
 curl -fsS http://127.0.0.1:8080/readyz
 ```
 
+Without publishing, run the same server from a checkout:
+
+```sh
+npm ci && npm run build
+node dist/index.js --registry /path/to/skills
+```
+
+and point any host config at `node /path/to/skills/packages/skills-mcp/dist/index.js --registry
+/path/to/skills`. The GHCR image is a convenience, not a requirement.
+
 ## Tools
 
 | Tool | Purpose |
