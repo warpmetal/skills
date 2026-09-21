@@ -281,8 +281,14 @@ export async function loadRegistry(options: LoadOptions = {}): Promise<LoadedReg
     }
     return loadLocalRegistry(resolve(registry), "local");
   }
-  if (options.tag) {
-    return loadRemoteRegistry(registryUrlForTag(options.tag), cacheDir, options.offline === true, bundled);
-  }
-  return bundled();
+
+  // Dynamic by default: resolve the requested tag (latest unless pinned) from
+  // the catalog host, revalidate against the cached copy, and fall back to the
+  // bundled snapshot only when both the network and cache are unavailable.
+  return loadRemoteRegistry(
+    registryUrlForTag(options.tag ?? "latest"),
+    cacheDir,
+    options.offline === true,
+    bundled,
+  );
 }

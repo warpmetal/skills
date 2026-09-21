@@ -125,14 +125,20 @@ Usage:
 
 Options:
   --registry <url|path>  Load registry.json from a URL or local directory
-  --tag <version>        Load a pinned registry tag from the catalog host
-  --offline              Never fetch a remote registry; use cache or bundled snapshot
+  --tag <version>        Pin a registry tag from the catalog host (default: latest)
+  --offline              Never fetch; use the cached or bundled registry
   --http                 Serve Streamable HTTP instead of stdio
   --host <address>       HTTP bind address (default ${DEFAULT_HOST})
   --port <number>        HTTP port (default ${DEFAULT_PORT})
   --cache-dir <path>     Override the registry cache directory
   --version, -V          Print the version
   --help, -h             Show this help
+
+Registry resolution (default):
+  1. --registry <url|path> or WARPMETAL_SKILLS_REGISTRY
+  2. <catalog>/<tag>/registry.json, where tag defaults to latest
+  3. cached copy from a previous fetch (revalidated with ETag; marked stale)
+  4. bundled snapshot shipped with this package (marked stale)
 
 Environment:
   WARPMETAL_SKILLS_REGISTRY      Default value for --registry

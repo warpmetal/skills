@@ -43,7 +43,7 @@ Contracts to preserve and reconcile:
 | No agent found | Offer in-flow installs via detected package managers after consent |
 | State | `~/.config/warpmetal/env/` — separate from payment-critical `state.json` |
 | New deps | optional `@napi-rs/keyring`; pure-JS `yaml` (omp config merge) |
-| Skill delivery | Pinned bundle of a registry tag by default; explicit update later (companion plan) |
+| Skill delivery | Dynamic: the CLI resolves `<catalog>/<tag>/registry.json` (tag defaults to `latest`), revalidates with ETag, caches, and verifies checksums before writing. The package ships no registry or skill content; `--registry`/`--tag` pin. Installed versions and checksums go in a lockfile; updates are explicit. |
 
 ## 3. User journeys
 
@@ -105,7 +105,7 @@ Runtime layout (same on laptop and inside an Agent Box, under the user's `$HOME`
 | `env store status \| rotate [--json]` | Backend info, key rotation |
 | `env secret <name> --stdout` | Read-only secret emission for host config indirection; never logged |
 | `env host list [--json]` | Detection detail: installed / configured / signed in |
-| `skill list \| show \| install \| update` | Skill manager (content source owned by companion plan) |
+| `skill list \| search \| show \| install \| remove \| update` | Registry client: resolve dynamically, verify checksums, write host directories, maintain the lockfile; `update --check` reports, `update <name>` applies only on consent |
 
 Exit codes: `0` ok; `2` usage/config error; `3` needs agent host; `4` needs provider auth;
 `5` apply failed; `6` integrity/unsupported platform.
@@ -249,10 +249,11 @@ Two consumers, two transports, one manifest:
 
 - **Agents in a session** use `@warpmetal/skills-mcp` for discovery and reads. MCP is the right
   protocol there because hosts manage server lifecycles and the model needs on-demand lookup.
-- **The `warpmetal` CLI** (`skill list/show/install/update`) reads the static registry directly:
-  `registry.json` plus files from the catalog URL, a pinned tag, or `--registry <path>`, with
-  checksum verification before writing. No MCP client dependency, deterministic installs, offline
-  from a path or cache, and package-manager-shaped behavior.
+- **The `warpmetal` CLI** (`skill list/search/install/remove/update`) resolves the registry
+  dynamically: `<catalog>/<tag>/registry.json` (tag defaults to `latest`) with ETag revalidation, a
+  local cache, and checksum verification before writing. It ships no registry or skill content;
+  `--registry <path|url>` or `--tag` pins a snapshot. Installed versions and checksums are recorded
+  in `skills.lock.json`, and updates are explicit and diff-reviewed.
 - Both share `registry.json`, the checksum manifest, and the skill layout, so results cannot drift.
   `skill search` matches the fields already in the manifest (name, tags, description, roles,
   hosts) instead of depending on the server.
@@ -285,6 +286,9 @@ Registry-side prerequisites completed in this repository (see [`PLAN.md`](../PLA
 - [x] `@warpmetal/skills-mcp` publishes skill discovery and reads independent of the CLI.
 - [x] Skill content layout (`skills/<name>/SKILL.md` + references) and registry checksums are
       ready to accept `coding-env`.
+- [x] Resolution model settled: dynamic remote-first resolution shared with the MCP; the CLI ships
+      no registry or skill content, records installed versions in a lockfile, and updates only with
+      explicit consent. Per-skill versions; tag pinning now, `name@version` later.
 
 Not started, in dependency order:
 
