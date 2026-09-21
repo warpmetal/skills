@@ -39,7 +39,7 @@ OpenCode catalog, and `packages/skills-mcp/snapshot/` (gitignored).
      "version": "0.1.0",
      "description": "Same as the frontmatter description.",
      "roles": ["planner", "builder", "reviewer"],
-     "hosts": ["omp", "opencode", "codex", "claude", "cursor", "agents"],
+     "hosts": ["omp", "opencode", "codex", "claude", "cursor", "dsh", "agents", "mcp"],
      "minimumWarpmetalCli": "0.9.0",
      "tags": ["example"]
    }

@@ -89,6 +89,22 @@ Claude Code (`.mcp.json`):
 
 Cursor (`.cursor/mcp.json`): the same `mcpServers` shape as Claude Code.
 
+DeepSeek Harness (`dsh-mcp-client` entry):
+
+```yaml
+- id: mcp-warpmetal-skills
+  name: '@deepseek-ai/dsh-mcp-client'
+  config:
+    serverName: warpmetal-skills
+    transport: stdio
+    command: npx
+    args: ['-y', '@warpmetal/skills-mcp']
+```
+
+dsh scrubs ambient variables matching `KEY|PASSWORD|SECRET|TOKEN` before launching stdio servers;
+this server needs no credentials, so it works unchanged. Switch to `transport: streamable-http`
+with `url` to use a self-hosted container instead.
+
 Remote HTTP (any host that supports Streamable HTTP):
 
 ```json

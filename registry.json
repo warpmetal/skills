@@ -15,7 +15,9 @@
         "claude",
         "opencode",
         "cursor",
-        "agents"
+        "dsh",
+        "agents",
+        "mcp"
       ],
       "minimumWarpmetalCli": "0.8.1",
       "tags": [
