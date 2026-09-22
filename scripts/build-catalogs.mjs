@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, rm, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -12,6 +12,11 @@ import {
 } from "./lib/build.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
+
+// Regenerate from scratch so a deleted skill cannot leave orphaned copies
+// behind in the catalog or plugin tree.
+await rm(join(root, "catalog"), { recursive: true, force: true });
+await rm(join(root, "plugins/warpmetal/skills"), { recursive: true, force: true });
 
 const model = await buildRegistryModel({ root });
 

@@ -110,6 +110,24 @@ for (const skill of model.skills) {
   }
 }
 
+// 4b. generated trees contain no orphaned skill directories.
+for (const tree of [join(root, "catalog"), join(root, "plugins/warpmetal/skills")]) {
+  let entries;
+  try {
+    entries = await readdir(tree, { withFileTypes: true });
+  } catch {
+    failures.push(`${relative(root, tree)} is missing; run npm run build`);
+    continue;
+  }
+  const known = new Set(model.skills.map((skill) => skill.name));
+  for (const entry of entries) {
+    if (tree.endsWith("catalog") && entry.name === "index.json") continue;
+    if (!known.has(entry.name)) {
+      failures.push(`${relative(root, tree)}/${entry.name} is orphaned; run npm run build`);
+    }
+  }
+}
+
 // 5. secret scan over published content.
 const SECRET_PATTERNS = [
   { name: "aws access key", regex: /AKIA[0-9A-Z]{16}/ },

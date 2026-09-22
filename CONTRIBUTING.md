@@ -22,6 +22,8 @@ OpenCode catalog, and `packages/skills-mcp/snapshot/` (gitignored).
 
 ## Adding or changing a skill
 
+Scaffold the files with `npm run new:skill -- <kebab-name>`, then fill them in:
+
 1. `skills/<kebab-name>/SKILL.md` with frontmatter:
 
    ```markdown

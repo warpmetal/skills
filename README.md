@@ -119,7 +119,8 @@ setups, `npm run pages` produces a static catalog and `@warpmetal/skills-mcp` ac
 
 ## Adding a skill
 
-1. Create `skills/<kebab-name>/SKILL.md` with `name` and `description` frontmatter, plus
+1. Scaffold with `npm run new:skill -- <kebab-name>` (or create the files manually):
+   `skills/<kebab-name>/SKILL.md` with `name` and `description` frontmatter, plus
    `references/` for supporting files.
 2. Add `skills/<kebab-name>/skill.json` with `name`, `version`, `description`, `roles`, `hosts`,
    `tags`, and `minimumWarpmetalCli` when the skill drives the CLI.
