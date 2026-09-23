@@ -12,6 +12,17 @@
         "references/safety.md",
         "warpmetal.md"
       ]
+    },
+    {
+      "name": "warpmetal-agent-sandbox",
+      "version": "0.1.0",
+      "files": [
+        "references/agents.md",
+        "references/github.md",
+        "references/multi-agent.md",
+        "references/verification.md",
+        "warpmetal-agent-sandbox.md"
+      ]
     }
   ]
 }
