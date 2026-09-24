@@ -1,0 +1,23 @@
+{
+  "name": "server-monitoring",
+  "version": "0.1.0",
+  "description": "Set up and manage alerting for client servers using Uptime Kuma (external checks) and Netdata (per-host detail). Tuned thresholds to catch real problems without alert fatigue. Two severity tiers: immediate page and daily digest. Closes the loop by handing off to the right skill when an alert fires. Use when setting up monitoring for a new client or when alerts are miscalibrated.",
+  "roles": [
+    "operator"
+  ],
+  "hosts": [
+    "codex",
+    "claude",
+    "opencode",
+    "cursor",
+    "dsh",
+    "agents",
+    "mcp"
+  ],
+  "tags": [
+    "monitoring",
+    "alerting",
+    "uptime-kuma",
+    "netdata"
+  ]
+}

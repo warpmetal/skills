@@ -83,8 +83,10 @@ async function handleRequest(
   }
 
   // Stateless mode: a fresh server and transport per request, no session state.
+  // The `content` profile is what keeps the CLI tools off this unauthenticated
+  // channel; see server.ts for why they are absent rather than refused.
   const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
-  const mcp = createSkillsServer(loaded);
+  const mcp = createSkillsServer(loaded, { profile: "content" });
   response.on("close", () => {
     void transport.close().catch(() => undefined);
     void mcp.close().catch(() => undefined);

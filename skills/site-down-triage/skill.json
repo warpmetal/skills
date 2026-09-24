@@ -1,0 +1,23 @@
+{
+  "name": "site-down-triage",
+  "version": "0.1.0",
+  "description": "Diagnose a downed or slow client site with a read-only layered ladder (scope → reachability → DNS → TLS → web → runtime → resources → database → logs → recent change). Stops at the first broken layer, preserves evidence, and proposes a minimal fix without restarting anything. Use when a site is down, returning 502, timing out, or the client reports slowness.",
+  "roles": [
+    "operator"
+  ],
+  "hosts": [
+    "codex",
+    "claude",
+    "opencode",
+    "cursor",
+    "dsh",
+    "agents",
+    "mcp"
+  ],
+  "tags": [
+    "triage",
+    "incident",
+    "diagnostics",
+    "read-only"
+  ]
+}

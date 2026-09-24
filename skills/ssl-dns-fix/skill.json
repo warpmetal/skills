@@ -1,0 +1,23 @@
+{
+  "name": "ssl-dns-fix",
+  "version": "0.1.0",
+  "description": "Diagnose and fix TLS certificate and DNS problems for a client site. Localizes the failure to one of three layers (resolution → issuance → serving) before attempting any fix. Always runs certbot --dry-run before a real attempt. Use when a cert didn't renew, the site shows \"not secure\", DNS changes haven't propagated, or the site has mixed content warnings.",
+  "roles": [
+    "operator"
+  ],
+  "hosts": [
+    "codex",
+    "claude",
+    "opencode",
+    "cursor",
+    "dsh",
+    "agents",
+    "mcp"
+  ],
+  "tags": [
+    "ssl",
+    "tls",
+    "dns",
+    "certificates"
+  ]
+}
