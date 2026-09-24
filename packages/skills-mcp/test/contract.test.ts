@@ -34,6 +34,7 @@ import {
   CLI_COMMANDS,
   acceptsIdempotencyKey,
   findProjectRoot,
+  resolveCliTarget,
   type CliCommandKey,
   type CliCommandSpec,
 } from "../src/exec.js";
@@ -153,6 +154,21 @@ describe("contract: the installed CLI honours the surface this server builds on"
       findProjectRoot(HERE),
       PROJECT_ROOT,
       "the project root must be discovered from the package's own layout",
+    );
+
+    // Discovery alone is not the claim; the resolver must act on it. Without
+    // these two, a resolution order that read the global prefix first would
+    // still report the right project root while every case ran against whatever
+    // happened to be installed globally.
+    const target = resolveCliTarget(process.env, process.execPath, PROJECT_ROOT);
+    assert.equal(
+      target.degraded,
+      null,
+      "the pinned devDependency must resolve without the degraded cmd shim",
+    );
+    assert.ok(
+      String(target.prefixArgs[0]).includes(path.join("node_modules", "warpmetal")),
+      `expected the project's own node_modules, got ${String(target.prefixArgs[0])}`,
     );
   });
 

@@ -2345,17 +2345,39 @@ describe("14. payload shapes match the CLI's own envelopes", () => {
 
 describe("executor target resolution", () => {
   it("resolves the npm package bin instead of the Windows cmd shim", () => {
-    const target = resolveCliTarget(
-      { PATH: path.dirname(process.execPath), APPDATA: "" },
-      process.execPath,
+    // Hermetic on purpose. This case used to resolve against the Node prefix
+    // (`path.dirname(process.execPath)`), which is the *global* install
+    // directory: it passed only on a host that happened to have `warpmetal`
+    // installed globally next to Node, and threw CliResolutionError on a clean
+    // CI runner. The pinned devDependency was never consulted, which is the
+    // exact regression `contract.test.ts` exists to catch.
+    //
+    // So the project layout is built here instead of borrowed from the host:
+    // a `node_modules/warpmetal` with a manifest and a bin file, handed to the
+    // resolver as its `projectRoot`. That root is added first, so it wins even
+    // on a machine that does have a global install.
+    const root = tempDir();
+    const packageDir = path.join(root, "node_modules", "warpmetal");
+    const expectedBin = path.join(packageDir, "bin", "warpmetal.js");
+    mkdirSync(path.dirname(expectedBin), { recursive: true });
+    writeFileSync(expectedBin, "// resolution fixture, never executed\n");
+    writeFileSync(
+      path.join(packageDir, "package.json"),
+      JSON.stringify({
+        name: "warpmetal",
+        version: "9.9.9",
+        bin: { warpmetal: "bin/warpmetal.js" },
+      }),
     );
+
+    const target = resolveCliTarget({ PATH: "", APPDATA: "" }, process.execPath, root);
+
     assert.equal(target.degraded, null, "the primary path must not be degraded");
     assert.equal(target.command, process.execPath);
-    assert.equal(target.prefixArgs.length, 1);
-    assert.ok(
-      String(target.prefixArgs[0]).endsWith(path.join("bin", "warpmetal.js")),
-      `expected the package bin, got ${String(target.prefixArgs[0])}`,
-    );
+    assert.deepEqual(target.prefixArgs, [expectedBin]);
+    // Read from the same public manifest that located the bin, which is what
+    // makes the version floor free rather than an extra process.
+    assert.equal(target.version, "9.9.9");
   });
 
   it("fails with an actionable message when nothing can be found", () => {
