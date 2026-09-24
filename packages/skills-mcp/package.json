@@ -1,7 +1,7 @@
 {
   "name": "@warpmetal/skills-mcp",
-  "version": "0.1.0",
-  "description": "Read-only MCP server for WarpMetal Agent Skills discovery",
+  "version": "0.2.0",
+  "description": "MCP server for WarpMetal Agent Skills discovery plus the WarpMetal CLI surface: 3 skill_* content tools everywhere and 43 wm_* CLI tools over stdio, with a hardened gate for the irreversible ones (named consequence, TOCTOU re-verification, a persistent manual_review latch), a CLI version floor and a concurrency ceiling.",
   "type": "module",
   "license": "UNLICENSED",
   "bin": {
@@ -12,10 +12,11 @@
   "files": [
     "dist/",
     "snapshot/",
-    "README.md"
+    "README.md",
+    "SECURITY.md"
   ],
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "publishConfig": {
     "access": "public"
@@ -28,16 +29,22 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --import tsx --test test/*.test.ts",
-    "prepack": "npm run build"
+    "test:contract": "node --import tsx --test test/contract.test.ts",
+    "test:live": "node --import tsx --test test/live.test.ts",
+    "dev": "tsx src/index.ts",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run typecheck && npm test"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.30.0",
-    "zod": "^3.25.0"
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "zod": "4.6.5"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "tsx": "^4.23.15",
-    "typescript": "^5.9.3"
+    "@types/node": "24.13.6",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "warpmetal": "0.8.12"
   }
 }

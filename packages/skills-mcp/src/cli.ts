@@ -137,7 +137,7 @@ Options:
 Registry resolution (default):
   1. --registry <url|path> or WARPMETAL_SKILLS_REGISTRY
   2. <catalog>/<tag>/registry.json, where tag defaults to latest
-  3. cached copy from a previous fetch (revalidated with ETag; marked stale)
+  3. cached copy from a previous load, revalidated with an ETag and marked stale
   4. bundled snapshot shipped with this package (marked stale)
 
 Environment:

@@ -5,7 +5,7 @@ import { helpText, parseArguments } from "./cli.js";
 import { errorMessage } from "./errors.js";
 import { startHttpServer } from "./http.js";
 import { loadRegistry } from "./registry.js";
-import { createSkillsServer } from "./server.js";
+import { SERVER_NAME, createSkillsServer } from "./server.js";
 import { packageVersion } from "./version.js";
 
 function banner(loadedSource: string, registryVersion: string, stale: boolean): string {
@@ -32,9 +32,11 @@ async function main(): Promise<void> {
   });
 
   if (options.http) {
+    // HTTP is unauthenticated, so it only ever gets the `content` profile: the
+    // skill tools and resources, never the CLI surface.
     const running = await startHttpServer(loaded, { host: options.host, port: options.port });
     process.stderr.write(
-      `warpmetal-skills-mcp ${packageVersion()} listening on http://${running.host}:${running.port} (${banner(loaded.source, loaded.registry.registryVersion, loaded.stale)})\n`,
+      `${SERVER_NAME} ${packageVersion()} listening on http://${running.host}:${running.port} (profile content, ${banner(loaded.source, loaded.registry.registryVersion, loaded.stale)})\n`,
     );
     const shutdown = () => {
       void running.close().finally(() => process.exit(0));
@@ -44,11 +46,12 @@ async function main(): Promise<void> {
     return;
   }
 
-  const server = createSkillsServer(loaded);
+  // stdio is a local, operator-controlled channel, so it gets everything.
+  const server = createSkillsServer(loaded, { profile: "full" });
   const transport = new StdioServerTransport();
   await server.connect(transport);
   process.stderr.write(
-    `warpmetal-skills-mcp ${packageVersion()} ready (${banner(loaded.source, loaded.registry.registryVersion, loaded.stale)})\n`,
+    `${SERVER_NAME} ${packageVersion()} ready (profile full, ${banner(loaded.source, loaded.registry.registryVersion, loaded.stale)})\n`,
   );
   const shutdown = () => {
     void server.close().finally(() => process.exit(0));
@@ -58,6 +61,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((error) => {
-  process.stderr.write(`warpmetal-skills-mcp: ${errorMessage(error)}\n`);
+  process.stderr.write(`${SERVER_NAME}: ${errorMessage(error)}\n`);
   process.exit(1);
 });
