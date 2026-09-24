@@ -1,0 +1,23 @@
+{
+  "name": "migrate-site",
+  "version": "0.1.0",
+  "description": "Move a client site between hosts in eight controlled phases: inventory, prepare target, lower TTL, first sync, freeze, cutover, verify, and decommission. Handles PHP/Laravel, WordPress, Node, and static sites. Use when moving a client off cPanel, consolidating sites onto a new server, or migrating between hosting providers.",
+  "roles": [
+    "operator"
+  ],
+  "hosts": [
+    "codex",
+    "claude",
+    "opencode",
+    "cursor",
+    "dsh",
+    "agents",
+    "mcp"
+  ],
+  "tags": [
+    "migration",
+    "rsync",
+    "cutover",
+    "dns"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "queue-cron-setup",
+  "version": "0.1.0",
+  "description": "Configure and verify queue workers and scheduled tasks for a client site. Sets up Laravel/Node workers under systemd with proper restart semantics, wires exactly one cron entry for the scheduler, and alerts on silent failures. Use when queue jobs aren't running, setting up workers for a new site, or scheduled tasks have stopped firing.",
+  "roles": [
+    "operator"
+  ],
+  "hosts": [
+    "codex",
+    "claude",
+    "opencode",
+    "cursor",
+    "dsh",
+    "agents",
+    "mcp"
+  ],
+  "tags": [
+    "queue",
+    "cron",
+    "systemd",
+    "workers"
+  ]
+}

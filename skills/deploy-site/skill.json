@@ -1,0 +1,23 @@
+{
+  "name": "deploy-site",
+  "version": "0.1.0",
+  "description": "Deploy a client site to production via zero-downtime Git-based workflow. Loads the client manifest, validates configuration, creates an isolated release, runs migrations, and activates atomically with automatic rollback on health failure. Use when deploying code to production, rolling back a broken release, or pushing a branch to a client's server.",
+  "roles": [
+    "operator"
+  ],
+  "hosts": [
+    "codex",
+    "claude",
+    "opencode",
+    "cursor",
+    "dsh",
+    "agents",
+    "mcp"
+  ],
+  "tags": [
+    "deploy",
+    "ci-cd",
+    "production",
+    "zero-downtime"
+  ]
+}
