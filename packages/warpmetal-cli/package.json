@@ -1,0 +1,44 @@
+{
+  "name": "@warpmetal/cli",
+  "version": "0.1.0",
+  "description": "The warpmetal CLI: the env credential store and the integration layer, plus verbatim delegation of the VPS lifecycle to the published upstream CLI.",
+  "type": "module",
+  "license": "UNLICENSED",
+  "bin": {
+    "warpmetal": "dist/cli.js"
+  },
+  "main": "dist/cli.js",
+  "types": "dist/cli.d.ts",
+  "files": [
+    "dist/",
+    "README.md",
+    "SECURITY.md"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/warpmetal/skills.git"
+  },
+  "homepage": "https://github.com/warpmetal/skills#readme",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --import tsx --test test/*.test.ts",
+    "dev": "tsx src/cli.ts",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run typecheck && npm test"
+  },
+  "dependencies": {
+    "warpmetal-upstream": "npm:warpmetal@0.8.12"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.6",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  }
+}
