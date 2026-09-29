@@ -8,11 +8,13 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "npm run build:registry && npm run build:catalogs",
+    "build": "npm run sync:conventions && npm run build:registry && npm run build:catalogs",
+    "sync:conventions": "node scripts/sync-conventions.mjs",
     "build:registry": "node scripts/build-registry.mjs",
     "build:catalogs": "node scripts/build-catalogs.mjs",
     "new:skill": "node scripts/new-skill.mjs",
     "verify": "node scripts/verify.mjs",
+    "validate:skills": "node scripts/validate-skills.mjs",
     "test": "npm --prefix packages/skills-mcp test",
     "check": "npm run build && npm run verify && npm test",
     "pages": "node scripts/build-pages.mjs",
