@@ -168,6 +168,7 @@ function registerContentTools(server: McpServer, loaded: LoadedRegistry): void {
     tags: z.array(z.string()),
     files: z.array(z.string()),
     minimumWarpmetalCli: z.string().optional(),
+    integrations: z.array(z.string()).optional(),
   });
 
   const registryMetaSchema = {

@@ -19,6 +19,7 @@ export interface RegistrySkill {
   roles: string[];
   hosts: string[];
   minimumWarpmetalCli?: string;
+  integrations?: string[];
   tags: string[];
   files: RegistryFile[];
 }
@@ -153,6 +154,10 @@ export function validateRegistry(value: unknown, origin: string): Registry {
     if (skill.minimumWarpmetalCli !== undefined && typeof skill.minimumWarpmetalCli !== "string") {
       fail(origin, `${name}: minimumWarpmetalCli must be a string`);
     }
+    const integrations = optionalStringArray(skill.integrations, origin, `${name}.integrations`);
+    if (integrations.length > 0 && !integrations.every((provider) => /^[a-z0-9]+(-[a-z0-9]+)*$/.test(provider))) {
+      fail(origin, `${name}: integrations must be lowercase kebab-case provider names`);
+    }
 
     return {
       name,
@@ -164,6 +169,7 @@ export function validateRegistry(value: unknown, origin: string): Registry {
       ...(typeof skill.minimumWarpmetalCli === "string"
         ? { minimumWarpmetalCli: skill.minimumWarpmetalCli }
         : {}),
+      ...(integrations.length > 0 ? { integrations } : {}),
       tags: optionalStringArray(skill.tags, origin, `${name}.tags`),
       files,
     };

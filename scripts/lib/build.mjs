@@ -113,6 +113,10 @@ export async function buildRegistryModel({ root, env = process.env }) {
     ) {
       throw new Error(`skills/${name}/skill.json minimumWarpmetalCli must be a string`);
     }
+    // Declared provider integrations. Validated against the engine catalog by
+    // scripts/validate-skills.mjs, because that check needs to read the catalog
+    // source; here only the shape is enforced.
+    const integrations = stringArray(meta.integrations, `${name}.integrations`);
 
     validateFrontmatter(name, await readFile(join(directory, "SKILL.md"), "utf8"));
 
@@ -142,6 +146,7 @@ export async function buildRegistryModel({ root, env = process.env }) {
         ? { minimumWarpmetalCli: meta.minimumWarpmetalCli }
         : {}),
       tags: stringArray(meta.tags, `${name}.tags`),
+      ...(integrations.length > 0 ? { integrations } : {}),
       files,
     });
   }

@@ -45,6 +45,15 @@
         "hosts": { "type": "array", "items": { "type": "string" } },
         "minimumWarpmetalCli": { "type": "string" },
         "tags": { "type": "array", "items": { "type": "string" } },
+        "integrations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          }
+        },
         "files": {
           "type": "array",
           "minItems": 1,

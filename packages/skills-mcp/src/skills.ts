@@ -16,6 +16,7 @@ export interface SkillSummary {
   tags: string[];
   files: string[];
   minimumWarpmetalCli?: string;
+  integrations?: string[];
 }
 
 export interface SearchHit {
@@ -95,6 +96,7 @@ export function summarizeSkill(skill: RegistrySkill): SkillSummary {
     ...(skill.minimumWarpmetalCli !== undefined
       ? { minimumWarpmetalCli: skill.minimumWarpmetalCli }
       : {}),
+    ...(skill.integrations !== undefined ? { integrations: [...skill.integrations] } : {}),
   };
 }
 
