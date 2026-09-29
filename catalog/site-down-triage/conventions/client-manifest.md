@@ -62,7 +62,52 @@ target_host = "acme-new"
 target_root = "/var/www/acme"
 ttl_lowered = "2026-09-20"                # date the A record TTL was dropped
 mail_relay  = "smtp.mailgun.org"           # if routing outbound through a relay
+
+[integrations.cloudflare]
+zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
+account = "acme"
+secret  = "cloudflare.token"              # default: <provider>.token
+ttl     = 60                              # default: 1 (Cloudflare "auto")
+
+[integrations.github]
+repo    = "org/acme"
+secret  = "github.token"                  # default: <provider>.token
+
+[integrations.slack]
+channel = "#acme-alerts"
+secret  = "slack.token"                   # or slack.webhook for an incoming hook
 ```
+
+## Integration References
+
+An `[integrations.<provider>]` table tells the skills which provider to use and
+what to pass it. It holds **references only**: a zone id, an account label, the
+*name* of a secret. A token in the manifest is a bug, not a configuration, and the
+validator rejects it.
+
+The value is read at run time from the credential vault through
+`conventions/lib/integration.sh`, one name at a time. See `integrations.md` for the
+provider catalog, the gate strings, and what the engine can honestly verify.
+
+```toml
+[integrations.cloudflare]
+zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
+secret  = "cloudflare.token"   # the *name*; the value lives in the vault
+```
+
+| Reference | Provider | Required for | Description |
+|-----------|----------|--------------|-------------|
+| `zone_id` | cloudflare | `cutover.sh` DNS change | Cloudflare zone id. Without it, the cutover prints the record change for the operator. |
+| `account` | cloudflare | optional | Account label, for the journal and the report. Never used to authenticate. |
+| `ttl` | cloudflare | optional | TTL for the A record. Default `1` (Cloudflare "auto"). Lower it before a cutover; see `migrate-site/references/ttl-strategy.md`. |
+| `secret` | any | optional | Vault name to read. Default `<provider>.token`. |
+| `repo` | github | `deploy.sh` preflight | `owner/name`, verified for access before the deploy. |
+| `channel` | slack | `notify` | Destination channel for a notification. |
+
+`monitoring.api_key_secret` follows the same idea for the Uptime Kuma API key:
+`kuma_resolve_key` reads `--api-key`, then the variable named by
+`monitoring.api_key_env`, then the vault secret named by `monitoring.api_key_secret`
+(default `uptime-kuma.token`).
 
 ## Field Definitions
 
@@ -98,6 +143,12 @@ mail_relay  = "smtp.mailgun.org"           # if routing outbound through a relay
 | `migration.source_host` | For `migrate-site` | migrate-site | SSH alias of the source host. |
 | `migration.target_host` | For `migrate-site` | migrate-site | SSH alias of the target host. |
 | `migration.ttl_lowered` | No | migrate-site | Date the A record TTL was lowered; used for the cutover warning. |
+| `integrations.<provider>.secret` | No | integration layer | Vault name to read. Default: `<provider>.token`. |
+| `integrations.cloudflare.zone_id` | For the automated cutover | migrate-site | Cloudflare zone id. Without it the DNS change is printed, not applied. |
+| `integrations.cloudflare.ttl` | No | migrate-site | TTL for the A record. Default: `1` (auto). |
+| `integrations.github.repo` | No | deploy-site | `owner/name`, access-verified before the deploy. |
+| `integrations.slack.channel` | No | server-monitoring | Destination channel for a notification. |
+| `monitoring.api_key_secret` | No | server-monitoring | Vault name holding the Uptime Kuma API key. Default: `uptime-kuma.token`. |
 
 ## Validation Rules
 
@@ -108,6 +159,7 @@ mail_relay  = "smtp.mailgun.org"           # if routing outbound through a relay
 5. **`health_url` must be HTTPS** — HTTP not permitted for production health checks.
 6. **`db.engine` must match installed database** — validate during preflight.
 7. **No secrets in manifest** — passwords, tokens, keys must never appear here. Use server-side `.env` in `shared/`.
+8. **Integration tables hold references only** — an `[integrations.<provider>]` table may name a secret (`secret = "cloudflare.token"`) but never contain a credential value.
 
 ## Example Manifests
 

@@ -291,7 +291,21 @@ DNS change proposed as diff:
 acme.com.  300  IN  A  <old-ip>  →  acme.com.  300  IN  A  <new-ip>
 ```
 
-Requires `CONFIRM CUTOVER`.
+Requires `CONFIRM CUTOVER`, plus `CONFIRM DNS CHANGE` when the record is applied.
+
+The record is applied in one of three ways, and the plan states which before you approve it:
+
+1. `[integrations.cloudflare]` in the client manifest and the integration ready →
+   the script calls `integration_run_mutating cloudflare dns-upsert` with the
+   zone id from the manifest and the target IP. Result reports
+   `dns_applied_by: "integration"`.
+2. `--dns-command '<command>'` → the script runs your command with `DOMAIN`,
+   `TARGET_IP`, and `CLIENT` exported. Result reports `dns_applied_by: "command"`.
+3. Neither → the required diff is printed for you to apply. Result reports
+   `dns_applied_by: "manual"`.
+
+Without `--confirm "CONFIRM DNS CHANGE"` the script stages nothing: it exits `11`
+with `CONFIRMATION_REQUIRED`. The source is never touched.
 
 Source server continues running for at least the OLD TTL (before it was lowered to 300).
 Do not power it off.
@@ -394,11 +408,21 @@ the migration is still reversible.
 ```bash
 bash scripts/cutover.sh --client acme --dry-run
 bash scripts/cutover.sh --client acme --confirm "CONFIRM CUTOVER"
+
+# Apply the A record through the Cloudflare integration (requires
+# [integrations.cloudflare] in the manifest and a stored token):
+bash scripts/cutover.sh --client acme \
+    --confirm "CONFIRM CUTOVER" --confirm "CONFIRM DNS CHANGE"
+
+# Or with your own command; it receives DOMAIN, TARGET_IP, and CLIENT:
+bash scripts/cutover.sh --client acme --dns-command '<command>' \
+    --confirm "CONFIRM CUTOVER" --confirm "CONFIRM DNS CHANGE"
 ```
 
-Add `--dns-command '<command>'` to let the script apply the record change itself;
-that also requires `--confirm "CONFIRM DNS CHANGE"`. Without it the required record
-diff is printed for the operator to apply. The source is never touched.
+With no integration configured and no `--dns-command`, the required record diff is
+printed for the operator to apply. The `dns_applied_by` field in the result says
+which path ran, and it is decided before the plan is printed, so the plan never
+promises an automatic change this run cannot deliver.
 
 ### Phase 7 — Verify (read-only)
 

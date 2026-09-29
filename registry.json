@@ -32,15 +32,23 @@
         },
         {
           "path": "conventions/client-manifest.md",
-          "sha256": "9a256fa105e45f20e6c3abf40f74ededd977e7ec044170623c89eb4d69764e52"
+          "sha256": "e9f561460535bae5dd93cc3663007b16b7015b5fa149ee0f4b6ee319f1715a3b"
+        },
+        {
+          "path": "conventions/integrations.md",
+          "sha256": "9ef579696860b1304bdad94d455971c23cdc361c17e225aa50700f2fb210fd32"
         },
         {
           "path": "conventions/lib/bootstrap.sh",
-          "sha256": "867f4d2d081ae17a793f8ddca1dc1e48f329c0e6e76282730109f0d665c3c523"
+          "sha256": "3a09ab128030fb8ff5e440a4f1df82b8d8d5c1cd70c976670bae7590714998ca"
         },
         {
           "path": "conventions/lib/confirm.sh",
           "sha256": "08a5db55452d90aa41b28b1c39444fce0679a4b864b33f2896f0c820997d34e1"
+        },
+        {
+          "path": "conventions/lib/integration.sh",
+          "sha256": "ccadf81b1081ec315a5cd91ba9aa257bb9fb4606a68659c6c39756ef7a997373"
         },
         {
           "path": "conventions/lib/journal.sh",
@@ -48,7 +56,7 @@
         },
         {
           "path": "conventions/lib/manifest.sh",
-          "sha256": "b7755d0c1972a059bb3ac135c9e803f37660b6508a5e3f707ca90473fb022058"
+          "sha256": "9eafefd24d1c9656be37220b7b330b969bbe44d83704c8e44303f43275b92857"
         },
         {
           "path": "conventions/lib/migration.sh",
@@ -56,7 +64,7 @@
         },
         {
           "path": "conventions/lib/monitoring.sh",
-          "sha256": "ee4f648ac54173311d07e8283e32d63aaae6d09a79480c28c00b9735d596c2c4"
+          "sha256": "8f041fb89d488bed8e4e9ceb5f9ca5839fc5a61c361fcbcffae71d6a61f15ecb"
         },
         {
           "path": "conventions/lib/output.sh",
@@ -149,11 +157,15 @@
         "agents",
         "mcp"
       ],
+      "minimumWarpmetalCli": "0.1.0",
       "tags": [
         "deploy",
         "ci-cd",
         "production",
         "zero-downtime"
+      ],
+      "integrations": [
+        "github"
       ],
       "files": [
         {
@@ -162,15 +174,23 @@
         },
         {
           "path": "conventions/client-manifest.md",
-          "sha256": "9a256fa105e45f20e6c3abf40f74ededd977e7ec044170623c89eb4d69764e52"
+          "sha256": "e9f561460535bae5dd93cc3663007b16b7015b5fa149ee0f4b6ee319f1715a3b"
+        },
+        {
+          "path": "conventions/integrations.md",
+          "sha256": "9ef579696860b1304bdad94d455971c23cdc361c17e225aa50700f2fb210fd32"
         },
         {
           "path": "conventions/lib/bootstrap.sh",
-          "sha256": "867f4d2d081ae17a793f8ddca1dc1e48f329c0e6e76282730109f0d665c3c523"
+          "sha256": "3a09ab128030fb8ff5e440a4f1df82b8d8d5c1cd70c976670bae7590714998ca"
         },
         {
           "path": "conventions/lib/confirm.sh",
           "sha256": "08a5db55452d90aa41b28b1c39444fce0679a4b864b33f2896f0c820997d34e1"
+        },
+        {
+          "path": "conventions/lib/integration.sh",
+          "sha256": "ccadf81b1081ec315a5cd91ba9aa257bb9fb4606a68659c6c39756ef7a997373"
         },
         {
           "path": "conventions/lib/journal.sh",
@@ -178,7 +198,7 @@
         },
         {
           "path": "conventions/lib/manifest.sh",
-          "sha256": "b7755d0c1972a059bb3ac135c9e803f37660b6508a5e3f707ca90473fb022058"
+          "sha256": "9eafefd24d1c9656be37220b7b330b969bbe44d83704c8e44303f43275b92857"
         },
         {
           "path": "conventions/lib/migration.sh",
@@ -186,7 +206,7 @@
         },
         {
           "path": "conventions/lib/monitoring.sh",
-          "sha256": "ee4f648ac54173311d07e8283e32d63aaae6d09a79480c28c00b9735d596c2c4"
+          "sha256": "8f041fb89d488bed8e4e9ceb5f9ca5839fc5a61c361fcbcffae71d6a61f15ecb"
         },
         {
           "path": "conventions/lib/output.sh",
@@ -246,7 +266,7 @@
         },
         {
           "path": "scripts/deploy.sh",
-          "sha256": "ba99f8ff244e7e8e31a366203775a8cdc130b2c83fb49eac9112080c0bf3effe"
+          "sha256": "79ea4bffef7cf2f390eb0d59b59a7c205a243d910e870169ad26bd21a67b3a1a"
         },
         {
           "path": "scripts/health-check.sh",
@@ -266,7 +286,7 @@
         },
         {
           "path": "SKILL.md",
-          "sha256": "32ef3bd9184ce85e15917cdf50ae0af3e30d649d2403ba1e26333c37e886fcdf"
+          "sha256": "7f18506f05b62891af1aece805b2a20d443bf29a8b17ced3065ca340a709c285"
         }
       ]
     },
@@ -287,11 +307,15 @@
         "agents",
         "mcp"
       ],
+      "minimumWarpmetalCli": "0.1.0",
       "tags": [
         "migration",
         "rsync",
         "cutover",
         "dns"
+      ],
+      "integrations": [
+        "cloudflare"
       ],
       "files": [
         {
@@ -300,15 +324,23 @@
         },
         {
           "path": "conventions/client-manifest.md",
-          "sha256": "9a256fa105e45f20e6c3abf40f74ededd977e7ec044170623c89eb4d69764e52"
+          "sha256": "e9f561460535bae5dd93cc3663007b16b7015b5fa149ee0f4b6ee319f1715a3b"
+        },
+        {
+          "path": "conventions/integrations.md",
+          "sha256": "9ef579696860b1304bdad94d455971c23cdc361c17e225aa50700f2fb210fd32"
         },
         {
           "path": "conventions/lib/bootstrap.sh",
-          "sha256": "867f4d2d081ae17a793f8ddca1dc1e48f329c0e6e76282730109f0d665c3c523"
+          "sha256": "3a09ab128030fb8ff5e440a4f1df82b8d8d5c1cd70c976670bae7590714998ca"
         },
         {
           "path": "conventions/lib/confirm.sh",
           "sha256": "08a5db55452d90aa41b28b1c39444fce0679a4b864b33f2896f0c820997d34e1"
+        },
+        {
+          "path": "conventions/lib/integration.sh",
+          "sha256": "ccadf81b1081ec315a5cd91ba9aa257bb9fb4606a68659c6c39756ef7a997373"
         },
         {
           "path": "conventions/lib/journal.sh",
@@ -316,7 +348,7 @@
         },
         {
           "path": "conventions/lib/manifest.sh",
-          "sha256": "b7755d0c1972a059bb3ac135c9e803f37660b6508a5e3f707ca90473fb022058"
+          "sha256": "9eafefd24d1c9656be37220b7b330b969bbe44d83704c8e44303f43275b92857"
         },
         {
           "path": "conventions/lib/migration.sh",
@@ -324,7 +356,7 @@
         },
         {
           "path": "conventions/lib/monitoring.sh",
-          "sha256": "ee4f648ac54173311d07e8283e32d63aaae6d09a79480c28c00b9735d596c2c4"
+          "sha256": "8f041fb89d488bed8e4e9ceb5f9ca5839fc5a61c361fcbcffae71d6a61f15ecb"
         },
         {
           "path": "conventions/lib/output.sh",
@@ -384,7 +416,7 @@
         },
         {
           "path": "scripts/cutover.sh",
-          "sha256": "39c36856cdd4dec684fdb5c48257d056b13f3f26aedc0542fdd7ee448f5065b7"
+          "sha256": "a0975af9224d7e637c4f698f6c8bf3159b3199d592475b3cf9fe68947a84ef6f"
         },
         {
           "path": "scripts/decommission.sh",
@@ -412,7 +444,7 @@
         },
         {
           "path": "SKILL.md",
-          "sha256": "8a12f8c6e2507ca368751dfcdac79929be007aba366f0c80ffceb1671fb7c043"
+          "sha256": "ad28271e427e0955d757f77ec44987bb0e5963d5b5c8ffedab2d2830f3ce6381"
         }
       ]
     },
@@ -446,15 +478,23 @@
         },
         {
           "path": "conventions/client-manifest.md",
-          "sha256": "9a256fa105e45f20e6c3abf40f74ededd977e7ec044170623c89eb4d69764e52"
+          "sha256": "e9f561460535bae5dd93cc3663007b16b7015b5fa149ee0f4b6ee319f1715a3b"
+        },
+        {
+          "path": "conventions/integrations.md",
+          "sha256": "9ef579696860b1304bdad94d455971c23cdc361c17e225aa50700f2fb210fd32"
         },
         {
           "path": "conventions/lib/bootstrap.sh",
-          "sha256": "867f4d2d081ae17a793f8ddca1dc1e48f329c0e6e76282730109f0d665c3c523"
+          "sha256": "3a09ab128030fb8ff5e440a4f1df82b8d8d5c1cd70c976670bae7590714998ca"
         },
         {
           "path": "conventions/lib/confirm.sh",
           "sha256": "08a5db55452d90aa41b28b1c39444fce0679a4b864b33f2896f0c820997d34e1"
+        },
+        {
+          "path": "conventions/lib/integration.sh",
+          "sha256": "ccadf81b1081ec315a5cd91ba9aa257bb9fb4606a68659c6c39756ef7a997373"
         },
         {
           "path": "conventions/lib/journal.sh",
@@ -462,7 +502,7 @@
         },
         {
           "path": "conventions/lib/manifest.sh",
-          "sha256": "b7755d0c1972a059bb3ac135c9e803f37660b6508a5e3f707ca90473fb022058"
+          "sha256": "9eafefd24d1c9656be37220b7b330b969bbe44d83704c8e44303f43275b92857"
         },
         {
           "path": "conventions/lib/migration.sh",
@@ -470,7 +510,7 @@
         },
         {
           "path": "conventions/lib/monitoring.sh",
-          "sha256": "ee4f648ac54173311d07e8283e32d63aaae6d09a79480c28c00b9735d596c2c4"
+          "sha256": "8f041fb89d488bed8e4e9ceb5f9ca5839fc5a61c361fcbcffae71d6a61f15ecb"
         },
         {
           "path": "conventions/lib/output.sh",
@@ -559,11 +599,15 @@
         "agents",
         "mcp"
       ],
+      "minimumWarpmetalCli": "0.1.0",
       "tags": [
         "monitoring",
         "alerting",
         "uptime-kuma",
         "netdata"
+      ],
+      "integrations": [
+        "slack"
       ],
       "files": [
         {
@@ -572,15 +616,23 @@
         },
         {
           "path": "conventions/client-manifest.md",
-          "sha256": "9a256fa105e45f20e6c3abf40f74ededd977e7ec044170623c89eb4d69764e52"
+          "sha256": "e9f561460535bae5dd93cc3663007b16b7015b5fa149ee0f4b6ee319f1715a3b"
+        },
+        {
+          "path": "conventions/integrations.md",
+          "sha256": "9ef579696860b1304bdad94d455971c23cdc361c17e225aa50700f2fb210fd32"
         },
         {
           "path": "conventions/lib/bootstrap.sh",
-          "sha256": "867f4d2d081ae17a793f8ddca1dc1e48f329c0e6e76282730109f0d665c3c523"
+          "sha256": "3a09ab128030fb8ff5e440a4f1df82b8d8d5c1cd70c976670bae7590714998ca"
         },
         {
           "path": "conventions/lib/confirm.sh",
           "sha256": "08a5db55452d90aa41b28b1c39444fce0679a4b864b33f2896f0c820997d34e1"
+        },
+        {
+          "path": "conventions/lib/integration.sh",
+          "sha256": "ccadf81b1081ec315a5cd91ba9aa257bb9fb4606a68659c6c39756ef7a997373"
         },
         {
           "path": "conventions/lib/journal.sh",
@@ -588,7 +640,7 @@
         },
         {
           "path": "conventions/lib/manifest.sh",
-          "sha256": "b7755d0c1972a059bb3ac135c9e803f37660b6508a5e3f707ca90473fb022058"
+          "sha256": "9eafefd24d1c9656be37220b7b330b969bbe44d83704c8e44303f43275b92857"
         },
         {
           "path": "conventions/lib/migration.sh",
@@ -596,7 +648,7 @@
         },
         {
           "path": "conventions/lib/monitoring.sh",
-          "sha256": "ee4f648ac54173311d07e8283e32d63aaae6d09a79480c28c00b9735d596c2c4"
+          "sha256": "8f041fb89d488bed8e4e9ceb5f9ca5839fc5a61c361fcbcffae71d6a61f15ecb"
         },
         {
           "path": "conventions/lib/output.sh",
@@ -648,19 +700,19 @@
         },
         {
           "path": "scripts/setup-monitoring.sh",
-          "sha256": "9f53b15b27e6443b2daf63de85509d7183b369bc311443526bc96294e560305d"
+          "sha256": "5a13243d47c8436f629ff3b7faa40e67b058e13bfb4bfb9e72825e7a93af6625"
         },
         {
           "path": "scripts/status-monitoring.sh",
-          "sha256": "19134ed017bedcb60e463e02de357b740943a1bb84f4c109872bff6d584ce36a"
+          "sha256": "d0ba0d98ecd299d16e8a8f9a6adde35f50f522f5cf8119d1ad61ddeeed3a19ce"
         },
         {
           "path": "scripts/test-alert.sh",
-          "sha256": "c5cd48719808748464960208248468a42f1415c39eb2bb77d8920cb4c1155b24"
+          "sha256": "da49376a225620e44b3f164eaf30be4a1fd18613eefb396f5e4c808ba4a747da"
         },
         {
           "path": "SKILL.md",
-          "sha256": "e65d6155ec556850e0f47b7e08bfa5a8d1c219ccbf8154fd2a65eb47508f336c"
+          "sha256": "616e4c396f34f3aa4b900d406280daeeebb9767e035ef58083bdb5e4749f3e38"
         }
       ]
     },
@@ -694,15 +746,23 @@
         },
         {
           "path": "conventions/client-manifest.md",
-          "sha256": "9a256fa105e45f20e6c3abf40f74ededd977e7ec044170623c89eb4d69764e52"
+          "sha256": "e9f561460535bae5dd93cc3663007b16b7015b5fa149ee0f4b6ee319f1715a3b"
+        },
+        {
+          "path": "conventions/integrations.md",
+          "sha256": "9ef579696860b1304bdad94d455971c23cdc361c17e225aa50700f2fb210fd32"
         },
         {
           "path": "conventions/lib/bootstrap.sh",
-          "sha256": "867f4d2d081ae17a793f8ddca1dc1e48f329c0e6e76282730109f0d665c3c523"
+          "sha256": "3a09ab128030fb8ff5e440a4f1df82b8d8d5c1cd70c976670bae7590714998ca"
         },
         {
           "path": "conventions/lib/confirm.sh",
           "sha256": "08a5db55452d90aa41b28b1c39444fce0679a4b864b33f2896f0c820997d34e1"
+        },
+        {
+          "path": "conventions/lib/integration.sh",
+          "sha256": "ccadf81b1081ec315a5cd91ba9aa257bb9fb4606a68659c6c39756ef7a997373"
         },
         {
           "path": "conventions/lib/journal.sh",
@@ -710,7 +770,7 @@
         },
         {
           "path": "conventions/lib/manifest.sh",
-          "sha256": "b7755d0c1972a059bb3ac135c9e803f37660b6508a5e3f707ca90473fb022058"
+          "sha256": "9eafefd24d1c9656be37220b7b330b969bbe44d83704c8e44303f43275b92857"
         },
         {
           "path": "conventions/lib/migration.sh",
@@ -718,7 +778,7 @@
         },
         {
           "path": "conventions/lib/monitoring.sh",
-          "sha256": "ee4f648ac54173311d07e8283e32d63aaae6d09a79480c28c00b9735d596c2c4"
+          "sha256": "8f041fb89d488bed8e4e9ceb5f9ca5839fc5a61c361fcbcffae71d6a61f15ecb"
         },
         {
           "path": "conventions/lib/output.sh",
@@ -803,11 +863,15 @@
         "agents",
         "mcp"
       ],
+      "minimumWarpmetalCli": "0.1.0",
       "tags": [
         "ssl",
         "tls",
         "dns",
         "certificates"
+      ],
+      "integrations": [
+        "cloudflare"
       ],
       "files": [
         {
@@ -816,15 +880,23 @@
         },
         {
           "path": "conventions/client-manifest.md",
-          "sha256": "9a256fa105e45f20e6c3abf40f74ededd977e7ec044170623c89eb4d69764e52"
+          "sha256": "e9f561460535bae5dd93cc3663007b16b7015b5fa149ee0f4b6ee319f1715a3b"
+        },
+        {
+          "path": "conventions/integrations.md",
+          "sha256": "9ef579696860b1304bdad94d455971c23cdc361c17e225aa50700f2fb210fd32"
         },
         {
           "path": "conventions/lib/bootstrap.sh",
-          "sha256": "867f4d2d081ae17a793f8ddca1dc1e48f329c0e6e76282730109f0d665c3c523"
+          "sha256": "3a09ab128030fb8ff5e440a4f1df82b8d8d5c1cd70c976670bae7590714998ca"
         },
         {
           "path": "conventions/lib/confirm.sh",
           "sha256": "08a5db55452d90aa41b28b1c39444fce0679a4b864b33f2896f0c820997d34e1"
+        },
+        {
+          "path": "conventions/lib/integration.sh",
+          "sha256": "ccadf81b1081ec315a5cd91ba9aa257bb9fb4606a68659c6c39756ef7a997373"
         },
         {
           "path": "conventions/lib/journal.sh",
@@ -832,7 +904,7 @@
         },
         {
           "path": "conventions/lib/manifest.sh",
-          "sha256": "b7755d0c1972a059bb3ac135c9e803f37660b6508a5e3f707ca90473fb022058"
+          "sha256": "9eafefd24d1c9656be37220b7b330b969bbe44d83704c8e44303f43275b92857"
         },
         {
           "path": "conventions/lib/migration.sh",
@@ -840,7 +912,7 @@
         },
         {
           "path": "conventions/lib/monitoring.sh",
-          "sha256": "ee4f648ac54173311d07e8283e32d63aaae6d09a79480c28c00b9735d596c2c4"
+          "sha256": "8f041fb89d488bed8e4e9ceb5f9ca5839fc5a61c361fcbcffae71d6a61f15ecb"
         },
         {
           "path": "conventions/lib/output.sh",
@@ -896,7 +968,7 @@
         },
         {
           "path": "scripts/fix-cert.sh",
-          "sha256": "5880528f1c65a043120b65b72ea26ddb4cb3270f61fd105d1f2a63538d402300"
+          "sha256": "335a4278a27d71310fa08d147906333b46aaa2d04045d9d21ae559485ac692af"
         },
         {
           "path": "scripts/fix-nginx.sh",
@@ -904,7 +976,7 @@
         },
         {
           "path": "SKILL.md",
-          "sha256": "daecd665459adde7deec26b458c452d57a707f9812d0773f091a217c1c722aa3"
+          "sha256": "6b1ab99bb8296930d43037cc7ad8ad33945e66cdd94258609573806fb09f2e13"
         }
       ]
     },

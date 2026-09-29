@@ -11,9 +11,18 @@
 # down here. That keeps the migration reversible (see migrate-site/SKILL.md,
 # rules 8 and 9).
 #
-# The DNS provider is intentionally not hardcoded. The required record change is
-# printed, and it is applied either by the operator or by the command passed in
-# --dns-command (see references/cutover-checklist.md and references/ttl-strategy.md).
+# The DNS provider is intentionally not hardcoded. When the client manifest
+# declares `[integrations.cloudflare]` and the engine holds a usable credential,
+# the required record change is applied through the gated integration path
+# (`integration_run_mutating cloudflare dns-upsert`). Otherwise the change is
+# printed and the operator applies it, or `--dns-command` supplies a command.
+#
+# Order of preference, and why:
+#   1. --dns-command       the operator asked for something specific
+#   2. cloudflare          declared in the manifest and verified ready by the engine
+#   3. print it            no integration configured; never guess a provider
+#
+# See references/cutover-checklist.md and references/ttl-strategy.md.
 #
 # Approval (see conventions/approvals.md):
 #   CONFIRM CUTOVER           run the pre-cutover verification and start the cutover
@@ -130,6 +139,32 @@ CURRENT_TTL="$(migration_a_record_ttl "${DOMAIN}" || true)"
 DNS_CHANGES_NEEDED=true
 [[ "${CURRENT_IP}" == "${TARGET_IP}" ]] && DNS_CHANGES_NEEDED=false
 
+# ── How the DNS change will be applied ───────────────────────────────────────
+# Resolved before the plan is printed, so the plan never promises an automatic
+# change that this run cannot deliver. `integration_ready` probes the provider, so
+# a declared-but-credential-less Cloudflare falls back to printing the record
+# instead of failing halfway through the cutover.
+CF_ZONE_ID="$(integration_ref cloudflare zone_id)"
+CF_TTL="$(integration_ref cloudflare ttl 1)"
+CF_ACCOUNT="$(integration_ref cloudflare account)"
+
+DNS_MODE="manual"
+if [[ -n "${DNS_COMMAND}" ]]; then
+    DNS_MODE="command"
+elif [[ -n "${CF_ZONE_ID}" ]] && integration_ready cloudflare; then
+    DNS_MODE="integration"
+fi
+
+if [[ "${DNS_MODE}" == "manual" && -n "${CF_ZONE_ID}" ]]; then
+    result_warn "Cloudflare is declared for ${CLIENT} but the integration is not ready (no usable credential, or the provider rejected it); the DNS change will be printed for the operator instead of applied"
+fi
+
+case "${DNS_MODE}" in
+    command)     DNS_APPLIED_BY="this script, via --dns-command" ;;
+    integration) DNS_APPLIED_BY="this script, via the cloudflare integration" ;;
+    *)           DNS_APPLIED_BY="the operator" ;;
+esac
+
 step OBSERVING "DNS: ${DOMAIN} currently -> ${CURRENT_IP:-unknown} (TTL ${CURRENT_TTL:-unknown}); target -> ${TARGET_IP}"
 
 {
@@ -138,10 +173,14 @@ step OBSERVING "DNS: ${DOMAIN} currently -> ${CURRENT_IP:-unknown} (TTL ${CURREN
     printf '  Current A:     %s\n' "${CURRENT_IP:-unknown}"
     printf '  Required A:    %s\n' "${TARGET_IP}"
     printf '  DNS change:    %s\n' "$([[ "${DNS_CHANGES_NEEDED}" == "true" ]] && printf 'yes' || printf 'not needed')"
-    printf '  Applied by:    %s\n' "$([[ -n "${DNS_COMMAND}" ]] && printf 'this script, via --dns-command' || printf 'the operator')"
+    printf '  Applied by:    %s\n' "${DNS_APPLIED_BY}"
+    if [[ "${DNS_MODE}" == "integration" ]]; then
+        printf '  Zone:          %s%s\n' "${CF_ZONE_ID}" "${CF_ACCOUNT:+ (account ${CF_ACCOUNT})}"
+        printf '  Record TTL:    %s\n' "${CF_TTL}"
+    fi
     printf '  Source stays:  up, serving a maintenance page\n'
     printf '  Gate required: CONFIRM CUTOVER'
-    [[ -n "${DNS_COMMAND}" && "${DNS_CHANGES_NEEDED}" == "true" ]] && printf ', CONFIRM DNS CHANGE'
+    [[ "${DNS_MODE}" != "manual" && "${DNS_CHANGES_NEEDED}" == "true" ]] && printf ', CONFIRM DNS CHANGE'
     printf '\n\n'
 } >&2
 
@@ -152,6 +191,7 @@ if [[ "${DRY_RUN}" == "true" ]]; then
     result_add_string "target_host" "${TARGET_HOST}"
     result_add_string "current_ip" "${CURRENT_IP}"
     result_add_string "target_ip" "${TARGET_IP}"
+    result_add_string "dns_applied_by" "${DNS_MODE}"
     result_add_raw "dns_change_needed" "${DNS_CHANGES_NEEDED}"
     emit_result "PLANNED"
     exit 0
@@ -201,26 +241,64 @@ fi
 # ── DNS ───────────────────────────────────────────────────────────────────────
 DNS_APPLIED=false
 if [[ "${DNS_CHANGES_NEEDED}" == "true" ]]; then
-    if [[ -n "${DNS_COMMAND}" ]]; then
-        step CONFIRMING "Checking approval gate for the DNS change"
-        require_confirm "CONFIRM DNS CHANGE" "DNS CHANGE" "Change the A record for ${DOMAIN} from ${CURRENT_IP:-unknown} to ${TARGET_IP}."
+    case "${DNS_MODE}" in
+        command)
+            step CONFIRMING "Checking approval gate for the DNS change"
+            require_confirm "CONFIRM DNS CHANGE" "DNS CHANGE" "Change the A record for ${DOMAIN} from ${CURRENT_IP:-unknown} to ${TARGET_IP}."
 
-        step EXECUTING "Applying the DNS change"
-        set +e
-        DNS_OUT="$(DOMAIN="${DOMAIN}" TARGET_IP="${TARGET_IP}" CLIENT="${CLIENT}" bash -c "${DNS_COMMAND}" 2>&1)"
-        DNS_RC=$?
-        set -e
-        journal_log "EXECUTING" "Apply DNS change" "--dns-command" "${DNS_RC}" 0 \
-            "$(printf '%s' "${DNS_OUT}" | journal_sanitize)" "EXECUTING" "EXECUTING"
-        if [[ "${DNS_RC}" -ne 0 ]]; then
-            fail_with 6 FAILED "The DNS command failed (exit ${DNS_RC}): $(printf '%s' "${DNS_OUT}" | tail -5 | tr '\n' ' ')"
-        fi
-        DNS_APPLIED=true
-        step EXECUTING "DNS change submitted"
-    else
-        step OBSERVING "No --dns-command given; apply this change yourself:"
-        printf '\n  %s  A  %s   (was %s)\n\n' "${DOMAIN}" "${TARGET_IP}" "${CURRENT_IP:-unknown}" >&2
-    fi
+            step EXECUTING "Applying the DNS change"
+            set +e
+            DNS_OUT="$(DOMAIN="${DOMAIN}" TARGET_IP="${TARGET_IP}" CLIENT="${CLIENT}" bash -c "${DNS_COMMAND}" 2>&1)"
+            DNS_RC=$?
+            set -e
+            journal_log "EXECUTING" "Apply DNS change" "--dns-command" "${DNS_RC}" 0 \
+                "$(printf '%s' "${DNS_OUT}" | journal_sanitize)" "EXECUTING" "EXECUTING"
+            if [[ "${DNS_RC}" -ne 0 ]]; then
+                fail_with 6 FAILED "The DNS command failed (exit ${DNS_RC}): $(printf '%s' "${DNS_OUT}" | tail -5 | tr '\n' ' ')"
+            fi
+            DNS_APPLIED=true
+            step EXECUTING "DNS change submitted"
+            ;;
+
+        integration)
+            step CONFIRMING "Checking approval gate for the DNS change"
+            require_confirm "CONFIRM DNS CHANGE" "DNS CHANGE" "Change the A record for ${DOMAIN} from ${CURRENT_IP:-unknown} to ${TARGET_IP}."
+
+            # Values come from the manifest and the probe above, so nothing here is
+            # concatenated from unvalidated input: the library passes each flag as
+            # its own argv entry and the engine re-checks the gate literal.
+            step EXECUTING "Applying the DNS change through the cloudflare integration"
+            set +e
+            DNS_OUT="$(integration_run_mutating cloudflare dns-upsert "CONFIRM DNS CHANGE" \
+                --zone-id "${CF_ZONE_ID}" \
+                --name "${DOMAIN}" \
+                --type A \
+                --content "${TARGET_IP}" \
+                --ttl "${CF_TTL}" 2>&1)"
+            DNS_RC=$?
+            set -e
+            # The journal gets the outcome and the verb, never the response body:
+            # an API reply is not worth the risk of it carrying the token.
+            integration_journal "EXECUTING" "cloudflare dns-upsert" "A ${DOMAIN} -> ${TARGET_IP}" "${DNS_RC}"
+            if [[ "${DNS_RC}" -ne 0 ]]; then
+                case "${DNS_RC}" in
+                    # Engine exit codes are mapped to the skill taxonomy here rather
+                    # than passed through, because the two tables answer different
+                    # questions. See conventions/integrations.md § Exit code mapping.
+                    4) fail_with 5 STOPPED "Cloudflare has no usable credential for ${CLIENT}. Store one with: warpmetal env store set cloudflare.token" ;;
+                    127) fail_with 127 STOPPED "The warpmetal CLI disappeared between the readiness probe and the DNS change; nothing was applied" ;;
+                    *) fail_with 1 FAILED "The Cloudflare DNS change failed (exit ${DNS_RC}): $(printf '%s' "${DNS_OUT}" | tail -5 | tr '\n' ' ')" ;;
+                esac
+            fi
+            DNS_APPLIED=true
+            step EXECUTING "DNS change submitted"
+            ;;
+
+        *)
+            step OBSERVING "No integration configured for ${CLIENT} and no --dns-command given; apply this change yourself:"
+            printf '\n  %s  A  %s   (was %s)\n\n' "${DOMAIN}" "${TARGET_IP}" "${CURRENT_IP:-unknown}" >&2
+            ;;
+    esac
 else
     step OBSERVING "The A record already points at ${TARGET_IP}; nothing to change"
 fi
@@ -279,6 +357,11 @@ result_add_string "previous_ip" "${CURRENT_IP}"
 result_add_string "target_ip" "${TARGET_IP}"
 result_add_raw "dns_change_needed" "${DNS_CHANGES_NEEDED}"
 result_add_raw "dns_applied" "${DNS_APPLIED}"
+result_add_string "dns_applied_by" "${DNS_MODE}"
+if [[ "${DNS_MODE}" == "integration" ]]; then
+    result_add_string "dns_provider" "cloudflare"
+    result_add_string "dns_zone_id" "${CF_ZONE_ID}"
+fi
 result_add_raw "propagated" "${PROPAGATED}"
 if [[ -n "${LIVE_STATUS}" ]]; then
     result_add_raw "live_status" "${LIVE_STATUS}"

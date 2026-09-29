@@ -98,9 +98,9 @@ agency_require_tools "python3:the exact Uptime Kuma API parse"
 
 MONITORING_HOST="${MON_HOST_OVERRIDE:-${MONITORING_HOST}}"
 KUMA_URL="${KUMA_URL:-${UPTIME_KUMA_URL}}"
-if [[ -z "${KUMA_KEY}" ]]; then
-    KUMA_KEY="${!MONITORING_KUMA_TOKEN_ENV:-}"
-fi
+# --api-key, then the variable named by monitoring.api_key_env, then the vault
+# secret named by monitoring.api_key_secret. kuma_require_key reports the gap.
+kuma_resolve_key || true
 
 journal_init "server-monitoring" "${CLIENT}" "${MANIFEST}"
 

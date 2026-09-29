@@ -47,6 +47,20 @@ Use this skill when the user says:
 
 See `conventions/client-manifest.md`. Minimum required fields: `host`, `site_root`, `domain`, `stack`, `health_url`.
 
+Repository access is verified before the deploy when GitHub is configured. The server
+keeps its own deploy key; nothing copies a credential onto it. What this proves is
+that the repository is reachable from the control machine with the stored credential,
+so a deploy does not fail ten steps in because a token expired overnight:
+
+```toml
+[integrations.github]
+repo   = "org/acme"          # optional: falls back to repo_url
+secret = "github.token"      # optional: default shown
+```
+
+The result reports `repo` and `repo_access` (`yes`, `no`, or `unknown`). A `no` is a
+warning, not a stop: the deploy pulls over the server's key, so the release continues.
+
 ## Prerequisites
 
 Nothing here is interactive: every script runs non-interactively and either
@@ -362,6 +376,7 @@ The envelope is defined in `conventions/outputs.md`. `deploy-site` adds:
 | `migrations_attempted` | `deploy` | boolean | Whether migrations were run in this deployment |
 | `migrations_were_run` | `rollback` | boolean | Whether migrations block the rollback |
 | `rolled_back_to` | `deploy` | string | Present only on `ROLLED_BACK` |
+| `repo`, `repo_access` | `deploy` | string | `owner/name` and whether GitHub access was verified (`yes`, `no`, `unknown`) |
 | `lock_state` | `inspect` | string | `free` or `held` |
 | `runtime_status` | `inspect`, `verify` | string | Output of `systemctl is-active` |
 | `migration_status` | `inspect` | string | Latest migration batch or status |

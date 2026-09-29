@@ -6,6 +6,9 @@
 # --data-binary @file. Nothing sensitive is visible in `ps` on either host.
 #
 #   kuma_require_key
+#   kuma_resolve_key               -> fills KUMA_KEY from --api-key, then the env var
+#                                     named by monitoring.api_key_env, then the vault
+#                                     secret named by monitoring.api_key_secret
 #   kuma_api <METHOD> <path> [json_body]
 #   kuma_monitors_tsv              -> id <TAB> name <TAB> type <TAB> active <TAB> url
 #   kuma_check_exists <client> <suffix>
@@ -14,15 +17,61 @@
 #   monitoring_push_monitors <client>
 
 KUMA_KEY=""
+KUMA_KEY_SOURCE=""
 KUMA_URL="${UPTIME_KUMA_URL:-}"
 
 kuma_require_key() {
     if [[ -z "${KUMA_KEY}" ]]; then
-        fail_with 5 STOPPED "No Uptime Kuma API key. Pass --api-key or export ${MONITORING_KUMA_TOKEN_ENV:-AGENCY_UPTIME_KUMA_KEY}."
+        fail_with 5 STOPPED "No Uptime Kuma API key. Pass --api-key, export ${MONITORING_KUMA_TOKEN_ENV:-AGENCY_UPTIME_KUMA_KEY}, or store monitoring.api_key_secret in the vault."
     fi
     if [[ -z "${KUMA_URL}" ]]; then
         fail_with 5 STOPPED "No Uptime Kuma URL. Set monitoring.uptime_kuma_url in the manifest or pass --kuma-url."
     fi
+}
+
+# kuma_resolve_key
+#
+# Fills KUMA_KEY from the first source that has one, in order of decreasing
+# explicitness:
+#
+#   1. --api-key             (the caller said so; already in KUMA_KEY)
+#   2. the environment       (the variable named by monitoring.api_key_env)
+#   3. the credential vault  (the secret named by monitoring.api_key_secret)
+#
+# The vault is last because it is the least visible to the operator running the
+# command, not because it is less trustworthy. The value is read through
+# integration_emit_secret, the only sanctioned path, and lands in a shell variable
+# - never in argv, the journal, or a warning.
+#
+# Returns 0 when a key was found, 1 when none of the sources had one. It does not
+# fail: a caller may legitimately want to report the gap instead of stopping.
+kuma_resolve_key() {
+    if [[ -n "${KUMA_KEY}" ]]; then
+        KUMA_KEY_SOURCE="--api-key"
+        return 0
+    fi
+
+    local from_env_name="${MONITORING_KUMA_TOKEN_ENV:-AGENCY_UPTIME_KUMA_KEY}"
+    if [[ -n "${!from_env_name:-}" ]]; then
+        KUMA_KEY="${!from_env_name}"
+        KUMA_KEY_SOURCE="env:${from_env_name}"
+        return 0
+    fi
+
+    local secret_name="${MONITORING_KUMA_TOKEN_SECRET:-uptime-kuma.token}"
+    if ! command -v integration_emit_secret >/dev/null 2>&1; then
+        return 1
+    fi
+    local value=""
+    set +e
+    value="$(integration_emit_secret "${secret_name}" 2>/dev/null)"
+    set -e
+    if [[ -n "${value}" ]]; then
+        KUMA_KEY="${value}"
+        KUMA_KEY_SOURCE="vault:${secret_name}"
+        return 0
+    fi
+    return 1
 }
 
 # kuma_api <METHOD> <path> [json_body]

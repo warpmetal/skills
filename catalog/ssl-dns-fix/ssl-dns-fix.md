@@ -272,13 +272,35 @@ bash scripts/diagnose-ssl.sh --client acme --domain www.acme.com
 bash scripts/fix-cert.sh --client acme
 ```
 
-This is always a plan first: the script runs `certbot renew --dry-run`, and if the
-dry run fails it emits `FAILED` with `reason` set and issues nothing. When the dry
-run succeeds it stops at `status: "PLANNED"` so the operator can review. Then:
+This is always a plan first: the script runs the staging dry run, and if it fails it
+emits `FAILED` with `reason` set and issues nothing. When the dry run succeeds it
+stops at `status: "PLANNED"` so the operator can review. Then:
 
 ```bash
 bash scripts/fix-cert.sh --client acme --confirm "CONFIRM CERT ISSUE"
 ```
+
+The script does two different jobs depending on what it finds:
+
+- **A certificate already exists** → it renews, keeping the challenge the cert was
+  issued with.
+- **No certificate exists yet** → it has to issue one, and the challenge is chosen
+  then. With `[integrations.cloudflare]` in the client manifest and the integration
+  ready, it uses DNS-01: the token is read from the vault, written to a `0600` file
+  on the server through an `umask 077` ssh stdin redirect (stricter than `scp`,
+  which would leave the file readable while the copy is in flight), and deleted
+  right after certbot exits. The result reports `credential_staged: true` and
+  `credential_removed: true`; a failed removal is a warning, not a silent pass.
+
+Without a DNS-01 integration the script stops rather than guessing a plugin: it
+cannot know whether your vhost serves its webroot through `--nginx`, `--webroot`, or
+something else. Issue that first certificate once by hand
+([cert-issuance.md](references/cert-issuance.md) § 2), then this script renews it.
+
+Use `--dns-challenge cloudflare` to require DNS-01 explicitly, or
+`--dns-challenge http` to refuse it. `cloudflare` stops the run when the integration
+is not ready instead of silently falling back, because a silent fallback would turn
+a DNS problem into a Let's Encrypt rate-limit problem.
 
 ### Step 3 — Fix the vhost (only when `layer` is `serving` or `mixed_content`)
 
@@ -375,7 +397,9 @@ The envelope is defined in `conventions/outputs.md`. `ssl-dns-fix` adds:
 | Gate | Enforcement |
 |------|-------------|
 | DNS before issuance | `fix-cert.sh` refuses when the domain does not resolve to this host (`reason: "no_dns_record"`) |
-| Dry-run gate | `certbot renew --dry-run` always precedes the real run; a failed dry run stops the script |
+| Dry-run gate | The staging dry run always precedes the real run; a failed dry run stops the script |
+| No guessed plugin | A first issuance needs DNS-01; without it the script stops and points at the manual step instead of picking a certbot plugin |
+| Credential hygiene | The DNS-01 token is staged at `0600`, removed immediately after certbot exits, and the removal is verified |
 | DNS diff gate | Zone changes are presented as a diff, never applied unattended |
 | HSTS warning | Explicit warning before any `max-age` above 86400 or a preload submission |
 | Rate limit guard | One certbot attempt per run, plus a warning if recent attempts appear in the LE logs |
@@ -403,7 +427,7 @@ Shared:
 | Script | Responsibility |
 |--------|----------------|
 | `scripts/diagnose-ssl.sh` | Read-only: dig, openssl, certbot certificates, nginx -T |
-| `scripts/fix-cert.sh` | certbot dry-run then apply with confirmation |
+| `scripts/fix-cert.sh` | Dry-run then issue or renew, with confirmation; DNS-01 through the Cloudflare integration when one is configured |
 | `scripts/fix-nginx.sh` | Propose nginx vhost diff, apply with confirmation, test+reload |
 
 ## Completion Criteria

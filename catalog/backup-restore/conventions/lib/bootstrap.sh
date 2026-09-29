@@ -24,8 +24,15 @@
 #   journal_init, journal_log, journal_run, journal_sanitize, journal_path
 #   ssh_run, ssh_user_run, ssh_script, ssh_target, scp_put, ssh_resolve_hostname
 #   require_confirm
-#   manifest_load, manifest_get, manifest_require, manifest_validate, manifest_validate_ssh
+#   manifest_load, manifest_get, manifest_require, manifest_validate, manifest_validate_ssh,
+#   manifest_integration, manifest_integration_keys, manifest_integrations,
+#   manifest_integration_declared, manifest_integration_secret
 #   agency_require_tools
+#   integration_cli, integration_reset, integration_available, integration_ready,
+#   integration_declared, integration_ref, integration_secret_name,
+#   integration_require_tools, integration_require_ready,
+#   integration_run, integration_run_mutating, integration_emit_secret, integration_secret_file,
+#   integration_tmp_cleanup, integration_journal, integration_denied
 #   fail_with, note, step
 
 LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -48,6 +55,8 @@ source "${LIB_DIR}/migration.sh"
 source "${LIB_DIR}/queue.sh"
 # shellcheck source=/dev/null
 source "${LIB_DIR}/monitoring.sh"
+# shellcheck source=/dev/null
+source "${LIB_DIR}/integration.sh"
 
 # --- Small conveniences used by every script ---------------------------------
 

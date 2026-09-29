@@ -42,6 +42,9 @@ Use this skill when the user says:
 |-------|---------|-------------|
 | `--action <setup\|status\|test-alert>` | `status` | What to do |
 | `--monitoring-host <alias>` | Manifest `monitoring_host` | SSH alias of Uptime Kuma host |
+| `--api-key <key>` | — | Uptime Kuma API key. Prefer the vault or the env var |
+| `--via <uptime-kuma\|slack>` | `uptime-kuma` | Transport for `test-alert` |
+| `--channel <#channel>` | Manifest `integrations.slack.channel` | Destination for `--via slack` |
 | `--dry-run` | `false` | Show plan only; no mutations |
 
 ### Required Client Configuration
@@ -57,6 +60,12 @@ page_channel      = "slack:#alerts"    # immediate page channel
 digest_channel    = "slack:#digest"    # daily summary channel
 domain_expiry_check = true
 backup_healthcheck  = "https://hc-ping.com/uuid"  # optional
+api_key_env         = "AGENCY_UPTIME_KUMA_KEY"     # optional; default shown
+api_key_secret      = "uptime-kuma.token"          # optional; vault name
+
+[integrations.slack]
+channel = "#alerts"                    # used by test-alert.sh --via slack
+secret  = "slack.token"                # or slack.webhook for an incoming hook
 ```
 
 ## Prerequisites
@@ -219,13 +228,22 @@ to your working directory, so they can be launched from anywhere. The examples b
 `cd` into the skill directory first; calling a script by absolute path works
 identically.
 `status-monitoring.sh` and `test-alert.sh` do not change monitoring configuration, so
-they take no gate. `setup-monitoring.sh` mutates and requires its exact `--confirm`
-string; without it it mutates nothing, prints `status: "CONFIRMATION_REQUIRED"` with
-`confirm_strings`, and exits `11`.
+they take no gate — with one exception: `test-alert.sh --via slack` posts a real
+message through the Slack integration and therefore requires `CONFIRM NOTIFY`.
+`setup-monitoring.sh` mutates and requires its exact `--confirm` string; without it it
+mutates nothing, prints `status: "CONFIRMATION_REQUIRED"` with `confirm_strings`, and
+exits `11`.
 
-The API key is never passed inside a URL and never stored in the client manifest. Use
-`--api-key`, or export the variable named by `monitoring.api_key_env` (default
-`AGENCY_UPTIME_KUMA_KEY`).
+The API key is never passed inside a URL and never stored in the client manifest.
+`kuma_resolve_key` looks in three places, in order of decreasing explicitness:
+
+1. `--api-key` — the operator said so.
+2. The variable named by `monitoring.api_key_env` (default `AGENCY_UPTIME_KUMA_KEY`).
+3. The vault secret named by `monitoring.api_key_secret` (default
+   `uptime-kuma.token`), read through `warpmetal env secret … --stdout`.
+
+The vault is last because it is the least visible to whoever runs the command, not
+because it is less trustworthy. The value never reaches a remote command line.
 
 ### Step 1 — Status (read-only)
 
@@ -255,7 +273,18 @@ way.
 ```bash
 bash scripts/test-alert.sh --client acme
 bash scripts/test-alert.sh --client acme --check acme-cert --notification-id 2
+
+# Post directly through the Slack integration instead:
+bash scripts/test-alert.sh --client acme --via slack \
+    --channel '#alerts' --confirm "CONFIRM NOTIFY"
 ```
+
+Uptime Kuma proves the whole alerting path, because the message travels through the
+channel configuration it will use in production. The Slack transport is the fallback
+for when that configuration cannot be exercised — an incoming webhook cannot be
+verified without sending something — and it is the only mutating action in this
+script, so it is the only one with a gate. The result says which one ran
+(`transport`).
 
 ### Reading the result
 
@@ -317,7 +346,9 @@ The envelope is defined in `conventions/outputs.md`. `server-monitoring` adds:
 | `monitors_created`, `monitors_already_present` | `setup` | number | Duplicate prevention outcome |
 | `netdata_dropin` | `setup` | string | Path of the Netdata health drop-in |
 | `proposed_count` | `setup --dry-run` | number | Number of monitors that would be created |
-| `test_alert_delivered` | `setup`, `test-alert` | boolean | Whether Uptime Kuma accepted the test |
+| `test_alert_delivered` | `setup`, `test-alert` | boolean | Whether the transport accepted the test |
+| `transport` | `test-alert` | string | `uptime-kuma` or `slack` |
+| `channel` | `test-alert --via slack` | string | Channel that received the test |
 | `check` | `test-alert` | string | Monitor name the test was aimed at |
 | `check_exists` | `test-alert` | string | `yes`, `no`, or `unknown` |
 | `notification_id` | `test-alert` | number | Channel that received the test |
@@ -383,7 +414,7 @@ Shared:
 |--------|----------------|
 | `scripts/setup-monitoring.sh` | Add Uptime Kuma checks via API, install Netdata, wire alerts |
 | `scripts/status-monitoring.sh` | Read-only: list all checks and current status for client |
-| `scripts/test-alert.sh` | Trigger test notification, verify delivery |
+| `scripts/test-alert.sh` | Trigger test notification, verify delivery (Uptime Kuma, or Slack with `--via slack`) |
 
 ## Completion Criteria
 
