@@ -19,5 +19,9 @@
     "ci-cd",
     "production",
     "zero-downtime"
+  ],
+  "minimumWarpmetalCli": "0.1.0",
+  "integrations": [
+    "github"
   ]
 }

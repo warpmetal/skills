@@ -19,5 +19,9 @@
     "tls",
     "dns",
     "certificates"
+  ],
+  "minimumWarpmetalCli": "0.1.0",
+  "integrations": [
+    "cloudflare"
   ]
 }

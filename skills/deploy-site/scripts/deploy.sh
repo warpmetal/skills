@@ -112,6 +112,21 @@ try_rsh() {
     return 0
 }
 
+# try_rsh_stdout — same contract, but stderr is discarded instead of merged.
+#
+# Use this for the calls whose output is *parsed into a value*. With `2>&1` an
+# ssh diagnostic ("Could not resolve hostname") becomes part of that value: the
+# release id, the disk percentage and the rollback target all silently turn into
+# an error sentence. Diagnostics stay visible for every call whose output is read
+# by a human or fed to a `fail_with` message, which is why this is opt-in.
+try_rsh_stdout() {
+    set +e
+    REMOTE_OUT="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" "$1" 2>/dev/null)"
+    REMOTE_RC=$?
+    set -e
+    return 0
+}
+
 CURRENT_RELEASE_ID=""
 PREVIOUS_RELEASE_ID=""
 RELEASE_ID=""
@@ -129,14 +144,44 @@ fi
 step OBSERVING "Client=${CLIENT} host=${HOST} stack=${STACK} site_root=${SITE_ROOT}"
 step OBSERVING "Ref to deploy: ${TARGET_REF}"
 
+# ── Repository access ─────────────────────────────────────────────────────────
+# The server keeps its own deploy key; nothing here copies a credential onto it.
+# What this proves is that the repository is reachable from the control machine
+# with the stored credential, so a deploy does not fail ten steps in because a
+# token expired overnight. `owner/name` comes from integrations.github.repo and
+# falls back to the `git@github.com:org/acme.git` form of repo_url.
+REPO_SLUG="$(integration_ref github repo)"
+if [[ -z "${REPO_SLUG}" ]]; then
+    REPO_SLUG="$(printf '%s' "${REPO_URL}" | sed -n 's#.*[:/]\([^/]*/[^/]*\)\.git$#\1#p')"
+fi
+
+REPO_ACCESS="unknown"
+if [[ -n "${REPO_SLUG}" ]]; then
+    if integration_require_ready github "the GitHub repository access check"; then
+        set +e
+        REPO_OUT="$(integration_run github repo-view --repo "${REPO_SLUG}" 2>&1)"
+        REPO_RC=$?
+        set -e
+        if [[ "${REPO_RC}" -eq 0 && "$(integration_status_of "${REPO_OUT}")" == "OK" ]]; then
+            REPO_ACCESS="yes"
+            step OBSERVING "GitHub access to ${REPO_SLUG}: verified"
+        else
+            REPO_ACCESS="no"
+            # A warning, not a stop: the deploy pulls over the server's own key, so
+            # an unverifiable control-machine credential does not block the release.
+            result_warn "GitHub access to ${REPO_SLUG} could not be verified (exit ${REPO_RC}); the server's deploy key is what pulls the code, so the deploy continues"
+        fi
+    fi
+fi
+
 if [[ -n "${TARGET_COMMIT}" && ! "${TARGET_COMMIT}" =~ ^[0-9a-fA-F]{7,40}$ ]]; then
     fail_with 5 STOPPED "--commit must be a hexadecimal SHA, got: ${TARGET_COMMIT}"
 fi
 
-try_rsh "readlink -f '${SITE_ROOT}/current' 2>/dev/null || true"
+try_rsh_stdout "readlink -f '${SITE_ROOT}/current' 2>/dev/null || true"
 CURRENT_RELEASE_ID="$(basename "${REMOTE_OUT}" 2>/dev/null || true)"
 
-try_rsh "
+try_rsh_stdout "
     cd '${RELEASES_DIR}' 2>/dev/null || exit 0
     for d in \$(ls -1t); do
         [ \"\$d\" = '${CURRENT_RELEASE_ID}' ] && continue
@@ -146,7 +191,7 @@ try_rsh "
 "
 PREVIOUS_RELEASE_ID="$(printf '%s' "${REMOTE_OUT}" | head -1 | tr -d '[:space:]')"
 
-try_rsh "df -h '${SITE_ROOT}' 2>/dev/null | tail -1 | awk '{print \$5}'"
+try_rsh_stdout "df -h '${SITE_ROOT}' 2>/dev/null | tail -1 | awk '{print \$5}'"
 DISK_PCT="$(printf '%s' "${REMOTE_OUT}" | tr -d '%[:space:]')"
 if [[ "${DISK_PCT}" =~ ^[0-9]+$ ]] && (( DISK_PCT > 90 )); then
     fail_with 13 STOPPED "Disk usage is ${DISK_PCT}% on ${HOST}; refusing to deploy"
@@ -483,6 +528,8 @@ result_add_string "previous_release_id" "${CURRENT_RELEASE_ID}"
 result_add_raw "health_checks" "{\"attempts\":${HEALTH_ATTEMPTS},\"passed\":${health_passed},\"url\":$(json_string "${HEALTH_URL}")}"
 result_add_raw "rollback_performed" "false"
 result_add_raw "migrations_attempted" "$([[ "${MIGRATIONS_ATTEMPTED}" == "true" ]] && printf 'true' || printf 'false')"
+result_add_string "repo" "${REPO_SLUG}"
+result_add_string "repo_access" "${REPO_ACCESS}"
 result_add_string "journal" "$(journal_path)"
 
 emit_result "READY"

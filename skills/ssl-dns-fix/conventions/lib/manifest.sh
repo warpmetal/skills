@@ -24,8 +24,13 @@
 #   MONITORING_HOST, UPTIME_KUMA_URL, PAGE_CHANNEL, DIGEST_CHANNEL,
 #   MONITORING_PAGE_NOTIFICATION_ID, MONITORING_DIGEST_NOTIFICATION_ID,
 #   MONITORING_CHECK_INTERVAL, MONITORING_DOMAIN_EXPIRY_CHECK, MONITORING_NETDATA_URL,
-#   MONITORING_KUMA_TOKEN_ENV
+#   MONITORING_KUMA_TOKEN_ENV, MONITORING_KUMA_TOKEN_SECRET
 #   MIGRATION_SOURCE_HOST, MIGRATION_TARGET_HOST, MIGRATION_TARGET_ROOT, MIGRATION_MAIL_RELAY, MIGRATION_TTL_LOWERED
+#   INTEGRATIONS (providers declared under [integrations.<provider>])
+#
+# Integration references are read on demand with manifest_integration; they are
+# not hoisted into variables because the set of providers grows and a global per
+# provider would silently go stale.
 #
 # Exit codes (per conventions/outputs.md):
 #   2 — invalid arguments / missing manifest
@@ -277,6 +282,61 @@ manifest_get_from() {
     fi
 }
 
+# --- Integration references ---------------------------------------------------
+
+# A manifest stores references, never values: a zone id, an account label, the
+# *name* of a secret. The value lives in the vault and is read one name at a time
+# by conventions/lib/integration.sh. Nothing here ever returns a credential.
+
+# manifest_integration <provider> <key> [default]
+manifest_integration() {
+    local provider="$1"
+    local key="$2"
+    local default_value="${3:-}"
+    manifest_get "integrations.${provider}.${key}" "${default_value}"
+}
+
+# manifest_integration_keys <provider> — one "key<TAB>value" line per key.
+manifest_integration_keys() {
+    local provider="${1:-}"
+    [[ -z "${provider}" ]] && return 2
+    printf '%s\n' "${MANIFEST_DUMP}" | awk -F'\t' -v prefix="integrations.${provider}." '
+        index($1, prefix) == 1 { print substr($1, length(prefix) + 1) "\t" $2 }'
+}
+
+# manifest_integrations — one declared provider per line, in manifest order.
+# Order is preserved because it is the order the operator wrote, which is the
+# order to report problems in.
+manifest_integrations() {
+    printf '%s\n' "${MANIFEST_DUMP}" | awk -F'\t' '
+        index($1, "integrations.") == 1 {
+            rest = substr($1, length("integrations.") + 1)
+            split(rest, parts, ".")
+            if (parts[1] != "" && !seen[parts[1]]++) print parts[1]
+        }'
+}
+
+# manifest_integration_declared <provider> — 0 when the section has any key.
+# Declaration is not configuration: this says the operator asked for it, not that
+# it will work. Use integration_ready (integration.sh) before a mutation.
+manifest_integration_declared() {
+    local provider="${1:-}"
+    [[ -z "${provider}" ]] && return 2
+    if [[ -n "$(manifest_integration_keys "${provider}")" ]]; then
+        return 0
+    fi
+    return 1
+}
+
+# manifest_integration_secret <provider> [default]
+# The name of the secret to read from the vault. Defaults to <provider>.token,
+# which is what the engine's catalog publishes for every provider in this release.
+manifest_integration_secret() {
+    local provider="$1"
+    local default_value="${2:-${provider}.token}"
+    manifest_integration "${provider}" "secret" "${default_value}"
+}
+
 # --- Failure ------------------------------------------------------------------
 
 _manifest_fail() {
@@ -405,6 +465,7 @@ manifest_load() {
     MONITORING_DOMAIN_EXPIRY_CHECK="$(manifest_get monitoring.domain_expiry_check false)"
     MONITORING_NETDATA_URL="$(manifest_get monitoring.netdata_url)"
     MONITORING_KUMA_TOKEN_ENV="$(manifest_get monitoring.api_key_env AGENCY_UPTIME_KUMA_KEY)"
+    MONITORING_KUMA_TOKEN_SECRET="$(manifest_get monitoring.api_key_secret "uptime-kuma.token")"
 
     MIGRATION_SOURCE_HOST="$(manifest_get migration.source_host)"
     MIGRATION_TARGET_HOST="$(manifest_get migration.target_host)"
@@ -424,7 +485,7 @@ manifest_load() {
     export MONITORING_HOST UPTIME_KUMA_URL PAGE_CHANNEL DIGEST_CHANNEL
     export MONITORING_PAGE_NOTIFICATION_ID MONITORING_DIGEST_NOTIFICATION_ID
     export MONITORING_CHECK_INTERVAL MONITORING_DOMAIN_EXPIRY_CHECK
-    export MONITORING_NETDATA_URL MONITORING_KUMA_TOKEN_ENV
+    export MONITORING_NETDATA_URL MONITORING_KUMA_TOKEN_ENV MONITORING_KUMA_TOKEN_SECRET
     export MIGRATION_SOURCE_HOST MIGRATION_TARGET_HOST MIGRATION_TARGET_ROOT
     export MIGRATION_MAIL_RELAY MIGRATION_TTL_LOWERED
 }

@@ -19,5 +19,9 @@
     "rsync",
     "cutover",
     "dns"
+  ],
+  "minimumWarpmetalCli": "0.1.0",
+  "integrations": [
+    "cloudflare"
   ]
 }
