@@ -99,6 +99,7 @@ async function dispatch(argv: readonly string[], deps: ResolvedDeps): Promise<nu
       paths: deps.paths,
       env: deps.env,
       preferKeychain: true,
+      vaultHttp: createHttp(deps.fetchFn ?? fetch),
     }));
 
     if (head === "env") {

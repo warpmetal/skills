@@ -1,4 +1,4 @@
-import type { BackendInfo, SecretBackend, VaultPayload } from "./types.js";
+import type { BackendInfo, PayloadBackend, VaultPayload } from "./types.js";
 
 /**
  * OS keychain backend, used when `@napi-rs/keyring` is installed.
@@ -38,7 +38,7 @@ async function loadKeyring(): Promise<KeyringModule | null> {
   }
 }
 
-export class KeychainBackend implements SecretBackend {
+export class KeychainBackend implements PayloadBackend {
   readonly kind = "keychain" as const;
   readonly #module: KeyringModule;
   readonly #entry: KeyringEntry;

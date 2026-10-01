@@ -28,6 +28,8 @@ packages/warpmetal-cli/        @warpmetal/cli integration engine (vault + provid
 scripts/                       build, verify, pages tooling
 tools/                         bash policy validator and the integration library self-test
 PLAN.md                        the implementation plan this repo was built from
+INTEGRATIONS.md                third-party integrations: the engine, the vault, the gates
+INTEGRATIONS.es.md             the same guide in Spanish
 ```
 
 ## Commands
@@ -157,9 +159,12 @@ warpmetal integration cloudflare dns-upsert --zone-id … --name … --type A --
 
 **The vault** stores one secret per namespaced name, encrypted with AES-256-GCM and
 scrypt under `~/.config/warpmetal/env/`, or in the OS keychain when one is
-available. A value leaves the vault through exactly one path —
-`warpmetal env secret <name> --stdout` — and never appears in argv, in `--json`
-output, in a journal entry, or in a log.
+available — or on the server when `WARPMETAL_VAULT_URL` points the store at WarpMetal
+Identity's vault. That backend wins over both local ones, carries the customer CLI
+device session as `X-Warpmetal-Customer-Authorization`, and fails closed without a
+session instead of falling back to a local file. A value leaves the vault through
+exactly one path — `warpmetal env secret <name> --stdout` — and never appears in
+argv, in `--json` output, in a journal entry, or in a log.
 
 **The gates.** A mutating verb requires its own literal, checked twice: by
 `integration_run_mutating` in bash and again by the engine.
@@ -181,7 +186,10 @@ secret  = "cloudflare.token"   # the name; the value lives in the vault
 Which skills use which provider is declared in `skill.json` (`integrations`) and
 validated against the engine catalog by `npm run validate:skills`. The full
 contract — API, honest degradation, exit-code mapping, and the provider catalog —
-is in [`conventions/integrations.md`](./conventions/integrations.md).
+is in [`conventions/integrations.md`](./conventions/integrations.md). The
+operator-facing walkthrough — how the layers fit, the remote vault, the bash API and
+the exit-code mapping — is in [`INTEGRATIONS.md`](./INTEGRATIONS.md)
+([español](./INTEGRATIONS.es.md)).
 
 ## Adding a skill
 

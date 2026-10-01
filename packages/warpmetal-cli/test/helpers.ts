@@ -2,11 +2,11 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import type { SecretBackend, VaultPayload } from "../src/env/backends/types.js";
+import type { PayloadBackend, VaultPayload } from "../src/env/backends/types.js";
 import { CredentialStore } from "../src/env/store.js";
 
 /** A backend that never touches the disk. Fast, and used by most tests. */
-export class MemoryBackend implements SecretBackend {
+export class MemoryBackend implements PayloadBackend {
   readonly kind = "file" as const;
   payload: VaultPayload | null = null;
   saves = 0;

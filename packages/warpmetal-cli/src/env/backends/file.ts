@@ -3,7 +3,7 @@ import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync, wri
 import { dirname } from "node:path";
 
 import { CliError } from "../../errors.js";
-import type { BackendInfo, SecretBackend, VaultPayload } from "./types.js";
+import type { BackendInfo, PayloadBackend, VaultPayload } from "./types.js";
 
 /**
  * AES-256-GCM + scrypt backend. The default on every platform, and the only
@@ -42,7 +42,7 @@ interface Envelope {
   readonly ciphertext: string;
 }
 
-export class FileBackend implements SecretBackend {
+export class FileBackend implements PayloadBackend {
   readonly kind = "file" as const;
   readonly #options: FileBackendOptions;
 

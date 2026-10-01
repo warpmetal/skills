@@ -32,10 +32,11 @@ not own:
 One vault, one API. There is no call that returns the whole vault, so a command
 cannot leak every secret by spreading an object it was handed.
 
-| Backend    | When                        | What it protects                                                                 |
-| ---------- | --------------------------- | -------------------------------------------------------------------------------- |
-| `keychain` | `@napi-rs/keyring` present  | Everything. No key material is written to the config directory.                   |
-| `file`     | everywhere else (default)   | The vault at rest: backups, copied dotfiles, a stray commit. Not a local attacker who can read the config directory. |
+| Backend    | When                         | What it protects                                                                 |
+| ---------- | ---------------------------- | -------------------------------------------------------------------------------- |
+| `remote`   | `WARPMETAL_VAULT_URL` is set | Everything, centrally. The value never touches local disk; the server holds the ciphertext and enforces compare-and-set per name. |
+| `keychain` | `@napi-rs/keyring` present   | Everything. No key material is written to the config directory.                   |
+| `file`     | everywhere else (default)    | The vault at rest: backups, copied dotfiles, a stray commit. Not a local attacker who can read the config directory. |
 
 The file backend is AES-256-GCM with a scrypt-derived key (`N=2^15, r=8, p=1`).
 The key comes from `WARPMETAL_VAULT_PASSPHRASE`, or from `env/vault.key` created
@@ -45,11 +46,33 @@ half vault behind.
 The vault lives under `$WARPMETAL_CONFIG_DIR`, `$XDG_CONFIG_HOME/warpmetal` or
 `~/.config/warpmetal`, in `env/`.
 
+### Remote vault
+
+Setting `WARPMETAL_VAULT_URL` to a customer-facing endpoint that fronts WarpMetal
+Identity's `/internal/customer/cli/credentials*` routes makes the server the vault. It
+is consulted before the local backends, so an explicit `WARPMETAL_VAULT_URL` is never
+silently ignored.
+
+- **The session** is the customer CLI device token, sent as
+  `X-Warpmetal-Customer-Authorization`. `WARPMETAL_VAULT_TOKEN` overrides it for CI;
+  otherwise the token is read from `<config>/session.json`.
+- **It fails closed.** No session, or an expired one, is exit `4` on every operation.
+  It never falls back to the local file, so a rejected session cannot put a credential
+  somewhere you did not choose.
+- **It is per-key.** A write sends the one value it was given, and presence is answered
+  from list metadata, so `env plan` and `env doctor` never fetch a value.
+- **Nothing is cached.** `generation` is the version the server reports, so another
+  client's write is visible immediately and can invalidate the next write.
+- **Two commands are refused.** `env store rotate` and `env store destroy` return
+  `unsupported` (exit `6`): the version is the server's, and destroying a tenant vault
+  is not a local act. Use `env revoke`, which removes a namespace one name at a time.
+
 ### Where a secret is allowed to go
 
 Exactly two places. `warpmetal env secret NAME --stdout` writes a raw value to
-stdout with no trailing newline, and the encrypted vault holds it at rest. It
-must not appear in:
+stdout with no trailing newline, and the encrypted vault holds it at rest — the local
+file, the OS keychain, or the server's ciphertext when the remote backend is in use.
+It must not appear in:
 
 - argv, ever. `env store set` refuses positional values; it reads `--stdin` or
   `--from-env` and rejects an interactive terminal.
@@ -96,6 +119,11 @@ Two rules hold for every adapter:
 
 `revoke` removes local material and states plainly that it cannot revoke a token
 at the provider. `unsupported` and `uncertain` are reported as such.
+
+The operator-facing walkthrough — the three layers, the remote vault, the bash library
+API and the exit-code mapping — is in
+[`INTEGRATIONS.md`](https://github.com/warpmetal/skills/blob/main/INTEGRATIONS.md)
+([español](https://github.com/warpmetal/skills/blob/main/INTEGRATIONS.es.md)).
 
 ## Development
 

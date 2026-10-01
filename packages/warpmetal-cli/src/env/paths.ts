@@ -22,6 +22,14 @@ export interface EnvPaths {
   readonly vaultFile: string;
   /** Local key material for the file backend. */
   readonly keyFile: string;
+  /**
+   * Customer CLI device session for the remote backend.
+   *
+   * Written by the sign-in flow, read - never written - here. It sits beside
+   * the config root rather than inside `env/` because it is not vault
+   * material: losing it costs a re-authentication, not a secret.
+   */
+  readonly sessionFile: string;
   /** Serialized plans written by `env plan`. */
   readonly plansDir: string;
   /** Short-lived 0600 shims written by `env secret --file`. */
@@ -44,6 +52,7 @@ export function resolvePaths(env: NodeJS.ProcessEnv = process.env): EnvPaths {
     root,
     vaultFile: join(root, "vault.enc"),
     keyFile: join(root, "vault.key"),
+    sessionFile: join(base, "session.json"),
     plansDir: join(root, "plans"),
     shimsDir: join(root, "shims"),
   };

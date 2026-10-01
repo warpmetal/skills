@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { describe, it } from "node:test";
 
 import { CliError } from "../src/errors.js";
+import { PayloadKeyAdapter } from "../src/env/backends/perkey.js";
 import { CredentialStore } from "../src/env/store.js";
 import { memoryStore, tempEnv } from "./helpers.js";
 
@@ -68,6 +69,39 @@ describe("credential store", () => {
     assert.equal(surface.includes("values"), false);
     assert.equal(surface.includes("dump"), false);
     assert.equal(surface.includes("payload"), false);
+  });
+
+  // A whole-payload write is read-modify-write. Without serialization, two
+  // writes interleave as read N / read N / write N+1 / write N+1 and the
+  // second silently drops the first. Each name must survive on its own.
+  it("does not lose a concurrent write to a different name", async () => {
+    const { store, backend } = await memoryStore();
+
+    await Promise.all([
+      store.write("cloudflare.token", "cf"),
+      store.write("slack.token", "slack"),
+      store.write("github.token", "gh"),
+    ]);
+
+    assert.equal(await store.read("cloudflare.token"), "cf");
+    assert.equal(await store.read("slack.token"), "slack");
+    assert.equal(await store.read("github.token"), "gh");
+    assert.equal(backend.saves, 3);
+  });
+
+  it("rejects a write against a stale generation and leaves the vault intact", async () => {
+    const { backend } = await memoryStore({ "slack.token": "x" });
+    const adapter = new PayloadKeyAdapter(backend);
+    const stale = await adapter.generation();
+
+    await adapter.put("cloudflare.token", "cf");
+
+    await assert.rejects(
+      () => adapter.put("github.token", "gh", { ifGeneration: stale }),
+      /stale vault version/,
+    );
+    assert.equal(await adapter.get("github.token"), null);
+    assert.equal(await adapter.get("cloudflare.token"), "cf");
   });
 });
 

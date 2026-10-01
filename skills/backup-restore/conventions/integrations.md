@@ -152,13 +152,15 @@ message is sent and the result says so.
 The engine and a skill script answer different questions, so the engine's codes are
 mapped rather than passed through. A missing credential is not "git failure"; it is
 a missing prerequisite, and the skill's own table (`outputs.md`) has the word for it.
+The one code below that is not the engine's is `11`, which this library returns itself.
 
-| Engine exit | Meaning | Skill action |
-|-------------|---------|--------------|
+| Exit code | Meaning | Skill action |
+|-----------|---------|--------------|
 | `0` | Reported (including `DEGRADED`) | Continue; read `status` from the JSON if the distinction matters. |
+| `2` | Usage or configuration error — a mutating verb invoked without its `--confirm` literal lands here | Fix the invocation. Nothing was sent. |
 | `4` | `NEEDS_AUTH` | `fail_with 5 STOPPED` — prerequisite missing. |
 | `5` | `ERROR` (provider rejected it) | `fail_with 1 FAILED`. |
-| `11` | The engine's own gate check refused | `integration_denied <provider> <verb> <gate>` then stop. |
+| `11` | Refused by **this** library, not the engine: the gate was not approved in this run, so the engine was never called | `integration_denied <provider> <verb> <gate>` then stop. |
 | `127` | The engine is not installed or vanished | `fail_with 127 STOPPED`. |
 
 A script must never emit an engine status such as `NEEDS_AUTH` as its own result:
