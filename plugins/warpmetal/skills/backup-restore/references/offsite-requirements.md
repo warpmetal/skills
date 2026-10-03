@@ -12,9 +12,9 @@
 | Account suspended or compromised | Same-account backups anywhere |
 | Region-level event | Same-region backups |
 
-A backup in the same DigitalOcean account as the server does NOT survive an account
-suspension. A backup in DigitalOcean Spaces when the server is on DigitalOcean Droplets
-is better, but still vulnerable to account-level issues.
+A backup in the same provider account as the server does NOT survive an account
+suspension. A backup in that provider's own object storage while the server runs on
+that provider's compute is better, but still vulnerable to account-level issues.
 
 ## Minimum Requirement
 
@@ -26,9 +26,9 @@ Backups must be in:
 
 | Server | Backup repo |
 |--------|-------------|
-| DigitalOcean | AWS S3, Backblaze B2, Wasabi |
-| Linode / Akamai | DigitalOcean Spaces, AWS S3 |
-| AWS EC2 | Backblaze B2, Wasabi, DigitalOcean Spaces |
+| Hetzner | AWS S3, Backblaze B2, Wasabi |
+| Linode / Akamai | AWS S3, Backblaze B2 |
+| AWS EC2 | Backblaze B2, Wasabi |
 | Any VPS | Backblaze B2 (cheapest, reliable, different provider) |
 
 **Marginal (same provider, different region):**

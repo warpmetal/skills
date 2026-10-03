@@ -2,13 +2,27 @@ import { findProvider, PROVIDERS } from "../registry.js";
 import { cloudflareAdapter } from "./cloudflare.js";
 import { githubAdapter } from "./github.js";
 import { slackAdapter } from "./slack.js";
+import { emailAdapter } from "./email.js";
+import { discordAdapter } from "./discord.js";
+import { vercelAdapter } from "./vercel.js";
+import { sentryAdapter } from "./sentry.js";
+import { stripeAdapter } from "./stripe.js";
 import type { Adapter } from "./types.js";
 
 /**
  * The adapter table. One adapter per catalog entry, in catalog order, so
  * `providerNames()` and `adapters()` can never disagree about what exists.
  */
-const ADAPTERS: readonly Adapter[] = [cloudflareAdapter, githubAdapter, slackAdapter];
+const ADAPTERS: readonly Adapter[] = [
+  cloudflareAdapter,
+  githubAdapter,
+  slackAdapter,
+  emailAdapter,
+  discordAdapter,
+  vercelAdapter,
+  sentryAdapter,
+  stripeAdapter,
+];
 
 export function adapters(): readonly Adapter[] {
   return ADAPTERS;

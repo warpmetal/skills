@@ -107,6 +107,10 @@ auth modes it accepts, the secrets it reads, its capabilities, the external
 tools it prefers, what its scopes can and cannot enforce, the files it writes, a
 verification command, a redacted error map, and how confident revocation can be.
 
+Today the catalog covers three families: DNS (`cloudflare`), notifications
+(`slack`, `email`, `discord`), and read-only platform probes (`github`, `vercel`,
+`sentry`, `stripe`).
+
 Two rules hold for every adapter:
 
 1. `status` never mutates and never prints a success it cannot verify. A Slack
@@ -122,8 +126,7 @@ at the provider. `unsupported` and `uncertain` are reported as such.
 
 The operator-facing walkthrough — the three layers, the remote vault, the bash library
 API and the exit-code mapping — is in
-[`INTEGRATIONS.md`](https://github.com/warpmetal/skills/blob/main/INTEGRATIONS.md)
-([español](https://github.com/warpmetal/skills/blob/main/INTEGRATIONS.es.md)).
+[`INTEGRATIONS.md`](https://github.com/warpmetal/skills/blob/main/INTEGRATIONS.md).
 
 ## Development
 

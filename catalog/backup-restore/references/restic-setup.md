@@ -6,7 +6,7 @@
 - Client-side encryption (AES-256)
 - Content-addressed deduplication (send only changed blocks)
 - Built-in retention with `forget --prune`
-- Supports S3, B2, Spaces, SFTP, local, and more
+- Supports S3, B2, Wasabi, SFTP, local, and more
 
 Preferred over hand-rolled `mysqldump | gzip | rclone` because retention and dedup
 are where hand-rolled scripts rot quietly for months.
@@ -49,13 +49,13 @@ export RESTIC_PASSWORD="$(cat /etc/restic/acme.password)"
 restic init
 ```
 
-### DigitalOcean Spaces
+### Wasabi
 
-Spaces is S3-compatible:
+Wasabi is S3-compatible:
 ```bash
 export AWS_ACCESS_KEY_ID="..."
 export AWS_SECRET_ACCESS_KEY="..."
-export RESTIC_REPOSITORY="s3:nyc3.digitaloceanspaces.com/mybucket/acme"
+export RESTIC_REPOSITORY="s3:s3.wasabisys.com/mybucket/acme"
 ```
 
 ## Password File

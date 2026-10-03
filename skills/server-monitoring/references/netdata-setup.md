@@ -89,10 +89,11 @@ SLACK_WEBHOOK_URL="https://hooks.slack.com/services/..."
 DEFAULT_RECIPIENT_SLACK="#acme-alerts"
 ```
 
-Or to PagerDuty:
+Or to Discord:
 ```bash
-SEND_PAGERDUTY="YES"
-PAGERDUTY_SERVICE_KEY="..."
+SEND_DISCORD="YES"
+DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."
+DEFAULT_RECIPIENT_DISCORD="acme-alerts"
 ```
 
 ## Silence Noisy Alarms

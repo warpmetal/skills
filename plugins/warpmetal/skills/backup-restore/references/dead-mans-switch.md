@@ -27,7 +27,7 @@ If ping not received within (period + grace):
 | Service | Free tier | Notes |
 |---------|-----------|-------|
 | healthchecks.io | 20 checks | Self-hostable; good UI |
-| Better Uptime | 5 monitors free | Integrates with Slack/PagerDuty |
+| Better Uptime | 5 monitors free | Integrates with Slack/Discord/email |
 | Cronitor | 5 monitors | Has schedule-aware alerting |
 | UptimeRobot | — | HTTP monitors but not cron-native |
 
@@ -60,7 +60,7 @@ most small agency needs.
 ## Alert Routing
 
 Dead-man alerts should route to the same place as other critical alerts.
-Configure in the healthcheck service to send to `page_channel` (Slack, PagerDuty, etc.)
+Configure in the healthcheck service to send to `page_channel` (Slack, Discord, email, etc.)
 
 ## Testing the Dead-Man's Switch
 

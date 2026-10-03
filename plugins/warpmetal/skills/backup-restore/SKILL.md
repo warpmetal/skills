@@ -389,7 +389,7 @@ The envelope is defined in `conventions/outputs.md`. `backup-restore` adds:
 
 ## References
 
-- [Restic Setup](references/restic-setup.md) — Installation, repo init, S3/B2/Spaces config
+- [Restic Setup](references/restic-setup.md) — Installation, repo init, S3/B2/Wasabi config
 - [What to Back Up](references/what-to-backup.md) — What to include and explicitly exclude
 - [Retention Policy](references/retention-policy.md) — 7 daily / 4 weekly / 6 monthly, forget --prune
 - [Restore Drill](references/restore-drill.md) — Full drill procedure and verification checks

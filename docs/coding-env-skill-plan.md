@@ -1,8 +1,9 @@
 # coding-env Skill + `warpmetal env` — Implementation Plan
 
-Status: planning complete; implementation not started (registry-side prerequisites are in place).
-Revision: 2026-09-21, revision 1.
+Status: design locked; the registry side is complete and the `warpmetal env` engine has partially landed (`store`/`secret`/`status`/`doctor`/`revoke` in `packages/warpmetal-cli`), while `setup`/`plan`/`apply`, host-config writing, and the `coding-env` skill content remain pending.
+Revision: 2026-09-21, revision 2 (reflects the `warpmetal env` engine that shipped 2026-09-28).
 Related plan: [`PLAN.md`](../PLAN.md) (skill registry, distribution channels, MCP server).
+Execution status: [`ROADMAP.md`](../ROADMAP.md).
 Workstream: this repository (`warpmetal/skills`): the `warpmetal` CLI, the `warpmetal env` command family, and the `coding-env` Agent Skill.
 
 ## 1. Context
@@ -279,7 +280,7 @@ acts as an adapter; it is not part of v1.
 
 ## 15. Delivery status (2026-09-21)
 
-Registry-side prerequisites completed in this repository (see [`PLAN.md`](../PLAN.md#delivery-status-2026-09-21)):
+Registry-side prerequisites completed in this repository (see [`ROADMAP.md`](../ROADMAP.md)):
 
 - [x] Distribution channels exist for every target host, including DeepSeek Harness
       (`.agents/skills`, `dsh-mcp-client`) and any MCP-capable local agent.
@@ -290,7 +291,7 @@ Registry-side prerequisites completed in this repository (see [`PLAN.md`](../PLA
       no registry or skill content, records installed versions in a lockfile, and updates only with
       explicit consent. Per-skill versions; tag pinning now, `name@version` later.
 
-Not started, in dependency order:
+Not yet complete, in dependency order:
 
 - [x] Core `warpmetal env` implementation in this repository: the vault, `store`, `secret`,
       `status`, `doctor`, and `revoke` ship in `packages/warpmetal-cli` (`@warpmetal/cli`) as of

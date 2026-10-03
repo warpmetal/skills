@@ -120,7 +120,7 @@ secret  = "cloudflare.token"   # the *name*; the value lives in the vault
 | `php` | Conditional | string | Required for `laravel` and `wordpress`. Format: `8.3`, `8.2`, etc. |
 | `db` | Conditional | table | Required for `laravel` and `wordpress`. `engine` ∈ {mysql, pgsql}. |
 | `health_url` | Yes | string | HTTPS URL returning 200 OK when healthy. Used by deploy-site health gate and server-monitoring. |
-| `alert_to` | No | string | Alert routing. Format: `slack:#channel`, `telegram:@chat`, `email:addr`. |
+| `alert_to` | No | string | Alert routing. Format: `slack:#channel`, `discord:#channel`, `email:addr`. |
 | `repo_url` | No | string | Git remote URL. Defaults to origin remote on server. |
 | `branch` | No | string | Git branch to deploy. Default: `main`. |
 | `deploy_user` | No | string | Remote user for file operations. Default: `www-data`. |

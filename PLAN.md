@@ -1,7 +1,7 @@
 # Skills Registry + `@warpmetal/skills-mcp` — Implementation Plan
 
-Status: planning complete; implementation ready to execute from a build agent.
-Revision: 2026-09-21, revision 2 (adds repo bootstrap, Docker, CI/CD).
+Status: design locked 2026-09-21; execution status is tracked in [`ROADMAP.md`](ROADMAP.md).
+Revision: 2026-09-21, revision 2 (adds repo bootstrap, Docker, CI/CD); frozen as a design document.
 Related plan: [`docs/coding-env-skill-plan.md`](docs/coding-env-skill-plan.md) (the `coding-env` skill and `warpmetal env` CLI).
 Workstream: this repository (`warpmetal/skills`): the skill registry, every generated distribution channel, the `warpmetal` CLI, and the MCP server.
 
@@ -40,9 +40,11 @@ Goals:
 - Reproducible releases: GitHub Actions verifies, publishes to npm, pushes GHCR images, and deploys
   the immutable catalog.
 
-Non-goals (v1): private/authenticated registries, writing or installing skills over MCP,
+Non-goals (v1): authenticated *transport* in this server, writing or installing skills over MCP,
 auto-update, skill execution sandboxing, third-party skill submissions, paid skills, x402api-pay
-bundling (it stays an external skill).
+bundling (it stays an external skill). Private/team registries are served by a second instance
+loading a second registry; the isolation is the loaded registry, plus an optional bearer token the
+server can send to an authenticated catalog (see §8).
 
 ## 3. Decisions (locked 2026-09-21)
 
@@ -66,9 +68,11 @@ warpmetal/skills/
   PLAN.md                       # this plan, committed as the first document
   registry.json                 # source of truth (generated manifest, committed)
   registry.schema.json
+  registry.internal.json        # internal registry manifest (committed, never published)
   skills/
     warpmetal/SKILL.md, references/...
     coding-env/SKILL.md, references/{roles,providers}/...
+  internal-skills/              # internal-only skills; built into registry.internal.json
   plugins/warpmetal/            # Claude/omp-compatible plugin (skills + plugin.json)
   .omp-plugin/marketplace.json
   .claude-plugin/marketplace.json
@@ -163,7 +167,19 @@ delayed.
   network use, declared tools/roles), CODEOWNERS review before merge.
 - Prompt-injection disclosure: MCP-returned content is untrusted input; document that MCP reads are
   not file-reviewed at install time and recommend version pinning.
-- No auth in v1 (public read-only). Private/team registries are a future plan.
+- No auth in the server's own transport (public read-only). Private/team registries are isolated by
+  running a second instance that loads a second registry (`--registry <path|url>` or
+  `WARPMETAL_SKILLS_REGISTRY`), never by a visibility flag inside one registry. The internal skills
+  live in this same repository under `internal-skills/`, built by `npm run build:internal` into
+  `registry.internal.json` + git-ignored `snapshot.internal/`; the public build reads only `skills/`,
+  so no internal name reaches `registry.json`, the generated channels, or the npm snapshot. The
+  server can also authenticate to an internal catalog with a bearer token (`--registry-token-file` or
+  `WARPMETAL_SKILLS_REGISTRY_TOKEN`): it is sent as `Authorization: Bearer` on every manifest and file
+  request, only as a header (never in the query string, which error messages echo), the cache is
+  partitioned by a hash of the token, and a `401`/`403` fails closed with `registry_unauthorized`
+  instead of falling back to the public snapshot. The token exists only on the internal instance. The
+  internal endpoint is still authenticated at the edge (a gateway in front of `/mcp`) because the
+  HTTP transport has no authentication of its own.
 - Supply chain: lockfile, pinned deps, provenance, no postinstall scripts; container images get OCI
   SBOM + provenance attestations.
 
@@ -280,79 +296,11 @@ attestations), `packages: write` (GHCR), and `pages: write` for the catalog depl
 OIDC trusted publishing so no long-lived `NPM_TOKEN` exists; if unavailable in P0, use a scoped
 automation token stored as a repository secret.
 
-## 14. Delivery status (2026-09-21)
+## 14. Delivery status
 
-Completed in this repository:
-
-- [x] Repository bootstrap: public `warpmetal/skills`, `PLAN.md`, README, CONTRIBUTING, SECURITY,
-      LICENSE (UNLICENSED), CODEOWNERS, CI workflows.
-- [x] Registry v1: `registry.json` + `registry.schema.json`, per-file sha256, `warpmetal` skill
-      migrated with recorded checksums.
-- [x] Generated channels: `.omp-plugin/` and `.claude-plugin/` marketplaces, `.agents/plugins/`
-      Codex catalog, `plugins/warpmetal/` plugin, `catalog/` OpenCode catalog, MCP snapshot.
-- [x] `@warpmetal/skills-mcp`: `skill_list`, `skill_search`, `skill_read`, `skill://` resources,
-      checksum verification on read, path/size guards, stdio + Streamable HTTP, remote
-      `--registry`/`--tag` with ETag cache and offline fallback.
-- [x] Docker: multi-stage non-root image (node:22-alpine); local build, `--version`, `/healthz`,
-      and `/readyz` smoke tests pass.
-- [x] CI/CD: `verify.yml` (schema, checksums, drift, secret scan, tests, Docker smoke) and
-      `release.yml` (npm provenance, multi-arch GHCR image, Pages catalog, GitHub release).
-- [x] DeepSeek Harness channel: skills roots and `dsh-mcp-client` snippet documented, `dsh` and
-      `mcp` host metadata on the skill.
-- [x] Dynamic registry resolution: `latest` by default over the catalog host, ETag revalidation,
-      cache next, bundled snapshot last (marked stale); 19 tests including remote and cache paths.
-- [x] `releases.json` history generated at release time for update checks and version lookups.
-- [x] Green CI on every push.
-
-Added 2026-09-28 — provider integrations (`docs` + `conventions/integrations.md`):
-
-- [x] `packages/warpmetal-cli` (`@warpmetal/cli`): a superset `warpmetal` binary that implements
-      `env` and `integration` locally and delegates every other command verbatim to the pinned
-      upstream package (`warpmetal-upstream: npm:warpmetal@0.8.12`), so there is no fork.
-- [x] Credential vault: AES-256-GCM + scrypt file backend under `~/.config/warpmetal/env/` with
-      `0600`/`0700` and write-then-rename, plus an optional `@napi-rs/keyring` backend. One
-      emission path only: `warpmetal env secret <name> --stdout`.
-- [x] Provider adapters (`cloudflare` DNS upsert/list, `slack` notify, `github` repo view) with
-      non-mutating status probes, honest degradation, idempotent writes, and per-verb gate literals
-      checked both in bash and in the engine.
-- [x] `conventions/lib/integration.sh`: resolution, honest `check_skipped` degradation, `0600`
-      secret files with a PID-keyed cleanup registry, and `integration_run_mutating`.
-- [x] Wiring: `migrate-site` cutover applies the A record through Cloudflare, `ssl-dns-fix` obtains
-      DNS-01 credentials from the vault, `server-monitoring` resolves the Kuma key from the vault and
-      can prove the Slack path, `deploy-site` verifies repository access.
-- [x] Manifest `[integrations.<provider>]` references (zone id, account, secret *name*), never values.
-- [x] `integrations` in `registry.schema.json`, the registry build, the MCP server, and
-      `npm run validate:skills` (a declared provider must exist in the engine catalog).
-- [x] Tests: 41 offline engine tests (1 skipped on Windows), 35 integration-library assertions, and
-      `conventions/` copies that are generated and drift-checked.
-- [x] CI: `verify.yml` installs, typechecks, and tests the engine and runs `tools/check-all.sh`;
-      `release.yml` publishes `@warpmetal/cli` and attaches its tarball to the GitHub release.
-
-Pending, requires org access or later workstreams:
-
-- [ ] `@warpmetal` npm scope + trusted publishing; GitHub Pages enablement; branch protection
-      requiring `verify`; CODEOWNERS team handle.
-- [ ] Live host validation on real installs: omp, Claude Code, Codex, OpenCode, DeepSeek Harness.
-- [ ] First `v*` tag to exercise the release pipeline end to end.
-- [ ] `coding-env` skill content lands in `skills/`; the `warpmetal env` engine it wraps now exists
-      in `packages/warpmetal-cli` (vault, `store`/`secret`/`status`/`doctor`/`revoke`), while
-      `setup`/`plan`/`apply` and host-config writing remain in that workstream.
-      See [`coding-env-skill-plan.md`](docs/coding-env-skill-plan.md).
-- [ ] CLI registry client, lockfile, and explicit update semantics land with the `coding-env` workstream.
-- [ ] Cloudflare WAF/firewall adapters and automatic security updates (later batch; this release is
-      DNS only).
-
-## 15. Open items
-
-- Catalog host and URL scheme; whether to keep `raw.githubusercontent.com` as fallback.
-- Resolved: no `@warpmetal/skills` snapshot package; consumers resolve dynamically and pin registry
-  tags plus a local lockfile.
-- Signing tooling choice (minisign vs cosign) and whether to require it for v1.
-- npm trusted publishing availability; GHCR/Pages permissions check.
-- Runtime base image choice (alpine vs distroless) and HTTP mode auth story for self-hosted
-  deployments.
-- Whether a later private/team registry reuses the same schema (keep fields forward-compatible).
-- Codex marketplace submission path and review requirements.
+Execution status (what is done, what is pending, and what is still open) is tracked in
+[`ROADMAP.md`](ROADMAP.md). This document is the design the repository was built from and is
+frozen as of 2026-09-21; the roadmap is the living status.
 
 ## Implementation notes (2026-09-21)
 

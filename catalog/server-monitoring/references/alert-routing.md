@@ -37,7 +37,7 @@ page_channel   = "slack:#acme-alerts"
 digest_channel = "slack:#acme-digest"
 ```
 
-Supported channel prefixes: `slack:`, `telegram:`, `pagerduty:`, `email:`.
+Supported channel prefixes: `slack:`, `discord:`, `email:`.
 
 ## Flap Suppression
 

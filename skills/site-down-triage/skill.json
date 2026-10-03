@@ -19,5 +19,9 @@
     "incident",
     "diagnostics",
     "read-only"
+  ],
+  "integrations": [
+    "sentry",
+    "vercel"
   ]
 }

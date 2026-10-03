@@ -35,6 +35,18 @@ function stubRunner(table: Record<string, RunResult>): CommandRunner {
   return async (command) => table[command] ?? { code: 127, stdout: "", stderr: "not found" };
 }
 
+/** A runner that also records the argv and the child environment. */
+function recordingRunner(
+  handler: (command: string, args: readonly string[]) => RunResult,
+): { run: CommandRunner; calls: Array<{ command: string; args: readonly string[]; env: Readonly<Record<string, string>> | undefined }> } {
+  const calls: Array<{ command: string; args: readonly string[]; env: Readonly<Record<string, string>> | undefined }> = [];
+  const run: CommandRunner = async (command, args, options) => {
+    calls.push({ command, args, env: options?.env });
+    return handler(command, args);
+  };
+  return { run, calls };
+}
+
 const NO_TOOLS = stubRunner({});
 
 async function run(
@@ -326,6 +338,224 @@ describe("github adapter", () => {
     const bad = await run(["integration", "github", "repo-view", "--repo", "not-a-repo"], store, { fetchFn });
     assert.equal(bad.code, 2);
     assert.match(bad.stderr, /owner\/name/);
+  });
+});
+
+describe("notify and platform providers share one honesty contract", () => {
+  const NEW_PROVIDERS = [
+    "email",
+    "discord",
+    "vercel",
+    "sentry",
+    "stripe",
+  ] as const;
+
+  it("reports NEEDS_AUTH with an empty store and never touches the network", async () => {
+    for (const provider of NEW_PROVIDERS) {
+      const { store } = await memoryStore();
+      const { fetchFn, calls } = stubFetch(() => ({ status: 200, body: {} }));
+      const { run: runner, calls: runnerCalls } = recordingRunner(() => ({ code: 127, stdout: "", stderr: "not found" }));
+
+      const result = await run(["integration", "status", provider, "--json"], store, { fetchFn, run: runner });
+
+      assert.equal(result.code, 4, `${provider}: expected NEEDS_AUTH`);
+      assert.match(result.stdout, /"status": "NEEDS_AUTH"/, `${provider}: status document`);
+      assert.equal(calls.length, 0, `${provider}: no HTTP request without a credential`);
+      assert.equal(runnerCalls.length, 0, `${provider}: no tool probe without a credential`);
+    }
+  });
+
+  it("validates the confirmation gate before consulting the credential store", async () => {
+    const cases: Array<{ provider: string; args: string[]; gate: string }> = [
+      { provider: "email", args: ["notify", "--to", "ops@example.com", "--from", "bot@example.com", "--text", "hi"], gate: "CONFIRM NOTIFY" },
+      { provider: "discord", args: ["notify", "--text", "hi"], gate: "CONFIRM NOTIFY" },
+    ];
+
+    for (const testCase of cases) {
+      const { store, backend } = await memoryStore();
+      const { fetchFn, calls } = stubFetch(() => ({ status: 200, body: {} }));
+      const result = await run(["integration", testCase.provider, ...testCase.args], store, { fetchFn });
+
+      assert.equal(result.code, 2, `${testCase.provider}: a missing gate is a usage error`);
+      assert.match(result.stderr, new RegExp(testCase.gate), `${testCase.provider}: gate named in the error`);
+      assert.equal(calls.length, 0, `${testCase.provider}: nothing may be sent without the gate`);
+      assert.equal(backend.loads, 0, `${testCase.provider}: the store must not be consulted`);
+    }
+  });
+
+  it("rejects an unknown verb as a usage error without reading the store", async () => {
+    for (const provider of NEW_PROVIDERS) {
+      const { store, backend } = await memoryStore();
+      const { fetchFn } = stubFetch(() => ({ status: 200, body: {} }));
+      const result = await run(["integration", provider, "nonsense"], store, { fetchFn });
+      assert.equal(result.code, 2, `${provider}: unknown verb`);
+      assert.match(result.stderr, new RegExp(`Unknown ${provider} verb`));
+      assert.equal(backend.loads, 0, `${provider}: verb check precedes the store`);
+    }
+  });
+});
+
+describe("email adapter", () => {
+  it("verifies the key against the sending domains", async () => {
+    const { store } = await memoryStore({ "email.api_key": "re-test-key-value-123456" });
+    const { fetchFn, calls } = stubFetch(() => ({ status: 200, body: { data: [{ name: "acme.com", status: "verified" }] } }));
+
+    const result = await run(["integration", "status", "email", "--json"], store, { fetchFn });
+
+    assert.equal(result.code, 0);
+    assert.match(calls[0]!.url, /\/domains$/);
+    assert.match(result.stdout, /"verifiedDomains": 1/);
+  });
+
+  it("sends a gated email and reports the message id", async () => {
+    const { store } = await memoryStore({ "email.api_key": "re-test-key-value-123456" });
+    const { fetchFn, calls } = stubFetch(() => ({ status: 200, body: { id: "msg-1" } }));
+
+    const result = await run(
+      [
+        "integration", "email", "notify",
+        "--to", "ops@example.com", "--from", "bot@acme.com", "--subject", "Alert", "--text", "body",
+        "--confirm", "CONFIRM NOTIFY", "--json",
+      ],
+      store,
+      { fetchFn },
+    );
+
+    assert.equal(result.code, 0);
+    assert.equal(calls[0]!.url, "https://api.resend.com/emails");
+    const body = JSON.parse(calls[0]!.body!) as { to: string[]; subject: string };
+    assert.deepEqual(body.to, ["ops@example.com"]);
+    assert.equal(body.subject, "Alert");
+  });
+
+  it("treats a rejected key as NEEDS_AUTH", async () => {
+    const { store } = await memoryStore({ "email.api_key": "re-test-key-value-123456" });
+    const { fetchFn } = stubFetch(() => ({ status: 401, body: { message: "invalid" } }));
+    const result = await run(["integration", "status", "email", "--json"], store, { fetchFn });
+    assert.equal(result.code, 4);
+  });
+});
+
+describe("discord adapter", () => {
+  it("verifies a bot token with the current-user read", async () => {
+    const { store } = await memoryStore({ "discord.token": "discord-bot-token-value-1" });
+    const { fetchFn, calls } = stubFetch(() => ({ status: 200, body: { id: "1", username: "warp" } }));
+
+    const result = await run(["integration", "status", "discord", "--json"], store, { fetchFn });
+
+    assert.equal(result.code, 0);
+    assert.match(calls[0]!.url, /\/users\/@me$/);
+    assert.equal(calls[0]!.headers["authorization"], "Bot discord-bot-token-value-1");
+    assert.match(result.stdout, /"status": "OK"/);
+  });
+
+  it("reports a webhook as DEGRADED because it cannot be verified without posting", async () => {
+    const { store } = await memoryStore({ "discord.webhook": "https://discord.com/api/webhooks/1/abc" });
+    const { fetchFn, calls } = stubFetch(() => ({ status: 200, body: {} }));
+
+    const result = await run(["integration", "status", "discord", "--json"], store, { fetchFn });
+
+    assert.equal(result.code, 0);
+    assert.equal(calls.length, 0, "a status probe must not post a message");
+    assert.match(result.stdout, /"status": "DEGRADED"/);
+  });
+
+  it("posts to the webhook when one is stored", async () => {
+    const webhook = "https://discord.com/api/webhooks/1/abc";
+    const { store } = await memoryStore({ "discord.webhook": webhook });
+    const { fetchFn, calls } = stubFetch(() => ({ status: 200, body: { id: "m1" } }));
+
+    const result = await run(
+      ["integration", "discord", "notify", "--text", "hi", "--confirm", "CONFIRM NOTIFY", "--json"],
+      store,
+      { fetchFn },
+    );
+
+    assert.equal(result.code, 0);
+    assert.equal(calls[0]!.url, webhook);
+    assert.deepEqual(JSON.parse(calls[0]!.body!), { content: "hi" });
+  });
+});
+
+describe("vercel adapter", () => {
+  it("verifies the token and lists deployments", async () => {
+    const token = "vercel-token-value-123456";
+    const { store } = await memoryStore({ "vercel.token": token });
+    const { fetchFn, calls } = stubFetch((call) =>
+      call.url.endsWith("/v2/user")
+        ? { status: 200, body: { user: { username: "warp" } } }
+        : { status: 200, body: { deployments: [{ uid: "d1", name: "site", state: "READY", url: "site.vercel.app" }] } },
+    );
+
+    const status = await run(["integration", "status", "vercel", "--json"], store, { fetchFn });
+    assert.equal(status.code, 0);
+    assert.match(status.stdout, /"username": "warp"/);
+
+    const list = await run(["integration", "vercel", "deployment-list", "--json"], store, { fetchFn });
+    assert.equal(list.code, 0);
+    assert.match(calls[1]!.url, /\/v6\/deployments\?limit=20$/);
+    assert.match(list.stdout, /"count": 1/);
+    assert.equal(list.stdout.includes(token), false);
+  });
+
+  it("treats a rejected token as NEEDS_AUTH", async () => {
+    const { store } = await memoryStore({ "vercel.token": "vercel-token-value-123456" });
+    const { fetchFn } = stubFetch(() => ({ status: 403, body: { error: { code: "forbidden" } } }));
+    const result = await run(["integration", "status", "vercel", "--json"], store, { fetchFn });
+    assert.equal(result.code, 4);
+  });
+});
+
+describe("sentry adapter", () => {
+  it("verifies the token and lists issues for a project", async () => {
+    const { store } = await memoryStore({ "sentry.token": "sentry-token-value-123456" });
+    const { fetchFn, calls } = stubFetch((call) =>
+      call.url.endsWith("/organizations/")
+        ? { status: 200, body: [{ slug: "acme" }] }
+        : { status: 200, body: [{ id: "9", shortId: "ACME-1", title: "TypeError", count: "3" }] },
+    );
+
+    const status = await run(["integration", "status", "sentry", "--json"], store, { fetchFn });
+    assert.equal(status.code, 0);
+    assert.match(status.stdout, /"organizationCount": 1/);
+
+    const list = await run(["integration", "sentry", "issue-list", "--org", "acme", "--project", "web", "--json"], store, { fetchFn });
+    assert.equal(list.code, 0);
+    assert.match(calls[1]!.url, /\/projects\/acme\/web\/issues\/$/);
+    assert.match(list.stdout, /"shortId": "ACME-1"/);
+  });
+
+  it("requires org and project rather than guessing them", async () => {
+    const { store, backend } = await memoryStore({ "sentry.token": "sentry-token-value-123456" });
+    const { fetchFn, calls } = stubFetch(() => ({ status: 200, body: [] }));
+
+    const result = await run(["integration", "sentry", "issue-list", "--org", "acme"], store, { fetchFn });
+
+    assert.equal(result.code, 2);
+    assert.match(result.stderr, /Missing required argument: --project/);
+    assert.equal(calls.length, 0);
+    assert.equal(backend.loads, 0);
+  });
+});
+
+describe("stripe adapter", () => {
+  it("reads the balance and never claims scope knowledge", async () => {
+    const { store } = await memoryStore({ "stripe.token": "sk_test_token_value_123456" });
+    const { fetchFn, calls } = stubFetch(() => ({ status: 200, body: { livemode: false, available: [{ currency: "usd", amount: 100 }] } }));
+
+    const result = await run(["integration", "stripe", "balance-get", "--json"], store, { fetchFn });
+
+    assert.equal(result.code, 0);
+    assert.equal(calls[0]!.url, "https://api.stripe.com/v1/balance");
+    assert.match(result.stdout, /"livemode": false/);
+    assert.match(result.stdout, /never moves money/);
+  });
+
+  it("treats a rejected key as NEEDS_AUTH", async () => {
+    const { store } = await memoryStore({ "stripe.token": "sk_test_token_value_123456" });
+    const { fetchFn } = stubFetch(() => ({ status: 401, body: { error: { type: "invalid_request_error" } } }));
+    const result = await run(["integration", "status", "stripe", "--json"], store, { fetchFn });
+    assert.equal(result.code, 4);
   });
 });
 

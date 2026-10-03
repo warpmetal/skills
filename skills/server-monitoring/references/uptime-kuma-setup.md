@@ -3,7 +3,7 @@
 ## What Is Uptime Kuma
 
 Self-hosted uptime monitoring. Runs as a Node.js process behind nginx.
-Provides external HTTP checks, status pages, and notifications to Slack/Telegram/email/PagerDuty.
+Provides external HTTP checks, status pages, and notifications to Slack/Discord/email.
 
 **Critical requirement:** Run Uptime Kuma on a **separate server** from the sites being monitored.
 A monitor running on the same box as the site reports nothing when that box dies.
@@ -97,8 +97,7 @@ curl -s -X POST "$UPTIME_KUMA_URL/api/monitors" \
 
 Configure in UI under Settings → Notifications:
 - **Slack**: incoming webhook URL
-- **Telegram**: bot token + chat ID
-- **PagerDuty**: integration key
+- **Discord**: incoming webhook URL
 - **Email**: SMTP config
 
 Assign notification channels to monitors. Use two channel IDs: one for page (immediate),

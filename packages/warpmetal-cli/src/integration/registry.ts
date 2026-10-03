@@ -11,7 +11,10 @@ export type Capability =
   | "dns.record.list"
   | "dns.record.upsert"
   | "repo.view"
-  | "notify.send";
+  | "notify.send"
+  | "deployment.read"
+  | "issue.read"
+  | "billing.read";
 
 /** How sure the engine can be that a revocation actually happened upstream. */
 export type RevokeConfidence = "confirmed" | "unsupported" | "uncertain";
@@ -101,7 +104,111 @@ export const PROVIDERS: readonly ProviderSpec[] = [
     },
     revoke:
       "unsupported",
-    notes: "Channel prefixes follow the monitoring convention: slack:, telegram:, pagerduty:, email:.",
+    notes: "Channel prefixes follow the monitoring convention: slack:, email:.",
+  },
+  {
+    name: "email",
+    title: "Email (Resend)",
+    authModes: ["api_token"],
+    secretNames: ["email.api_key"],
+    capabilities: ["notify.send"],
+    requiresTools: [],
+    scoping:
+      "An API key can send only from the domains verified in the account, and only to recipients the provider accepts. It cannot read an inbox or manage the account.",
+    filesWritten: [],
+    verifyCommand: "warpmetal integration status email --json",
+    errorMap: {
+      "401": "Resend rejected the API key.",
+      "403": "The key is valid but may not send from that domain.",
+      "422": "Resend rejected the message: the from or to address is not accepted.",
+      "429": "Resend rate limited the send; nothing was delivered.",
+    },
+    revoke:
+      "unsupported",
+    notes: "Outbound notification only. The from address is a manifest reference; the reply-to is never asserted.",
+  },
+  {
+    name: "discord",
+    title: "Discord",
+    authModes: ["incoming_webhook", "bot_token"],
+    secretNames: ["discord.webhook", "discord.token"],
+    capabilities: ["notify.send"],
+    requiresTools: [],
+    scoping:
+      "An incoming webhook is bound to one channel forever and cannot be re-targeted. A bot token can post to any channel the bot was granted access to, which is managed in Discord, not here.",
+    filesWritten: [],
+    verifyCommand: "warpmetal integration status discord --json",
+    errorMap: {
+      "400": "Discord rejected the request: the payload is malformed.",
+      "401": "Unauthorized: the bot token was rejected.",
+      "403": "Forbidden: the bot cannot post in that channel.",
+      "404": "The webhook or channel does not exist, or the bot cannot see it.",
+    },
+    revoke:
+      "unsupported",
+    notes: "The mirror of Slack: an incoming webhook can only be proven by posting, so a webhook-only `status` is DEGRADED.",
+  },
+  {
+    name: "vercel",
+    title: "Vercel",
+    authModes: ["api_token"],
+    secretNames: ["vercel.token"],
+    capabilities: ["deployment.read"],
+    requiresTools: [],
+    scoping:
+      "A token is bound to one user or team and exposes the projects that scope can see. This release only lists projects and deployments; it never promotes, rolls back or redeploys.",
+    filesWritten: [],
+    verifyCommand: "warpmetal integration status vercel --json",
+    errorMap: {
+      "400": "Vercel rejected the request: the query is malformed.",
+      "401": "Vercel rejected the token.",
+      "403": "The token lacks scope for this team or project.",
+      "404": "The project does not exist, or the token cannot see it.",
+    },
+    revoke:
+      "uncertain",
+    notes: "Read-only in this release. Deploys stay a human action; see the deploy skill for the gated path.",
+  },
+  {
+    name: "sentry",
+    title: "Sentry",
+    authModes: ["api_token"],
+    secretNames: ["sentry.token"],
+    capabilities: ["issue.read"],
+    requiresTools: [],
+    scoping:
+      "An auth token carries the scopes chosen at creation and can only see the organizations and projects it was granted. This release only lists projects; it never resolves, assigns or deletes an issue.",
+    filesWritten: [],
+    verifyCommand: "warpmetal integration status sentry --json",
+    errorMap: {
+      "400": "Sentry rejected the request: the query is malformed.",
+      "401": "Sentry rejected the auth token.",
+      "403": "The token lacks the scope required for this read.",
+      "404": "The organization or project does not exist, or the token cannot see it.",
+    },
+    revoke:
+      "uncertain",
+    notes: "Read-only in this release. Triage actions remain manual.",
+  },
+  {
+    name: "stripe",
+    title: "Stripe",
+    authModes: ["api_token"],
+    secretNames: ["stripe.token"],
+    capabilities: ["billing.read"],
+    requiresTools: [],
+    scoping:
+      "A restricted key can be limited to specific resources and to read-only access. This release only reads the balance; it never creates a charge, a refund or a customer.",
+    filesWritten: [],
+    verifyCommand: "warpmetal integration status stripe --json",
+    errorMap: {
+      "401": "Stripe rejected the API key.",
+      "403": "The key is valid but is not permitted for this resource.",
+      "429": "Stripe rate limited the request.",
+    },
+    revoke:
+      "uncertain",
+    notes: "Read-only in this release. Money movements stay outside this CLI by design.",
   },
 ];
 

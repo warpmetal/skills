@@ -108,6 +108,14 @@ warpmetal integration list --json | jq -r '.providers[] | select(.name=="cloudfl
 |----------|------|------|
 | `cloudflare` | `dns-upsert` | `CONFIRM DNS CHANGE` |
 | `slack` | `notify` | `CONFIRM NOTIFY` |
+| `email` | `notify` | `CONFIRM NOTIFY` |
+| `discord` | `notify` | `CONFIRM NOTIFY` |
+
+Two verb families are shared across providers so a skill does not learn a new
+vocabulary per vendor: `notify` (every messaging provider, gate `CONFIRM NOTIFY`)
+and `dns-list` / `dns-upsert` (every DNS provider, `dns-upsert` gated). The
+read-only platform providers (`vercel`, `sentry`, `stripe`) expose
+no mutating verb and therefore no gate.
 
 `integration_run` (the read-only form) never invents a `--confirm`.
 
@@ -122,10 +130,15 @@ command, a redacted error map, and how confident revocation can be.
 | `cloudflare` | `dns.record.list`, `dns.record.upsert` | `cloudflare.token` | Unsupported; revoke in the dashboard |
 | `github` | `repo.view` | `github.token` (or a `gh` session) | Uncertain; confirm in the dashboard |
 | `slack` | `notify.send` | `slack.token` or `slack.webhook` | Unsupported; revoke in the dashboard |
+| `email` | `notify.send` | `email.api_key` | Unsupported; revoke the key in Resend |
+| `discord` | `notify.send` | `discord.token` or `discord.webhook` | Unsupported; regenerate the webhook or reset the bot token |
+| `vercel` | `deployment.read` | `vercel.token` | Uncertain; revoke the token in the dashboard |
+| `sentry` | `issue.read` | `sentry.token` | Uncertain; revoke the auth token in Sentry |
+| `stripe` | `billing.read` | `stripe.token` | Uncertain; roll the restricted key in Stripe |
 
 Scope is set in the provider's dashboard and cannot be tightened by this toolkit.
 Never claim a capability the provider cannot enforce: a fine-grained GitHub PAT can
-be limited to selected repositories, a classic PAT cannot be narrowed here, and a
+be limited to selected repositories, a classic PAT cannot be narrowed here, a
 Slack incoming webhook is bound to one channel forever.
 
 `env revoke` reports `unsupported` or `uncertain` rather than pretending a local
@@ -143,9 +156,9 @@ delete is a revocation.
 | `ERROR` | 5 | The provider rejected the action |
 
 `DEGRADED` deliberately exits 0: the command succeeded at answering the question.
-Read `status` from the JSON, never guess from the exit code. A Slack webhook is the
-canonical `DEGRADED` — it cannot be verified without sending a message, so no
-message is sent and the result says so.
+Read `status` from the JSON, never guess from the exit code. A Slack or Discord
+webhook is the canonical `DEGRADED` — it cannot be verified without sending a
+message, so no message is sent and the result says so.
 
 ### Exit code mapping
 

@@ -363,7 +363,7 @@ if integration_declared cloudflare; then
 else
     bad "integration_declared should see cloudflare"
 fi
-if integration_declared pagerduty; then
+if integration_declared unlisted-provider; then
     bad "integration_declared must not invent an undeclared provider"
 else
     ok "integration_declared rejects an undeclared provider"

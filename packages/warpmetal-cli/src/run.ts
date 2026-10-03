@@ -18,7 +18,7 @@ export interface RunResult {
 export type CommandRunner = (
   command: string,
   args: readonly string[],
-  options?: { readonly stdin?: string },
+  options?: { readonly stdin?: string; readonly env?: Readonly<Record<string, string>> },
 ) => Promise<RunResult>;
 
 export function createRunner(): CommandRunner {
@@ -26,7 +26,8 @@ export function createRunner(): CommandRunner {
     new Promise<RunResult>((resolve) => {
       let child;
       try {
-        child = spawn(command, [...args], { shell: false, windowsHide: true });
+        const env = options?.env === undefined ? undefined : { ...process.env, ...options.env };
+        child = spawn(command, [...args], { shell: false, windowsHide: true, ...(env !== undefined ? { env } : {}) });
       } catch (error) {
         resolve({ code: 127, stdout: "", stderr: (error as Error).message });
         return;

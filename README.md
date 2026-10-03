@@ -28,8 +28,8 @@ packages/warpmetal-cli/        @warpmetal/cli integration engine (vault + provid
 scripts/                       build, verify, pages tooling
 tools/                         bash policy validator and the integration library self-test
 PLAN.md                        the implementation plan this repo was built from
+ROADMAP.md                     execution status: done, pending, and open items
 INTEGRATIONS.md                third-party integrations: the engine, the vault, the gates
-INTEGRATIONS.es.md             the same guide in Spanish
 ```
 
 ## Commands
@@ -188,8 +188,7 @@ validated against the engine catalog by `npm run validate:skills`. The full
 contract — API, honest degradation, exit-code mapping, and the provider catalog —
 is in [`conventions/integrations.md`](./conventions/integrations.md). The
 operator-facing walkthrough — how the layers fit, the remote vault, the bash API and
-the exit-code mapping — is in [`INTEGRATIONS.md`](./INTEGRATIONS.md)
-([español](./INTEGRATIONS.es.md)).
+the exit-code mapping — is in [`INTEGRATIONS.md`](./INTEGRATIONS.md).
 
 ## Adding a skill
 
@@ -207,7 +206,7 @@ Content rules are in [CONTRIBUTING.md](./CONTRIBUTING.md).
 ## Status
 
 - Registry, channels, and the MCP server are implemented and verified; see the delivery status in
-  [`PLAN.md`](./PLAN.md#delivery-status-2026-09-21).
+  [`ROADMAP.md`](./ROADMAP.md).
 - The integration engine (`@warpmetal/cli`: vault, provider adapters, gates) and the bash
   integration layer are implemented and verified offline; see
   [`conventions/integrations.md`](./conventions/integrations.md).

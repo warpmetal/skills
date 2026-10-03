@@ -1,7 +1,5 @@
 # Third-party integrations
 
-> Léelo en español: [`INTEGRATIONS.es.md`](INTEGRATIONS.es.md)
-
 How the agency skills talk to GitHub, Cloudflare and Slack: how the machinery works,
 what it can do today, and what it deliberately cannot. This describes what the code
 actually does, including the cases where it refuses to act.
@@ -110,6 +108,15 @@ tests drive it.
 | `cloudflare` | `status`, `dns-list`, `dns-upsert` | `CONFIRM DNS CHANGE` (`dns-upsert` only) | `cloudflare.token` | — |
 | `github` | `status`, `repo-view` | — (read-only) | `github.token`, or a `gh` session | `gh` (optional) |
 | `slack` | `status`, `notify` | `CONFIRM NOTIFY` (`notify` only) | `slack.token` or `slack.webhook` | — |
+| `email` | `status`, `notify` | `CONFIRM NOTIFY` (`notify` only) | `email.api_key` | — |
+| `discord` | `status`, `notify` | `CONFIRM NOTIFY` (`notify` only) | `discord.token` or `discord.webhook` | — |
+| `vercel` | `status`, `deployment-list` | — (read-only) | `vercel.token` | — |
+| `sentry` | `status`, `issue-list` | — (read-only) | `sentry.token` | — |
+| `stripe` | `status`, `balance-get` | — (read-only) | `stripe.token` | — |
+
+Two verb families are shared so a skill does not learn a vendor vocabulary per
+provider: `notify` for every messaging provider and `dns-list` / `dns-upsert` for
+every DNS provider. The platform providers are read-only and therefore ungated.
 
 ### Direct examples
 
@@ -136,14 +143,20 @@ warpmetal integration github repo-view --repo org/acme --json
 # Send a notification
 warpmetal integration slack notify --channel "#acme-alerts" --text "Deploy OK" \
   --confirm "CONFIRM NOTIFY" --json
+
+# Read-only platform probes
+warpmetal integration stripe balance-get --json
+warpmetal integration sentry issue-list --org acme --project web --json
+warpmetal integration vercel deployment-list --json
 ```
 
 ### Declared capabilities
 
 Capabilities are a closed enum: `dns.record.list`, `dns.record.upsert`, `repo.view`,
-`notify.send`. An adapter **implements** the catalog; it never widens it on its own.
-`scripts/verify.mjs` reads the same catalog, so a skill cannot declare an integration the
-engine does not actually have.
+`notify.send`, `deployment.read`, `issue.read`, `billing.read`. An
+adapter **implements** the catalog; it never widens it on its own. `scripts/verify.mjs`
+reads the same catalog, so a skill cannot declare an integration the engine does not
+actually have.
 
 ---
 
@@ -487,17 +500,26 @@ These limits are deliberate and declared in the catalog; you can read them back 
 
 - **Cloudflare: DNS only.** `dns-list` and `dns-upsert`. WAF and firewall rules are a
   later phase.
+- **Platform providers are read-only.** `vercel` (`deployment-list`), `sentry`
+  (`issue-list`) and `stripe` (`balance-get`) expose no
+  mutating verb, so there is nothing to gate. No deploy is
+  promoted, no issue is triaged and no money moves.
+- **A Discord webhook can only report `DEGRADED`.** It cannot
+  be proven without sending a message, and a status probe must not
+  post to a channel, so it says so instead of claiming `OK`.
 - **Scope is set in the provider's dashboard.** This toolkit **cannot tighten it**, and
   `integration status` reports at most whether the token is valid, **never** which zones
   it can reach. A classic GitHub PAT cannot be narrowed from here; a fine-grained one can,
   in GitHub's own dashboard.
-- **A Slack incoming webhook is bound to one channel forever** and cannot be re-targeted.
-- **GitHub is read-only in this release** (`repo.view`): there is no mutating verb to
-  gate. It also claims no scopes, because the GitHub API does not expose classic PAT
-  scopes, so `status` reports identity and nothing more.
-- **Revocation is honest, not magic.** `cloudflare` and `slack`: `unsupported` (revoke in
-  the dashboard). `github`: `uncertain` (confirm in the dashboard). `env revoke` removes
-  local material and says so.
+- **A Slack or Discord incoming webhook is bound to one channel forever** and cannot be
+  re-targeted.
+- **GitHub and Sentry are read-only in this release** (`repo.view`, `issue.read`): there
+  is no mutating verb to gate. GitHub also claims no scopes, because the GitHub API does
+  not expose classic PAT scopes, so `status` reports identity and nothing more.
+- **Revocation is honest, not magic.** `unsupported` (revoke in the provider's dashboard)
+  for `cloudflare`, `slack`, `email` and `discord`;
+  `uncertain` (confirm in the dashboard) for `github`, `vercel`,
+  `sentry` and `stripe`. `env revoke` removes local material and says so.
 - **`env secret` does not accept `--json`.** That is a usage error.
 
 ---
@@ -516,6 +538,18 @@ and exits 11. The engine suite is **network-free by construction**: the fetch fu
 the process runner and the credential backend are all injected. A secret-canary test
 proves a stored value **never** appears in any diagnostic, plan, list, error or `--json`
 document, and that it **does** appear on the one sanctioned stream.
+
+Every provider is covered by the same matrix: an empty store yields `NEEDS_AUTH` with
+**zero** network calls, an unknown verb is a usage error **before** the store is opened,
+a mutating verb without its literal sends nothing, and a stubbed happy path asserts the
+exact request the adapter makes.
+
+Live lab evidence for vault → adapter → provider (Identity remote store, no bridges) was produced
+for the baseline providers and for the extended smoke that walks all eight — a provider with a
+credential must answer its probe, and one without records `SKIP (no credential)` rather than a pass.
+The lab constraint that shaped the script: the fixture's device session lives ~60 s and every mint
+creates a new principal (a new tenant, so an empty vault), so the smoke runs one session per group
+instead of trying to refresh one.
 
 ---
 
@@ -541,7 +575,6 @@ document, and that it **does** appear on the one sanctioned stream.
 
 ## See also
 
-- [`INTEGRATIONS.es.md`](INTEGRATIONS.es.md) — this same guide in Spanish.
 - [`conventions/integrations.md`](conventions/integrations.md) — the normative contract
   the skills follow, and the provider catalog.
 - [`conventions/client-manifest.md`](conventions/client-manifest.md) — the full manifest
