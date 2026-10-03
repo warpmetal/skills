@@ -27,7 +27,9 @@ export interface RegistryFixture {
  * Builds a temporary registry with two skills and correct checksums.
  * The layout mirrors the repository: registry.json + skills/<name>/...
  */
-export async function makeRegistryFixture(): Promise<RegistryFixture> {
+export async function makeRegistryFixture(
+  options: { registryVersion?: string } = {},
+): Promise<RegistryFixture> {
   const dir = await mkdtemp(join(tmpdir(), "skills-mcp-"));
   const definitions = {
     demo: {
@@ -73,7 +75,11 @@ export async function makeRegistryFixture(): Promise<RegistryFixture> {
     });
   }
 
-  const registry = { schemaVersion: 1, registryVersion: "0.1.0", skills };
+  const registry = {
+    schemaVersion: 1,
+    registryVersion: options.registryVersion ?? "0.1.0",
+    skills,
+  };
   await writeFile(join(dir, "registry.json"), JSON.stringify(registry, null, 2), "utf8");
 
   return {

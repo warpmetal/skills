@@ -54,6 +54,12 @@ export interface LoadOptions {
   cacheDir?: string;
   offline?: boolean;
   /**
+   * Root directory of the bundled snapshot served when both the network and
+   * the cache are unavailable. Defaults to the packaged `snapshot/`; tests
+   * inject their own fixture so the fallback stays hermetic.
+   */
+  bundledRoot?: string;
+  /**
    * Bearer token sent to the registry host when the manifest and skill files
    * are fetched over HTTP. The public catalog never receives it.
    */
@@ -340,7 +346,7 @@ async function loadRemoteRegistry(
 export async function loadRegistry(options: LoadOptions = {}): Promise<LoadedRegistry> {
   const registry = options.registry ?? process.env.WARPMETAL_SKILLS_REGISTRY;
   const cacheDir = cacheDirectory(options.cacheDir);
-  const bundled = () => loadLocalRegistry(bundledRegistryRoot(), "bundled");
+  const bundled = () => loadLocalRegistry(options.bundledRoot ?? bundledRegistryRoot(), "bundled");
   const token = normalizeRegistryToken(
     options.registryToken ?? process.env.WARPMETAL_SKILLS_REGISTRY_TOKEN,
   );

@@ -220,6 +220,9 @@ test("a missing or wrong token fails closed instead of falling back", async () =
 
 test("the registry cache is partitioned by token identity", async () => {
   const fixture = await makeRegistryFixture();
+  // The fallback bundle, injected so this test never reads the packaged
+  // snapshot (git-ignored, and absent in the hermetic package-level CI job).
+  const bundledFixture = await makeRegistryFixture({ registryVersion: "9.9.9" });
   const cache = await mkdtemp(join(tmpdir(), "skills-mcp-cache-"));
   const staticServer = await startStaticServer(fixture.dir, { requireToken: "token-a" });
   const registryUrl = `${staticServer.url}/registry.json`;
@@ -237,17 +240,20 @@ test("the registry cache is partitioned by token identity", async () => {
     assert.equal(cachedA.registry.registryVersion, "0.1.0");
 
     // A different identity must not read token-a's cache; with the network down
-    // it falls back to the public bundled snapshot, not to another token's data.
+    // it falls back to the bundled snapshot, not to another token's data.
     const cachedB = await loadRegistry({
       registry: registryUrl,
       cacheDir: cache,
       registryToken: "token-b",
+      bundledRoot: bundledFixture.dir,
     });
     assert.equal(cachedB.stale, true);
+    assert.equal(cachedB.registry.registryVersion, "9.9.9");
     assert.notEqual(cachedB.registry.registryVersion, "0.1.0");
   } finally {
     await closeServer(staticServer.server).catch(() => undefined);
     await rm(cache, { recursive: true, force: true });
     await fixture.cleanup();
+    await bundledFixture.cleanup();
   }
 });
