@@ -18,6 +18,8 @@ skills/                        canonical Agent Skills (SKILL.md + references)
   <name>/conventions/          generated copy of conventions/; never edit these
 registry.json                  generated manifest with per-file sha256 checksums
 registry.schema.json           JSON Schema for the manifest
+registry.internal.json         generated manifest for internal skills (never published)
+internal-skills/               internal-only skills (built into registry.internal.json)
 plugins/warpmetal/             generated Claude/omp-compatible plugin (skills + plugin.json)
 .omp-plugin/marketplace.json   generated omp marketplace catalog
 .claude-plugin/marketplace.json generated Claude Code marketplace catalog
@@ -37,6 +39,8 @@ INTEGRATIONS.md                third-party integrations: the engine, the vault, 
 ```sh
 npm run build      # sync conventions, regenerate registry.json, catalogs, plugin, snapshot
 npm run verify     # schema + checksums + drift + secret scan
+npm run build:internal   # regenerate registry.internal.json + snapshot.internal/ (internal skills)
+npm run verify:internal  # schema + checksums + snapshot parity + secret scan + isolation guard
 npm test           # skills-mcp unit and protocol tests
 npm run check      # build + verify + test
 npm run pages      # build the versioned Pages artifact under public/
@@ -189,6 +193,29 @@ contract — API, honest degradation, exit-code mapping, and the provider catalo
 is in [`conventions/integrations.md`](./conventions/integrations.md). The
 operator-facing walkthrough — how the layers fit, the remote vault, the bash API and
 the exit-code mapping — is in [`INTEGRATIONS.md`](./INTEGRATIONS.md).
+
+## Internal (private) skills
+
+Internal skills live in `internal-skills/` in this same repository but are never served by the public
+catalog: the public build reads only `skills/`, so they do not reach `registry.json`, the generated
+marketplace/OpenCode catalogs, GitHub Pages, or the npm snapshot. A second registry is built and
+verified separately:
+
+```sh
+npm run build:internal     # registry.internal.json + snapshot.internal/
+npm run verify:internal    # schema, checksums, snapshot parity, secret scan, isolation guard
+```
+
+They are served by a dedicated, non-public `@warpmetal/skills-mcp` instance pointed at the internal
+bundle, optionally over an authenticated catalog with a bearer token
+(`--registry-token-file` / `WARPMETAL_SKILLS_REGISTRY_TOKEN`). See
+[`internal-skills/README.md`](internal-skills/README.md) for the deployment shape and
+[`packages/skills-mcp/SECURITY.md`](packages/skills-mcp/SECURITY.md) for what the token does and does
+not guarantee.
+
+Because this repository is public, the content under `internal-skills/` is visible in git: "private"
+means not served by the public catalog, not confidential. If it must be confidential, it cannot live
+here.
 
 ## Adding a skill
 

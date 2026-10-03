@@ -40,6 +40,8 @@ export interface LoadedRegistry {
   rootDir: string | null;
   /** Base URL for remote file reads. */
   baseUrl: string | null;
+  /** Bearer token for remote reads, or null for bundled/local registries. */
+  registryToken: string | null;
   /** True when the preferred source failed and a fallback was served. */
   stale: boolean;
   /** Where the registry was resolved from, for diagnostics. */
@@ -51,6 +53,11 @@ export interface LoadOptions {
   tag?: string;
   cacheDir?: string;
   offline?: boolean;
+  /**
+   * Bearer token sent to the registry host when the manifest and skill files
+   * are fetched over HTTP. The public catalog never receives it.
+   */
+  registryToken?: string;
 }
 
 const DEFAULT_REGISTRY_URL = "https://skills.warpmetal.com";
@@ -205,9 +212,20 @@ async function loadLocalRegistry(rootDir: string, source: RegistrySource): Promi
     source,
     rootDir: resolve(rootDir),
     baseUrl: null,
+    registryToken: null,
     stale: false,
     resolvedFrom: path,
   };
+}
+
+/**
+ * Cache keys include an opaque hash of the token so that two identities never
+ * share a cache entry, and an anonymous load never reads a privileged one. The
+ * token itself is never written to disk.
+ */
+function remoteCacheKey(url: string, token: string | undefined): string {
+  const identity = token ? `#${sha256Hex(token).slice(0, 16)}` : "";
+  return sha256Hex(`${url}${identity}`).slice(0, 24);
 }
 
 /**
@@ -240,9 +258,10 @@ async function loadRemoteRegistry(
   url: string,
   cacheDir: string,
   offline: boolean,
+  token: string | undefined,
   fallback: () => Promise<LoadedRegistry>,
 ): Promise<LoadedRegistry> {
-  const key = sha256Hex(url).slice(0, 24);
+  const key = remoteCacheKey(url, token);
   const cacheFile = join(cacheDir, `${key}.json`);
   const etagFile = join(cacheDir, `${key}.etag`);
   let cachedText: string | undefined;
@@ -263,6 +282,7 @@ async function loadRemoteRegistry(
     source: "remote",
     rootDir: null,
     baseUrl: new URL(".", url).href,
+    registryToken: token ?? null,
     stale,
     resolvedFrom: `${cacheFile} (${reason})`,
   });
@@ -270,10 +290,20 @@ async function loadRemoteRegistry(
   if (!offline) {
     try {
       const headers: Record<string, string> = { accept: "application/json" };
+      if (token) headers.authorization = `Bearer ${token}`;
       if (etag) headers["if-none-match"] = etag;
       const response = await fetch(url, { headers, signal: AbortSignal.timeout(10_000) });
       if (response.status === 304 && cachedText !== undefined) {
         return fromCache(false, "cache revalidated");
+      }
+      if (response.status === 401 || response.status === 403) {
+        // Fail closed. A rejected credential must never fall back to a cache or
+        // the public bundled snapshot: that would silently serve the wrong
+        // registry instead of surfacing a broken internal deployment.
+        throw new SkillError(
+          "registry_unauthorized",
+          `${url}: credentials rejected (HTTP ${response.status})`,
+        );
       }
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const text = await response.text();
@@ -290,10 +320,12 @@ async function loadRemoteRegistry(
         source: "remote",
         rootDir: null,
         baseUrl: new URL(".", url).href,
+        registryToken: token ?? null,
         stale: false,
         resolvedFrom: url,
       };
     } catch (error) {
+      if (error instanceof SkillError && error.code === "registry_unauthorized") throw error;
       if (cachedText !== undefined) return fromCache(true, `offline fallback: ${(error as Error).message}`);
       const bundled = await fallback();
       return { ...bundled, stale: true };
@@ -309,10 +341,13 @@ export async function loadRegistry(options: LoadOptions = {}): Promise<LoadedReg
   const registry = options.registry ?? process.env.WARPMETAL_SKILLS_REGISTRY;
   const cacheDir = cacheDirectory(options.cacheDir);
   const bundled = () => loadLocalRegistry(bundledRegistryRoot(), "bundled");
+  const token = normalizeRegistryToken(
+    options.registryToken ?? process.env.WARPMETAL_SKILLS_REGISTRY_TOKEN,
+  );
 
   if (registry) {
     if (/^https?:\/\//i.test(registry)) {
-      return loadRemoteRegistry(registry, cacheDir, options.offline === true, bundled);
+      return loadRemoteRegistry(registry, cacheDir, options.offline === true, token, bundled);
     }
     return loadLocalRegistry(resolve(registry), "local");
   }
@@ -324,6 +359,13 @@ export async function loadRegistry(options: LoadOptions = {}): Promise<LoadedReg
     registryUrlForTag(options.tag ?? "latest"),
     cacheDir,
     options.offline === true,
+    token,
     bundled,
   );
+}
+
+/** Trims a token and treats blank values as "no token". */
+export function normalizeRegistryToken(value: string | undefined): string | undefined {
+  const trimmed = value?.trim();
+  return trimmed && trimmed.length > 0 ? trimmed : undefined;
 }

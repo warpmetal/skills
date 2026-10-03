@@ -1,8 +1,10 @@
 #!/usr/bin/env node
+import { readFile } from "node:fs/promises";
+
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
 import { helpText, parseArguments } from "./cli.js";
-import { errorMessage } from "./errors.js";
+import { SkillError, errorMessage } from "./errors.js";
 import { startHttpServer } from "./http.js";
 import { loadRegistry } from "./registry.js";
 import { SERVER_NAME, createSkillsServer } from "./server.js";
@@ -10,6 +12,22 @@ import { packageVersion } from "./version.js";
 
 function banner(loadedSource: string, registryVersion: string, stale: boolean): string {
   return `${loadedSource}${stale ? ", stale" : ""}, registry ${registryVersion}`;
+}
+
+/**
+ * `--registry-token-file` exists so hosts that scrub `*TOKEN*` environment
+ * variables can still pass a credential without putting it in the process list
+ * or the environment.
+ */
+async function readTokenFile(path: string): Promise<string> {
+  try {
+    return await readFile(path, "utf8");
+  } catch (error) {
+    throw new SkillError(
+      "invalid_request",
+      `--registry-token-file: cannot read ${path}: ${(error as Error).message}`,
+    );
+  }
 }
 
 async function main(): Promise<void> {
@@ -24,11 +42,16 @@ async function main(): Promise<void> {
     return;
   }
 
+  const registryToken = options.registryTokenFile
+    ? await readTokenFile(options.registryTokenFile)
+    : undefined;
+
   const loaded = await loadRegistry({
     registry: options.registry,
     tag: options.tag,
     cacheDir: options.cacheDir,
     offline: options.offline,
+    registryToken,
   });
 
   if (options.http) {

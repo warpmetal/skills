@@ -79,6 +79,45 @@ Manifest reads are cached and revalidated; file bodies are fetched from the cata
 against the manifest checksum on every read. In cached or offline mode, listings work but file reads
 require the network (v1).
 
+## Private registries
+
+The server has no per-skill visibility flag. A process serves exactly the registry it loaded, so
+isolating internal skills means running a second instance against a second registry, not asking one
+instance to hide part of its own.
+
+```sh
+# Public instance: the hosted catalog, unauthenticated.
+npx -y @warpmetal/skills-mcp
+
+# Internal instance: the private bundle mounted read-only, reached only over a
+# private network. A missing or unreadable path fails with `registry_unavailable`,
+# so nothing is silently answered from the public catalog.
+node dist/index.js --http --registry /registry
+
+# Internal instance over an authenticated catalog: the token is sent as a header.
+node dist/index.js --http \
+  --registry https://<internal-catalog>/registry.internal.json \
+  --registry-token-file /run/secrets/registry.token
+```
+
+Three properties make this a boundary rather than a filter:
+
+- `--registry <path>` loads a local registry and reads files from that directory. A name the registry
+  does not declare is `not_found`: an absent skill cannot be read, the same way an absent tool cannot
+  be called.
+- A missing or unreadable `--registry <path>` fails with `registry_unavailable`. A local path has no
+  fallback, so an unreachable bundle is never answered from the public catalog.
+- `--registry <url>` is different: a `401`/`403` fails closed with `registry_unauthorized`, but a plain
+  network failure still falls back to the cached copy and then the bundled **public** snapshot, marked
+  `stale: true`. If an internal instance must never serve public content, mount the bundle on a local
+  path instead of pointing at a URL.
+
+Because the process carries exactly one registry, keep the private manifest and its files off the
+public catalog host: the manifest lists every skill name, description and per-file checksum.
+Authenticate the internal endpoint at the edge, since the HTTP transport itself has no
+authentication. See [SECURITY.md](SECURITY.md) and
+[`internal-skills/README.md`](../../internal-skills/README.md).
+
 ## Tools
 
 ### Content (`skill_*`) — both profiles
@@ -201,7 +240,10 @@ DeepSeek Harness (`dsh-mcp-client` entry):
 dsh scrubs ambient variables matching `KEY|PASSWORD|SECRET|TOKEN` before launching stdio servers. That
 scrubbing is exactly why the CLI tools take no credential through the environment: the server relies on
 the CLI's own on-disk identity. Switch to `transport: streamable-http` with `url` to use a self-hosted
-container instead, and note that HTTP then serves the `content` profile only.
+container instead, and note that HTTP then serves the `content` profile only. The same scrubbing drops
+`WARPMETAL_SKILLS_REGISTRY_TOKEN` when you point the server at an authenticated registry, so use
+`--registry-token-file /run/secrets/registry.token` there: the credential stays out of both the
+environment and the process list.
 
 Remote HTTP (any host that supports Streamable HTTP):
 
@@ -215,6 +257,27 @@ Remote HTTP (any host that supports Streamable HTTP):
 
 The hosted HTTP endpoint is not deployed yet; run the container yourself until it is.
 
+### Authenticated (private) registries
+
+Internal skills live in a second registry under `internal-skills/` in the same repository, built with
+`npm run build:internal` into `registry.internal.json` and `snapshot.internal/`. The public catalog
+never serves them. Run a dedicated instance against the internal registry:
+
+```sh
+# Local bundle (no endpoint, no token)
+node dist/index.js --http --registry /path/to/snapshot.internal
+
+# Authenticated remote catalog
+node dist/index.js --http \
+  --registry https://<internal-catalog>/registry.internal.json \
+  --registry-token-file /run/secrets/registry.token
+```
+
+With a token configured, every manifest and file request carries `Authorization: Bearer <token>`; see
+[Private registries](#private-registries) for the failure semantics and [SECURITY.md](SECURITY.md) for
+what the token does and does not guarantee. The token must exist only on the internal instance: if the
+public instance received it, that instance would serve these skills too.
+
 ## Options
 
 | Flag | Meaning |
@@ -223,12 +286,14 @@ The hosted HTTP endpoint is not deployed yet; run the container yourself until i
 | `--tag <version>` | Pin a registry tag from the catalog host (default: `latest`) |
 | `--offline` | Never fetch; use cache or the bundled snapshot |
 | `--cache-dir <path>` | Override the registry cache directory |
+| `--registry-token-file <path>` | Read a bearer token from a file; sent to an authenticated registry |
 | `--http`, `--host`, `--port` | HTTP transport settings (selects the `content` profile) |
 | `--version`, `--help` | Print version or help |
 
 ## Environment
 
 Registry (content surface): `WARPMETAL_SKILLS_REGISTRY`, `WARPMETAL_SKILLS_REGISTRY_URL`,
+`WARPMETAL_SKILLS_REGISTRY_TOKEN` (bearer token for an authenticated registry),
 `WARPMETAL_SKILLS_HOST`, `PORT`, `XDG_CACHE_HOME`.
 
 CLI surface: `WARPMETAL_MCP_AUDIT` (set to `0` to disable the audit log), `WARPMETAL_MCP_AUDIT_DIR`

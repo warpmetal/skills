@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { cp, mkdir, readdir, readFile, rm } from "node:fs/promises";
-import { dirname, join, relative, sep } from "node:path";
+import { dirname, join, relative, resolve, sep } from "node:path";
 
 export const NAME_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 export const VERSION_PATTERN = /^[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9.]+)?$/;
@@ -60,32 +60,42 @@ function frontmatterField(block, field) {
   return match[1].trim().replace(/^["']|["']$/g, "");
 }
 
-function validateFrontmatter(name, content) {
+function validateFrontmatter(label, name, content) {
   if (!content.startsWith("---\n")) {
-    throw new Error(`skills/${name}/SKILL.md must start with YAML frontmatter`);
+    throw new Error(`${label}/${name}/SKILL.md must start with YAML frontmatter`);
   }
   const end = content.indexOf("\n---", 4);
-  if (end === -1) throw new Error(`skills/${name}/SKILL.md frontmatter is not closed`);
+  if (end === -1) throw new Error(`${label}/${name}/SKILL.md frontmatter is not closed`);
   const block = content.slice(4, end);
   const declaredName = frontmatterField(block, "name");
-  if (declaredName === undefined) throw new Error(`skills/${name}/SKILL.md is missing a name`);
+  if (declaredName === undefined) throw new Error(`${label}/${name}/SKILL.md is missing a name`);
   if (declaredName !== name) {
     throw new Error(
-      `skills/${name}/SKILL.md frontmatter name must be "${name}" (found "${declaredName}")`,
+      `${label}/${name}/SKILL.md frontmatter name must be "${name}" (found "${declaredName}")`,
     );
   }
   if (frontmatterField(block, "description") === undefined) {
-    throw new Error(`skills/${name}/SKILL.md is missing a description`);
+    throw new Error(`${label}/${name}/SKILL.md is missing a description`);
   }
 }
 
-export async function buildRegistryModel({ root, env = process.env }) {
-  const skillsRoot = join(root, "skills");
+/**
+ * Builds the registry model from a skills directory.
+ *
+ * `skillsDir` defaults to `<root>/skills` (the public registry). A different
+ * directory builds a different registry from the same tooling: the internal
+ * registry passes `<root>/internal-skills`. The per-skill `path` is always
+ * `skills/<name>` regardless of the source directory, because that is the only
+ * layout the MCP server accepts (`validateRegistry` rejects anything else).
+ */
+export async function buildRegistryModel({ root, skillsDir, env = process.env }) {
+  const skillsRoot = skillsDir ? resolve(skillsDir) : join(root, "skills");
+  const label = relative(root, skillsRoot).split(sep).join("/") || "skills";
   const names = (await readdir(skillsRoot, { withFileTypes: true }))
     .filter((entry) => entry.isDirectory() && !entry.name.startsWith("."))
     .map((entry) => entry.name)
     .sort();
-  if (names.length === 0) throw new Error("no skills found under skills/");
+  if (names.length === 0) throw new Error(`no skills found under ${label}/`);
 
   const skills = [];
   for (const name of names) {
@@ -98,27 +108,27 @@ export async function buildRegistryModel({ root, env = process.env }) {
     try {
       meta = JSON.parse(await readFile(join(directory, "skill.json"), "utf8"));
     } catch (error) {
-      throw new Error(`skills/${name}/skill.json is missing or invalid: ${error.message}`);
+      throw new Error(`${label}/${name}/skill.json is missing or invalid: ${error.message}`);
     }
-    if (meta.name !== name) throw new Error(`skills/${name}/skill.json name must be "${name}"`);
+    if (meta.name !== name) throw new Error(`${label}/${name}/skill.json name must be "${name}"`);
     if (typeof meta.version !== "string" || !VERSION_PATTERN.test(meta.version)) {
-      throw new Error(`skills/${name}/skill.json version must be semver`);
+      throw new Error(`${label}/${name}/skill.json version must be semver`);
     }
     if (typeof meta.description !== "string" || meta.description.trim().length === 0) {
-      throw new Error(`skills/${name}/skill.json description is required`);
+      throw new Error(`${label}/${name}/skill.json description is required`);
     }
     if (
       meta.minimumWarpmetalCli !== undefined &&
       typeof meta.minimumWarpmetalCli !== "string"
     ) {
-      throw new Error(`skills/${name}/skill.json minimumWarpmetalCli must be a string`);
+      throw new Error(`${label}/${name}/skill.json minimumWarpmetalCli must be a string`);
     }
     // Declared provider integrations. Validated against the engine catalog by
     // scripts/validate-skills.mjs, because that check needs to read the catalog
     // source; here only the shape is enforced.
     const integrations = stringArray(meta.integrations, `${name}.integrations`);
 
-    validateFrontmatter(name, await readFile(join(directory, "SKILL.md"), "utf8"));
+    validateFrontmatter(label, name, await readFile(join(directory, "SKILL.md"), "utf8"));
 
     const files = [];
     let total = 0;
@@ -126,13 +136,13 @@ export async function buildRegistryModel({ root, env = process.env }) {
       if (path === "skill.json") continue;
       const bytes = await readFile(join(directory, path));
       if (bytes.byteLength > MAX_FILE_BYTES) {
-        throw new Error(`skills/${name}/${path} exceeds ${MAX_FILE_BYTES} bytes`);
+        throw new Error(`${label}/${name}/${path} exceeds ${MAX_FILE_BYTES} bytes`);
       }
       total += bytes.byteLength;
       files.push({ path, sha256: sha256(bytes) });
     }
     if (total > MAX_SKILL_BYTES) {
-      throw new Error(`skills/${name} exceeds ${MAX_SKILL_BYTES} bytes in total`);
+      throw new Error(`${label}/${name} exceeds ${MAX_SKILL_BYTES} bytes in total`);
     }
 
     skills.push({

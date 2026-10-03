@@ -36,8 +36,14 @@ jobs:
       - name: Build registry and channels
         run: npm run build
 
+      - name: Build internal registry
+        run: npm run build:internal
+
       - name: Verify schema, checksums, catalogs, and secrets
         run: npm run verify
+
+      - name: Verify internal registry and isolation
+        run: npm run verify:internal
 
       - name: Validate skill conventions and integration policies
         run: npm run validate:skills

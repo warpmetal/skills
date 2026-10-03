@@ -206,7 +206,15 @@ export async function readSkillFile(
     const url = `${loaded.baseUrl}${skill.path}/${normalized}`;
     let bytes: Buffer;
     try {
-      const response = await fetch(url, { signal: AbortSignal.timeout(10_000) });
+      const headers: Record<string, string> = {};
+      if (loaded.registryToken) headers.authorization = `Bearer ${loaded.registryToken}`;
+      const response = await fetch(url, { headers, signal: AbortSignal.timeout(10_000) });
+      if (response.status === 401 || response.status === 403) {
+        throw new SkillError(
+          "registry_unauthorized",
+          `${url}: credentials rejected (HTTP ${response.status})`,
+        );
+      }
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       bytes = Buffer.from(await response.arrayBuffer());
     } catch (error) {

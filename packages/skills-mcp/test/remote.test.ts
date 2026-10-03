@@ -10,9 +10,30 @@ import { loadRegistry, registryUrlForTag } from "../src/registry.js";
 import { readSkillFile } from "../src/skills.js";
 import { makeRegistryFixture } from "./helpers.js";
 
-async function startStaticServer(root: string): Promise<{ server: Server; url: string }> {
+interface StaticRequest {
+  path: string;
+  authorization: string | undefined;
+  query: string;
+}
+
+async function startStaticServer(
+  root: string,
+  options: { requireToken?: string } = {},
+): Promise<{ server: Server; url: string; requests: StaticRequest[] }> {
+  const requests: StaticRequest[] = [];
   const server = createServer(async (request, response) => {
-    const pathname = decodeURIComponent(new URL(request.url ?? "/", "http://localhost").pathname);
+    const parsed = new URL(request.url ?? "/", "http://localhost");
+    const pathname = decodeURIComponent(parsed.pathname);
+    requests.push({
+      path: pathname,
+      authorization: request.headers.authorization,
+      query: parsed.search,
+    });
+    if (options.requireToken !== undefined && request.headers.authorization !== `Bearer ${options.requireToken}`) {
+      response.writeHead(401, { "content-type": "application/json" });
+      response.end(JSON.stringify({ error: "unauthorized" }));
+      return;
+    }
     const target = normalize(join(root, pathname));
     if (!target.startsWith(resolve(root))) {
       response.writeHead(403);
@@ -34,7 +55,7 @@ async function startStaticServer(root: string): Promise<{ server: Server; url: s
   await new Promise<void>((resolvePromise) => server.listen(0, "127.0.0.1", resolvePromise));
   const address = server.address();
   const port = typeof address === "object" && address !== null ? address.port : 0;
-  return { server, url: `http://127.0.0.1:${port}` };
+  return { server, url: `http://127.0.0.1:${port}`, requests };
 }
 
 async function closeServer(server: Server): Promise<void> {
@@ -133,6 +154,100 @@ test("a failed cache write does not fail a successful fetch", async () => {
   } finally {
     await closeServer(staticServer.server);
     await rm(cacheRoot, { recursive: true, force: true });
+    await fixture.cleanup();
+  }
+});
+
+test("an authenticated registry sends the token as a header, never in the query", async () => {
+  const fixture = await makeRegistryFixture();
+  const cache = await mkdtemp(join(tmpdir(), "skills-mcp-cache-"));
+  const staticServer = await startStaticServer(fixture.dir, { requireToken: "s3cret-token" });
+  const registryUrl = `${staticServer.url}/registry.json`;
+  try {
+    const loaded = await loadRegistry({
+      registry: registryUrl,
+      cacheDir: cache,
+      registryToken: "s3cret-token",
+    });
+    assert.equal(loaded.source, "remote");
+    assert.equal(loaded.stale, false);
+
+    const skill = await readSkillFile(loaded, "demo");
+    assert.match(skill.text, /# Demo/);
+
+    assert.ok(staticServer.requests.length > 0);
+    assert.ok(staticServer.requests.every((request) => request.query === ""));
+    assert.ok(
+      staticServer.requests.every((request) => request.authorization === "Bearer s3cret-token"),
+    );
+  } finally {
+    await closeServer(staticServer.server);
+    await rm(cache, { recursive: true, force: true });
+    await fixture.cleanup();
+  }
+});
+
+test("a missing or wrong token fails closed instead of falling back", async () => {
+  const fixture = await makeRegistryFixture();
+  const cache = await mkdtemp(join(tmpdir(), "skills-mcp-cache-"));
+  const staticServer = await startStaticServer(fixture.dir, { requireToken: "s3cret-token" });
+  const registryUrl = `${staticServer.url}/registry.json`;
+  const previousToken = process.env.WARPMETAL_SKILLS_REGISTRY_TOKEN;
+  delete process.env.WARPMETAL_SKILLS_REGISTRY_TOKEN;
+  try {
+    // A valid credential would succeed, so the failure below is about the token.
+    const loaded = await loadRegistry({
+      registry: registryUrl,
+      cacheDir: cache,
+      registryToken: "s3cret-token",
+    });
+    assert.equal(loaded.stale, false);
+
+    for (const registryToken of [undefined, "wrong-token"]) {
+      await assert.rejects(
+        () => loadRegistry({ registry: registryUrl, cacheDir: cache, registryToken }),
+        (error: unknown) => (error as { code?: string }).code === "registry_unauthorized",
+      );
+    }
+  } finally {
+    if (previousToken === undefined) delete process.env.WARPMETAL_SKILLS_REGISTRY_TOKEN;
+    else process.env.WARPMETAL_SKILLS_REGISTRY_TOKEN = previousToken;
+    await closeServer(staticServer.server);
+    await rm(cache, { recursive: true, force: true });
+    await fixture.cleanup();
+  }
+});
+
+test("the registry cache is partitioned by token identity", async () => {
+  const fixture = await makeRegistryFixture();
+  const cache = await mkdtemp(join(tmpdir(), "skills-mcp-cache-"));
+  const staticServer = await startStaticServer(fixture.dir, { requireToken: "token-a" });
+  const registryUrl = `${staticServer.url}/registry.json`;
+  try {
+    await loadRegistry({ registry: registryUrl, cacheDir: cache, registryToken: "token-a" });
+    await closeServer(staticServer.server);
+
+    // The same identity reuses its own cached manifest.
+    const cachedA = await loadRegistry({
+      registry: registryUrl,
+      cacheDir: cache,
+      registryToken: "token-a",
+    });
+    assert.equal(cachedA.stale, true);
+    assert.equal(cachedA.registry.registryVersion, "0.1.0");
+
+    // A different identity must not read token-a's cache; with the network down
+    // it falls back to the public bundled snapshot, not to another token's data.
+    const cachedB = await loadRegistry({
+      registry: registryUrl,
+      cacheDir: cache,
+      registryToken: "token-b",
+    });
+    assert.equal(cachedB.stale, true);
+    assert.notEqual(cachedB.registry.registryVersion, "0.1.0");
+  } finally {
+    await closeServer(staticServer.server).catch(() => undefined);
+    await rm(cache, { recursive: true, force: true });
     await fixture.cleanup();
   }
 });

@@ -39,6 +39,39 @@ transport rather than by the caller:
 A way to reach a `wm_*` tool over HTTP is a vulnerability. A way to make the
 `content` profile serve something outside the loaded registry is one too.
 
+### Private registries
+
+Internal skills are isolated by running a second instance against a second registry, not by a
+visibility flag inside one registry. The HTTP transport still has no authentication of its own; an
+internal instance is expected to sit behind an edge that authenticates the caller and restricts the
+network.
+
+The server can hold one credential: a bearer token (`--registry-token-file`, or
+`WARPMETAL_SKILLS_REGISTRY_TOKEN`) that it sends as `Authorization: Bearer` on every manifest and file
+request to an authenticated catalog.
+
+What that guarantees:
+
+- The token is sent only to the host named by `--registry`/`WARPMETAL_SKILLS_REGISTRY`, only as a
+  header, and never as a query parameter. URLs appear in error strings and logs, so a token in the
+  query string would leak with them.
+- A `401`/`403` fails closed (`registry_unauthorized`). The server does not fall back to a cached or
+  bundled registry, which could otherwise serve the wrong skills after a credential is rotated or
+  revoked.
+- The cache is partitioned by a short hash of the token, so two identities never share a cache entry
+  and an unauthenticated load cannot read a privileged one. The token itself is never written to the
+  cache, and the public catalog path carries no token at all.
+
+What it does not do:
+
+- It authenticates *the server to the catalog*, not the MCP caller. The edge still proves caller
+  identity, and the server cannot distinguish one authenticated caller from another.
+- It does not change the fallback order for a *network* failure (as opposed to `401`/`403`): the server
+  still prefers a stale cache and then the bundled public snapshot. A private instance running without
+  a token can therefore serve public content while the internal catalog is unreachable.
+- The boundary is the loaded registry: a name the registry does not declare is `not_found`.
+- `/readyz` reports the registry version and skill count without authentication.
+
 ## Not a vulnerability
 
 Some behaviour is deliberate and is documented here so it is not reported as a
