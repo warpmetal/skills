@@ -8,8 +8,8 @@ COPY src ./src
 RUN npm run build
 
 FROM node:22-alpine AS runtime
-LABEL org.opencontainers.image.title="WarpMetal Skills MCP" \
-      org.opencontainers.image.description="Read-only MCP server for WarpMetal Agent Skills" \
+LABEL org.opencontainers.image.title="WarpMetal MCP" \
+      org.opencontainers.image.description="MCP server for WarpMetal Agent Skills and the WarpMetal CLI surface" \
       org.opencontainers.image.source="https://github.com/warpmetal/skills" \
       org.opencontainers.image.licenses="UNLICENSED"
 ENV NODE_ENV=production

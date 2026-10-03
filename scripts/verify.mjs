@@ -14,6 +14,7 @@ import {
   renderMarketplaceCatalogs,
   renderPluginManifest,
 } from "./lib/build.mjs";
+import { collectSkillPolicyFailures } from "./validate-skills.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const failures = [];
@@ -136,6 +137,10 @@ const SECRET_PATTERNS = [
   { name: "gitlab token", regex: /\bglpat-[A-Za-z0-9_-]{20,}\b/ },
   { name: "openai key", regex: /\bsk-[A-Za-z0-9]{20,}\b/ },
   { name: "slack token", regex: /\bxox[baprs]-[A-Za-z0-9-]{10,}\b/ },
+  // A Slack incoming webhook is a bearer credential in URL form: it is the whole
+  // authorisation to post to a channel, so it belongs in this list.
+  { name: "slack webhook", regex: /hooks\.slack\.com\/services\/[A-Za-z0-9+/]{8,}/ },
+  { name: "cloudflare global key", regex: /\b[0-9a-f]{37}\b/ },
   { name: "jwt", regex: /\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b/ },
 ];
 
@@ -192,6 +197,12 @@ for (const file of await collect(scanRoots)) {
       failures.push(`possible ${pattern.name} in ${relative(root, file)}`);
     }
   }
+}
+
+// 6. skill policies: conventions parity, the resolver block, no inline provider
+//    calls, and declared integrations that actually exist in the engine catalog.
+for (const failure of await collectSkillPolicyFailures({ root })) {
+  failures.push(failure);
 }
 
 if (failures.length > 0) {

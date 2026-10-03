@@ -1,0 +1,25 @@
+{
+  "name": "warpmetal-agent-sandbox",
+  "version": "0.1.0",
+  "description": "Prepare and verify an isolated WarpMetal Agent Runtime sandbox so that a coding agent such as Cursor CLI, Codex, Claude Code, Antigravity or another documented agent can work inside it, authenticate with GitHub, clone a repository and operate through Git. Use once an Agent Runtime sandbox, its access grant and its SSH alias already exist and the user wants a coding agent working inside that sandbox.",
+  "roles": [
+    "operator"
+  ],
+  "hosts": [
+    "codex",
+    "claude",
+    "opencode",
+    "cursor",
+    "dsh",
+    "agents",
+    "mcp"
+  ],
+  "minimumWarpmetalCli": "0.8.10",
+  "tags": [
+    "warpmetal",
+    "sandbox",
+    "agent",
+    "github",
+    "coding-agent"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "backup-restore",
+  "version": "0.1.0",
+  "description": "Set up restic-based backups for a client site and verify they actually work via a restore drill. Covers database dumps, user uploads, configs, and cron/systemd units. Enforces key escrow, offsite storage, and a dead-man's switch before declaring setup complete. Use when setting up backups, testing restores, or recovering from data loss.",
+  "roles": [
+    "operator"
+  ],
+  "hosts": [
+    "codex",
+    "claude",
+    "opencode",
+    "cursor",
+    "dsh",
+    "agents",
+    "mcp"
+  ],
+  "tags": [
+    "backup",
+    "restore",
+    "restic",
+    "disaster-recovery"
+  ]
+}

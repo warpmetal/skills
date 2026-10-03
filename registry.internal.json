@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "registryVersion": "0.0.0-dev",
+  "skills": [
+    {
+      "name": "example-internal",
+      "version": "0.1.0",
+      "description": "Template for an internal-only WarpMetal skill. Replace with a real internal workflow.",
+      "path": "skills/example-internal",
+      "roles": [
+        "operator"
+      ],
+      "hosts": [
+        "mcp"
+      ],
+      "tags": [
+        "internal",
+        "example"
+      ],
+      "files": [
+        {
+          "path": "references/notes.md",
+          "sha256": "7d9ceec7f0967c463da785fbc127e913d63754e0d8b7529b1da2a28caaceac1b"
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "5bbe7679de6b3dbf4a34df1d8a6a956c4bc2435ce15a32ec4b46710b1094d294"
+        }
+      ]
+    }
+  ]
+}

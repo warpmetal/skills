@@ -1,0 +1,122 @@
+# CI for packages/skills-mcp, the unified MCP server.
+#
+# Two jobs, deliberately separated by what they depend on:
+#
+#   conformance - offline and hermetic. It builds, typechecks and runs the MCP
+#                 suites: the content server's own tests, the 109 conformance
+#                 cases, and the CLI contract suite. This is the gate a pull
+#                 request must pass.
+#   live        - depends on the third-party WarpMetal service being reachable,
+#                 so it never runs on a pull request. A vendor outage must not be
+#                 able to block a merge, but the payload shapes this server reads
+#                 must still be re-checked on a schedule.
+#
+# Windows is in the matrix on purpose, not for coverage theatre: binary
+# resolution, `shell: false` spawning and the degraded cmd.exe fallback all have
+# a Windows-only branch that never executes on Linux.
+#
+# `verify.yml` stays the repository-level gate (registry build, checksums,
+# drift). This workflow is the package-level one, and it is the only place the
+# contract suite runs against a real CLI on both operating systems.
+name: mcp
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/skills-mcp/**"
+      - ".github/workflows/mcp.yml"
+  pull_request:
+    paths:
+      - "packages/skills-mcp/**"
+      - ".github/workflows/mcp.yml"
+  schedule:
+    # 06:00 UTC daily, for the live job only.
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mcp-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  conformance:
+    name: conformance (node ${{ matrix.node }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: packages/skills-mcp
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: packages/skills-mcp/package-lock.json
+
+      # `npm ci` installs the pinned `warpmetal` devDependency, which is what
+      # makes the contract suite reproducible: the server resolves a local
+      # install before a global one.
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # The content suite, the 109 conformance cases, and the two profile cases.
+      - name: Conformance suite
+        run: npm test
+
+      - name: CLI contract suite
+        run: npm run test:contract
+
+  live:
+    name: live contract against the WarpMetal service
+    # Schedule or a manual dispatch only. Never on push or pull_request.
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/skills-mcp
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: packages/skills-mcp/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # Read-only calls only: health, catalog and state list. This job spends
+      # nothing and mutates nothing; it exists to catch a payload-shape drift
+      # that the offline fixtures cannot see.
+      #
+      # The owner token is the long-lived recovery credential, not the
+      # SSH-derived access token: a scheduled job needs a credential that
+      # outlives the schedule. It is passed through `env` rather than as an
+      # argument, and GitHub masks registered secrets in the log. Without it the
+      # credential-dependent checks skip with a named reason instead of failing,
+      # so losing the secret degrades coverage without turning the job red.
+      - name: Live contract suite
+        run: npm run test:live
+        env:
+          WARPMETAL_MCP_LIVE: "1"
+          WARPMETAL_OWNER_TOKEN: ${{ secrets.WARPMETAL_OWNER_TOKEN }}

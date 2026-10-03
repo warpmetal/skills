@@ -1,9 +1,9 @@
 # Skills Registry + `@warpmetal/skills-mcp` — Implementation Plan
 
-Status: planning complete; implementation ready to execute from a build agent.
-Revision: 2026-09-21, revision 2 (adds repo bootstrap, Docker, CI/CD).
-Companion plan: [`docs/coding-env-skill-plan.md`](docs/coding-env-skill-plan.md) (the `coding-env` skill and `warpmetal env` CLI).
-Workstream: new repository `warpmetal/skills` plus generated channels consumed by agent-kit.
+Status: design locked 2026-09-21; execution status is tracked in [`ROADMAP.md`](ROADMAP.md).
+Revision: 2026-09-21, revision 2 (adds repo bootstrap, Docker, CI/CD); frozen as a design document.
+Related plan: [`docs/coding-env-skill-plan.md`](docs/coding-env-skill-plan.md) (the `coding-env` skill and `warpmetal env` CLI).
+Workstream: this repository (`warpmetal/skills`): the skill registry, every generated distribution channel, the `warpmetal` CLI, and the MCP server.
 
 ## 1. Context
 
@@ -14,8 +14,8 @@ distribution channels that do not exist in this repo yet:
 - **Claude Code / omp plugin marketplaces** — same catalog format. omp prefers
   `.omp-plugin/marketplace.json`, falls back to `.claude-plugin/marketplace.json`; installs become
   plugins containing skills, agents, commands, MCP servers.
-- **Codex / ChatGPT plugin marketplace** — `.agents/plugins/marketplace.json`; agent-kit already
-  ships one for its single plugin.
+- **Codex / ChatGPT plugin marketplace** — `.agents/plugins/marketplace.json`, mirroring the
+  catalog format the Codex plugin system consumes.
 - **OpenCode V2 HTTP catalogs** — a `skills` URL entry with `index.json` listing
   `{name, version, files}`, files served relative and same-origin.
 
@@ -23,8 +23,8 @@ MCP is a runtime tool protocol, not a package manager: pulling skills over MCP n
 already configured and cannot advertise skills in the system prompt. It is still valuable for
 on-demand discovery, so this plan includes a read-only server alongside the file-based channels.
 
-Decision: `warpmetal/skills` becomes the single source of truth; agent-kit consumes a pinned
-snapshot; the MCP server is a standalone package released from the same repo.
+Decision: `warpmetal/skills` becomes the single source of truth; the CLI and the MCP server consume
+it; the MCP server is a standalone package released from the same repo.
 
 ## 2. Goals and non-goals
 
@@ -34,24 +34,25 @@ Goals:
   Codex plugin marketplace, OpenCode catalog, npm snapshot, MCP server data.
 - Host-native installs without the WarpMetal CLI: `omp plugin marketplace add warpmetal/skills`,
   Claude marketplace, Codex marketplace.
-- Offline-capable, version-pinned consumption by agent-kit.
+- Offline-capable, version-pinned consumption by the `warpmetal` CLI.
 - A read-only skills MCP for on-demand discovery, shipped as an npm package and a multi-arch
   container image.
 - Reproducible releases: GitHub Actions verifies, publishes to npm, pushes GHCR images, and deploys
   the immutable catalog.
-- Migration of the existing `warpmetal` skill out of agent-kit without breaking users.
 
-Non-goals (v1): private/authenticated registries, writing or installing skills over MCP,
+Non-goals (v1): authenticated *transport* in this server, writing or installing skills over MCP,
 auto-update, skill execution sandboxing, third-party skill submissions, paid skills, x402api-pay
-bundling (it stays an external skill).
+bundling (it stays an external skill). Private/team registries are served by a second instance
+loading a second registry; the isolation is the loaded registry, plus an optional bearer token the
+server can send to an authenticated catalog (see §8).
 
 ## 3. Decisions (locked 2026-09-21)
 
 | Area | Decision |
 |---|---|
-| Registry home | Separate repo `warpmetal/skills`; agent-kit pins a released tag |
+| Registry home | This repository (`warpmetal/skills`); releases are immutable tags |
 | Repo | `git@github.com:warpmetal/skills.git`; created 2026-09-21, currently empty |
-| Visibility / license | Public; `UNLICENSED` for v1 (matching agent-kit); revisit licensing once skills stabilize |
+| Visibility / license | Public; `UNLICENSED` for v1; revisit licensing once skills stabilize |
 | Channels | Ship host-native marketplace + catalog channels from the start |
 | MCP | Build now; standalone package `@warpmetal/skills-mcp`; read-only |
 | Registry resolution | Dynamic by default: consumers resolve `<catalog>/<tag>/registry.json` (tag defaults to `latest`), revalidate with ETag, fall back to cache, then to a bundled snapshot (marked stale). The CLI ships no registry or skill content; the MCP package and Docker image keep the last-resort bundle. |
@@ -67,9 +68,11 @@ warpmetal/skills/
   PLAN.md                       # this plan, committed as the first document
   registry.json                 # source of truth (generated manifest, committed)
   registry.schema.json
+  registry.internal.json        # internal registry manifest (committed, never published)
   skills/
     warpmetal/SKILL.md, references/...
     coding-env/SKILL.md, references/{roles,providers}/...
+  internal-skills/              # internal-only skills; built into registry.internal.json
   plugins/warpmetal/            # Claude/omp-compatible plugin (skills + plugin.json)
   .omp-plugin/marketplace.json
   .claude-plugin/marketplace.json
@@ -77,7 +80,6 @@ warpmetal/skills/
   catalog/index.json            # OpenCode HTTP catalog
   packages/skills-mcp/          # @warpmetal/skills-mcp (standalone, bin: warpmetal-skills-mcp)
     Dockerfile                  # multi-stage, non-root, stdio + optional HTTP
-  packages/skills-registry/     # optional: @warpmetal/skills npm snapshot for agent-kit pinning
   scripts/{build-registry,build-catalogs,verify,release}
   .github/workflows/{verify,release}.yml
   README.md, CONTRIBUTING.md, SECURITY.md, CODEOWNERS, .gitignore
@@ -165,7 +167,19 @@ delayed.
   network use, declared tools/roles), CODEOWNERS review before merge.
 - Prompt-injection disclosure: MCP-returned content is untrusted input; document that MCP reads are
   not file-reviewed at install time and recommend version pinning.
-- No auth in v1 (public read-only). Private/team registries are a future plan.
+- No auth in the server's own transport (public read-only). Private/team registries are isolated by
+  running a second instance that loads a second registry (`--registry <path|url>` or
+  `WARPMETAL_SKILLS_REGISTRY`), never by a visibility flag inside one registry. The internal skills
+  live in this same repository under `internal-skills/`, built by `npm run build:internal` into
+  `registry.internal.json` + git-ignored `snapshot.internal/`; the public build reads only `skills/`,
+  so no internal name reaches `registry.json`, the generated channels, or the npm snapshot. The
+  server can also authenticate to an internal catalog with a bearer token (`--registry-token-file` or
+  `WARPMETAL_SKILLS_REGISTRY_TOKEN`): it is sent as `Authorization: Bearer` on every manifest and file
+  request, only as a header (never in the query string, which error messages echo), the cache is
+  partitioned by a hash of the token, and a `401`/`403` fails closed with `registry_unauthorized`
+  instead of falling back to the public snapshot. The token exists only on the internal instance. The
+  internal endpoint is still authenticated at the edge (a gateway in front of `/mcp`) because the
+  HTTP transport has no authentication of its own.
 - Supply chain: lockfile, pinned deps, provenance, no postinstall scripts; container images get OCI
   SBOM + provenance attestations.
 
@@ -175,28 +189,14 @@ delayed.
 2. Tag `vX.Y.Z` → `build-catalogs` → verify → publish `@warpmetal/skills` and
    `@warpmetal/skills-mcp` to npm → push multi-arch GHCR image → deploy Pages catalog → GitHub
    release with checksums.
-3. Consumers pick the release up dynamically; no CLI or server republish is needed. agent-kit pins
-   a registry tag in its tests, and generated plugin copies change only when this repository's own
-   plugin layout changes.
+3. Consumers pick the release up dynamically; no CLI or server republish is needed. The CLI tests
+   pin a registry tag, and generated plugin copies change only when this repository's own plugin
+   layout changes.
 
-Backward compatibility: `warpmetal agent install` keeps working for existing users; the CLI reads
-the snapshot indirection so the cutover is invisible.
+Backward compatibility: `warpmetal agent install` keeps working for existing users; the CLI resolves
+the registry without changing the installed command surface.
 
-## 10. Migration from agent-kit
-
-- Move `agent-kit/skills/warpmetal` into the registry; keep the content byte-identical (checksums
-  recorded).
-- agent-kit ships no registry or skill content: `agent install`, `env setup`, and the `skill`
-  commands resolve the registry remotely (ETag cache, checksum verification) with a clear offline
-  error when neither the network nor a cache is available.
-- `src/install-skill.js` becomes a registry client: fetch manifest → verify checksums → write host
-  directory → record the installed version and checksum in a local lockfile.
-- The Codex plugin directory remains a plugin-distribution concern, not a CLI bundle.
-- `test/plugin.test.js` switches from "byte-identical source copy" to "checksum matches pinned
-  registry tag".
-- `package.json` `files` and `check` entries updated; prepack regenerates the snapshot.
-
-## 11. Requirements and acceptance
+## 10. Requirements and acceptance
 
 | ID | Requirement | Observable acceptance | Verification |
 |---|---|---|---|
@@ -214,7 +214,7 @@ the snapshot indirection so the cutover is invisible.
 | R12 | Docs parity | Each channel has tested, copyable config snippets | docs test |
 | R13 | Reproducible artifacts | `v*` tag produces npm packages, GHCR image, and Pages catalog with matching versions and attestations | release rehearsal |
 
-## 12. Phases
+## 11. Phases
 
 **P0 — spikes and format validation (evidence required):**
 1. Validate marketplace catalogs against a real omp version and Claude Code (paths, plugin layout,
@@ -233,39 +233,37 @@ secret checks, generated channel files, README/CONTRIBUTING/SECURITY, Dockerfile
 tests, per-host documentation snippets, multi-arch image build and GHCR publishing, npm publish
 with provenance.
 
-**P3 — integration:** npm snapshot package, agent-kit pinning PR, plugin test change, marketplace
-publication, Pages catalog deployment, live host canaries, release notes.
+**P3 — integration:** registry snapshot package, plugin test change, marketplace publication, Pages
+catalog deployment, live host canaries, release notes.
 
-## 13. Interfaces with `coding-env-skill-plan.md`
+## 12. Interfaces with `coding-env-skill-plan.md`
 
-- The companion plan consumes only: skill directory layout, `registry.json` fields
+- The `coding-env` plan consumes only: skill directory layout, `registry.json` fields
   (`name`, `version`, `files`, `sha256`), and the published MCP snippets.
-- The companion plan owns all `warpmetal env` behavior, host config writing, and credential
+- The `coding-env` plan owns all `warpmetal env` behavior, host config writing, and credential
   handling; this plan owns content, distribution, and discovery.
 - The CLI ships no registry or skill content; it resolves `<catalog>/<tag>/registry.json` (tag
   defaults to `latest`) at use time, revalidates with ETag, caches, verifies checksums, and records
   installed versions in a local lockfile. `--registry <path|url>`/`--tag` pin an exact snapshot.
-- `warpmetal skill list/search/install/remove/update` command semantics are frozen by the companion
-  plan; this repository owns the registry, its per-skill versions, and the hosted catalog.
+- `warpmetal skill list/search/install/remove/update` command semantics are frozen by the
+  `coding-env` plan; this repository owns the registry, its per-skill versions, and the hosted catalog.
 - Resolution model: agents use this MCP server for discovery and reads; the CLI uses the same
   manifest over plain HTTPS (not MCP) so both paths cannot drift. A CLI MCP-client mode is only for
   private/authenticated registries later.
 - Release-time `releases.json` provides update history; per-skill versions allow `name@version`
   installs later without changing the manifest schema.
 
-## 14. Repo bootstrap, Docker, and CI/CD
+## 13. Repo bootstrap, Docker, and CI/CD
 
 ### Bootstrap order (build-agent checklist)
 
-1. Clone `git@github.com:warpmetal/skills.git` as a sibling checkout; never nest it inside another
-   working tree.
-2. Commit `PLAN.md` (this document) first, then the scaffold: README, `LICENSE` (UNLICENSED
+1. Commit `PLAN.md` (this document) first, then the scaffold: README, `LICENSE` (UNLICENSED
    placeholder), `CODEOWNERS`, `.gitignore`, root tooling package (no npm workspaces; the MCP
    package keeps its own lockfile), `registry.schema.json`,
    `skills/`, `packages/skills-mcp/`, `scripts/`, `.github/workflows/`.
-3. Seed `registry.json` with the two known skills (`warpmetal`, `coding-env`) and record checksums.
-4. Protect `main`: require the `verify` workflow, require CODEOWNERS review, block force-push.
-5. Verify environment prerequisites: `@warpmetal` npm scope ownership, npm trusted publishing,
+2. Seed `registry.json` with the two known skills (`warpmetal`, `coding-env`) and record checksums.
+3. Protect `main`: require the `verify` workflow, require CODEOWNERS review, block force-push.
+4. Verify environment prerequisites: `@warpmetal` npm scope ownership, npm trusted publishing,
    GHCR write access, Pages enabled.
 
 ### Docker (MCP server)
@@ -298,51 +296,11 @@ attestations), `packages: write` (GHCR), and `pages: write` for the catalog depl
 OIDC trusted publishing so no long-lived `NPM_TOKEN` exists; if unavailable in P0, use a scoped
 automation token stored as a repository secret.
 
-## 15. Delivery status (2026-09-21)
+## 14. Delivery status
 
-Completed in this repository:
-
-- [x] Repository bootstrap: public `warpmetal/skills`, `PLAN.md`, README, CONTRIBUTING, SECURITY,
-      LICENSE (UNLICENSED), CODEOWNERS, CI workflows.
-- [x] Registry v1: `registry.json` + `registry.schema.json`, per-file sha256, `warpmetal` skill
-      migrated with recorded checksums.
-- [x] Generated channels: `.omp-plugin/` and `.claude-plugin/` marketplaces, `.agents/plugins/`
-      Codex catalog, `plugins/warpmetal/` plugin, `catalog/` OpenCode catalog, MCP snapshot.
-- [x] `@warpmetal/skills-mcp`: `skill_list`, `skill_search`, `skill_read`, `skill://` resources,
-      checksum verification on read, path/size guards, stdio + Streamable HTTP, remote
-      `--registry`/`--tag` with ETag cache and offline fallback.
-- [x] Docker: multi-stage non-root image (node:22-alpine); local build, `--version`, `/healthz`,
-      and `/readyz` smoke tests pass.
-- [x] CI/CD: `verify.yml` (schema, checksums, drift, secret scan, tests, Docker smoke) and
-      `release.yml` (npm provenance, multi-arch GHCR image, Pages catalog, GitHub release).
-- [x] DeepSeek Harness channel: skills roots and `dsh-mcp-client` snippet documented, `dsh` and
-      `mcp` host metadata on the skill.
-- [x] Dynamic registry resolution: `latest` by default over the catalog host, ETag revalidation,
-      cache next, bundled snapshot last (marked stale); 19 tests including remote and cache paths.
-- [x] `releases.json` history generated at release time for update checks and version lookups.
-- [x] Green CI on every push.
-
-Pending, requires org access or later workstreams:
-
-- [ ] `@warpmetal` npm scope + trusted publishing; GitHub Pages enablement; branch protection
-      requiring `verify`; CODEOWNERS team handle.
-- [ ] Live host validation on real installs: omp, Claude Code, Codex, OpenCode, DeepSeek Harness.
-- [ ] First `v*` tag to exercise the release pipeline end to end.
-- [ ] `coding-env` skill content lands in `skills/` when the `warpmetal env` CLI ships
-      ([companion plan](docs/coding-env-skill-plan.md)); agent-kit pins a released registry tag.
-- [ ] CLI registry client, lockfile, and explicit update semantics land with the companion workstream.
-
-## 16. Open items
-
-- Catalog host and URL scheme; whether to keep `raw.githubusercontent.com` as fallback.
-- Resolved: no `@warpmetal/skills` snapshot package; consumers resolve dynamically and pin registry
-  tags plus a local lockfile.
-- Signing tooling choice (minisign vs cosign) and whether to require it for v1.
-- npm trusted publishing availability; GHCR/Pages permissions check.
-- Runtime base image choice (alpine vs distroless) and HTTP mode auth story for self-hosted
-  deployments.
-- Whether a later private/team registry reuses the same schema (keep fields forward-compatible).
-- Codex marketplace submission path and review requirements.
+Execution status (what is done, what is pending, and what is still open) is tracked in
+[`ROADMAP.md`](ROADMAP.md). This document is the design the repository was built from and is
+frozen as of 2026-09-21; the roadmap is the living status.
 
 ## Implementation notes (2026-09-21)
 

@@ -29,9 +29,18 @@ test("stdio server exposes tools and serves skills end to end", async () => {
     await client.connect(transport);
 
     const tools = await client.listTools();
+    // stdio gets the `full` profile: the three content tools plus the 43 CLI
+    // tools. The unauthenticated HTTP transport is what narrows this down to the
+    // `skill_*` surface, and `test/profiles.test.ts` holds that pair of counts.
+    const names = tools.tools.map((tool) => tool.name).sort();
+    assert.equal(names.length, 46, "stdio must expose the full 46-tool surface");
     assert.deepEqual(
-      tools.tools.map((tool) => tool.name).sort(),
+      names.filter((name) => name.startsWith("skill_")),
       ["skill_list", "skill_read", "skill_search"],
+    );
+    assert.ok(
+      names.some((name) => name.startsWith("wm_")),
+      "the full profile must include the WarpMetal CLI tools",
     );
 
     const listed = parseJsonText(

@@ -1,0 +1,8 @@
+{
+  "name": "example-internal",
+  "version": "0.1.0",
+  "description": "Template for an internal-only WarpMetal skill. Replace with a real internal workflow.",
+  "roles": ["operator"],
+  "hosts": ["mcp"],
+  "tags": ["internal", "example"]
+}
