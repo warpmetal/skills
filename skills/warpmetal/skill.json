@@ -5,5 +5,6 @@
   "roles": ["operator"],
   "hosts": ["codex", "claude", "opencode", "cursor", "dsh", "agents", "mcp"],
   "minimumWarpmetalCli": "0.8.1",
-  "tags": ["warpmetal", "vps", "sandbox", "ssh", "x402", "renewal"]
+  "tags": ["warpmetal", "vps", "sandbox", "ssh", "x402", "renewal"],
+  "integrations": ["stripe"]
 }

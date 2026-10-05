@@ -1,13 +1,14 @@
 # coding-env Skill + `warpmetal env` — Implementation Plan
 
-Status: planning complete; implementation not started (registry-side prerequisites are in place).
-Revision: 2026-09-21, revision 1.
-Companion plan: [`PLAN.md`](../PLAN.md) (skill registry repo, distribution channels, MCP server).
-Workstream: WarpMetal agent-kit (`agent-kit/`, its own git repo, published as npm `warpmetal`, Node >= 20, currently zero runtime dependencies).
+Status: design locked; the registry side is complete and the `warpmetal env` engine has partially landed (`store`/`secret`/`status`/`doctor`/`revoke` in `packages/warpmetal-cli`), while `setup`/`plan`/`apply`, host-config writing, and the `coding-env` skill content remain pending.
+Revision: 2026-09-21, revision 2 (reflects the `warpmetal env` engine that shipped 2026-09-28).
+Related plan: [`PLAN.md`](../PLAN.md) (skill registry, distribution channels, MCP server).
+Execution status: [`ROADMAP.md`](../ROADMAP.md).
+Workstream: this repository (`warpmetal/skills`): the `warpmetal` CLI, the `warpmetal env` command family, and the `coding-env` Agent Skill.
 
 ## 1. Context
 
-`agent-kit` ships the `warpmetal` CLI and one portable skill (`skills/warpmetal`), installed with
+This repository ships the `warpmetal` CLI and one portable skill (`skills/warpmetal`), installed with
 `warpmetal agent install --target codex|claude|all [--scope user|project]`. This plan adds the
 coding-environment product:
 
@@ -17,12 +18,11 @@ coding-environment product:
 
 Contracts to preserve and reconcile:
 
-- `AGENT_CLI_ACCOUNT_INTEGRATIONS_PLAN.md` — broker/vault, per-sandbox grants, role templates
-  `coder`/`reviewer`/`qa`, install-before-auth, signed tool bundles. The local credential store
-  here is the interim tier until that broker exists.
-- `planning/sandbox-agents-and-optional-app-maintenance.md` — Agent Boxes, order-time tool intent,
-  and reserved command names. Do not repurpose `warpmetal agent install`, `integration setup`, or
-  `agent setup`.
+- The broker/vault contract: per-sandbox grants, role templates `coder`/`reviewer`/`qa`,
+  install-before-auth, signed tool bundles. The local credential store here is the interim tier
+  until that broker exists.
+- The Agent Boxes contract: order-time tool intent and reserved command names. Do not repurpose
+  `warpmetal agent install`, `integration setup`, or `agent setup`.
 - The CLI's existing invariants: `--json` everywhere, idempotency keys, `--confirm` for mutating
   commands, no bearer values in argv, private state under `~/.config/warpmetal` with `0600`/`0700`.
 
@@ -64,7 +64,7 @@ Contracts to preserve and reconcile:
 ## 4. Architecture
 
 ```
-agent-kit/src/env/
+packages/warpmetal-cli/src/env/
   setup.js            interactive orchestrator (readline, hidden input, no extra deps)
   detect.js           environment + host detection, host registry
   plan.js             manifest builder (role, services, composition, diff)
@@ -78,8 +78,9 @@ agent-kit/src/env/
   hosts/*.js          one per agent host (config writers)
 ```
 
-CLI wiring: `src/cli.js` dispatch, help text, `src/args.js` additions, `package.json` `check` and
-`files` updates, tests under `test/env-*.test.js` (node:test, following existing conventions).
+CLI wiring: `packages/warpmetal-cli/src/cli.js` dispatch, help text, `packages/warpmetal-cli/src/args.js`
+additions, `packages/warpmetal-cli/package.json` `check` and `files` updates, tests under
+`packages/warpmetal-cli/test/env-*.test.js` (node:test, following existing conventions).
 
 Runtime layout (same on laptop and inside an Agent Box, under the user's `$HOME`):
 
@@ -231,7 +232,7 @@ seven service adapters, composition writer, `doctor`/`revoke`/`store rotate`, `-
 extension.
 
 **P3 — skill and release:** `skills/coding-env/` content + role/provider references, README/help,
-companion-plan snapshot integration, plugin copy sync, release checks, Agent Box image preinstall
+registry snapshot integration, plugin copy sync, release checks, Agent Box image preinstall
 handoff.
 
 ## 12. Testing
@@ -261,13 +262,13 @@ Two consumers, two transports, one manifest:
 A CLI MCP-client mode is justified only for private or authenticated registries, where a server
 acts as an adapter; it is not part of v1.
 
-- Skill content source is indirection-based: today `agent-kit/skills/<name>/`; after the companion
-  migration, a generated snapshot of a pinned registry tag. CLI code must not care which.
+- Skill content source is indirection-based: today `skills/<name>/`; after the migration, a generated
+  snapshot of a pinned registry tag. CLI code must not care which.
 - Fields consumed from `registry.json`: `name`, `version`, `files`, `sha256`.
-- `skill list/install/update` is part of this plan's CLI surface; the remote source is owned by the
-  companion plan. Until it exists, only bundled skills are installable.
+- `skill list/install/update` is part of this plan's CLI surface; the registry that supplies them is
+  this repository's. Until it exists, only bundled skills are installable.
 - If the user opts into on-demand skill discovery, `env apply` may write a `@warpmetal/skills-mcp`
-  entry using the snippets the companion plan publishes; the server package is owned there.
+  entry using the snippets this repository publishes; the server package is owned here.
 
 ## 14. Open items
 
@@ -279,7 +280,7 @@ acts as an adapter; it is not part of v1.
 
 ## 15. Delivery status (2026-09-21)
 
-Registry-side prerequisites completed in this repository (see [`PLAN.md`](../PLAN.md#delivery-status-2026-09-21)):
+Registry-side prerequisites completed in this repository (see [`ROADMAP.md`](../ROADMAP.md)):
 
 - [x] Distribution channels exist for every target host, including DeepSeek Harness
       (`.agents/skills`, `dsh-mcp-client`) and any MCP-capable local agent.
@@ -290,12 +291,17 @@ Registry-side prerequisites completed in this repository (see [`PLAN.md`](../PLA
       no registry or skill content, records installed versions in a lockfile, and updates only with
       explicit consent. Per-skill versions; tag pinning now, `name@version` later.
 
-Not started, in dependency order:
+Not yet complete, in dependency order:
 
-- [ ] `warpmetal env` implementation in `agent-kit` (`setup`, `plan`, `apply`, `status`, `doctor`,
-      `revoke`, `store`, `secret`) and the `agent install --skill` extension.
+- [x] Core `warpmetal env` implementation in this repository: the vault, `store`, `secret`,
+      `status`, `doctor`, and `revoke` ship in `packages/warpmetal-cli` (`@warpmetal/cli`) as of
+      2026-09-28. The vault is the same one the provider integrations use, so a credential has
+      exactly one home. `setup`, `plan`, `apply`, host-config writing, and the
+      `agent install --skill` extension are still pending in this workstream.
+- [x] Service adapters for the providers shipped so far: `cloudflare` (DNS), `slack` (notify), and
+      `github` (repo view) live in `packages/warpmetal-cli/src/integration/adapters/`. The rest of
+      the host matrix (§ 7) is still open.
 - [ ] P0 spikes: omp/dsh config surfaces, provisioning-intent contract, keyring availability,
       service auth truth table.
 - [ ] `coding-env` skill content published to `skills/coding-env/` once the CLI minimum version
       exists, so installed skills never reference missing commands.
-- [ ] agent-kit pins a released registry tag for its bundled snapshot.

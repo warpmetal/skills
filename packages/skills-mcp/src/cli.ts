@@ -4,6 +4,7 @@ export interface CliOptions {
   registry?: string;
   tag?: string;
   cacheDir?: string;
+  registryTokenFile?: string;
   offline: boolean;
   http: boolean;
   port: number;
@@ -19,6 +20,7 @@ const VALUE_FLAGS = new Set([
   "--registry",
   "--tag",
   "--cache-dir",
+  "--registry-token-file",
   "--port",
   "--host",
 ]);
@@ -54,6 +56,9 @@ export function parseArguments(argv: string[]): CliOptions {
           break;
         case "--cache-dir":
           options.cacheDir = value;
+          break;
+        case "--registry-token-file":
+          options.registryTokenFile = value;
           break;
         case "--port":
           options.port = parsePort(value);
@@ -131,21 +136,23 @@ Options:
   --host <address>       HTTP bind address (default ${DEFAULT_HOST})
   --port <number>        HTTP port (default ${DEFAULT_PORT})
   --cache-dir <path>     Override the registry cache directory
+  --registry-token-file <path>  Bearer token for an authenticated registry, read from a file
   --version, -V          Print the version
   --help, -h             Show this help
 
 Registry resolution (default):
   1. --registry <url|path> or WARPMETAL_SKILLS_REGISTRY
   2. <catalog>/<tag>/registry.json, where tag defaults to latest
-  3. cached copy from a previous fetch (revalidated with ETag; marked stale)
+  3. cached copy from a previous load, revalidated with an ETag and marked stale
   4. bundled snapshot shipped with this package (marked stale)
 
 Environment:
-  WARPMETAL_SKILLS_REGISTRY      Default value for --registry
-  WARPMETAL_SKILLS_REGISTRY_URL  Base catalog URL (default https://skills.warpmetal.com)
-  WARPMETAL_SKILLS_HOST          Default value for --host
-  PORT                           Default value for --port
-  XDG_CACHE_HOME                 Cache root when --cache-dir is not set
+  WARPMETAL_SKILLS_REGISTRY       Default value for --registry
+  WARPMETAL_SKILLS_REGISTRY_URL   Base catalog URL (default https://skills.warpmetal.com)
+  WARPMETAL_SKILLS_REGISTRY_TOKEN Bearer token for an authenticated registry
+  WARPMETAL_SKILLS_HOST           Default value for --host
+  PORT                            Default value for --port
+  XDG_CACHE_HOME                  Cache root when --cache-dir is not set
 
 Transports:
   stdio (default)   Suitable for local MCP hosts (omp, Claude Code, Codex, Cursor, OpenCode)

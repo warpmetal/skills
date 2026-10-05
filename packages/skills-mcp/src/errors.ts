@@ -5,7 +5,8 @@ export type SkillErrorCode =
   | "traversal_rejected"
   | "too_large"
   | "integrity_mismatch"
-  | "registry_unavailable";
+  | "registry_unavailable"
+  | "registry_unauthorized";
 
 /** Bounded, redacted error taxonomy for the skills MCP server. */
 export class SkillError extends Error {

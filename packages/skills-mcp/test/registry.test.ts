@@ -5,6 +5,7 @@ import { join } from "node:path";
 import test from "node:test";
 
 import { loadRegistry, validateRegistry } from "../src/registry.js";
+import { readSkillFile } from "../src/skills.js";
 import { makeRegistryFixture } from "./helpers.js";
 
 test("loads a local registry with resolved root directory", async () => {
@@ -19,6 +20,35 @@ test("loads a local registry with resolved root directory", async () => {
     assert.deepEqual(
       loaded.registry.skills.map((skill) => skill.name),
       ["demo", "database"],
+    );
+  } finally {
+    await fixture.cleanup();
+  }
+});
+
+test("a loaded registry never serves a skill it does not declare", async () => {
+  // The boundary of a registry is the registry itself. A skill that is not
+  // declared cannot be read, so a public instance can never serve an internal
+  // name even when the caller guesses it. This is what makes a second,
+  // separately-loaded registry a hard boundary rather than a runtime filter.
+  const fixture = await makeRegistryFixture();
+  try {
+    const loaded = await loadRegistry({ registry: fixture.dir });
+
+    await assert.rejects(
+      () => readSkillFile(loaded, "internal-only-skill"),
+      (error: unknown) => (error as { code?: string }).code === "not_found",
+    );
+    await assert.rejects(
+      () => readSkillFile(loaded, "internal-only-skill", "SKILL.md"),
+      (error: unknown) => (error as { code?: string }).code === "not_found",
+    );
+
+    // The listing is exactly what the registry declares: absence is the
+    // boundary, not a filter applied at read time.
+    assert.deepEqual(
+      loaded.registry.skills.map((skill) => skill.name).sort(),
+      ["database", "demo"],
     );
   } finally {
     await fixture.cleanup();

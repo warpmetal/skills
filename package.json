@@ -8,13 +8,17 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "npm run build:registry && npm run build:catalogs",
+    "build": "npm run sync:conventions && npm run build:registry && npm run build:catalogs",
+    "sync:conventions": "node scripts/sync-conventions.mjs",
     "build:registry": "node scripts/build-registry.mjs",
     "build:catalogs": "node scripts/build-catalogs.mjs",
+    "build:internal": "node scripts/build-internal-registry.mjs",
     "new:skill": "node scripts/new-skill.mjs",
     "verify": "node scripts/verify.mjs",
+    "verify:internal": "node scripts/verify-internal.mjs",
+    "validate:skills": "node scripts/validate-skills.mjs",
     "test": "npm --prefix packages/skills-mcp test",
-    "check": "npm run build && npm run verify && npm test",
+    "check": "npm run build && npm run build:internal && npm run verify && npm run verify:internal && npm test",
     "pages": "node scripts/build-pages.mjs",
     "docker:build": "docker build -t ghcr.io/warpmetal/skills-mcp:dev packages/skills-mcp"
   },

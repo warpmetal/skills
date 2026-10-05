@@ -2,11 +2,13 @@
 
 ## Ground rules
 
-- `registry.json`, `catalog/`, `plugins/`, and the marketplace catalogs are **generated**. Never
-  edit them by hand; change `skills/` or `scripts/` and run `npm run build`.
+- `registry.json`, `catalog/`, `plugins/`, the marketplace catalogs, and every `conventions/`
+  directory inside a skill are **generated**. Never edit them by hand; change `conventions/`,
+  `skills/`, or `scripts/` and run `npm run build`.
 - Skill content is instruction-code executed by agents. Treat it with the same review rigor as
   executable code.
 - Never commit secrets, tokens, machine-specific paths, or private URLs into skills or metadata.
+  An `[integrations.<provider>]` manifest table names a secret; it never contains one.
 - CI (`npm run verify`) must pass: schema, checksums, catalog drift, and the secret scan.
 
 ## Local workflow
@@ -14,11 +16,19 @@
 ```sh
 npm ci
 npm ci --prefix packages/skills-mcp
+npm ci --prefix packages/warpmetal-cli
 npm run build && npm run check
+bash tools/check-all.sh
 ```
 
-`npm run build` regenerates `registry.json`, the marketplace catalogs, the plugin directory, the
-OpenCode catalog, and `packages/skills-mcp/snapshot/` (gitignored).
+`npm run build` syncs `conventions/` into every skill that ships it, then regenerates
+`registry.json`, the marketplace catalogs, the plugin directory, the OpenCode catalog, and
+`packages/skills-mcp/snapshot/` (gitignored).
+
+`conventions/` at the repository root is the single source of truth for the shared bash library and
+the contracts. Each skill carries a byte-identical copy because an installed skill has to resolve
+`conventions/lib/bootstrap.sh` beside itself; `scripts/validate-skills.mjs` fails the build when a
+copy drifts, so edit the root and re-run the build.
 
 ## Adding or changing a skill
 
@@ -43,12 +53,35 @@ Scaffold the files with `npm run new:skill -- <kebab-name>`, then fill them in:
      "roles": ["planner", "builder", "reviewer"],
      "hosts": ["omp", "opencode", "codex", "claude", "cursor", "dsh", "agents", "mcp"],
      "minimumWarpmetalCli": "0.9.0",
-     "tags": ["example"]
+     "tags": ["example"],
+     "integrations": ["cloudflare"]
    }
    ```
 
+   `integrations` is optional and lists only providers the skill actually calls through
+   `conventions/lib/integration.sh`. Each name must exist in the engine catalog
+   (`packages/warpmetal-cli/src/integration/registry.ts`), and `npm run validate:skills` fails the
+   build if one does not: declaring a provider the engine does not implement is worse than declaring
+   none, because an agent would plan around a capability that is not there.
+
 3. Bump `version` whenever the skill content changes. Registry releases keep per-skill versions in
    lockstep for now, so a change to any skill bumps the repository tag at release time.
+
+## Touching the shared conventions
+
+`conventions/` is a shared library, so a change there rewrites all seven agency skills in the same
+commit. That is expected and reviewed as one change.
+
+- Add a function to `conventions/lib/`, document it in the same file's header and in
+  `conventions/integrations.md` (or the matching contract), and cover it in
+  `tools/integration-selftest.sh` when it touches the integration layer.
+- A skill script never talks to a provider directly. No `curl https://api.cloudflare.com`, no `gh`,
+  no webhook URL, no `warpmetal integration` literal outside `conventions/lib/integration.sh`;
+  `npm run validate:skills` fails the build on any of those.
+- A skipped check must be visible. When a capability cannot be verified, record a `check_skipped`
+  warning — a false OK is the worst outcome for an autonomous consumer.
+- Run `npm run build` afterwards so the copies match, and `bash tools/check-all.sh` to exercise the
+  library against its stub CLI.
 
 ## Content rules
 
@@ -70,5 +103,6 @@ Scaffold the files with `npm run new:skill -- <kebab-name>`, then fill them in:
 ## Releases
 
 Maintainers tag `vX.Y.Z`; the release workflow re-runs verification, publishes
-`@warpmetal/skills-mcp` to npm with provenance, pushes multi-arch images to GHCR, deploys the
-versioned catalog to GitHub Pages, and creates a GitHub release with the registry digest.
+`@warpmetal/skills-mcp` and `@warpmetal/cli` to npm with provenance, pushes multi-arch images to
+GHCR, deploys the versioned catalog to GitHub Pages, and creates a GitHub release with the registry
+digest and the engine tarball.

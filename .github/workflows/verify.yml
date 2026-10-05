@@ -22,6 +22,7 @@ jobs:
           cache-dependency-path: |
             package-lock.json
             packages/skills-mcp/package-lock.json
+            packages/warpmetal-cli/package-lock.json
 
       - name: Install registry tooling
         run: npm ci
@@ -29,14 +30,32 @@ jobs:
       - name: Install MCP server
         run: npm ci --prefix packages/skills-mcp
 
+      - name: Install integration engine
+        run: npm ci --prefix packages/warpmetal-cli
+
       - name: Build registry and channels
         run: npm run build
+
+      - name: Build internal registry
+        run: npm run build:internal
 
       - name: Verify schema, checksums, catalogs, and secrets
         run: npm run verify
 
+      - name: Verify internal registry and isolation
+        run: npm run verify:internal
+
+      - name: Validate skill conventions and integration policies
+        run: npm run validate:skills
+
       - name: Test MCP server
         run: npm test
+
+      - name: Test integration engine
+        run: npm --prefix packages/warpmetal-cli test
+
+      - name: Integration library self-test
+        run: bash tools/check-all.sh
 
       - name: Drift check
         run: git diff --exit-code
