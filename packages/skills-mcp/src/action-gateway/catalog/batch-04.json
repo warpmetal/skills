@@ -1,0 +1,1312 @@
+{
+  "version": 1,
+  "batch": "04",
+  "source": "digitalocean-action-gateway",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "linear_create_comment",
+      "name": "create_comment",
+      "title": "Create Linear Comment",
+      "description": "Create a comment on a Linear issue by id or identifier.",
+      "toolkitId": "linear",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "description": "Comment content in markdown. Maps to CommentCreateInput.body.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "body_data": {
+            "description": "[Internal] Comment content as a Prosemirror document. Maps to CommentCreateInput.bodyData."
+          },
+          "create_as_user": {
+            "description": "Create as a user with this name (OAuth actor=app only). Maps to CommentCreateInput.createAsUser.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "create_on_synced_slack_thread": {
+            "description": "Create on the issue's synced Slack thread (fails if none). Maps to CommentCreateInput.createOnSyncedSlackThread.",
+            "type": "boolean"
+          },
+          "created_at": {
+            "description": "Past creation timestamp for imports (ISO-8601). Maps to CommentCreateInput.createdAt.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "display_icon_url": {
+            "description": "External avatar URL; requires create_as_user (OAuth actor=app only). Maps to CommentCreateInput.displayIconUrl.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "do_not_subscribe_to_issue": {
+            "description": "If true, do not auto-subscribe to the issue. Maps to CommentCreateInput.doNotSubscribeToIssue.",
+            "type": "boolean"
+          },
+          "document_content_id": {
+            "description": "Document content to associate the comment with. Maps to CommentCreateInput.documentContentId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "id": {
+            "description": "Optional comment UUID v4. If omitted, Linear generates one. Maps to CommentCreateInput.id.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "initiative_id": {
+            "description": "Initiative to associate the comment with. Maps to CommentCreateInput.initiativeId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "initiative_update_id": {
+            "description": "Initiative update to associate the comment with. Maps to CommentCreateInput.initiativeUpdateId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "issue_id": {
+            "description": "Issue UUID or identifier (e.g. DIG-7) to associate the comment with. Maps to CommentCreateInput.issueId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "parent_id": {
+            "description": "Parent comment id to nest under. Maps to CommentCreateInput.parentId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "post_id": {
+            "description": "Post to associate the comment with. Maps to CommentCreateInput.postId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "project_id": {
+            "description": "Project to associate the comment with. Maps to CommentCreateInput.projectId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "project_update_id": {
+            "description": "Project update to associate the comment with. Maps to CommentCreateInput.projectUpdateId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "quoted_text": {
+            "description": "Referenced text for inline comments. Maps to CommentCreateInput.quotedText.",
+            "type": "string"
+          },
+          "subscriber_ids": {
+            "description": "[Internal] User ids subscribing to this comment thread. Maps to CommentCreateInput.subscriberIds.",
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "body",
+          "issue_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "comment": {
+            "properties": {
+              "body": {
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Linear Comment",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "supabase_list_projects",
+      "name": "list_projects",
+      "title": "List Supabase Organization Projects",
+      "description": "List projects for a Supabase organization by slug, with optional pagination, search, sort, and status filters.",
+      "toolkitId": "supabase",
+      "version": "v13",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "default": 100,
+            "description": "Number of projects to return per page (1-100).",
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "offset": {
+            "default": 0,
+            "description": "Number of projects to skip (offset-based pagination).",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "organization_slug": {
+            "description": "Organization slug (from list_organizations). Example: tsrqponmlkjihgfedcba.",
+            "minLength": 1,
+            "pattern": "^[\\w-]+$",
+            "type": "string"
+          },
+          "search": {
+            "description": "Case-insensitive substring match on project name.",
+            "type": "string"
+          },
+          "sort": {
+            "default": "name_asc",
+            "description": "Sort order for projects.",
+            "enum": [
+              "name_asc",
+              "name_desc",
+              "created_asc",
+              "created_desc"
+            ],
+            "type": "string"
+          },
+          "statuses": {
+            "description": "Comma-separated project statuses to filter by. Supported: ACTIVE_HEALTHY, INACTIVE.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "organization_slug"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "pagination": {
+            "description": "Pagination metadata from the Management API response.",
+            "type": "object"
+          },
+          "projects": {
+            "items": {
+              "properties": {
+                "cloud_provider": {
+                  "type": "string"
+                },
+                "inserted_at": {
+                  "type": "string"
+                },
+                "is_branch": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "ref": {
+                  "description": "Project ref.",
+                  "type": "string"
+                },
+                "region": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Supabase Organization Projects",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "supabase_create_a_project",
+      "name": "create_a_project",
+      "title": "Create a project",
+      "description": "Create a new Supabase project in an organization, choosing its region, size, and database password. Use to provision a new backend; use list_all_projects to see what already exists.",
+      "toolkitId": "supabase",
+      "version": "v5",
+      "inputSchema": {
+        "properties": {
+          "db_pass": {
+            "description": "Database password",
+            "type": "string"
+          },
+          "desired_instance_size": {
+            "description": "Desired instance size. Omit this field to always default to the smallest possible size.",
+            "enum": [
+              "nano",
+              "micro",
+              "small",
+              "medium",
+              "large",
+              "xlarge",
+              "2xlarge",
+              "4xlarge",
+              "8xlarge",
+              "12xlarge",
+              "16xlarge",
+              "24xlarge",
+              "24xlarge_optimized_memory",
+              "24xlarge_optimized_cpu",
+              "24xlarge_high_memory",
+              "48xlarge",
+              "48xlarge_optimized_memory",
+              "48xlarge_optimized_cpu",
+              "48xlarge_high_memory"
+            ],
+            "type": "string"
+          },
+          "high_availability": {
+            "description": "[Experimental] Whether to enable high availability for the project.",
+            "type": "boolean"
+          },
+          "kps_enabled": {
+            "description": "This field is deprecated and is ignored in this request",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Name of your project",
+            "type": "string"
+          },
+          "organization_id": {
+            "description": "Deprecated: Use `organization_slug` instead.",
+            "type": "string"
+          },
+          "organization_slug": {
+            "description": "Organization slug",
+            "type": "string"
+          },
+          "plan": {
+            "description": "Subscription Plan is now set on organization level and is ignored in this request",
+            "enum": [
+              "free",
+              "pro"
+            ],
+            "type": "string"
+          },
+          "postgres_engine": {
+            "additionalProperties": true,
+            "properties": {},
+            "type": "object"
+          },
+          "region": {
+            "description": "Region you want your server to reside in. Use region_selection instead.",
+            "enum": [
+              "us-east-1",
+              "us-east-2",
+              "us-west-1",
+              "us-west-2",
+              "ap-east-1",
+              "ap-southeast-1",
+              "ap-northeast-1",
+              "ap-northeast-2",
+              "ap-southeast-2",
+              "eu-west-1",
+              "eu-west-2",
+              "eu-west-3",
+              "eu-north-1",
+              "eu-central-1",
+              "eu-central-2",
+              "ca-central-1",
+              "ap-south-1",
+              "sa-east-1"
+            ],
+            "type": "string"
+          },
+          "region_selection": {
+            "description": "Region selection. Only one of region or region_selection can be specified.",
+            "properties": {
+              "code": {
+                "description": "The Smart Region Group's code. The codes supported are not a stable API, and should be retrieved from the /available-regions endpoint.",
+                "enum": [
+                  "americas",
+                  "emea",
+                  "apac"
+                ],
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "smartGroup"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "code"
+            ],
+            "type": "object"
+          },
+          "release_channel": {
+            "additionalProperties": true,
+            "properties": {},
+            "type": "object"
+          },
+          "template_url": {
+            "description": "Template URL used to create the project from the CLI.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "db_pass",
+          "name",
+          "organization_slug"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "created_at": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "organization_id": {
+            "type": "string"
+          },
+          "organization_slug": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create a project",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "supabase_apply_a_migration",
+      "name": "apply_a_migration",
+      "title": "Apply a database migration",
+      "description": "Run a SQL migration against a Supabase project's database and record it in the migration history. Use to change the schema for real; use upsert_a_migration to record a migration without executing it.",
+      "toolkitId": "supabase",
+      "version": "v5",
+      "inputSchema": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "ref": {
+            "description": "Project ref",
+            "type": "string"
+          },
+          "rollback": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ref",
+          "query"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Apply a database migration",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_zones_get",
+      "name": "zones_get",
+      "title": "List Cloudflare Zones",
+      "description": "cloudflare_zones_get: list Cloudflare DNS zones/domains for the authenticated API token using GET /zones. Returns zone IDs and domain names. Use this when you need to list zones or discover zone IDs before calling zone-scoped Cloudflare APIs.",
+      "toolkitId": "cloudflare",
+      "version": "v3",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "account_id": {
+            "description": "Query parameter account.id.",
+            "type": "string"
+          },
+          "account_name": {
+            "description": "Query parameter account.name.",
+            "type": "string"
+          },
+          "direction": {
+            "description": "Query parameter direction.",
+            "type": "string"
+          },
+          "match": {
+            "description": "Query parameter match.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Query parameter name.",
+            "type": "string"
+          },
+          "order": {
+            "description": "Query parameter order.",
+            "type": "string"
+          },
+          "page": {
+            "description": "Query parameter page.",
+            "type": "string"
+          },
+          "per_page": {
+            "description": "Query parameter per_page.",
+            "type": "string"
+          },
+          "status": {
+            "description": "Query parameter status.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Query parameter type.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Cloudflare Zones",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_accounts_list_accounts",
+      "name": "accounts_list_accounts",
+      "title": "List Cloudflare Accounts",
+      "description": "cloudflare_accounts_list_accounts: list Cloudflare accounts for the authenticated API token using GET /accounts (top-level accounts collection, no account_id path). Returns account IDs and account names. Use this when you need to list accounts or discover account IDs before calling account-scoped Cloudflare APIs.",
+      "toolkitId": "cloudflare",
+      "version": "v3",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "direction": {
+            "description": "Query parameter direction.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Query parameter name.",
+            "type": "string"
+          },
+          "page": {
+            "description": "Query parameter page.",
+            "type": "string"
+          },
+          "per_page": {
+            "description": "Query parameter per_page.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Cloudflare Accounts",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "vercel_get_projects",
+      "name": "get_projects",
+      "title": "Retrieve a list of projects",
+      "description": "List the account's projects with their framework, linked repository, and latest deployment. Use to discover or search for a project; use get_project once its id or name is known.",
+      "toolkitId": "vercel",
+      "version": "v9",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "build_machine_types": {
+            "description": "Filter results by effective build machine types. Accepts comma-separated values. Use \"elastic\" for projects with elastic selection and \"default\" for projects without a build machine type set.",
+            "type": "string"
+          },
+          "build_queue_configuration": {
+            "description": "Filter results by build queue configuration. SKIP_NAMESPACE_QUEUE includes projects without a configuration set.",
+            "enum": [
+              "SKIP_NAMESPACE_QUEUE",
+              "WAIT_FOR_NAMESPACE_QUEUE"
+            ],
+            "type": "string"
+          },
+          "deprecated": {
+            "type": "boolean"
+          },
+          "edge_config_id": {
+            "description": "Filter results by connected Edge Config ID",
+            "type": "string"
+          },
+          "edge_config_token_id": {
+            "description": "Filter results by connected Edge Config Token ID",
+            "type": "string"
+          },
+          "elastic_concurrency_enabled": {
+            "description": "Filter results by projects with elastic concurrency enabled",
+            "enum": [
+              "1",
+              "0"
+            ],
+            "type": "string"
+          },
+          "exclude_repos": {
+            "description": "Filter results by excluding those projects that belong to a repo",
+            "type": "string"
+          },
+          "from": {
+            "description": "Query only projects updated after the given timestamp or continuation token.",
+            "type": "string"
+          },
+          "git_fork_protection": {
+            "description": "Specifies whether PRs from Git forks should require a team member's authorization before it can be deployed",
+            "enum": [
+              "1",
+              "0"
+            ],
+            "type": "string"
+          },
+          "limit": {
+            "description": "Limit the number of projects returned",
+            "type": "string"
+          },
+          "repo": {
+            "description": "Filter results by repo. Also used for project count",
+            "type": "string"
+          },
+          "repo_id": {
+            "description": "Filter results by Repository ID.",
+            "type": "string"
+          },
+          "repo_url": {
+            "description": "Filter results by Repository URL.",
+            "type": "string"
+          },
+          "search": {
+            "description": "Search projects by the name field",
+            "maxLength": 100,
+            "type": "string"
+          },
+          "slug": {
+            "description": "The Team slug to perform the request on behalf of.",
+            "type": "string"
+          },
+          "static_ips_enabled": {
+            "description": "Filter results by projects with Static IPs enabled",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "type": "string"
+          },
+          "team_id": {
+            "description": "The Team identifier to perform the request on behalf of.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Retrieve a list of projects",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "vercel_create_project",
+      "name": "create_project",
+      "title": "Create a new project",
+      "description": "Create a new Vercel project that deployments, domains, and environment variables attach to. Use for a project that does not exist yet; use update_project to change the settings of one that does.",
+      "toolkitId": "vercel",
+      "version": "v9",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "build_command": {
+            "description": "The build command for this project. When `null` is used this value will be automatically detected",
+            "maxLength": 256,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "command_for_ignoring_build_step": {
+            "maxLength": 256,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dev_command": {
+            "description": "The dev command for this project. When `null` is used this value will be automatically detected",
+            "maxLength": 256,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "enable_affected_projects_deployments": {
+            "description": "Opt-in to skip deployments when there are no changes to the root directory and its dependencies",
+            "type": "boolean"
+          },
+          "enable_preview_feedback": {
+            "description": "Opt-in to preview toolbar on the project level",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "enable_production_feedback": {
+            "description": "Opt-in to production toolbar on the project level",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "environment_variables": {
+            "description": "Collection of ENV Variables the Project will use",
+            "items": {
+              "properties": {
+                "gitBranch": {
+                  "description": "If defined, the git branch of the environment variable (must have target=preview)",
+                  "maxLength": 250,
+                  "type": "string"
+                },
+                "key": {
+                  "description": "Name of the ENV variable",
+                  "type": "string"
+                },
+                "target": {
+                  "description": "Deployment Target or Targets in which the ENV variable will be used",
+                  "oneOf": [
+                    {
+                      "enum": [
+                        "production",
+                        "preview",
+                        "development"
+                      ],
+                      "type": "string"
+                    },
+                    {
+                      "items": {
+                        "enum": [
+                          "production",
+                          "preview",
+                          "development"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  ]
+                },
+                "type": {
+                  "description": "Type of the ENV variable",
+                  "enum": [
+                    "system",
+                    "encrypted",
+                    "plain",
+                    "sensitive"
+                  ],
+                  "type": "string"
+                },
+                "value": {
+                  "description": "Value for the ENV variable",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "key",
+                "value",
+                "target"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "framework": {
+            "description": "The framework that is being used for this project. When `null` is used no framework is selected",
+            "enum": [
+              null,
+              "container",
+              "blitzjs",
+              "nextjs",
+              "gatsby",
+              "remix",
+              "react-router",
+              "astro",
+              "hexo",
+              "eleventy",
+              "docusaurus-2",
+              "docusaurus",
+              "preact",
+              "solidstart-1",
+              "solidstart",
+              "dojo",
+              "ember",
+              "vue",
+              "scully",
+              "ionic-angular",
+              "angular",
+              "polymer",
+              "svelte",
+              "sveltekit",
+              "sveltekit-1",
+              "ionic-react",
+              "create-react-app",
+              "gridsome",
+              "umijs",
+              "sapper",
+              "saber",
+              "stencil",
+              "nuxtjs",
+              "redwoodjs",
+              "hugo",
+              "jekyll",
+              "brunch",
+              "middleman",
+              "zola",
+              "hydrogen",
+              "vite",
+              "tanstack-start",
+              "tanstack-start-lovable",
+              "vitepress",
+              "vuepress",
+              "parcel",
+              "fastapi",
+              "flask",
+              "fasthtml",
+              "django",
+              "ash",
+              "eve",
+              "sanity",
+              "sanity-v2",
+              "storybook",
+              "nitro",
+              "hono",
+              "express",
+              "h3",
+              "koa",
+              "nestjs",
+              "elysia",
+              "fastify",
+              "xmcp",
+              "python",
+              "ruby",
+              "rust",
+              "axum",
+              "actix-web",
+              "bun",
+              "node",
+              "go",
+              "services",
+              "mastra"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "git_repository": {
+            "description": "The Git Repository that will be connected to the project. When this is defined, any pushes to the specified connected Git Repository will be automatically deployed",
+            "properties": {
+              "repo": {
+                "description": "The name of the git repository. For example: \\\"vercel/next.js\\\"",
+                "type": "string"
+              },
+              "type": {
+                "description": "The Git Provider of the repository",
+                "enum": [
+                  "github",
+                  "github-limited",
+                  "gitlab",
+                  "bitbucket",
+                  "vercel",
+                  "cursor-origin"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "repo"
+            ],
+            "type": "object"
+          },
+          "install_command": {
+            "description": "The install command for this project. When `null` is used this value will be automatically detected",
+            "maxLength": 256,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "description": "The desired name for the project",
+            "maxLength": 100,
+            "type": "string"
+          },
+          "oidc_token_config": {
+            "additionalProperties": false,
+            "description": "OpenID Connect JSON Web Token generation configuration.",
+            "properties": {
+              "enabled": {
+                "description": "Whether or not to generate OpenID Connect JSON Web Tokens.",
+                "type": "boolean"
+              },
+              "issuerMode": {
+                "description": "team: `https://oidc.vercel.com/[team_slug]` global: `https://oidc.vercel.com`",
+                "enum": [
+                  "team",
+                  "global"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "output_directory": {
+            "description": "The output directory of the project. When `null` is used this value will be automatically detected",
+            "maxLength": 256,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "preview_deployment_suffix": {
+            "description": "Custom domain suffix for preview deployments. Takes precedence over team-level suffix. Must be a domain owned by the team.",
+            "maxLength": 253,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "preview_deployments_disabled": {
+            "description": "Specifies whether preview deployments are disabled for this project.",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "public_source": {
+            "description": "Deprecated. Accepted for backwards compatibility but ignored.",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "resource_config": {
+            "additionalProperties": false,
+            "description": "Specifies resource override configuration for the project",
+            "properties": {
+              "buildMachineElasticLastUpdated": {
+                "type": "number"
+              },
+              "buildMachineElasticReason": {
+                "enum": [
+                  "oom-failure",
+                  "enospc-failure",
+                  "build-timeout-failure",
+                  "basic-floor",
+                  "high-peak-memory",
+                  "sustained-high-cpu",
+                  "high-peak-disk",
+                  "long-build-duration",
+                  "short-build-duration",
+                  "enterprise-floor"
+                ],
+                "type": "string"
+              },
+              "buildMachineSelection": {
+                "enum": [
+                  "elastic",
+                  "fixed"
+                ],
+                "type": "string"
+              },
+              "buildMachineType": {
+                "enum": [
+                  "basic",
+                  "enhanced",
+                  "turbo",
+                  "standard",
+                  "elastic"
+                ],
+                "type": "string"
+              },
+              "buildQueue": {
+                "properties": {
+                  "configuration": {
+                    "enum": [
+                      "SKIP_NAMESPACE_QUEUE",
+                      "WAIT_FOR_NAMESPACE_QUEUE"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "elasticConcurrencyEnabled": {
+                "type": "boolean"
+              },
+              "enableFunctionsBeta": {
+                "type": "boolean"
+              },
+              "fluid": {
+                "type": "boolean"
+              },
+              "functionDefaultMemoryType": {
+                "enum": [
+                  "standard_legacy",
+                  "standard",
+                  "performance",
+                  "performance_xl"
+                ],
+                "type": "string"
+              },
+              "functionDefaultRegions": {
+                "description": "The regions to deploy Vercel Functions to for this project",
+                "items": {
+                  "maxLength": 4,
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "functionDefaultTimeout": {
+                "maximum": 900,
+                "minimum": 1,
+                "type": "number"
+              },
+              "functionZeroConfigFailover": {
+                "description": "Specifies whether Zero Config Failover is enabled for this project.",
+                "oneOf": [
+                  {
+                    "type": "boolean"
+                  }
+                ]
+              },
+              "isNSNBDisabled": {
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          },
+          "root_directory": {
+            "description": "The name of a directory or relative path to the source code of your project. When `null` is used it will default to the project root",
+            "maxLength": 256,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sandbox": {
+            "additionalProperties": false,
+            "description": "Specifies the default region and failover regions for sandboxes created in the project",
+            "properties": {
+              "failoverRegions": {
+                "description": "The regions sandboxes in this project fall back to when they cannot be created in `region`.",
+                "items": {
+                  "enum": [
+                    "iad1",
+                    "sfo1",
+                    "cle1",
+                    "cdg1"
+                  ],
+                  "type": "string"
+                },
+                "maxItems": 4,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "region": {
+                "description": "The Vercel region sandboxes in this project are created in by default.",
+                "enum": [
+                  "iad1",
+                  "sfo1",
+                  "cle1",
+                  "cdg1"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "serverless_function_region": {
+            "description": "The region to deploy Serverless Functions in this project",
+            "maxLength": 4,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "serverless_function_zero_config_failover": {
+            "description": "Specifies whether Zero Config Failover is enabled for this project.",
+            "oneOf": [
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "skip_git_connect_during_link": {
+            "description": "Opts-out of the message prompting a CLI user to connect a Git repository in `vercel link`.",
+            "type": "boolean"
+          },
+          "slug": {
+            "description": "The Team slug to perform the request on behalf of.",
+            "type": "string"
+          },
+          "sso_protection": {
+            "description": "The Vercel Auth setting for the project (historically named \\\"SSO Protection\\\")",
+            "properties": {
+              "deploymentType": {
+                "enum": [
+                  "all",
+                  "preview",
+                  "prod_deployment_urls_and_all_previews",
+                  "all_except_custom_domains"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "deploymentType"
+            ],
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "team_id": {
+            "description": "The Team identifier to perform the request on behalf of.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create a new project",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "vercel_get_deployments",
+      "name": "get_deployments",
+      "title": "List deployments",
+      "description": "List deployments across the account or one project, with the state, target, and commit of each. Use to find recent builds and how they finished; use get_project for a project's configuration rather than its deploy history.",
+      "toolkitId": "vercel",
+      "version": "v9",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "app": {
+            "description": "Name of the deployment.",
+            "type": "string"
+          },
+          "branch": {
+            "description": "Filter deployments based on the branch name",
+            "type": "string"
+          },
+          "from": {
+            "description": "Gets the deployment created after this Date timestamp. (default: current time)",
+            "type": "number"
+          },
+          "limit": {
+            "description": "Maximum number of deployments to list from a request.",
+            "type": "number"
+          },
+          "project_id": {
+            "description": "Filter deployments from the given ID or name.",
+            "type": "string"
+          },
+          "project_ids": {
+            "description": "Filter deployments from the given project IDs. Cannot be used when projectId is specified.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 20,
+            "minItems": 1,
+            "type": "array"
+          },
+          "rollback_candidate": {
+            "description": "Filter deployments based on their rollback candidacy",
+            "type": "boolean"
+          },
+          "sha": {
+            "description": "Filter deployments based on the SHA",
+            "type": "string"
+          },
+          "since": {
+            "description": "Get Deployments created after this JavaScript timestamp.",
+            "type": "number"
+          },
+          "slug": {
+            "description": "The Team slug to perform the request on behalf of.",
+            "type": "string"
+          },
+          "state": {
+            "description": "Filter deployments based on their state (`BUILDING`, `ERROR`, `INITIALIZING`, `QUEUED`, `READY`, `CANCELED`, `BLOCKED`)",
+            "type": "string"
+          },
+          "target": {
+            "description": "Filter deployments based on the environment.",
+            "type": "string"
+          },
+          "team_id": {
+            "description": "The Team identifier to perform the request on behalf of.",
+            "type": "string"
+          },
+          "to": {
+            "description": "Gets the deployment created before this Date timestamp. (default: current time)",
+            "type": "number"
+          },
+          "until": {
+            "description": "Get Deployments created before this JavaScript timestamp.",
+            "type": "number"
+          },
+          "users": {
+            "description": "Filter out deployments based on users who have created the deployment.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List deployments",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "figma_get_file",
+      "name": "get_file",
+      "title": "Get File",
+      "description": "Return the full document tree for a Figma file, including every layer and its properties. This is the heaviest of the file reads; use get_file_nodes when only certain layers are needed.",
+      "toolkitId": "figma",
+      "version": "v2",
+      "inputSchema": {
+        "properties": {
+          "branch_data": {
+            "description": "Returns branch metadata for the requested file. If the file is a branch, the main file's key will be included in the returned response. If the file has branches, their metadata will be included in the returned response. Default: false.",
+            "type": "boolean"
+          },
+          "depth": {
+            "description": "Positive integer representing how deep into the document tree to traverse. For example, setting this to 1 returns only Pages, setting it to 2 returns Pages and all top level objects on each page. Not setting this parameter returns all nodes.",
+            "type": "number"
+          },
+          "file_key": {
+            "description": "File to export JSON from. This can be a file key or branch key. Use `GET /v1/files/:key` with the `branch_data` query param to get the branch key.",
+            "type": "string"
+          },
+          "geometry": {
+            "description": "Set to \"paths\" to export vector data.",
+            "type": "string"
+          },
+          "ids": {
+            "description": "Comma separated list of nodes that you care about in the document. If specified, only a subset of the document will be returned corresponding to the nodes listed, their children, and everything between the root node and the listed nodes. Note: There may be other nodes included in the returned JSON that are outside the ancestor chains of the desired nodes. The response may also include dependencies",
+            "type": "string"
+          },
+          "version": {
+            "description": "A specific version ID to get. Omitting this will get the current version of the file.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_key"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get File",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

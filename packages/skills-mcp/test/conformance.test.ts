@@ -779,13 +779,20 @@ describe("4. no HTTP client, no protocol reimplementation", () => {
     "skills.ts", // fetches remote skill files with `fetch`
   ]);
 
+  /** Action Gateway talks to DigitalOcean over HTTPS; it is not part of the CLI stack. */
+  function isCliStackFile(relative: string): boolean {
+    if (CONTENT_TRANSPORT_FILES.has(relative)) return false;
+    if (relative === "action-gateway" || relative.startsWith("action-gateway/")) return false;
+    return true;
+  }
+
   it("contains no HTTP call anywhere in the CLI stack", () => {
     const files = readdirSync(SRC_DIR, { recursive: true })
       .map((entry) => String(entry))
       .filter((entry) => entry.endsWith(".ts"))
       .filter((entry) => !entry.endsWith(".d.ts"))
       .map((entry) => entry.split(path.sep).join("/"))
-      .filter((entry) => !CONTENT_TRANSPORT_FILES.has(entry));
+      .filter(isCliStackFile);
 
     assert.ok(
       files.length >= 9,

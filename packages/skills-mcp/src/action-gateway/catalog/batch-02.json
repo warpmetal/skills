@@ -1,0 +1,2369 @@
+{
+  "version": 1,
+  "batch": "02",
+  "source": "digitalocean-action-gateway",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "notion_query_database",
+      "name": "query_database",
+      "title": "Query Notion Database",
+      "description": "Query the entries of a classic Notion database with optional filters and sorts. Use it only when the workspace still exposes a legacy database; query_data_source is the modern replacement and should be preferred.",
+      "toolkitId": "notion",
+      "version": "v6",
+      "inputSchema": {
+        "properties": {
+          "database_id": {
+            "description": "Database ID.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "Notion filter object (passthrough).",
+            "type": "object"
+          },
+          "page_size": {
+            "type": "integer"
+          },
+          "sorts": {
+            "description": "Notion sorts array (passthrough).",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "start_cursor": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "database_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "has_more": {
+            "type": "boolean"
+          },
+          "next_cursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "results": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Query Notion Database",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "notion_get_page",
+      "name": "get_page",
+      "title": "Retrieve Notion Page",
+      "description": "Retrieve a Notion page by ID.",
+      "toolkitId": "notion",
+      "version": "v2",
+      "inputSchema": {
+        "properties": {
+          "page_id": {
+            "description": "Page ID.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "archived": {
+            "type": "boolean"
+          },
+          "created_time": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "last_edited_time": {
+            "type": "string"
+          },
+          "properties": {
+            "type": "object"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Retrieve Notion Page",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "notion_create_page",
+      "name": "create_page",
+      "title": "Create Notion Page",
+      "description": "Create a new page under a parent page the Notion connection can access.",
+      "toolkitId": "notion",
+      "version": "v2",
+      "inputSchema": {
+        "properties": {
+          "content": {
+            "description": "Optional plain-text body paragraph.",
+            "type": "string"
+          },
+          "parent_page_id": {
+            "description": "Parent page ID to create under.",
+            "type": "string"
+          },
+          "title": {
+            "description": "Page title.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parent_page_id",
+          "title"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Notion Page",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "notion_append_block_children",
+      "name": "append_block_children",
+      "title": "Append Notion Block Children",
+      "description": "Append a paragraph of text as a child block of a page or block.",
+      "toolkitId": "notion",
+      "version": "v2",
+      "inputSchema": {
+        "properties": {
+          "block_id": {
+            "description": "Parent block or page ID.",
+            "type": "string"
+          },
+          "content": {
+            "description": "Plain-text paragraph to append.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "block_id",
+          "content"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "results": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Append Notion Block Children",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "stripe_post_customers",
+      "name": "post_customers",
+      "title": "Create a customer",
+      "description": "Creating customers. Use when the request specifically involves creating customers, rather than a related Stripe action.",
+      "toolkitId": "stripe",
+      "version": "v9",
+      "inputSchema": {
+        "properties": {
+          "address": {
+            "additionalProperties": true,
+            "description": "The customer's address. Learn about [country-specific requirements for calculating tax](https://docs.stripe.com/invoicing/taxes?dashboard-or-api=dashboard#set-up-customer).",
+            "type": "object"
+          },
+          "balance": {
+            "description": "An integer amount in cents (or local equivalent) that represents the customer's current balance, which affect the customer's future invoices. A negative amount represents a credit that decreases the amount due on an invoice; a positive amount increases the amount due on an invoice.",
+            "type": "integer"
+          },
+          "business_name": {
+            "additionalProperties": true,
+            "description": "The customer's business name. This may be up to *150 characters*.",
+            "type": "object"
+          },
+          "cash_balance": {
+            "description": "Balance information and default balance settings for this customer.",
+            "properties": {
+              "settings": {
+                "properties": {
+                  "reconciliation_mode": {
+                    "enum": [
+                      "automatic",
+                      "manual",
+                      "merchant_default"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "description": {
+            "description": "An arbitrary string that you can attach to a customer object. It is displayed alongside the customer in the dashboard.",
+            "type": "string"
+          },
+          "email": {
+            "description": "Customer's email address. It's displayed alongside the customer in your dashboard and can be useful for searching and tracking. This may be up to *512 characters*.",
+            "type": "string"
+          },
+          "individual_name": {
+            "additionalProperties": true,
+            "description": "The customer's full name. This may be up to *150 characters*.",
+            "type": "object"
+          },
+          "invoice_prefix": {
+            "description": "The prefix for the customer used to generate unique invoice numbers. Must be 3–12 uppercase letters or numbers.",
+            "type": "string"
+          },
+          "invoice_settings": {
+            "description": "Default invoice settings for this customer.",
+            "properties": {
+              "custom_fields": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "default_payment_method": {
+                "type": "string"
+              },
+              "footer": {
+                "type": "string"
+              },
+              "rendering_options": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "description": "Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+            "type": "object"
+          },
+          "name": {
+            "description": "The customer's full name or business name.",
+            "type": "string"
+          },
+          "next_invoice_sequence": {
+            "description": "The sequence to be used on the customer's next invoice. Defaults to 1.",
+            "type": "integer"
+          },
+          "payment_method": {
+            "type": "string"
+          },
+          "phone": {
+            "description": "The customer's phone number.",
+            "type": "string"
+          },
+          "preferred_locales": {
+            "description": "Customer's preferred languages, ordered by preference.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "shipping": {
+            "additionalProperties": true,
+            "description": "The customer's shipping information. Appears on invoices emailed to this customer.",
+            "type": "object"
+          },
+          "source": {
+            "type": "string"
+          },
+          "tax": {
+            "description": "Tax details about the customer.",
+            "properties": {
+              "ip_address": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "validate_location": {
+                "enum": [
+                  "deferred",
+                  "immediately"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "tax_exempt": {
+            "description": "The customer's tax exemption. One of `none`, `exempt`, or `reverse`.",
+            "enum": [
+              "",
+              "exempt",
+              "none",
+              "reverse"
+            ],
+            "type": "string"
+          },
+          "tax_id_data": {
+            "description": "The customer's tax IDs.",
+            "items": {
+              "properties": {
+                "type": {
+                  "enum": [
+                    "ad_nrt",
+                    "ae_trn",
+                    "al_tin",
+                    "am_tin",
+                    "ao_tin",
+                    "ar_cuit",
+                    "au_abn",
+                    "au_arn",
+                    "aw_tin",
+                    "az_tin",
+                    "ba_tin",
+                    "bb_tin",
+                    "bd_bin",
+                    "bf_ifu",
+                    "bg_uic",
+                    "bh_vat",
+                    "bj_ifu",
+                    "bo_tin",
+                    "br_cnpj",
+                    "br_cpf",
+                    "bs_tin",
+                    "by_tin",
+                    "ca_bn",
+                    "ca_gst_hst",
+                    "ca_pst_bc",
+                    "ca_pst_mb",
+                    "ca_pst_sk",
+                    "ca_qst",
+                    "cd_nif",
+                    "ch_uid",
+                    "ch_vat",
+                    "cl_tin",
+                    "cm_niu",
+                    "cn_tin",
+                    "co_nit",
+                    "cr_tin",
+                    "cv_nif",
+                    "de_stn",
+                    "do_rcn",
+                    "ec_ruc",
+                    "eg_tin",
+                    "es_cif",
+                    "et_tin",
+                    "eu_oss_vat",
+                    "eu_vat",
+                    "fo_vat",
+                    "gb_vat",
+                    "ge_vat",
+                    "gi_tin",
+                    "gn_nif",
+                    "hk_br",
+                    "hr_oib",
+                    "hu_tin",
+                    "ic_nif",
+                    "id_npwp",
+                    "il_vat",
+                    "in_gst",
+                    "is_vat",
+                    "it_cf",
+                    "jp_cn",
+                    "jp_rn",
+                    "jp_trn",
+                    "ke_pin",
+                    "kg_tin",
+                    "kh_tin",
+                    "kr_brn",
+                    "kz_bin",
+                    "la_tin",
+                    "li_uid",
+                    "li_vat",
+                    "lk_vat",
+                    "ma_vat",
+                    "md_vat",
+                    "me_pib",
+                    "mk_vat",
+                    "mr_nif",
+                    "mx_rfc",
+                    "my_frp",
+                    "my_itn",
+                    "my_sst",
+                    "ng_tin",
+                    "no_vat",
+                    "no_voec",
+                    "np_pan",
+                    "nz_gst",
+                    "om_vat",
+                    "pe_ruc",
+                    "ph_tin",
+                    "pl_nip",
+                    "py_ruc",
+                    "ro_tin",
+                    "rs_pib",
+                    "ru_inn",
+                    "ru_kpp",
+                    "sa_vat",
+                    "sg_gst",
+                    "sg_uen",
+                    "si_tin",
+                    "sn_ninea",
+                    "sr_fin",
+                    "sv_nit",
+                    "th_vat",
+                    "tj_tin",
+                    "tr_tin",
+                    "tw_vat",
+                    "tz_vat",
+                    "ua_vat",
+                    "ug_tin",
+                    "us_ein",
+                    "uy_ruc",
+                    "uz_tin",
+                    "uz_vat",
+                    "ve_rif",
+                    "vn_tin",
+                    "za_vat",
+                    "zm_tin",
+                    "zw_tin"
+                  ],
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "test_clock": {
+            "description": "ID of the test clock to attach to the customer.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create a customer",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "stripe_get_customers",
+      "name": "get_customers",
+      "title": "List all customers",
+      "description": "Retrieving customers. Use when the request specifically involves retrieving customers, rather than a related Stripe action.",
+      "toolkitId": "stripe",
+      "version": "v10",
+      "inputSchema": {
+        "properties": {
+          "created": {
+            "additionalProperties": true,
+            "description": "Only return customers that were created during the given date interval.",
+            "type": "object"
+          },
+          "email": {
+            "description": "A case-sensitive filter on the list based on the customer's `email` field. The value must be a string.",
+            "type": "string"
+          },
+          "ending_before": {
+            "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.",
+            "type": "integer"
+          },
+          "starting_after": {
+            "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.",
+            "type": "string"
+          },
+          "test_clock": {
+            "description": "Provides a list of customers that are associated with the specified test clock. The response will not include customers with test clocks if this parameter is not set.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List all customers",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "stripe_post_payment_intents",
+      "name": "post_payment_intents",
+      "title": "Create a PaymentIntent",
+      "description": "Creating payment intents. Use when the request specifically involves creating payment intents, rather than a related Stripe action.",
+      "toolkitId": "stripe",
+      "version": "v10",
+      "inputSchema": {
+        "properties": {
+          "allowed_payment_method_types": {
+            "description": "The list of payment method types allowed for use with this payment. Stripe automatically returns compatible payment methods from this list in the `payment_method_types` field of the response, based on the other PaymentIntent parameters, such as `currency`, `amount`, and `customer`.",
+            "items": {
+              "enum": [
+                "acss_debit",
+                "affirm",
+                "afterpay_clearpay",
+                "alipay",
+                "alma",
+                "amazon_pay",
+                "au_becs_debit",
+                "bacs_debit",
+                "bancontact",
+                "billie",
+                "bizum",
+                "blik",
+                "boku_promptpay",
+                "boleto",
+                "capchase_pay",
+                "card",
+                "cashapp",
+                "check_scan",
+                "click_to_pay",
+                "crypto",
+                "customer_balance",
+                "demo_pay",
+                "duitnow",
+                "dummy_auth_push",
+                "dummy_passthrough_card",
+                "edenred",
+                "eps",
+                "fpx",
+                "gcash",
+                "getbalance",
+                "gift_card",
+                "giropay",
+                "gopay",
+                "grabpay",
+                "id_bank_transfer",
+                "ideal",
+                "kakao_pay",
+                "klarna",
+                "knet",
+                "konbini",
+                "kr_card",
+                "kr_market",
+                "kriya",
+                "link",
+                "mb_way",
+                "mobilepay",
+                "momo",
+                "mondu",
+                "multibanco",
+                "naver_pay",
+                "netbanking",
+                "ng_bank",
+                "ng_bank_transfer",
+                "ng_card",
+                "ng_market",
+                "ng_ussd",
+                "ng_wallet",
+                "nz_bank_account",
+                "octopus",
+                "oxxo",
+                "p24",
+                "paper_check",
+                "pay_by_bank",
+                "payco",
+                "paynow",
+                "paypal",
+                "paypay",
+                "payto",
+                "pix",
+                "promptpay",
+                "qris",
+                "rechnung",
+                "revolut_pay",
+                "samsung_pay",
+                "satispay",
+                "scalapay",
+                "sepa_debit",
+                "sequra",
+                "shop_pay",
+                "shopeepay",
+                "sofort",
+                "south_korea_market",
+                "stripe_balance",
+                "sunbit",
+                "swish",
+                "tamara",
+                "test_pay",
+                "truemoney",
+                "twint",
+                "upi",
+                "us_bank_account",
+                "us_cash_voucher",
+                "vipps",
+                "wechat_pay",
+                "wero",
+                "zip"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "amount": {
+            "description": "Amount intended to be collected by this PaymentIntent. A positive integer representing how much to charge in the [smallest currency unit](https://docs.stripe.com/currencies#zero-decimal) (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency). The minimum amount is $0.50 US or [equivalent in charge currency](https://docs.stripe.com/currencies#minimum-and-maximum-charge-amounts). The amount value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).",
+            "type": "integer"
+          },
+          "amount_details": {
+            "description": "Provides industry-specific information about the amount.",
+            "properties": {
+              "discount_amount": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "enforce_arithmetic_validation": {
+                "type": "boolean"
+              },
+              "line_items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "shipping": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "tax": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "application_fee_amount": {
+            "description": "The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application owner's Stripe account. The amount of the application fee collected will be capped at the total amount captured. For more information, see the PaymentIntents [use case for connected accounts](https://docs.stripe.com/payments/connected-accounts).",
+            "type": "integer"
+          },
+          "automatic_payment_methods": {
+            "description": "When you enable this parameter, this PaymentIntent accepts payment methods that you enable in the Dashboard and that are compatible with this PaymentIntent's other parameters.",
+            "properties": {
+              "allow_redirects": {
+                "enum": [
+                  "always",
+                  "never"
+                ],
+                "type": "string"
+              },
+              "enabled": {
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          },
+          "capture_method": {
+            "description": "Controls when the funds will be captured from the customer's account.",
+            "enum": [
+              "automatic",
+              "automatic_async",
+              "manual"
+            ],
+            "type": "string"
+          },
+          "confirm": {
+            "description": "Set to `true` to attempt to [confirm this PaymentIntent](https://docs.stripe.com/api/payment_intents/confirm) immediately. This parameter defaults to `false`. When creating and confirming a PaymentIntent at the same time, you can also provide the parameters available in the [Confirm API](https://docs.stripe.com/api/payment_intents/confirm).",
+            "type": "boolean"
+          },
+          "confirmation_method": {
+            "description": "Describes whether we can confirm this PaymentIntent automatically, or if it requires customer action to confirm the payment.",
+            "enum": [
+              "automatic",
+              "manual"
+            ],
+            "type": "string"
+          },
+          "confirmation_token": {
+            "description": "ID of the ConfirmationToken used to confirm this PaymentIntent.\n\nIf the provided ConfirmationToken contains properties that are also being provided in this request, such as `payment_method`, then the values in this request will take precedence.",
+            "type": "string"
+          },
+          "currency": {
+            "description": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+            "type": "string"
+          },
+          "customer": {
+            "description": "ID of the Customer this PaymentIntent belongs to, if one exists.\n\nPayment methods attached to other Customers cannot be used with this PaymentIntent.\n\nIf [setup_future_usage](https://api.stripe.com#payment_intent_object-setup_future_usage) is set and this PaymentIntent's payment method is not `card_present`, then the payment method attaches to the Customer after the PaymentIntent has been confirmed and any required actions from the user are complete. If the payment method is `card_present` and isn't a digital wallet, then a [generated_card](https://docs.stripe.com/api/charges/object#charge_object-payment_method_details-card_present-generated_card) payment method representing the card is created and attached to the Customer instead.",
+            "type": "string"
+          },
+          "customer_account": {
+            "description": "ID of the Account representing the customer that this PaymentIntent belongs to, if one exists.\n\nPayment methods attached to other Accounts cannot be used with this PaymentIntent.\n\nIf [setup_future_usage](https://api.stripe.com#payment_intent_object-setup_future_usage) is set and this PaymentIntent's payment method is not `card_present`, then the payment method attaches to the Account after the PaymentIntent has been confirmed and any required actions from the user are complete. If the payment method is `card_present` and isn't a digital wallet, then a [generated_card](https://docs.stripe.com/api/charges/object#charge_object-payment_method_details-card_present-generated_card) payment method representing the card is created and attached to the Account instead.",
+            "type": "string"
+          },
+          "description": {
+            "description": "An arbitrary string attached to the object. Often useful for displaying to users.",
+            "type": "string"
+          },
+          "error_on_requires_action": {
+            "description": "Set to `true` to fail the payment attempt if the PaymentIntent transitions into `requires_action`. Use this parameter for simpler integrations that don't handle customer actions, such as [saving cards without authentication](https://docs.stripe.com/payments/save-card-without-authentication). This parameter can only be used with [`confirm=true`](https://docs.stripe.com/api/payment_intents/create#create_payment_intent-confirm).",
+            "type": "boolean"
+          },
+          "excluded_payment_method_types": {
+            "description": "The list of payment method types to exclude from use with this payment.",
+            "items": {
+              "enum": [
+                "acss_debit",
+                "affirm",
+                "afterpay_clearpay",
+                "alipay",
+                "alma",
+                "amazon_pay",
+                "au_becs_debit",
+                "bacs_debit",
+                "bancontact",
+                "billie",
+                "bizum",
+                "blik",
+                "boleto",
+                "card",
+                "cashapp",
+                "crypto",
+                "customer_balance",
+                "eps",
+                "fpx",
+                "giropay",
+                "grabpay",
+                "ideal",
+                "kakao_pay",
+                "klarna",
+                "konbini",
+                "kr_card",
+                "mb_way",
+                "mobilepay",
+                "multibanco",
+                "naver_pay",
+                "nz_bank_account",
+                "oxxo",
+                "p24",
+                "pay_by_bank",
+                "payco",
+                "paynow",
+                "paypal",
+                "payto",
+                "pix",
+                "promptpay",
+                "revolut_pay",
+                "samsung_pay",
+                "satispay",
+                "scalapay",
+                "sepa_debit",
+                "sofort",
+                "sunbit",
+                "swish",
+                "twint",
+                "upi",
+                "us_bank_account",
+                "wechat_pay",
+                "zip"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "hooks": {
+            "description": "Automations to be run during the PaymentIntent lifecycle",
+            "properties": {
+              "inputs": {
+                "properties": {
+                  "tax": {
+                    "properties": {
+                      "calculation": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "mandate": {
+            "description": "ID of the mandate that's used for this payment. This parameter can only be used with [`confirm=true`](https://docs.stripe.com/api/payment_intents/create#create_payment_intent-confirm).",
+            "type": "string"
+          },
+          "mandate_data": {
+            "additionalProperties": true,
+            "description": "This hash contains details about the Mandate to create. This parameter can only be used with [`confirm=true`](https://docs.stripe.com/api/payment_intents/create#create_payment_intent-confirm).",
+            "type": "object"
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "description": "Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+            "properties": {},
+            "type": "object"
+          },
+          "off_session": {
+            "additionalProperties": true,
+            "description": "Set to `true` to indicate that the customer isn't in your checkout flow during this payment attempt and can't authenticate. Use this parameter in scenarios where you collect payment method details and [charge them later](https://docs.stripe.com/payments/save-during-payment). This parameter can only be used with [`confirm=true`](https://docs.stripe.com/api/payment_intents/create#create_payment_intent-confirm).",
+            "type": "object"
+          },
+          "on_behalf_of": {
+            "description": "The Stripe account ID that these funds are intended for. Learn more about the [use case for connected accounts](https://docs.stripe.com/payments/connected-accounts).",
+            "type": "string"
+          },
+          "payment_details": {
+            "description": "Provides industry-specific information about the charge.",
+            "properties": {
+              "customer_reference": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "order_reference": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "payment_method": {
+            "description": "ID of the payment method (a PaymentMethod, Card, or [compatible Source](https://docs.stripe.com/payments/payment-methods/transitioning#compatibility) object) to attach to this PaymentIntent.\n\nIf you omit this parameter with `confirm=true`, `customer.default_source` attaches as this PaymentIntent's payment instrument to improve migration for users of the Charges API. We recommend that you explicitly provide the `payment_method` moving forward.\nIf the payment method is attached to a Customer, you must also provide the ID of that Customer as the [customer](https://api.stripe.com#create_payment_intent-customer) parameter of this PaymentIntent.",
+            "type": "string"
+          },
+          "payment_method_configuration": {
+            "description": "The ID of the [payment method configuration](https://docs.stripe.com/api/payment_method_configurations) to use with this PaymentIntent.",
+            "type": "string"
+          },
+          "payment_method_data": {
+            "description": "If provided, this hash will be used to create a PaymentMethod. The new PaymentMethod will appear\nin the [payment_method](https://docs.stripe.com/api/payment_intents/object#payment_intent_object-payment_method)\nproperty on the PaymentIntent.",
+            "properties": {
+              "acss_debit": {
+                "properties": {
+                  "account_number": {
+                    "type": "string"
+                  },
+                  "institution_number": {
+                    "type": "string"
+                  },
+                  "transit_number": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "affirm": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "afterpay_clearpay": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "alipay": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "allow_redisplay": {
+                "enum": [
+                  "always",
+                  "limited",
+                  "unspecified"
+                ],
+                "type": "string"
+              },
+              "alma": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "amazon_pay": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "au_becs_debit": {
+                "properties": {
+                  "account_number": {
+                    "type": "string"
+                  },
+                  "bsb_number": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "bacs_debit": {
+                "properties": {
+                  "account_number": {
+                    "type": "string"
+                  },
+                  "sort_code": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "bancontact": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "billie": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "billing_details": {
+                "properties": {
+                  "address": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "email": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "name": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "phone": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "tax_id": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "bizum": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "blik": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "boleto": {
+                "properties": {
+                  "tax_id": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "cashapp": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "crypto": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "customer_balance": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "eps": {
+                "properties": {
+                  "bank": {
+                    "enum": [
+                      "arzte_und_apotheker_bank",
+                      "austrian_anadi_bank_ag",
+                      "bank_austria",
+                      "bankhaus_carl_spangler",
+                      "bankhaus_schelhammer_und_schattera_ag",
+                      "bawag_psk_ag",
+                      "bks_bank_ag",
+                      "brull_kallmus_bank_ag",
+                      "btv_vier_lander_bank",
+                      "capital_bank_grawe_gruppe_ag",
+                      "deutsche_bank_ag",
+                      "dolomitenbank",
+                      "easybank_ag",
+                      "erste_bank_und_sparkassen",
+                      "hypo_alpeadriabank_international_ag",
+                      "hypo_bank_burgenland_aktiengesellschaft",
+                      "hypo_noe_lb_fur_niederosterreich_u_wien",
+                      "hypo_oberosterreich_salzburg_steiermark",
+                      "hypo_tirol_bank_ag",
+                      "hypo_vorarlberg_bank_ag",
+                      "marchfelder_bank",
+                      "oberbank_ag",
+                      "raiffeisen_bankengruppe_osterreich",
+                      "schoellerbank_ag",
+                      "sparda_bank_wien",
+                      "volksbank_gruppe",
+                      "volkskreditbank_ag",
+                      "vr_bank_braunau"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "fpx": {
+                "properties": {
+                  "bank": {
+                    "enum": [
+                      "affin_bank",
+                      "agrobank",
+                      "alliance_bank",
+                      "ambank",
+                      "bank_islam",
+                      "bank_muamalat",
+                      "bank_of_china",
+                      "bank_rakyat",
+                      "bnp_paribas",
+                      "bsn",
+                      "cimb",
+                      "citibank",
+                      "deutsche_bank",
+                      "hong_leong_bank",
+                      "hsbc",
+                      "kfh",
+                      "maybank2e",
+                      "maybank2u",
+                      "mbsb_bank",
+                      "ocbc",
+                      "pb_enterprise",
+                      "public_bank",
+                      "rhb",
+                      "standard_chartered",
+                      "uob"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "giropay": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "grabpay": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "ideal": {
+                "properties": {
+                  "bank": {
+                    "enum": [
+                      "abn_amro",
+                      "adyen",
+                      "asn_bank",
+                      "bunq",
+                      "buut",
+                      "finom",
+                      "handelsbanken",
+                      "ing",
+                      "knab",
+                      "mollie",
+                      "moneyou",
+                      "n26",
+                      "nn",
+                      "rabobank",
+                      "regiobank",
+                      "revolut",
+                      "sns_bank",
+                      "triodos_bank",
+                      "van_lanschot",
+                      "yoursafe"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "interac_present": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "kakao_pay": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "klarna": {
+                "properties": {
+                  "dob": {
+                    "properties": {
+                      "day": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      "month": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      "year": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              },
+              "konbini": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "kr_card": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "link": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "mb_way": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "metadata": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "mobilepay": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "multibanco": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "naver_pay": {
+                "properties": {
+                  "funding": {
+                    "enum": [
+                      "card",
+                      "points"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "nz_bank_account": {
+                "properties": {
+                  "account_holder_name": {
+                    "type": "string"
+                  },
+                  "account_number": {
+                    "type": "string"
+                  },
+                  "bank_code": {
+                    "type": "string"
+                  },
+                  "branch_code": {
+                    "type": "string"
+                  },
+                  "reference": {
+                    "type": "string"
+                  },
+                  "suffix": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "oxxo": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "p24": {
+                "properties": {
+                  "bank": {
+                    "enum": [
+                      "alior_bank",
+                      "bank_millennium",
+                      "bank_nowy_bfg_sa",
+                      "bank_pekao_sa",
+                      "banki_spbdzielcze",
+                      "blik",
+                      "bnp_paribas",
+                      "boz",
+                      "citi_handlowy",
+                      "credit_agricole",
+                      "envelobank",
+                      "etransfer_pocztowy24",
+                      "getin_bank",
+                      "ideabank",
+                      "ing",
+                      "inteligo",
+                      "mbank_mtransfer",
+                      "nest_przelew",
+                      "noble_pay",
+                      "pbac_z_ipko",
+                      "plus_bank",
+                      "santander_przelew24",
+                      "tmobile_usbugi_bankowe",
+                      "toyota_bank",
+                      "velobank",
+                      "volkswagen_bank"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "pay_by_bank": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "payco": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "paynow": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "paypal": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "payto": {
+                "properties": {
+                  "account_number": {
+                    "type": "string"
+                  },
+                  "bsb_number": {
+                    "type": "string"
+                  },
+                  "pay_id": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "pix": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "promptpay": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "radar_options": {
+                "properties": {
+                  "session": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "revolut_pay": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "samsung_pay": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "satispay": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "scalapay": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "sepa_debit": {
+                "properties": {
+                  "iban": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "sofort": {
+                "properties": {
+                  "country": {
+                    "enum": [
+                      "AT",
+                      "BE",
+                      "DE",
+                      "ES",
+                      "IT",
+                      "NL"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "sunbit": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "swish": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "twint": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "type": {
+                "enum": [
+                  "acss_debit",
+                  "affirm",
+                  "afterpay_clearpay",
+                  "alipay",
+                  "alma",
+                  "amazon_pay",
+                  "au_becs_debit",
+                  "bacs_debit",
+                  "bancontact",
+                  "billie",
+                  "bizum",
+                  "blik",
+                  "boleto",
+                  "cashapp",
+                  "crypto",
+                  "customer_balance",
+                  "eps",
+                  "fpx",
+                  "giropay",
+                  "grabpay",
+                  "ideal",
+                  "kakao_pay",
+                  "klarna",
+                  "konbini",
+                  "kr_card",
+                  "link",
+                  "mb_way",
+                  "mobilepay",
+                  "multibanco",
+                  "naver_pay",
+                  "nz_bank_account",
+                  "oxxo",
+                  "p24",
+                  "pay_by_bank",
+                  "payco",
+                  "paynow",
+                  "paypal",
+                  "payto",
+                  "pix",
+                  "promptpay",
+                  "revolut_pay",
+                  "samsung_pay",
+                  "satispay",
+                  "scalapay",
+                  "sepa_debit",
+                  "sofort",
+                  "sunbit",
+                  "swish",
+                  "twint",
+                  "upi",
+                  "us_bank_account",
+                  "wechat_pay",
+                  "zip"
+                ],
+                "type": "string"
+              },
+              "upi": {
+                "properties": {
+                  "mandate_options": {
+                    "properties": {
+                      "amount": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      "amount_type": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      "description": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      "end_date": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              },
+              "us_bank_account": {
+                "properties": {
+                  "account_holder_type": {
+                    "enum": [
+                      "company",
+                      "individual"
+                    ],
+                    "type": "string"
+                  },
+                  "account_number": {
+                    "type": "string"
+                  },
+                  "account_type": {
+                    "enum": [
+                      "checking",
+                      "savings"
+                    ],
+                    "type": "string"
+                  },
+                  "financial_connections_account": {
+                    "type": "string"
+                  },
+                  "routing_number": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "wechat_pay": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              },
+              "zip": {
+                "additionalProperties": true,
+                "properties": {},
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "payment_method_options": {
+            "description": "Payment method-specific configuration for this PaymentIntent.",
+            "properties": {
+              "acss_debit": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "affirm": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "afterpay_clearpay": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "alipay": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "alma": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "amazon_pay": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "au_becs_debit": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "bacs_debit": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "bancontact": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "billie": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "bizum": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "blik": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "boleto": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "card": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "card_present": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "cashapp": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "crypto": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "customer_balance": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "eps": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "fpx": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "giropay": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "grabpay": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "ideal": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "interac_present": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "kakao_pay": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "klarna": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "konbini": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "kr_card": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "link": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "mb_way": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "mobilepay": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "multibanco": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "naver_pay": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "nz_bank_account": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "oxxo": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "p24": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "pay_by_bank": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "payco": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "paynow": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "paypal": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "payto": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "pix": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "promptpay": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "revolut_pay": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "samsung_pay": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "satispay": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "scalapay": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "sepa_debit": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "sofort": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "sunbit": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "swish": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "twint": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "upi": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "us_bank_account": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "wechat_pay": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "zip": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "payment_method_types": {
+            "description": "The list of payment method types (for example, a card) that this PaymentIntent can use. If you don't provide this, Stripe will dynamically show relevant payment methods from your [payment method settings](https://dashboard.stripe.com/settings/payment_methods). A list of valid payment method types can be found [here](https://docs.stripe.com/api/payment_methods/object#payment_method_object-type).",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "radar_options": {
+            "description": "Options to configure Radar. Learn more about [Radar Sessions](https://docs.stripe.com/radar/radar-session).",
+            "properties": {
+              "referrer": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "session": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "receipt_email": {
+            "description": "Email address to send the receipt to. If you specify `receipt_email` for a payment in live mode, you send a receipt regardless of your [email settings](https://dashboard.stripe.com/account/emails).",
+            "type": "string"
+          },
+          "return_url": {
+            "description": "The URL to redirect your customer back to after they authenticate or cancel their payment on the payment method's app or site. If you'd prefer to redirect to a mobile application, you can alternatively supply an application URI scheme. This parameter can only be used with [`confirm=true`](https://docs.stripe.com/api/payment_intents/create#create_payment_intent-confirm).",
+            "type": "string"
+          },
+          "setup_future_usage": {
+            "description": "Indicates that you intend to make future payments with this PaymentIntent's payment method.\n\nIf you provide a Customer with the PaymentIntent, you can use this parameter to [attach the payment method](/payments/save-during-payment) to the Customer after the PaymentIntent is confirmed and the customer completes any required actions. If you don't provide a Customer, you can still [attach](/api/payment_methods/attach) the payment method to a Customer after the transaction completes.\n\nIf the payment method is `card_present` and isn't a digital wallet, Stripe creates and attaches a [generated_card](/api/charges/object#charge_object-payment_method_details-card_present-generated_card) payment method representing the card to the Customer instead.\n\nWhen processing card payments, Stripe uses `setup_future_usage` to help you comply with regional legislation and network rules, such as [SCA](/strong-customer-authentication).",
+            "enum": [
+              "off_session",
+              "on_session"
+            ],
+            "type": "string"
+          },
+          "shipping": {
+            "description": "Shipping information for this PaymentIntent.",
+            "properties": {
+              "address": {
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  },
+                  "country": {
+                    "type": "string"
+                  },
+                  "line1": {
+                    "type": "string"
+                  },
+                  "line2": {
+                    "type": "string"
+                  },
+                  "postal_code": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "carrier": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "phone": {
+                "type": "string"
+              },
+              "tracking_number": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "statement_descriptor": {
+            "description": "Text that appears on the customer's statement as the statement descriptor for a non-card charge. This value overrides the account's default statement descriptor. For information about requirements, including the 22-character limit, see [the Statement Descriptor docs](https://docs.stripe.com/get-started/account/statement-descriptors).\n\nSetting this value for a card charge returns an error. For card charges, set the [statement_descriptor_suffix](https://docs.stripe.com/get-started/account/statement-descriptors#dynamic) instead.",
+            "type": "string"
+          },
+          "statement_descriptor_suffix": {
+            "description": "Provides information about a card charge. Concatenated to the account's [statement descriptor prefix](https://docs.stripe.com/get-started/account/statement-descriptors#static) to form the complete statement descriptor that appears on the customer's statement.",
+            "type": "string"
+          },
+          "transfer_data": {
+            "description": "The parameters that you can use to automatically create a Transfer.\nLearn more about the [use case for connected accounts](https://docs.stripe.com/payments/connected-accounts).",
+            "properties": {
+              "amount": {
+                "type": "integer"
+              },
+              "description": {
+                "type": "string"
+              },
+              "destination": {
+                "type": "string"
+              },
+              "metadata": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "payment_data": {
+                "properties": {
+                  "description": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "transfer_group": {
+            "description": "A string that identifies the resulting payment as part of a group. Learn more about the [use case for connected accounts](https://docs.stripe.com/connect/separate-charges-and-transfers).",
+            "type": "string"
+          },
+          "use_stripe_sdk": {
+            "description": "Set to `true` when confirming server-side and using Stripe.js, iOS, or Android client-side SDKs to handle the next actions.",
+            "type": "boolean"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create a PaymentIntent",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "stripe_get_payment_intents",
+      "name": "get_payment_intents",
+      "title": "List all PaymentIntents",
+      "description": "Retrieving payment intents. Use when the request specifically involves retrieving payment intents, rather than a related Stripe action.",
+      "toolkitId": "stripe",
+      "version": "v10",
+      "inputSchema": {
+        "properties": {
+          "created": {
+            "additionalProperties": true,
+            "description": "A filter on the list, based on the object `created` field. The value can be a string with an integer Unix timestamp or a dictionary with a number of different query options.",
+            "type": "object"
+          },
+          "customer": {
+            "description": "Only return PaymentIntents for the customer that this customer ID specifies.",
+            "type": "string"
+          },
+          "customer_account": {
+            "description": "Only return PaymentIntents for the account representing the customer that this ID specifies.",
+            "type": "string"
+          },
+          "ending_before": {
+            "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.",
+            "type": "integer"
+          },
+          "starting_after": {
+            "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List all PaymentIntents",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "stripe_get_balance",
+      "name": "get_balance",
+      "title": "Retrieve balance",
+      "description": "Retrieving balance. Use when the request specifically involves retrieving balance, rather than a related Stripe action.",
+      "toolkitId": "stripe",
+      "version": "v10",
+      "inputSchema": {
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Retrieve balance",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "stripe_post_invoices",
+      "name": "post_invoices",
+      "title": "Create an invoice",
+      "description": "Creating invoices. Use when the request specifically involves creating invoices, rather than a related Stripe action.",
+      "toolkitId": "stripe",
+      "version": "v10",
+      "inputSchema": {
+        "properties": {
+          "account_tax_ids": {
+            "additionalProperties": true,
+            "description": "The account tax IDs associated with the invoice. Only editable when the invoice is a draft.",
+            "type": "object"
+          },
+          "application_fee_amount": {
+            "description": "A fee in cents (or local equivalent) that will be applied to the invoice and transferred to the application owner's Stripe account. The request must be made with an OAuth key or the Stripe-Account header in order to take an application fee. For more information, see the application fees [documentation](https://docs.stripe.com/billing/invoices/connect#collecting-fees).",
+            "type": "integer"
+          },
+          "auto_advance": {
+            "description": "Controls whether Stripe performs [automatic collection](https://docs.stripe.com/invoicing/integration/automatic-advancement-collection) of the invoice. If `false`, the invoice's state doesn't automatically advance without an explicit action. Defaults to false.",
+            "type": "boolean"
+          },
+          "automatic_tax": {
+            "description": "Settings for automatic tax lookup for this invoice.",
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "liability": {
+                "properties": {
+                  "account": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "enum": [
+                      "account",
+                      "self"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "automatically_finalizes_at": {
+            "description": "The time when this invoice should be scheduled to finalize (up to 5 years in the future). The invoice is finalized at this time if it's still in draft state.",
+            "type": "integer"
+          },
+          "collection_method": {
+            "description": "Either `charge_automatically`, or `send_invoice`. When charging automatically, Stripe will attempt to pay this invoice using the default source attached to the customer. When sending an invoice, Stripe will email this invoice to the customer with payment instructions. Defaults to `charge_automatically`.",
+            "enum": [
+              "charge_automatically",
+              "send_invoice"
+            ],
+            "type": "string"
+          },
+          "currency": {
+            "description": "The currency to create this invoice in. Defaults to that of `customer` if not specified.",
+            "type": "string"
+          },
+          "custom_fields": {
+            "additionalProperties": true,
+            "description": "A list of up to 4 custom fields to be displayed on the invoice.",
+            "type": "object"
+          },
+          "customer": {
+            "description": "The ID of the customer to bill.",
+            "type": "string"
+          },
+          "customer_account": {
+            "description": "The ID of the account to bill.",
+            "type": "string"
+          },
+          "days_until_due": {
+            "description": "The number of days from when the invoice is created until it is due. Valid only for invoices where `collection_method=send_invoice`.",
+            "type": "integer"
+          },
+          "default_payment_method": {
+            "description": "ID of the default payment method for the invoice. It must belong to the customer associated with the invoice. If not set, defaults to the subscription's default payment method, if any, or to the default payment method in the customer's invoice settings.",
+            "type": "string"
+          },
+          "default_source": {
+            "description": "ID of the default payment source for the invoice. It must belong to the customer associated with the invoice and be in a chargeable state. If not set, defaults to the subscription's default source, if any, or to the customer's default source.",
+            "type": "string"
+          },
+          "default_tax_rates": {
+            "description": "The tax rates that will apply to any line item that does not have `tax_rates` set.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "description": {
+            "description": "An arbitrary string attached to the object. Often useful for displaying to users. Referenced as 'memo' in the Dashboard.",
+            "type": "string"
+          },
+          "discounts": {
+            "additionalProperties": true,
+            "description": "The coupons and promotion codes to redeem into discounts for the invoice. If not specified, inherits the discount from the invoice's customer. Pass an empty string to avoid inheriting any discounts.",
+            "type": "object"
+          },
+          "due_date": {
+            "description": "The date on which payment for this invoice is due. Valid only for invoices where `collection_method=send_invoice`.",
+            "type": "integer"
+          },
+          "effective_at": {
+            "description": "The date when this invoice is in effect. Same as `finalized_at` unless overwritten. When defined, this value replaces the system-generated 'Date of issue' printed on the invoice PDF and receipt.",
+            "type": "integer"
+          },
+          "footer": {
+            "description": "Footer to be displayed on the invoice.",
+            "type": "string"
+          },
+          "from_invoice": {
+            "description": "Revise an existing invoice. The new invoice will be created in `status=draft`. See the [revision documentation](https://docs.stripe.com/invoicing/invoice-revisions) for more details.",
+            "properties": {
+              "action": {
+                "enum": [
+                  "revision"
+                ],
+                "type": "string"
+              },
+              "invoice": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "issuer": {
+            "description": "The connected account that issues the invoice. The invoice is presented with the branding and support information of the specified account.",
+            "properties": {
+              "account": {
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "account",
+                  "self"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "description": "Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+            "type": "object"
+          },
+          "number": {
+            "description": "Set the number for this invoice. If no number is present then a number will be assigned automatically when the invoice is finalized. In many markets, regulations require invoices to be unique, sequential and / or gapless. You are responsible for ensuring this is true across all your different invoicing systems in the event that you edit the invoice number using our API. If you use only Stripe for your invoices and do not change invoice numbers, Stripe handles this aspect of compliance for you automatically.",
+            "type": "string"
+          },
+          "on_behalf_of": {
+            "description": "The account (if any) for which the funds of the invoice payment are intended. If set, the invoice will be presented with the branding and support information of the specified account. See the [Invoices with Connect](https://docs.stripe.com/billing/invoices/connect) documentation for details.",
+            "type": "string"
+          },
+          "payment_settings": {
+            "description": "Configuration settings for the PaymentIntent that is generated when the invoice is finalized.",
+            "properties": {
+              "default_mandate": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "payment_method_options": {
+                "properties": {
+                  "acss_debit": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "bancontact": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "card": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "customer_balance": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "konbini": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "payto": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "pix": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "sepa_debit": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "upi": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "us_bank_account": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              },
+              "payment_method_types": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "pending_invoice_items_behavior": {
+            "description": "How to handle pending invoice items on invoice creation. Defaults to `exclude` if the parameter is omitted.",
+            "enum": [
+              "exclude",
+              "include"
+            ],
+            "type": "string"
+          },
+          "rendering": {
+            "description": "The rendering-related settings that control how the invoice is displayed on customer-facing surfaces such as PDF and Hosted Invoice Page.",
+            "properties": {
+              "amount_tax_display": {
+                "enum": [
+                  "",
+                  "exclude_tax",
+                  "include_inclusive_tax"
+                ],
+                "type": "string"
+              },
+              "pdf": {
+                "properties": {
+                  "page_size": {
+                    "enum": [
+                      "a4",
+                      "auto",
+                      "letter"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "template": {
+                "type": "string"
+              },
+              "template_version": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "shipping_cost": {
+            "description": "Settings for the cost of shipping for this invoice.",
+            "properties": {
+              "shipping_rate": {
+                "type": "string"
+              },
+              "shipping_rate_data": {
+                "properties": {
+                  "delivery_estimate": {
+                    "properties": {
+                      "maximum": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      "minimum": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "display_name": {
+                    "type": "string"
+                  },
+                  "fixed_amount": {
+                    "properties": {
+                      "amount": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      "currency": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      "currency_options": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "metadata": {
+                    "additionalProperties": true,
+                    "properties": {},
+                    "type": "object"
+                  },
+                  "tax_behavior": {
+                    "enum": [
+                      "exclusive",
+                      "inclusive",
+                      "unspecified"
+                    ],
+                    "type": "string"
+                  },
+                  "tax_code": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "enum": [
+                      "fixed_amount"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "shipping_details": {
+            "description": "Shipping details for the invoice. The Invoice PDF will use the `shipping_details` value if it is set, otherwise the PDF will render the shipping address from the customer.",
+            "properties": {
+              "address": {
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  },
+                  "country": {
+                    "type": "string"
+                  },
+                  "line1": {
+                    "type": "string"
+                  },
+                  "line2": {
+                    "type": "string"
+                  },
+                  "postal_code": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "name": {
+                "type": "string"
+              },
+              "phone": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "statement_descriptor": {
+            "description": "Extra information about a charge for the customer's credit card statement. It must contain at least one letter. If not specified and this invoice is part of a subscription, the default `statement_descriptor` will be set to the first subscription item's product's `statement_descriptor`.",
+            "type": "string"
+          },
+          "subscription": {
+            "description": "The ID of the subscription to invoice, if any. If set, the created invoice will only include pending invoice items for that subscription. The subscription's billing cycle and regular subscription events won't be affected.",
+            "type": "string"
+          },
+          "transfer_data": {
+            "description": "If specified, the funds from the invoice will be transferred to the destination and the ID of the resulting transfer will be found on the invoice's charge.",
+            "properties": {
+              "amount": {
+                "type": "integer"
+              },
+              "destination": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create an invoice",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,772 @@
+{
+  "version": 1,
+  "batch": "07",
+  "source": "digitalocean-action-gateway",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "datadog_v1_get_ip_ranges",
+      "name": "v1_get_ip_ranges",
+      "title": "List Datadog IP ranges",
+      "description": "List the current public IP ranges used by Datadog services.",
+      "toolkitId": "datadog",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "response": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "response"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Datadog IP ranges",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "pagerduty_list_incidents",
+      "name": "list_incidents",
+      "title": "List incidents",
+      "description": "Search incidents by service, team, status, urgency, or time. Use for discovery when no identifier is known, while get_incident returns one incident in full.",
+      "toolkitId": "pagerduty",
+      "version": "v9",
+      "inputSchema": {
+        "properties": {
+          "date_range": {
+            "description": "When set to all, the since and until parameters and defaults are ignored.",
+            "enum": [
+              "all"
+            ],
+            "type": "string"
+          },
+          "incident_key": {
+            "description": "Incident de-duplication key. Incidents with child alerts do not have an incident key; querying by incident key will return incidents whose alerts have alert_key matching the given incident key.",
+            "type": "string"
+          },
+          "include": {
+            "description": "Array of additional details to include.",
+            "enum": [
+              "acknowledgers",
+              "agents",
+              "assignees",
+              "conference_bridge",
+              "escalation_policies",
+              "first_trigger_log_entries",
+              "priorities",
+              "services",
+              "teams",
+              "users"
+            ],
+            "type": "string"
+          },
+          "limit": {
+            "description": "The number of results per page. Maximum of 100.",
+            "type": "integer"
+          },
+          "offset": {
+            "description": "Offset to start pagination search results.",
+            "type": "integer"
+          },
+          "service_ids": {
+            "description": "Returns only the incidents associated with the passed service(s). This expects one or more service IDs.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "since": {
+            "description": "The start of the date range over which you want to search. Maximum range is 6 months and default is 1 month.",
+            "type": "string"
+          },
+          "sort_by": {
+            "description": "Used to specify both the field you wish to sort the results on (incident_number/created_at/resolved_at/urgency), as well as the direction (asc/desc) of the results. The sort_by field and direction should be separated by a colon. A maximum of two fields can be included, separated by a comma. Sort direction defaults to ascending. The account must have the `urgencies` ability to sort by the urgency.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "statuses": {
+            "description": "Return only incidents with the given statuses. To query multiple statuses, pass `statuses[]` more than once, for example: `https://api.pagerduty.com/incidents?statuses[]=triggered&statuses[]=acknowledged`. (More status codes may be introduced in the future.)",
+            "enum": [
+              "triggered",
+              "acknowledged",
+              "resolved"
+            ],
+            "type": "string"
+          },
+          "team_ids": {
+            "description": "An array of team IDs. Only results related to these teams will be returned. Account must have the `teams` ability to use this parameter.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "time_zone": {
+            "description": "Time zone used to render timestamps and to interpret `since/until` values before filtering. Rendering defaults to UTC if omitted. `since/until` default to the account's time zone if omitted.",
+            "type": "string"
+          },
+          "total": {
+            "description": "By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.\n\nSee our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.\n",
+            "type": "boolean"
+          },
+          "until": {
+            "description": "The end of the date range over which you want to search. Maximum range is 6 months and default is 1 month.",
+            "type": "string"
+          },
+          "urgencies": {
+            "description": "Array of the urgencies of the incidents to be returned. Defaults to all urgencies. Account must have the `urgencies` ability to do this.",
+            "enum": [
+              "high",
+              "low"
+            ],
+            "type": "string"
+          },
+          "user_ids": {
+            "description": "Returns only the incidents currently assigned to the passed user(s). This expects one or more user IDs. Note: When using the assigned_to_user filter, you will only receive incidents with statuses of triggered or acknowledged. This is because resolved incidents are not assigned to any user.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List incidents",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "pagerduty_create_incident",
+      "name": "create_incident",
+      "title": "Create an Incident",
+      "description": "Open a new incident on a service and start its escalation. Use when a person or agent needs to declare an incident, while update_incident changes one that is already open.",
+      "toolkitId": "pagerduty",
+      "version": "v8",
+      "inputSchema": {
+        "properties": {
+          "body": {
+            "additionalProperties": true,
+            "description": "JSON request body for this PagerDuty operation.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "body"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create an Incident",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "pagerduty_list_services",
+      "name": "list_services",
+      "title": "List services",
+      "description": "Search technical services by name, team, or integration. Use for discovery, while list_business_services covers the customer-facing layer above them.",
+      "toolkitId": "pagerduty",
+      "version": "v9",
+      "inputSchema": {
+        "properties": {
+          "include": {
+            "description": "Array of additional details to include.",
+            "enum": [
+              "escalation_policies",
+              "teams",
+              "integrations",
+              "auto_pause_notifications_parameters"
+            ],
+            "type": "string"
+          },
+          "limit": {
+            "description": "The number of results per page.",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Filters the results, showing only services with the specified name.",
+            "type": "string"
+          },
+          "offset": {
+            "description": "Offset to start pagination search results.",
+            "type": "integer"
+          },
+          "query": {
+            "description": "Filters the result, showing only the records whose name matches the query.",
+            "type": "string"
+          },
+          "sort_by": {
+            "description": "Used to specify the field you wish to sort the results on.",
+            "enum": [
+              "name",
+              "name:asc",
+              "name:desc"
+            ],
+            "type": "string"
+          },
+          "team_ids": {
+            "description": "An array of team IDs. Only results related to these teams will be returned. Account must have the `teams` ability to use this parameter.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "time_zone": {
+            "description": "Time zone in which results will be rendered. This will default to the account time zone.",
+            "type": "string"
+          },
+          "total": {
+            "description": "By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.\n\nSee our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.\n",
+            "type": "boolean"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List services",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "exa_web_search",
+      "name": "web_search",
+      "title": "Web Search",
+      "description": "Search the public internet for current information, news, announcements, and general web content, returning relevant results with normalized text snippets.",
+      "toolkitId": "exa",
+      "version": "v2",
+      "inputSchema": {
+        "properties": {
+          "max_results": {
+            "description": "Maximum number of search results to return.",
+            "type": "integer"
+          },
+          "query": {
+            "description": "Search query string.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "provider": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "results": {
+            "items": {
+              "properties": {
+                "publishedDate": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Web Search",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "exa_web_fetch",
+      "name": "web_fetch",
+      "title": "Web Fetch",
+      "description": "Fetch and extract public web page content with Exa.",
+      "toolkitId": "exa",
+      "version": "v2",
+      "inputSchema": {
+        "properties": {
+          "max_characters": {
+            "description": "Maximum extracted text characters to return.",
+            "type": "integer"
+          },
+          "url": {
+            "description": "Public web page URL to fetch.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "provider": {
+            "type": "string"
+          },
+          "results": {
+            "items": {
+              "properties": {
+                "publishedDate": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Web Fetch",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "perplexity_chat_completion",
+      "name": "chat_completion",
+      "title": "Answer a question with Perplexity Sonar",
+      "description": "Answer a conversation with a reply grounded in a live web search, returned with its citation URLs and search results. Use for a quick cited answer; pick create_async_chat_completion for a long deep-research report.",
+      "toolkitId": "perplexity",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "max_tokens": {
+            "description": "Maximum tokens to generate in the answer.",
+            "maximum": 128000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "messages": {
+            "description": "Conversation so far, oldest first. The final message is normally the user's question.",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "content": {
+                  "description": "Message text.",
+                  "maxLength": 100000,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "role": {
+                  "description": "Who authored the message.",
+                  "enum": [
+                    "system",
+                    "user",
+                    "assistant"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "role",
+                "content"
+              ],
+              "type": "object"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array"
+          },
+          "model": {
+            "description": "Sonar model to answer with, for example sonar or sonar-deep-research. Call list_models for the values this account may use.",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "return_related_questions": {
+            "description": "Also return follow-up questions related to the answer.",
+            "type": "boolean"
+          },
+          "search_mode": {
+            "description": "Corpus to ground the answer in, for example web or academic.",
+            "maxLength": 32,
+            "minLength": 1,
+            "type": "string"
+          },
+          "search_recency_filter": {
+            "description": "Restrict grounding sources by age, for example day, week, month, or year.",
+            "maxLength": 16,
+            "minLength": 1,
+            "type": "string"
+          },
+          "temperature": {
+            "description": "Sampling temperature between 0 and 2. Lower is more deterministic.",
+            "maximum": 2,
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "model",
+          "messages"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Answer a question with Perplexity Sonar",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "perplexity_search",
+      "name": "search",
+      "title": "Search the web with Perplexity",
+      "description": "Run a live web or people search and get ranked results with titles, URLs, snippets, and publication dates. Use when the user wants raw sources to read; pick chat_completion for a written answer with citations.",
+      "toolkitId": "perplexity",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "country": {
+            "description": "ISO 3166-1 alpha-2 country code to bias results toward, for example US or DE.",
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string"
+          },
+          "max_results": {
+            "description": "Maximum results to return. Up to 20 for web search, up to 50 when search_type is people. Defaults to 10.",
+            "maximum": 50,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_tokens_per_page": {
+            "description": "Maximum content tokens to extract from each result page.",
+            "maximum": 1000000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "query": {
+            "description": "The search query, in natural language or keywords.",
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "search_language_filter": {
+            "description": "ISO 639-1 two-letter language codes to restrict results to.",
+            "items": {
+              "description": "ISO 639-1 code.",
+              "maxLength": 2,
+              "minLength": 2,
+              "type": "string"
+            },
+            "maxItems": 20,
+            "type": "array"
+          },
+          "search_type": {
+            "description": "Search corpus: web for general pages, people for person profiles. Defaults to web.",
+            "enum": [
+              "web",
+              "people"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Search the web with Perplexity",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "resend_list_emails",
+      "name": "list_emails",
+      "title": "List Emails",
+      "description": "Retrieve a list of emails",
+      "toolkitId": "resend",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "after": {
+            "description": "Return items after this cursor.",
+            "type": "string"
+          },
+          "before": {
+            "description": "Return items before this cursor.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Number of items to return.",
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "description": "Array containing email information.",
+            "items": {
+              "properties": {
+                "bcc": {
+                  "description": "The email addresses of the blind carbon copy recipients.",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "cc": {
+                  "description": "The email addresses of the carbon copy recipients.",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "created_at": {
+                  "description": "The date and time the email was created.",
+                  "format": "date-time",
+                  "type": "string"
+                },
+                "from": {
+                  "description": "The email address of the sender.",
+                  "type": "string"
+                },
+                "html": {
+                  "description": "The HTML body of the email.",
+                  "type": "string"
+                },
+                "id": {
+                  "description": "The ID of the email.",
+                  "type": "string"
+                },
+                "last_event": {
+                  "description": "The status of the email.",
+                  "type": "string"
+                },
+                "object": {
+                  "description": "The type of object.",
+                  "type": "string"
+                },
+                "reply_to": {
+                  "description": "The email addresses to which replies should be sent.",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "subject": {
+                  "description": "The subject line of the email.",
+                  "type": "string"
+                },
+                "text": {
+                  "description": "The plain text body of the email.",
+                  "type": "string"
+                },
+                "to": {
+                  "items": {
+                    "description": "The email addresses of the recipients.",
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "has_more": {
+            "description": "Indicates if there are more results available.",
+            "type": "boolean"
+          },
+          "object": {
+            "description": "Type of the response object.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Emails",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "resend_create_contact",
+      "name": "create_contact",
+      "title": "Create Contact",
+      "description": "Create a new contact",
+      "toolkitId": "resend",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "audience_id": {
+            "description": "Unique identifier of the audience to which the contact belongs.",
+            "type": "string"
+          },
+          "email": {
+            "description": "Email address of the contact.",
+            "type": "string"
+          },
+          "first_name": {
+            "description": "First name of the contact.",
+            "type": "string"
+          },
+          "last_name": {
+            "description": "Last name of the contact.",
+            "type": "string"
+          },
+          "properties": {
+            "additionalProperties": true,
+            "description": "A map of custom property keys and values to create.",
+            "type": "object"
+          },
+          "segments": {
+            "description": "Array of segment IDs to add the contact to.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "topics": {
+            "description": "Array of topic subscriptions for the contact.",
+            "items": {
+              "properties": {
+                "id": {
+                  "description": "The topic ID.",
+                  "type": "string"
+                },
+                "subscription": {
+                  "description": "The subscription status for this topic.",
+                  "enum": [
+                    "opt_in",
+                    "opt_out"
+                  ],
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "unsubscribed": {
+            "description": "The Contact's global subscription status. If set to true, the contact will be unsubscribed from all Broadcasts.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "description": "Unique identifier for the created contact.",
+            "type": "string"
+          },
+          "object": {
+            "description": "Type of the response object.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Contact",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

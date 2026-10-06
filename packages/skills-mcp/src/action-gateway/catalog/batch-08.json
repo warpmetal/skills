@@ -1,0 +1,436 @@
+{
+  "version": 1,
+  "batch": "08",
+  "source": "digitalocean-action-gateway",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "calendly_list_event_types",
+      "name": "list_event_types",
+      "title": "List user's event types",
+      "description": "List the event types a Calendly user or organization offers for booking, such as a 30-minute intro call. Use when you need the available meeting types or an event type URI for other tools.",
+      "toolkitId": "calendly",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "active": {
+            "description": "True for active event types only, false for inactive only; omit for all.",
+            "type": "boolean"
+          },
+          "admin_managed": {
+            "description": "True for admin-managed event types only, false to exclude them.",
+            "type": "boolean"
+          },
+          "count": {
+            "description": "Number of rows to return per page (maximum 100).",
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "organization": {
+            "description": "Organization URI whose event types to list. Provide user or organization.",
+            "format": "uri",
+            "pattern": "^https://api\\.calendly\\.com/",
+            "type": "string"
+          },
+          "page_token": {
+            "description": "Page token from a previous response's pagination.next_page_token.",
+            "type": "string"
+          },
+          "sort": {
+            "description": "Sort field and direction, for example start_time:asc.",
+            "type": "string"
+          },
+          "user": {
+            "description": "User URI whose event types to list. Provide user or organization.",
+            "format": "uri",
+            "pattern": "^https://api\\.calendly\\.com/",
+            "type": "string"
+          },
+          "user_availability_schedule": {
+            "description": "With user, only event types that use this availability schedule.",
+            "format": "uri",
+            "pattern": "^https://api\\.calendly\\.com/",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List user's event types",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "calendly_get_current_user",
+      "name": "get_current_user",
+      "title": "Get current user",
+      "description": "Get the Calendly user who owns the connected account, including their user and organization URIs. Use when you need the account owner's own URI to pass to other Calendly tools.",
+      "toolkitId": "calendly",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get current user",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "clickup_create_task",
+      "name": "create_task",
+      "title": "Create Task",
+      "description": "Create a task in a list, with its name, assignees, and due date. Use to add work; use update_task to change a task that exists.",
+      "toolkitId": "clickup",
+      "version": "v3",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "list_id": {
+            "description": "ClickUp list id.",
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9._:-]+$",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the created resource.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "list_id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Task",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "clickup_get_task",
+      "name": "get_task",
+      "title": "Get Task",
+      "description": "Return one task with its full detail, including custom fields and subtasks. Use when the task id is already known.",
+      "toolkitId": "clickup",
+      "version": "v3",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "task_id": {
+            "description": "ClickUp task id.",
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9._:-]+$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Task",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "clickup_create_task_comment",
+      "name": "create_task_comment",
+      "title": "Create Task Comment",
+      "description": "Add a comment to a task. Use to comment on work; use create_threaded_comment to reply inside an existing thread.",
+      "toolkitId": "clickup",
+      "version": "v3",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "comment_text": {
+            "description": "Comment body.",
+            "type": "string"
+          },
+          "task_id": {
+            "description": "ClickUp task id.",
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9._:-]+$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id",
+          "comment_text"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Task Comment",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "posthog_list_project_dashboards",
+      "name": "list_project_dashboards",
+      "title": "List project dashboards with pagination",
+      "description": "Get paginated dashboards for a project by ID, using 'limit' and 'offset'. Must authenticate with PersonalAPIKeyAuth. Includes count, pagination, and dashboard details.",
+      "toolkitId": "posthog",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "description": "Request schema for `ListProjectDashboards`",
+        "properties": {
+          "limit": {
+            "description": "Number of results to return per page.",
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "description": "The initial index from which to return the results.",
+            "title": "Offset",
+            "type": "integer"
+          },
+          "project_id": {
+            "description": "Project ID of the project you\"re trying to access. To find the ID of the project, make a call to /api/projects/. ",
+            "title": "Project Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id"
+        ],
+        "title": "ListProjectDashboardsRequest",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List project dashboards with pagination",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "posthog_get_feature_flags_matching_ids",
+      "name": "get_feature_flags_matching_ids",
+      "title": "Get feature flags matching IDs",
+      "description": "Tool to get IDs of all feature flags matching the current filters. Uses the same filtering logic as the list endpoint and returns only IDs that the user has permission to edit.",
+      "toolkitId": "posthog",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "description": "Request schema for `GetFeatureFlagsMatchingIds`",
+        "properties": {
+          "project_id": {
+            "description": "Project ID of the project you're trying to access. To find the ID of the project, make a call to /api/projects/.",
+            "title": "Project Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id"
+        ],
+        "title": "GetFeatureFlagsMatchingIdsRequest",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get feature flags matching IDs",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "mixpanel_track_event",
+      "name": "track_event",
+      "title": "Track event",
+      "description": "Record current events in a Mixpanel project. Use when sending new behavioral activity rather than importing historical event data.",
+      "toolkitId": "mixpanel",
+      "version": "v11",
+      "inputSchema": {
+        "properties": {
+          "events": {
+            "items": {
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "properties": {
+                  "additionalProperties": true,
+                  "required": [
+                    "token",
+                    "distinct_id"
+                  ],
+                  "type": "object"
+                }
+              },
+              "required": [
+                "event",
+                "properties"
+              ],
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "project_id": {
+            "description": "Mixpanel project id (for example 12345).",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "project_id",
+          "events"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Track event",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "mixpanel_raw_event_export",
+      "name": "raw_event_export",
+      "title": "Export raw events",
+      "description": "Export raw Mixpanel events as stored event records. Use when detailed event-level data is needed instead of aggregated analysis or profile queries.",
+      "toolkitId": "mixpanel",
+      "version": "v20",
+      "inputSchema": {
+        "properties": {
+          "from_date": {
+            "description": "Inclusive start date yyyy-mm-dd.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum events to return.",
+            "type": "integer"
+          },
+          "project_id": {
+            "description": "Mixpanel project id (for example 12345).",
+            "type": "integer"
+          },
+          "to_date": {
+            "description": "Inclusive end date yyyy-mm-dd.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id",
+          "from_date",
+          "to_date"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Export raw events",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "circleci_list_pipelines",
+      "name": "list_pipelines",
+      "title": "Get a list of pipelines in CircleCI",
+      "description": "Get a list of pipelines. Use when choosing a broad account-level view instead of pipelines from one project.",
+      "toolkitId": "circleci",
+      "version": "v11",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "mine": {
+            "description": "Only include entries created by your user.",
+            "type": "boolean"
+          },
+          "org_slug": {
+            "description": "Org slug in the form `vcs-slug/org-name`. For projects that use GitLab or GitHub App, use `circleci` as the `vcs-slug` and replace the `org-name` with the organization ID (found in Organization Settings).",
+            "maxLength": 512,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9._-]+(/[A-Za-z0-9._-]+){0,3}$",
+            "type": "string"
+          },
+          "page_token": {
+            "description": "A token to retrieve the next page of results.",
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get a list of pipelines in CircleCI",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

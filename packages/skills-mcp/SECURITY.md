@@ -11,7 +11,8 @@ out of transcripts.
 
 ## Scope
 
-This server sits between an MCP client and the WarpMetal CLI. In scope:
+This server sits between an MCP client and (a) the WarpMetal CLI and (b) optionally
+DigitalOcean Action Gateway. In scope:
 
 - The approval gate: a token that can be replayed, reused for a different argv,
   forged, or accepted after expiry.
@@ -23,20 +24,24 @@ This server sits between an MCP client and the WarpMetal CLI. In scope:
   `audit.jsonl`.
 - Binary resolution and process spawning: injection, a shell, or a path that
   escapes the intended install.
+- Action Gateway: leaking `DIGITALOCEAN_TOKEN`, registering AG tools on the HTTP
+  `content` profile, or proxying provider secrets that should stay in DO Connections.
 
 ## Transport profiles
 
 The server exposes two surfaces, and which one a client can reach is decided by the
 transport rather than by the caller:
 
-- **`full`** — stdio. The `skill_*` content tools and every `wm_*` CLI tool (46 in
-  total). stdio is a local, operator-controlled channel.
+- **`full`** — stdio. The `skill_*` content tools, every `wm_*` CLI tool, and the Action Gateway
+  tools (146 in total). stdio is a local, operator-controlled channel. AG calls use
+  `DIGITALOCEAN_TOKEN` / `DIGITALOCEAN_AG_ACTOR_ID` from the environment; provider OAuth tokens stay
+  in DigitalOcean Connections on the actor, not in this process.
 - **`content`** — the Streamable HTTP transport. The `skill_*` tools and the
-  `skill://` resources only. The `wm_*` tools are not registered at all on this
-  profile, because the HTTP transport has no authentication and those tools spawn
-  a privileged binary and mutate real infrastructure.
+  `skill://` resources only. The `wm_*` and Action Gateway tools are not registered at all on this
+  profile, because the HTTP transport has no authentication and those tools can mutate real
+  infrastructure / third-party accounts.
 
-A way to reach a `wm_*` tool over HTTP is a vulnerability. A way to make the
+A way to reach a `wm_*` or Action Gateway tool over HTTP is a vulnerability. A way to make the
 `content` profile serve something outside the loaded registry is one too.
 
 ### Private registries

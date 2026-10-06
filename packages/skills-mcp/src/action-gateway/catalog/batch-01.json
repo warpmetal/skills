@@ -1,0 +1,777 @@
+{
+  "version": 1,
+  "batch": "01",
+  "source": "digitalocean-action-gateway",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "github_create_issue",
+      "name": "create_issue",
+      "title": "Create GitHub Issue",
+      "description": "Create a new issue in a GitHub repository.",
+      "toolkitId": "github",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "body": {
+            "description": "Issue body (markdown).",
+            "type": "string"
+          },
+          "owner": {
+            "description": "Repository owner (user or org).",
+            "type": "string"
+          },
+          "repo": {
+            "description": "Repository name.",
+            "type": "string"
+          },
+          "title": {
+            "description": "Issue title.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "title"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create GitHub Issue",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "toolSlug": "github_list_issues",
+      "name": "list_issues",
+      "title": "List GitHub Issues",
+      "description": "List issues in a GitHub repository.",
+      "toolkitId": "github",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "max_results": {
+            "description": "Maximum number of issues to return.",
+            "type": "integer"
+          },
+          "owner": {
+            "description": "Repository owner (user or organization).",
+            "type": "string"
+          },
+          "repo": {
+            "description": "Repository name.",
+            "type": "string"
+          },
+          "state": {
+            "default": "open",
+            "description": "Filter by issue state.",
+            "enum": [
+              "open",
+              "closed",
+              "all"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List GitHub Issues",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "toolSlug": "github_get_issue",
+      "name": "get_issue",
+      "title": "Get GitHub Issue",
+      "description": "Get details of a specific issue in a GitHub repository.",
+      "toolkitId": "github",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "issue_number": {
+            "description": "Issue number.",
+            "type": "integer"
+          },
+          "owner": {
+            "description": "Repository owner (user or organization).",
+            "type": "string"
+          },
+          "repo": {
+            "description": "Repository name.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "issue_number"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get GitHub Issue",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "toolSlug": "github_create_pull_request",
+      "name": "create_pull_request",
+      "title": "Create GitHub Pull Request",
+      "description": "Create a new pull request in a GitHub repository.",
+      "toolkitId": "github",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "base": {
+            "description": "Branch to merge into.",
+            "type": "string"
+          },
+          "body": {
+            "description": "Pull request body/description.",
+            "type": "string"
+          },
+          "draft": {
+            "description": "Create as a draft pull request.",
+            "type": "boolean"
+          },
+          "head": {
+            "description": "Branch with changes (user:branch for cross-repo).",
+            "type": "string"
+          },
+          "owner": {
+            "description": "Repository owner (user or organization).",
+            "type": "string"
+          },
+          "repo": {
+            "description": "Repository name.",
+            "type": "string"
+          },
+          "title": {
+            "description": "Pull request title.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "title",
+          "head",
+          "base"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create GitHub Pull Request",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "toolSlug": "github_get_pull_request",
+      "name": "get_pull_request",
+      "title": "Get GitHub Pull Request",
+      "description": "Get details of a specific pull request in a GitHub repository.",
+      "toolkitId": "github",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "owner": {
+            "description": "Repository owner (user or organization).",
+            "type": "string"
+          },
+          "pull_number": {
+            "description": "Pull request number.",
+            "type": "integer"
+          },
+          "repo": {
+            "description": "Repository name.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "pull_number"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get GitHub Pull Request",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "toolSlug": "github_search_repositories",
+      "name": "search_repositories",
+      "title": "Search GitHub Repositories",
+      "description": "Search repositories.",
+      "toolkitId": "github",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "max_results": {
+            "description": "Max results.",
+            "type": "integer"
+          },
+          "order": {
+            "description": "Sort order.",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "type": "string"
+          },
+          "q": {
+            "description": "Search query.",
+            "type": "string"
+          },
+          "sort": {
+            "description": "Sort field.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "q"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Search GitHub Repositories",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "toolSlug": "gitlab_list_projects",
+      "name": "list_projects",
+      "title": "GitLab Get Projects",
+      "description": "List all projects. Use when the request specifically involves listing projects, rather than a related GitLab action.",
+      "toolkitId": "gitlab",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "active": {
+            "description": "Limit by projects that are not archived and not marked for deletion",
+            "type": "boolean"
+          },
+          "archived": {
+            "description": "Limit by archived status",
+            "type": "boolean"
+          },
+          "custom_attributes": {
+            "additionalProperties": true,
+            "description": "Filter with custom attributes",
+            "properties": {},
+            "type": "object"
+          },
+          "id_after": {
+            "description": "Limit results to projects with IDs greater than the specified ID",
+            "type": "integer"
+          },
+          "id_before": {
+            "description": "Limit results to projects with IDs less than the specified ID",
+            "type": "integer"
+          },
+          "imported": {
+            "description": "Limit by imported by authenticated user",
+            "type": "boolean"
+          },
+          "include_hidden": {
+            "description": "Include hidden projects. Can only be set by admins",
+            "type": "boolean"
+          },
+          "include_pending_delete": {
+            "description": "Include projects in pending delete state. Can only be set by admins",
+            "type": "boolean"
+          },
+          "last_activity_after": {
+            "description": "Limit results to projects with last_activity after specified time. Format: ISO 8601 YYYY-MM-DDTHH:MM:SSZ",
+            "type": "string"
+          },
+          "last_activity_before": {
+            "description": "Limit results to projects with last_activity before specified time. Format: ISO 8601 YYYY-MM-DDTHH:MM:SSZ",
+            "type": "string"
+          },
+          "marked_for_deletion_on": {
+            "description": "Date when the project was marked for deletion",
+            "type": "string"
+          },
+          "membership": {
+            "description": "Limit by projects that the current user is a member of",
+            "type": "boolean"
+          },
+          "min_access_level": {
+            "description": "Limit by minimum access level of authenticated user",
+            "enum": [
+              10,
+              15,
+              20,
+              25,
+              30,
+              40,
+              50
+            ],
+            "type": "integer"
+          },
+          "order_by": {
+            "description": "Return projects ordered by field. storage_size, repository_size, wiki_size, packages_size are only available to admins. Similarity is available when searching and is limited to projects the user has access to.",
+            "enum": [
+              "id",
+              "name",
+              "path",
+              "created_at",
+              "updated_at",
+              "last_activity_at",
+              "similarity",
+              "star_count",
+              "storage_size",
+              "repository_size",
+              "wiki_size",
+              "packages_size"
+            ],
+            "type": "string"
+          },
+          "owned": {
+            "description": "Limit by owned by authenticated user",
+            "type": "boolean"
+          },
+          "page": {
+            "description": "Current page number",
+            "type": "integer"
+          },
+          "per_page": {
+            "description": "Number of items per page",
+            "type": "integer"
+          },
+          "repository_checksum_failed": {
+            "description": "Limit by projects where repository checksum is failed",
+            "type": "boolean"
+          },
+          "repository_storage": {
+            "description": "Which storage shard the repository is on. Available only to admins",
+            "type": "string"
+          },
+          "search": {
+            "description": "Return list of projects matching the search criteria",
+            "type": "string"
+          },
+          "search_namespaces": {
+            "description": "Include ancestor namespaces when matching search criteria",
+            "type": "boolean"
+          },
+          "simple": {
+            "description": "Return only the ID, URL, name, and path of each project",
+            "type": "boolean"
+          },
+          "sort": {
+            "description": "Return projects sorted in ascending and descending order",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "type": "string"
+          },
+          "starred": {
+            "description": "Limit by starred status",
+            "type": "boolean"
+          },
+          "statistics": {
+            "description": "Include project statistics",
+            "type": "boolean"
+          },
+          "topic": {
+            "description": "Comma-separated list of topics. Limit results to projects having all topics",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "topic_id": {
+            "description": "Limit results to projects with the assigned topic given by the topic ID",
+            "type": "integer"
+          },
+          "updated_after": {
+            "description": "Return projects updated after the specified datetime. Format: ISO 8601 YYYY-MM-DDTHH:MM:SSZ",
+            "type": "string"
+          },
+          "updated_before": {
+            "description": "Return projects updated before the specified datetime. Format: ISO 8601 YYYY-MM-DDTHH:MM:SSZ",
+            "type": "string"
+          },
+          "visibility": {
+            "description": "Limit by visibility",
+            "enum": [
+              "private",
+              "internal",
+              "public"
+            ],
+            "type": "string"
+          },
+          "wiki_checksum_failed": {
+            "description": "Limit by projects where wiki checksum is failed",
+            "type": "boolean"
+          },
+          "with_custom_attributes": {
+            "description": "Include custom attributes in the response",
+            "type": "boolean"
+          },
+          "with_issues_enabled": {
+            "description": "Limit by enabled issues feature",
+            "type": "boolean"
+          },
+          "with_merge_requests_enabled": {
+            "description": "Limit by enabled merge requests feature",
+            "type": "boolean"
+          },
+          "with_programming_language": {
+            "description": "Limit to repositories which use the given programming language",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "GitLab Get Projects",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "toolSlug": "gitlab_create_project_issue",
+      "name": "create_project_issue",
+      "title": "GitLab Create Project Issue",
+      "description": "Create an issue. Use when the request specifically involves creating project issue, rather than a related GitLab action.",
+      "toolkitId": "gitlab",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "add_labels": {
+            "description": "Comma-separated list of label names",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "assignee_id": {
+            "description": "[Deprecated] The ID of a user to assign issue",
+            "type": "integer"
+          },
+          "assignee_ids": {
+            "description": "The array of user IDs to assign issue",
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "confidential": {
+            "description": "Boolean parameter if the issue should be confidential",
+            "type": "boolean"
+          },
+          "created_at": {
+            "description": "Date time when the issue was created. Available only for admins and project owners.",
+            "type": "string"
+          },
+          "description": {
+            "description": "The description of an issue",
+            "type": "string"
+          },
+          "discussion_locked": {
+            "description": " Boolean parameter indicating if the issue's discussion is locked",
+            "type": "boolean"
+          },
+          "discussion_to_resolve": {
+            "description": "The ID of a discussion to resolve, also pass `merge_request_to_resolve_discussions_of`",
+            "type": "string"
+          },
+          "due_date": {
+            "description": "Date string in the format YEAR-MONTH-DAY",
+            "type": "string"
+          },
+          "epic_id": {
+            "description": "The ID of an epic to associate the issue with",
+            "type": "integer"
+          },
+          "epic_iid": {
+            "description": "The IID of an epic to associate the issue with (deprecated)",
+            "type": "integer"
+          },
+          "iid": {
+            "description": "The internal ID of a project issue. Available only for admins and project owners.",
+            "type": "integer"
+          },
+          "issue_type": {
+            "description": "The type of the issue. Accepts: issue, incident, test_case, requirement, task, ticket",
+            "enum": [
+              "issue",
+              "incident",
+              "test_case",
+              "requirement",
+              "task",
+              "ticket"
+            ],
+            "type": "string"
+          },
+          "labels": {
+            "description": "Comma-separated list of label names",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "merge_request_to_resolve_discussions_of": {
+            "description": "The IID of a merge request for which to resolve discussions",
+            "type": "integer"
+          },
+          "milestone": {
+            "description": "The title of a project or ancestor-group milestone to assign the issue to. Mutually exclusive with `milestone_id`.",
+            "type": "string"
+          },
+          "milestone_id": {
+            "description": "The ID of a milestone to assign issue",
+            "type": "integer"
+          },
+          "project_id": {
+            "description": "The ID or URL-encoded path of the project",
+            "type": "string"
+          },
+          "remove_labels": {
+            "description": "Comma-separated list of label names",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "severity": {
+            "description": "The severity of the issue. Only applies to incidents. Accepts: unknown, low, medium, high, critical",
+            "enum": [
+              "unknown",
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ],
+            "type": "string"
+          },
+          "start_date": {
+            "description": "Date string in the format YEAR-MONTH-DAY",
+            "type": "string"
+          },
+          "title": {
+            "description": "The title of an issue",
+            "type": "string"
+          },
+          "weight": {
+            "description": "The weight of the issue",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "project_id",
+          "title"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "GitLab Create Project Issue",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "toolSlug": "gitlab_create_merge_request",
+      "name": "create_merge_request",
+      "title": "GitLab Create Merge Request",
+      "description": "Create a merge request. Use when the request specifically involves creating merge request, rather than a related GitLab action.",
+      "toolkitId": "gitlab",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "add_labels": {
+            "description": "Comma-separated label names to add to a merge request.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "allow_collaboration": {
+            "description": "Allow commits from members who can merge to the target branch.",
+            "type": "boolean"
+          },
+          "allow_maintainer_to_push": {
+            "description": "[deprecated] See allow_collaboration",
+            "type": "boolean"
+          },
+          "approval_rules_attributes": {
+            "items": {
+              "properties": {
+                "approvals_required": {
+                  "description": "Total number of approvals required",
+                  "type": "string"
+                },
+                "id": {
+                  "description": "The ID of a rule",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "approvals_before_merge": {
+            "description": "Number of approvals required before this can be merged",
+            "type": "integer"
+          },
+          "assignee_id": {
+            "description": "Assignee user ID.",
+            "type": "integer"
+          },
+          "assignee_ids": {
+            "description": "The IDs of the users to assign the merge request to, as a comma-separated list. Set to 0 or provide an empty value to unassign all assignees.",
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "description": {
+            "description": "Description of the merge request. Limited to 1,048,576 characters.",
+            "type": "string"
+          },
+          "labels": {
+            "description": "Comma-separated label names for a merge request. Set to an empty string to unassign all labels.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "merge_after": {
+            "description": "Date after which the merge request can be merged.",
+            "type": "string"
+          },
+          "milestone": {
+            "description": "The title of a project or ancestor-group milestone to assign the merge request to. Mutually exclusive with `milestone_id`.",
+            "type": "string"
+          },
+          "milestone_id": {
+            "description": "The global ID of a milestone to assign the merge request to.",
+            "type": "integer"
+          },
+          "project_id": {
+            "description": "The ID or URL-encoded path of the project.",
+            "type": "string"
+          },
+          "remove_labels": {
+            "description": "Comma-separated label names to remove from a merge request.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "remove_source_branch": {
+            "description": "Flag indicating if a merge request should remove the source branch when merging.",
+            "type": "boolean"
+          },
+          "reviewer_ids": {
+            "description": "The IDs of the users to review the merge request, as a comma-separated list. Set to 0 or provide an empty value to unassign all reviewers.",
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "source_branch": {
+            "description": "The source branch.",
+            "type": "string"
+          },
+          "squash": {
+            "description": "Squash commits into a single commit when merging.",
+            "type": "boolean"
+          },
+          "target_branch": {
+            "description": "The target branch.",
+            "type": "string"
+          },
+          "target_project_id": {
+            "description": "The target project of the merge request defaults to the :id of the project.",
+            "type": "integer"
+          },
+          "title": {
+            "description": "The title of the merge request.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id",
+          "title",
+          "source_branch",
+          "target_branch"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "GitLab Create Merge Request",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "toolSlug": "notion_search",
+      "name": "search",
+      "title": "Search Notion",
+      "description": "Search pages and databases the Notion connection can access.",
+      "toolkitId": "notion",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "page_size": {
+            "description": "Max results to return (Notion caps at 100).",
+            "type": "integer"
+          },
+          "query": {
+            "description": "Text to search titles for. Omit to list everything shared with the integration.",
+            "type": "string"
+          },
+          "start_cursor": {
+            "description": "Pagination cursor from a previous response's next_cursor.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Search Notion",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    }
+  ]
+}

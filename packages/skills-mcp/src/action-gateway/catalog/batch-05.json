@@ -1,0 +1,576 @@
+{
+  "version": 1,
+  "batch": "05",
+  "source": "digitalocean-action-gateway",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "figma_get_file_nodes",
+      "name": "get_file_nodes",
+      "title": "Get File Nodes",
+      "description": "Return the document subtree for specific layers of a Figma file, named by node id. Use instead of get_file when the whole document would be more than you need.",
+      "toolkitId": "figma",
+      "version": "v2",
+      "inputSchema": {
+        "properties": {
+          "depth": {
+            "description": "Positive integer representing how deep into the node tree to traverse. For example, setting this to 1 will return only the children directly underneath the desired nodes. Not setting this parameter returns all nodes. Note: this parameter behaves differently from the same parameter in the `GET /v1/files/:key` endpoint. In this endpoint, the depth will be counted starting from the desired node rathe",
+            "type": "number"
+          },
+          "file_key": {
+            "description": "File to export JSON from. This can be a file key or branch key. Use `GET /v1/files/:key` with the `branch_data` query param to get the branch key.",
+            "type": "string"
+          },
+          "geometry": {
+            "description": "Set to \"paths\" to export vector data.",
+            "type": "string"
+          },
+          "ids": {
+            "description": "A comma separated list of node IDs to retrieve and convert.",
+            "type": "string"
+          },
+          "version": {
+            "description": "A specific version ID to get. Omitting this will get the current version of the file.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_key",
+          "ids"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get File Nodes",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "shopify_list_products",
+      "name": "list_products",
+      "title": "List Shopify Products",
+      "description": "List products in the connected Shopify shop with optional first-page size.",
+      "toolkitId": "shopify",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "first": {
+            "default": 10,
+            "description": "Number of products to return (max 50).",
+            "maximum": 50,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "first"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Shopify Products",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "shopify_get_product",
+      "name": "get_product",
+      "title": "Get Shopify Product",
+      "description": "Get a single Shopify product by GraphQL ID (gid://shopify/Product/...).",
+      "toolkitId": "shopify",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "description": "Product GraphQL ID.",
+            "maxLength": 128,
+            "minLength": 10,
+            "pattern": "^gid://shopify/Product/[0-9]+$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Shopify Product",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "shopify_list_orders",
+      "name": "list_orders",
+      "title": "List Shopify Orders",
+      "description": "List recent orders for the connected Shopify shop (default 60-day window unless read_all_orders is granted).",
+      "toolkitId": "shopify",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "first": {
+            "default": 10,
+            "description": "Number of orders to return.",
+            "maximum": 50,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "first"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Shopify Orders",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "hubspot_crm_contacts_list",
+      "name": "crm_contacts_list",
+      "title": "Retrieve contacts",
+      "description": "Retrieve all contacts, using query parameters to specify the information that gets returned. Use when the task is to retrieve contacts across multiple crm contacts; choose a get tool when a specific record is already known.",
+      "toolkitId": "hubspot",
+      "version": "v11",
+      "inputSchema": {
+        "properties": {
+          "after": {
+            "description": "The paging cursor token of the last successfully read resource will be returned as the `paging.next.after` JSON property of a paged response containing more results.",
+            "type": "string"
+          },
+          "archived": {
+            "default": false,
+            "description": "Whether to return only results that have been archived.",
+            "type": "boolean"
+          },
+          "associations": {
+            "description": "A comma separated list of object types to retrieve associated IDs for. If any of the specified associations do not exist, they will be ignored.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "limit": {
+            "default": 10,
+            "description": "The maximum number of results to display per page.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "properties": {
+            "description": "A comma separated list of the properties to be returned in the response. If any of the specified properties are not present on the requested object(s), they will be ignored.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "properties_with_history": {
+            "description": "A comma separated list of the properties to be returned along with their history of previous values. If any of the specified properties are not present on the requested object(s), they will be ignored. Usage of this parameter will reduce the maximum number of contacts that can be read by a single request.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Retrieve contacts",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "hubspot_crm_contacts_create",
+      "name": "crm_contacts_create",
+      "title": "Create a contact",
+      "description": "Create a contact in HubSpot. Use when the task is to create a contact; choose an update tool to change an existing record instead.",
+      "toolkitId": "hubspot",
+      "version": "v11",
+      "inputSchema": {
+        "properties": {
+          "associations": {
+            "items": {
+              "properties": {
+                "to": {
+                  "description": "Contains the Id of a Public Object",
+                  "properties": {
+                    "id": {
+                      "description": "The unique ID of the object.",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object"
+                },
+                "types": {
+                  "items": {
+                    "description": "Defines the type, direction, and details of the relationship between two CRM objects.",
+                    "properties": {
+                      "associationCategory": {
+                        "description": "The category of the association, such as \"HUBSPOT_DEFINED\".",
+                        "enum": [
+                          "HUBSPOT_DEFINED",
+                          "INTEGRATOR_DEFINED",
+                          "USER_DEFINED",
+                          "WORK"
+                        ],
+                        "type": "string"
+                      },
+                      "associationTypeId": {
+                        "description": "The ID representing the specific type of association.",
+                        "format": "int32",
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "associationCategory",
+                      "associationTypeId"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "to",
+                "types"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "properties": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Key-value pairs for setting properties for the new object.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "associations",
+          "properties"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create a contact",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "hubspot_crm_deals_list",
+      "name": "crm_deals_list",
+      "title": "List",
+      "description": "List in HubSpot. Use when the task is to list across multiple crm deals; choose a get tool when a specific record is already known.",
+      "toolkitId": "hubspot",
+      "version": "v11",
+      "inputSchema": {
+        "properties": {
+          "after": {
+            "description": "The paging cursor token of the last successfully read resource will be returned as the `paging.next.after` JSON property of a paged response containing more results.",
+            "type": "string"
+          },
+          "archived": {
+            "default": false,
+            "description": "Whether to return only results that have been archived.",
+            "type": "boolean"
+          },
+          "associations": {
+            "description": "A comma separated list of object types to retrieve associated IDs for. If any of the specified associations do not exist, they will be ignored.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "limit": {
+            "default": 10,
+            "description": "The maximum number of results to display per page.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "properties": {
+            "description": "A comma separated list of the properties to be returned in the response. If any of the specified properties are not present on the requested object(s), they will be ignored.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "properties_with_history": {
+            "description": "A comma separated list of the properties to be returned along with their history of previous values. If any of the specified properties are not present on the requested object(s), they will be ignored. Usage of this parameter will reduce the maximum number of objects that can be read by a single request.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "asana_get_a_task",
+      "name": "get_a_task",
+      "title": "Get a task",
+      "description": "Get a task in Asana.",
+      "toolkitId": "asana",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "task_gid": {
+            "description": "The task to operate on.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_gid"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get a task",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "asana_create_a_project",
+      "name": "create_a_project",
+      "title": "Create a project",
+      "description": "Create a project in Asana.",
+      "toolkitId": "asana",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "archived": {
+            "description": "True if the project is archived, false if not. Archived projects do not show in the UI by default and may be treated differently for queries.",
+            "type": "boolean"
+          },
+          "color": {
+            "description": "Color of the project.",
+            "enum": [
+              "dark-pink",
+              "dark-green",
+              "dark-blue",
+              "dark-red",
+              "dark-teal",
+              "dark-brown",
+              "dark-orange",
+              "dark-purple",
+              "dark-warm-gray",
+              "light-pink",
+              "light-green",
+              "light-blue",
+              "light-red",
+              "light-teal",
+              "light-brown",
+              "light-orange",
+              "light-purple",
+              "light-warm-gray"
+            ],
+            "type": "string"
+          },
+          "current_status": {
+            "additionalProperties": true,
+            "description": "*Deprecated: new integrations should prefer the `current_status_update` resource.*",
+            "properties": {},
+            "type": "object"
+          },
+          "current_status_update": {
+            "additionalProperties": true,
+            "description": "The latest `status_update` posted to this project.",
+            "properties": {},
+            "type": "object"
+          },
+          "custom_fields": {
+            "additionalProperties": true,
+            "description": "An object where each key is a Custom Field GID and each value is an enum GID, string, number, or object.",
+            "type": "object"
+          },
+          "default_view": {
+            "description": "The default view (list, board, calendar, or timeline) of a project.",
+            "enum": [
+              "list",
+              "board",
+              "calendar",
+              "timeline"
+            ],
+            "type": "string"
+          },
+          "due_date": {
+            "description": "*Deprecated: new integrations should prefer the `due_on` field.*",
+            "type": "string"
+          },
+          "due_on": {
+            "description": "The day on which this project is due. This takes a date with format YYYY-MM-DD.",
+            "type": "string"
+          },
+          "followers": {
+            "description": "*Create-only*. Comma separated string of users. Followers are a subset of members who have opted in to receive \"tasks added\" notifications for a project.",
+            "type": "string"
+          },
+          "html_notes": {
+            "description": "[Opt In](/docs/input-output-options). The notes of the project with formatting as HTML.",
+            "type": "string"
+          },
+          "is_template": {
+            "description": "[Opt In](/docs/input-output-options). *Deprecated - please use a project template endpoint instead (more in [this forum post](https://forum.asana.com/t/a-new-api-for-project-templates/156432)).* Determines if the project is a template.",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Name of the project. This is generally a short sentence fragment that fits on a line in the UI for maximum readability. However, it can be longer.",
+            "type": "string"
+          },
+          "notes": {
+            "description": "Free-form textual information associated with the project (ie., its description).",
+            "type": "string"
+          },
+          "owner": {
+            "description": "The current owner of the project, may be null.",
+            "type": "string"
+          },
+          "public": {
+            "description": "True if the project is public to its team.",
+            "type": "boolean"
+          },
+          "start_on": {
+            "description": "The day on which work for this project begins, or null if the project has no start date. This takes a date with `YYYY-MM-DD` format. *Note: `due_on` or `due_at` must be present in the request when setting or unsetting the `start_on` parameter. Additionally, `start_on` and `due_on` cannot be the same date.*",
+            "type": "string"
+          },
+          "team": {
+            "description": "The team that this project is shared with.",
+            "type": "string"
+          },
+          "workspace": {
+            "additionalProperties": true,
+            "properties": {},
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create a project",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "dropbox_list_folder",
+      "name": "list_folder",
+      "title": "List Dropbox Folder",
+      "description": "List the files and folders at a path in the user's Dropbox. Returns a cursor for paging through large folders.",
+      "toolkitId": "dropbox",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "limit": {
+            "description": "Maximum number of entries to return in one page.",
+            "type": "integer"
+          },
+          "path": {
+            "default": "",
+            "description": "Folder path to list, for example /qa_tree. An empty string means the app folder root.",
+            "type": "string"
+          },
+          "recursive": {
+            "description": "List the folder's contents recursively rather than one level.",
+            "type": "boolean"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "cursor": {
+            "type": "string"
+          },
+          "has_more": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Dropbox Folder",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

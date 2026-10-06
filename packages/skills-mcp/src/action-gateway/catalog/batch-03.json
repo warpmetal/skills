@@ -1,0 +1,545 @@
+{
+  "version": 1,
+  "batch": "03",
+  "source": "digitalocean-action-gateway",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "jira_create_issue",
+      "name": "create_issue",
+      "title": "Create Jira Issue",
+      "description": "Create a new issue in a Jira project, setting its type, summary and any required fields. Use when raising new work; update_issue changes an issue that already exists.",
+      "toolkitId": "jira",
+      "version": "v4",
+      "inputSchema": {
+        "properties": {
+          "description": {
+            "description": "A plain-text issue description.",
+            "type": "string"
+          },
+          "issue_type": {
+            "description": "The issue type, for example Task, Bug, or Story.",
+            "type": "string"
+          },
+          "project_key": {
+            "description": "The Jira project key, for example AR.",
+            "type": "string"
+          },
+          "summary": {
+            "description": "The issue title.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_key",
+          "summary",
+          "issue_type",
+          "description"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Jira Issue",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "jira_get_issue",
+      "name": "get_issue",
+      "title": "Get Jira Issue",
+      "description": "Return one Jira issue with its fields, comments and change history. Use when you have the issue key or id; list_issues searches for issues by JQL.",
+      "toolkitId": "jira",
+      "version": "v2",
+      "inputSchema": {
+        "properties": {
+          "issue_key": {
+            "description": "Issue ID or key, for example PROJ-123.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_key"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "fields": {
+            "type": "object"
+          },
+          "id": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Jira Issue",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "jira_add_comment",
+      "name": "add_comment",
+      "title": "Add Jira Comment",
+      "description": "Post a comment onto an existing Jira issue, optionally restricted to a project role or group. Use when you have the issue key or id; get_issue returns the comments already on it.",
+      "toolkitId": "jira",
+      "version": "v2",
+      "inputSchema": {
+        "properties": {
+          "comment": {
+            "description": "Plain-text comment body.",
+            "type": "string"
+          },
+          "issue_key": {
+            "description": "Issue ID or key, for example PROJ-123.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_key",
+          "comment"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Add Jira Comment",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "jira_transition_issue",
+      "name": "transition_issue",
+      "title": "Transition Jira Issue",
+      "description": "Move a Jira issue through a workflow transition, optionally setting fields as it moves. Use when changing one issue's status; bulk_transition_issues moves many.",
+      "toolkitId": "jira",
+      "version": "v3",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "comment": {
+            "description": "Optional transition comment.",
+            "type": "string"
+          },
+          "issue_key": {
+            "description": "Issue ID or key, for example AR-167.",
+            "type": "string"
+          },
+          "transition_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_key",
+          "transition_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Transition Jira Issue",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "jira_get_project",
+      "name": "get_project",
+      "title": "Get Jira Project",
+      "description": "Return one Jira project, including its key, lead, type and components. Use when you hold the project key; get_projects searches for one.",
+      "toolkitId": "jira",
+      "version": "v2",
+      "inputSchema": {
+        "properties": {
+          "expand": {
+            "description": "Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that the project description, issue types, and project lead are included in all responses by default. Expand options include:\n\n *  `description` The project description.\n *  `issueTypes` The issue types associated with the project.\n *  `lead` The project lead.\n *  `projectKeys` All project keys associated with the project.\n *  `issueTypeHierarchy` The project issue type hierarchy.",
+            "type": "string"
+          },
+          "project_key": {
+            "description": "The project ID or project key (case sensitive).",
+            "type": "string"
+          },
+          "properties": {
+            "description": "A list of project properties to return for the project. This parameter accepts a comma-separated list.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "project_key"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Jira Project",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "confluence_get_page_by_id",
+      "name": "get_page_by_id",
+      "title": "Get Confluence Page by ID",
+      "description": "Get one Confluence page by its numeric page ID.",
+      "toolkitId": "confluence",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "draft": {
+            "description": "Whether to return a draft version when one is available.",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Numeric ID of the requested Confluence resource.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "version": {
+            "description": "Specific page version to return.",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Confluence Page by ID",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "confluence_get_pages",
+      "name": "get_pages",
+      "title": "Get Confluence Pages",
+      "description": "List Confluence pages, optionally filtering by space, title, status, subtype, or body format.",
+      "toolkitId": "confluence",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "body_format": {
+            "description": "Representation to use for returned Confluence page content.",
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "cursor": {
+            "description": "Pagination cursor returned by a previous request.",
+            "maxLength": 2048,
+            "minLength": 1,
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum number of results to return.",
+            "maximum": 250,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "sort": {
+            "description": "Provider-supported ordering for the returned results.",
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string"
+          },
+          "space_id": {
+            "description": "Numeric ID of the Confluence space.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "status": {
+            "description": "Provider-supported status used to filter results.",
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "subtype": {
+            "description": "Confluence content subtype used to filter pages.",
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": {
+            "description": "Exact page title used to filter results.",
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Confluence Pages",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "linear_create_issue",
+      "name": "create_issue",
+      "title": "Create Linear Issue",
+      "description": "Create a new issue in a Linear team.",
+      "toolkitId": "linear",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "linear_team_id": {
+            "description": "Linear team UUID (teamId).",
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": {
+            "description": "Issue title.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "linear_team_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Linear Issue",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "linear_list_issues",
+      "name": "list_issues",
+      "title": "List Linear Issues",
+      "description": "List recent Linear issues.",
+      "toolkitId": "linear",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "first": {
+            "default": 10,
+            "description": "Maximum number of issues to return.",
+            "maximum": 50,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "issues": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Linear Issues",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "linear_get_issue",
+      "name": "get_issue",
+      "title": "Get Linear Issue",
+      "description": "Fetch a Linear issue by id or identifier.",
+      "toolkitId": "linear",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "issue_id": {
+            "description": "Linear issue UUID or identifier (e.g. DIG-7).",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "issue": {
+            "properties": {
+              "assignee": {
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "description": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "identifier": {
+                "type": "string"
+              },
+              "priority": {
+                "type": "integer"
+              },
+              "state": {
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Linear Issue",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}
