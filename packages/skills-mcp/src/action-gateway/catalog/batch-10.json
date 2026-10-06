@@ -1,0 +1,553 @@
+{
+  "version": 1,
+  "batch": "10",
+  "source": "digitalocean-action-gateway",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "gemini_generate_content",
+      "name": "generate_content",
+      "title": "Generate content",
+      "description": "Generate a model response for the given conversation contents.",
+      "toolkitId": "gemini",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cachedContent": {
+            "description": "Name of cached content to use as context, e.g. `cachedContents/abc123`.",
+            "type": "string"
+          },
+          "contents": {
+            "description": "Ordered conversation turns. Each item is a Content with `role` and `parts`.",
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "generationConfig": {
+            "additionalProperties": true,
+            "description": "Sampling and output options, e.g. temperature, maxOutputTokens, responseMimeType.",
+            "properties": {},
+            "type": "object"
+          },
+          "model": {
+            "description": "Bare model id with no slashes, e.g. `gemini-2.5-flash`. Do not pass the `models/`-prefixed resource name — the slash is percent-encoded and the request will not match.",
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9._-]+$",
+            "type": "string"
+          },
+          "safetySettings": {
+            "description": "Per-category safety thresholds.",
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "systemInstruction": {
+            "additionalProperties": true,
+            "description": "Developer-set system instruction, as a Content object.",
+            "properties": {},
+            "type": "object"
+          },
+          "toolConfig": {
+            "additionalProperties": true,
+            "description": "Configuration for the declared tools.",
+            "properties": {},
+            "type": "object"
+          },
+          "tools": {
+            "description": "Tool declarations the model may call.",
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "contents",
+          "model"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Generate content",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "gemini_list_models",
+      "name": "list_models",
+      "title": "List models",
+      "description": "List the models available to the calling API key.",
+      "toolkitId": "gemini",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "page_size": {
+            "description": "Maximum number of items to return in one page.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Page token from a previous response, to fetch the next page.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List models",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "anthropic-admin_list_workspaces",
+      "name": "list_workspaces",
+      "title": "List Workspaces",
+      "description": "List workspaces in the Anthropic organization, with cursor pagination. The Default Workspace is never included in results.",
+      "toolkitId": "anthropic-admin",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "after_id": {
+            "description": "Cursor. Return the page immediately after this object ID (the previous response's last_id).",
+            "type": "string"
+          },
+          "before_id": {
+            "description": "Cursor. Return the page immediately before this object ID (the previous response's first_id).",
+            "type": "string"
+          },
+          "include_archived": {
+            "description": "Include archived workspaces in the results. Defaults to false.",
+            "type": "boolean"
+          },
+          "limit": {
+            "description": "Number of items to return per page. Defaults to 20.",
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Workspaces",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "anthropic-admin_list_api_keys",
+      "name": "list_api_keys",
+      "title": "List API Keys",
+      "description": "List the organization's API keys with their status, workspace, creator and expiry. Key values are never returned. Supports cursor pagination and filtering by status, workspace or creator.",
+      "toolkitId": "anthropic-admin",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "after_id": {
+            "description": "Cursor. Return the page immediately after this object ID (the previous response's last_id).",
+            "type": "string"
+          },
+          "before_id": {
+            "description": "Cursor. Return the page immediately before this object ID (the previous response's first_id).",
+            "type": "string"
+          },
+          "created_by_user_id": {
+            "description": "ID of the organization member (prefixed `user_`). Filters to keys this member created.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Number of items to return per page. Defaults to 20.",
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "status": {
+            "description": "Filter to keys in this status.",
+            "enum": [
+              "active",
+              "inactive",
+              "archived"
+            ],
+            "type": "string"
+          },
+          "workspace_id": {
+            "description": "ID of the workspace (prefixed `wrkspc_`). Filters to keys scoped to this workspace.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List API Keys",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-cloud_list_stacks",
+      "name": "list_stacks",
+      "title": "List Stacks",
+      "description": "List Grafana Cloud stacks (instances) for an org. Match the intended stack by slug; never pick the first item automatically.",
+      "toolkitId": "grafana-cloud",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "org_slug": {
+            "description": "Grafana Cloud org slug.",
+            "pattern": "^[a-z0-9]([a-z0-9-]{0,62}[a-z0-9])?$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "org_slug"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Stacks",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-cloud_get_org",
+      "name": "get_org",
+      "title": "Get Cloud Org",
+      "description": "Get a Grafana Cloud organization by slug. Use to resolve org id before stack-scoped calls. Do not guess slugs from docs examples.",
+      "toolkitId": "grafana-cloud",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "org_slug": {
+            "description": "Grafana Cloud org slug.",
+            "pattern": "^[a-z0-9]([a-z0-9-]{0,62}[a-z0-9])?$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "org_slug"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Cloud Org",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "monday_boards",
+      "name": "boards",
+      "title": "List Monday.com Boards",
+      "description": "Find and list active or archived Monday.com work-management boards with optional ID, workspace, state, kind, ordering, and pagination filters.",
+      "toolkitId": "monday",
+      "version": "v6",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "board_kind": {
+            "enum": [
+              "private",
+              "public",
+              "share"
+            ],
+            "type": "string"
+          },
+          "ids": {
+            "description": "Specific board IDs to return.",
+            "items": {
+              "pattern": "^[0-9]+$",
+              "type": "string"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array"
+          },
+          "limit": {
+            "description": "Maximum boards to return.",
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "order_by": {
+            "enum": [
+              "created_at",
+              "used_at"
+            ],
+            "type": "string"
+          },
+          "page": {
+            "description": "Page number, starting at 1.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "state": {
+            "enum": [
+              "active",
+              "all",
+              "archived",
+              "deleted"
+            ],
+            "type": "string"
+          },
+          "workspace_ids": {
+            "items": {
+              "pattern": "^[0-9]+$",
+              "type": "string"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Monday.com Boards",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "monday_get_workspaces",
+      "name": "get_workspaces",
+      "title": "List Monday.com Workspaces",
+      "description": "Find and list active or closed Monday.com work-management workspaces with optional ID, kind, state, ordering, and pagination filters.",
+      "toolkitId": "monday",
+      "version": "v5",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "items": {
+              "pattern": "^[0-9]+$",
+              "type": "string"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "closed",
+              "open",
+              "template"
+            ],
+            "type": "string"
+          },
+          "limit": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "order_by": {
+            "enum": [
+              "created_at"
+            ],
+            "type": "string"
+          },
+          "page": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "state": {
+            "enum": [
+              "active",
+              "all",
+              "archived",
+              "deleted"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Monday.com Workspaces",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "onesignal_view_an_app",
+      "name": "view_an_app",
+      "title": "View an app",
+      "description": "View an app. Calls OneSignal `GET /apps/{app_id}`. Requires a customer API key.",
+      "toolkitId": "onesignal",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "app_id": {
+            "description": "Your OneSignal App ID in UUID v4 format. See [Keys & IDs](/docs/en/keys-and-ids).",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+            "type": "string"
+          },
+          "view": {
+            "description": "Set to `config` to return configuration-only data. This omits `players` and `messageable_players`, skipping the subscription-count lookup for a faster response.",
+            "enum": [
+              "config"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "app_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "View an app",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "amplitude_get_flags",
+      "name": "get_flags",
+      "title": "Get Amplitude Experiment Flags",
+      "description": "Get Amplitude feature-flag and experiment configurations for local evaluation, optionally filtered by flag key.",
+      "toolkitId": "amplitude",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "flag_keys": {
+            "description": "Optional comma-separated flag keys; omit to return all flags associated with the deployment key",
+            "maxLength": 4096,
+            "minLength": 1,
+            "pattern": "^[^,\\s]+(?:,[^,\\s]+)*$",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "items": {
+          "additionalProperties": true,
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "metadata": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "segments": {
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "variants": {
+              "additionalProperties": true,
+              "type": "object"
+            }
+          },
+          "required": [
+            "key"
+          ],
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "annotations": {
+        "title": "Get Amplitude Experiment Flags",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

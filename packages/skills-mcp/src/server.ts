@@ -9,13 +9,13 @@
  *      through one hardened executor.
  *
  * They are split by *transport*, not by trust in the caller. `full` is what
- * stdio gets: both surfaces, because stdio is a local, operator-controlled
- * channel. `content` is what HTTP gets: the `skill_*` tools and the registry
- * resources only, because the HTTP transport has no authentication, and the
- * `wm_*` tools spawn a privileged binary and mutate real infrastructure. A
- * remote, unauthenticated caller must never reach them, so the tools are not
- * registered at all rather than registered and refused - an absent tool cannot
- * be argued with.
+ * stdio gets: content + `wm_*` + the Action Gateway tools, because stdio is a
+ * local, operator-controlled channel. `content` is what HTTP gets: the
+ * `skill_*` tools and the registry resources only, because the HTTP transport
+ * has no authentication, and the `wm_*` / AG tools can mutate real
+ * infrastructure. A remote, unauthenticated caller must never reach them, so
+ * those tools are not registered at all rather than registered and refused -
+ * an absent tool cannot be argued with.
  *
  * The runner is injected rather than imported, so the conformance tests can
  * drive the real server (and the real schema conversion) with a deterministic
@@ -53,6 +53,11 @@ import {
 } from "./skills.js";
 import { TaskRegistry } from "./tasks.js";
 import {
+  createActionGatewayClientFromEnv,
+  registerActionGatewayTools,
+  type ActionGatewayInvoker,
+} from "./action-gateway/index.js";
+import {
   ALL_TOOL_SPECS,
   registerToolSpecs,
   type ServerDeps,
@@ -71,9 +76,10 @@ export const SERVER_VERSION = packageVersion();
 /**
  * Which tools this server exposes.
  *
- *  - `full`: the content surface plus the 43 `wm_*` CLI tools. stdio only.
+ *  - `full`: the content surface plus the 43 `wm_*` CLI tools and the Action
+ *    Gateway tools. stdio only.
  *  - `content`: the `skill_*` tools and the registry resources only. The safe
- *    profile for the unauthenticated HTTP transport.
+ *    profile for the unauthenticated HTTP transport (no wm_*, no AG tools).
  */
 export type ServerProfile = "full" | "content";
 
@@ -88,6 +94,12 @@ export interface ServerOptions {
   approvals?: ApprovalStore;
   tasks?: TaskRegistry;
   latch?: LatchStore;
+  /**
+   * Action Gateway invoker for the full profile. Defaults to an env-backed
+   * client (`DIGITALOCEAN_TOKEN` + `DIGITALOCEAN_AG_ACTOR_ID`). Tests inject a mock.
+   * Pass `null` to skip registering AG tools entirely.
+   */
+  actionGateway?: ActionGatewayInvoker | null;
 }
 
 export type BuildServerOptions = ServerOptions;
@@ -355,6 +367,10 @@ export function createSkillsServer(
 
   if ((options.profile ?? "full") === "full") {
     registerToolSpecs(server, options.specs ?? ALL_TOOL_SPECS, buildDeps(options));
+    if (options.actionGateway !== null) {
+      const invoker = options.actionGateway ?? createActionGatewayClientFromEnv();
+      registerActionGatewayTools(server, invoker);
+    }
   }
 
   return server;

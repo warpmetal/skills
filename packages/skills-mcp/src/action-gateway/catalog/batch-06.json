@@ -1,0 +1,519 @@
+{
+  "version": 1,
+  "batch": "06",
+  "source": "digitalocean-action-gateway",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "dropbox_search_files",
+      "name": "search_files",
+      "title": "Search Dropbox Files",
+      "description": "Search the user's Dropbox for files and folders matching a query string.",
+      "toolkitId": "dropbox",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "max_results": {
+            "description": "Maximum number of matches to return.",
+            "type": "integer"
+          },
+          "path": {
+            "description": "Restrict the search to this folder path.",
+            "type": "string"
+          },
+          "query": {
+            "description": "Search query, for example disposable_qa.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "cursor": {
+            "type": "string"
+          },
+          "has_more": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Search Dropbox Files",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "discord_get_my_user",
+      "name": "get_my_user",
+      "title": "Get My Discord User",
+      "description": "Get the Discord user profile of the connected account, including id, username, global display name, avatar, and locale.",
+      "toolkitId": "discord",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get My Discord User",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "discord_list_my_guilds",
+      "name": "list_my_guilds",
+      "title": "List My Discord Servers",
+      "description": "List the Discord servers (guilds) the connected user belongs to, with the user's permissions in each. Use this to find a guild id before calling other guild tools.",
+      "toolkitId": "discord",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "after": {
+            "description": "Return guilds after this guild id.",
+            "pattern": "^[0-9]{17,20}$",
+            "type": "string"
+          },
+          "before": {
+            "description": "Return guilds before this guild id.",
+            "pattern": "^[0-9]{17,20}$",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum number of guilds to return. Defaults to 200.",
+            "maximum": 200,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "with_counts": {
+            "description": "When true, include approximate member and presence counts for each guild.",
+            "type": "boolean"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List My Discord Servers",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "airtable_list_bases",
+      "name": "list_bases",
+      "title": "List Airtable Bases",
+      "description": "List the Airtable bases this key can access, with their names and ids. Use it when you need a base id before reading its tables or records.",
+      "toolkitId": "airtable",
+      "version": "v3",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "offset": {
+            "description": "Pagination cursor returned by a previous list-bases response.",
+            "maxLength": 1024,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Airtable Bases",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "intercom_list_all_contacts",
+      "name": "list_all_contacts",
+      "title": "List All Contacts",
+      "description": "Page through every contact in the workspace in creation order. Use for a straightforward sweep; search_contacts narrows by attribute, tag, or activity.",
+      "toolkitId": "intercom",
+      "version": "v9",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "include_merge_history": {
+            "default": false,
+            "description": "Pass `true` to include a `merge_history` array on each contact in the response. Only returned for contacts with a `user` role.",
+            "type": "boolean"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List All Contacts",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "intercom_create_contact",
+      "name": "create_contact",
+      "title": "Create Contact",
+      "description": "Create a person in the workspace as a signed-up user or an anonymous lead. Use for someone not recorded yet; update_a_contact edits a person who already exists.",
+      "toolkitId": "intercom",
+      "version": "v9",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "avatar": {
+            "description": "An image URL containing the avatar of a contact",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "custom_attributes": {
+            "description": "The custom attributes which are set for the contact",
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "email": {
+            "description": "The contacts email",
+            "type": "string"
+          },
+          "email_verified": {
+            "description": "Whether the contact's email address has been verified. Set to true to indicate you have verified the contact owns this email address, or false to mark it as unverified. Must be supplied together with an email in the same request; sending it without an email returns a 400.",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "external_id": {
+            "description": "A unique identifier for the contact which is given to Intercom",
+            "type": "string"
+          },
+          "last_seen_at": {
+            "description": "(Unix timestamp in seconds) The time when the contact was last seen (either where the Intercom Messenger was installed or when specified manually).",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "name": {
+            "description": "The contacts name",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "owner_id": {
+            "description": "The id of an admin that has been assigned account ownership of the contact",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "phone": {
+            "description": "The contacts phone",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "role": {
+            "description": "The role of the contact.",
+            "type": "string"
+          },
+          "signed_up_at": {
+            "description": "(Unix timestamp in seconds) The time specified for when a contact signed up.",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "unsubscribed_from_emails": {
+            "description": "Whether the contact is unsubscribed from emails",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Contact",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "snowflake_list_databases",
+      "name": "list_databases",
+      "title": "List the databases in a Snowflake account.",
+      "description": "List the databases in a Snowflake account, with optional name pattern, prefix, and dropped-database history filters. Use to find databases; to read one database's details, use fetch_database.",
+      "toolkitId": "snowflake",
+      "version": "v7",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "from_name": {
+            "description": "Return only databases ordered after this name, for paging through a large account.",
+            "type": "string"
+          },
+          "history": {
+            "description": "Include dropped databases that have not yet been purged.",
+            "type": "boolean"
+          },
+          "like": {
+            "description": "Filter databases by name using case-insensitive SQL wildcard matching, for example test_%.",
+            "type": "string"
+          },
+          "show_limit": {
+            "description": "Maximum number of databases to return.",
+            "maximum": 10000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "starts_with": {
+            "description": "Filter databases whose name begins with this case-sensitive prefix.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List the databases in a Snowflake account.",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "snowflake_list_tables",
+      "name": "list_tables",
+      "title": "List tables.",
+      "description": "List the tables in a Snowflake schema, with optional name pattern, prefix, and dropped-table history filters. Use to find tables in a schema; to read one table's columns and settings, use fetch_table.",
+      "toolkitId": "snowflake",
+      "version": "v6",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "database": {
+            "description": "The database.",
+            "type": "string"
+          },
+          "deep": {
+            "description": "Optionally includes dependency information of the table.",
+            "type": "boolean"
+          },
+          "from_name": {
+            "description": "Parameter to enable fetching rows only following the first row whose object name matches the specified string. Case-sensitive and does not have to be the full name.",
+            "type": "string"
+          },
+          "history": {
+            "description": "Optionally includes dropped tables that have not yet been purged.",
+            "type": "boolean"
+          },
+          "like": {
+            "description": "Parameter to filter the command output by resource name. Uses case-insensitive pattern matching, with support for SQL wildcard characters.",
+            "type": "string"
+          },
+          "schema": {
+            "description": "The schema.",
+            "type": "string"
+          },
+          "show_limit": {
+            "description": "Parameter to limit the maximum number of rows returned by a command.",
+            "maximum": 10000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "starts_with": {
+            "description": "Parameter to filter the command output based on the string of characters that appear at the beginning of the object name. Uses case-sensitive pattern matching.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "database",
+          "schema"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List tables.",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "sentry_list_organization_projects",
+      "name": "list_organization_projects",
+      "title": "List Sentry Organization Projects",
+      "description": "List the projects belonging to an organization, with their platforms and slugs. Use it when you need to discover projects; get_project returns one project's settings once its slug is known instead.",
+      "toolkitId": "sentry",
+      "version": "v16",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
+            "type": "string"
+          },
+          "organization_id_or_slug": {
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@+-]*$",
+            "type": "string"
+          },
+          "per_page": {
+            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100.",
+            "type": "integer"
+          },
+          "query": {
+            "description": "Filter projects by name or slug.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "organization_id_or_slug"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {},
+      "annotations": {
+        "title": "List Sentry Organization Projects",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "sentry_list_a_project_s_issues",
+      "name": "list_a_project_s_issues",
+      "title": "List A Project S Issues",
+      "description": "List a project's issues, the grouped view of errors with their counts, assignees, and status. Use for triage; use list_project_events when the individual raw events are needed rather than the groups they roll up into.",
+      "toolkitId": "sentry",
+      "version": "v10",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
+            "type": "string"
+          },
+          "hashes": {
+            "description": "A list of hashes of groups to return. Is not compatible with 'query' parameter. The maximum number of hashes that can be sent is 100. If more are sent, only the first 100 will be used.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "The maximum number of issues to return. The maximum is 100.",
+            "type": "integer"
+          },
+          "organization_id_or_slug": {
+            "description": "The ID or slug of the organization the issues belong to.",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@+-]*$",
+            "type": "string"
+          },
+          "project_id_or_slug": {
+            "description": "The ID or slug of the project the issues belong to.",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@+-]*$",
+            "type": "string"
+          },
+          "query": {
+            "description": "An optional Sentry structured search query. If not provided an implied `\"is:unresolved\"` is assumed.",
+            "type": "string"
+          },
+          "short_id_lookup": {
+            "description": "If this is set to true then short IDs are looked up by this function as well. This can cause the return value of the function to return an event issue of a different project which is why this is an opt-in. Set to 1 to enable.",
+            "type": "boolean"
+          },
+          "sort": {
+            "description": "The sort order of the issues. Options include 'Last Seen' (`date`), 'First Seen' (`new`), 'Trends' (`trends`), 'Events' (`freq`), 'Users' (`user`), and 'Date Added' (`inbox`).",
+            "enum": [
+              "date",
+              "new",
+              "trends",
+              "freq",
+              "user",
+              "inbox"
+            ],
+            "type": "string"
+          },
+          "stats_period": {
+            "description": "An optional stat period (can be one of `\"24h\"`, `\"14d\"`, and `\"\"`), defaults to \"24h\" if not provided.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "organization_id_or_slug",
+          "project_id_or_slug"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {},
+      "annotations": {
+        "title": "List A Project S Issues",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

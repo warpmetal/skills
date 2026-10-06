@@ -1,11 +1,13 @@
 # @warpmetal/skills-mcp
 
-Unified MCP (Model Context Protocol) server for WarpMetal. One package, one host entry, two surfaces:
+Unified MCP (Model Context Protocol) server for WarpMetal. One package, one host entry, three surfaces:
 
 - **Content** — discovers and reads WarpMetal Agent Skills from the registry manifest
   (`registry.json`) with checksum verification and the `skill://` URI semantics the hosts already use.
 - **CLI** — exposes the `warpmetal` command-line tool as 43 typed tools: 16 read-only, 3 task tools,
   and 12 plan/apply pairs, six of which guard the verbs that cannot be taken back.
+- **Action Gateway (batches 01-10)** — 100 DigitalOcean Action Gateway tools (GitHub / GitLab / Notion / Stripe / Jira / Confluence / Linear / Supabase / Cloudflare / Vercel / Figma / Shopify / HubSpot / Asana / Dropbox / Discord / Airtable / Intercom / Snowflake / Sentry / Datadog / PagerDuty / Exa / Perplexity / Resend / Calendly / ClickUp / PostHog / Mixpanel / CircleCI / Mailchimp / X / Square / OpenAI / Gemini / Anthropic Admin / Grafana Cloud / Monday.com / OneSignal / Amplitude)
+  registered only on the `full` (stdio) profile; calls create an AG session and run `action_invoke`.
 
 ## Two profiles, split by transport
 
@@ -14,12 +16,12 @@ boundary, not a configuration preference.
 
 | Profile | Transport | Tools | Why |
 | --- | --- | --- | --- |
-| `full` | stdio (default) | **46** — 3 `skill_*` + 43 `wm_*` | stdio is a local, operator-controlled channel |
-| `content` | Streamable HTTP (`--http`) | **3** — only `skill_*` | HTTP has no authentication; the `wm_*` tools spawn a privileged binary and mutate real infrastructure |
+| `full` | stdio (default) | **146** — 3 `skill_*` + 43 `wm_*` + 100 AG | stdio is a local, operator-controlled channel |
+| `content` | Streamable HTTP (`--http`) | **3** — only `skill_*` | HTTP has no authentication; `wm_*` and AG tools must not be reachable |
 
-On the `content` profile the `wm_*` tools are *not registered at all*, not registered-and-refused:
-an absent tool cannot be argued with. The `skill://` resources are available on both profiles,
-because reading a skill is a local, read-only operation that exposes no execution.
+On the `content` profile the `wm_*` and Action Gateway tools are *not registered at all*, not
+registered-and-refused: an absent tool cannot be argued with. The `skill://` resources are available
+on both profiles, because reading a skill is a local, read-only operation that exposes no execution.
 
 ## Requirements
 
@@ -29,6 +31,9 @@ because reading a skill is a local, read-only operation that exposes no executio
   server was built and tested against is declared as an exact devDependency (`0.8.12`), and
   resolution looks in the project's own `node_modules` before anywhere else, so a local install wins.
   `npm install -g warpmetal` remains the fallback.
+- **Optional, for Action Gateway tools:** `DIGITALOCEAN_TOKEN` (PAT with Action Gateway access) and
+  `DIGITALOCEAN_AG_ACTOR_ID` (stable actor that owns provider Connections). Without them the 100 AG
+  tools still appear in `tools/list`, but each `tools/call` returns `ag_unconfigured`.
 
 Without the CLI the server still starts and the `skill_*` tools keep working from the registry
 snapshot; every `wm_*` call then returns `FAILED` with an actionable `cli_unavailable` message rather
@@ -38,10 +43,106 @@ A CLI below the version floor is refused rather than warned about: reads still w
 can be diagnosed, but every `*_apply` is answered `DENIED` before any process exists. An *unreadable*
 version refuses nothing, because an override or a bare PATH executable is *unknown* rather than old.
 
+## Action Gateway (batches 01-10)
+
+Batch-01 tools (stdio / `full` only):
+
+1. `github_create_issue` · 2. `github_list_issues` · 3. `github_get_issue`
+4. `github_create_pull_request` · 5. `github_get_pull_request` · 6. `github_search_repositories`
+7. `gitlab_list_projects` · 8. `gitlab_create_project_issue` · 9. `gitlab_create_merge_request`
+10. `notion_search`
+
+Batch-02 tools (stdio / `full` only):
+
+11. `notion_query_database` · 12. `notion_get_page` · 13. `notion_create_page`
+14. `notion_append_block_children` · 15. `stripe_post_customers` · 16. `stripe_get_customers`
+17. `stripe_post_payment_intents` · 18. `stripe_get_payment_intents` · 19. `stripe_get_balance`
+20. `stripe_post_invoices`
+
+Batch-03 tools (stdio / `full` only):
+
+21. `jira_create_issue` · 22. `jira_get_issue` · 23. `jira_add_comment`
+24. `jira_transition_issue` · 25. `jira_get_project` · 26. `confluence_get_page_by_id`
+27. `confluence_get_pages` · 28. `linear_create_issue` · 29. `linear_list_issues`
+30. `linear_get_issue`
+
+Batch-04 tools (stdio / `full` only):
+
+31. `linear_create_comment` · 32. `supabase_list_projects` · 33. `supabase_create_a_project`
+34. `supabase_apply_a_migration` · 35. `cloudflare_zones_get` · 36. `cloudflare_accounts_list_accounts`
+37. `vercel_get_projects` · 38. `vercel_create_project` · 39. `vercel_get_deployments`
+40. `figma_get_file`
+
+Batch-05 tools (stdio / `full` only):
+
+41. `figma_get_file_nodes` · 42. `shopify_list_products` · 43. `shopify_get_product`
+44. `shopify_list_orders` · 45. `hubspot_crm_contacts_list` · 46. `hubspot_crm_contacts_create`
+47. `hubspot_crm_deals_list` · 48. `asana_get_a_task` · 49. `asana_create_a_project`
+50. `dropbox_list_folder`
+
+Batch-06 tools (stdio / `full` only):
+
+51. `dropbox_search_files` · 52. `discord_get_my_user` · 53. `discord_list_my_guilds`
+54. `airtable_list_bases` · 55. `intercom_list_all_contacts` · 56. `intercom_create_contact`
+57. `snowflake_list_databases` · 58. `snowflake_list_tables` · 59. `sentry_list_organization_projects`
+60. `sentry_list_a_project_s_issues`
+
+Batch-07 tools (stdio / `full` only):
+
+61. `datadog_v1_get_ip_ranges` · 62. `pagerduty_list_incidents` · 63. `pagerduty_create_incident`
+64. `pagerduty_list_services` · 65. `exa_web_search` · 66. `exa_web_fetch`
+67. `perplexity_chat_completion` · 68. `perplexity_search` · 69. `resend_list_emails`
+70. `resend_create_contact`
+
+Batch-08 tools (stdio / `full` only):
+
+71. `calendly_list_event_types` · 72. `calendly_get_current_user` · 73. `clickup_create_task`
+74. `clickup_get_task` · 75. `clickup_create_task_comment` · 76. `posthog_list_project_dashboards`
+77. `posthog_get_feature_flags_matching_ids` · 78. `mixpanel_track_event` · 79. `mixpanel_raw_event_export`
+80. `circleci_list_pipelines`
+
+Batch-09 tools (stdio / `full` only):
+
+81. `circleci_get_pipeline_by_id` · 82. `mailchimp_list_campaigns` · 83. `mailchimp_add_member_to_list`
+84. `x_create_posts` · 85. `x_get_users_me` · 86. `x_search_posts_recent`
+87. `square_list_payments` · 88. `square_create_payment` · 89. `square_list_customers`
+90. `openai_list_models`
+
+Batch-10 tools (stdio / `full` only):
+
+91. `gemini_generate_content` · 92. `gemini_list_models` · 93. `anthropic-admin_list_workspaces`
+94. `anthropic-admin_list_api_keys` · 95. `grafana-cloud_list_stacks` · 96. `grafana-cloud_get_org`
+97. `monday_boards` · 98. `monday_get_workspaces` · 99. `onesignal_view_an_app`
+100. `amplitude_get_flags`
+
+Setup:
+
+1. Create a DigitalOcean personal access token authorized for Action Gateway → `DIGITALOCEAN_TOKEN`.
+2. Create or pick a stable **Actor** in Action Gateway → `DIGITALOCEAN_AG_ACTOR_ID`.
+3. In the console, open **Connections** and authorize **GitHub**, **GitLab**, **Notion**, **Stripe**,
+   **Jira**, **Confluence**, **Linear**, **Supabase**, **Cloudflare**, **Vercel**, **Figma**,
+   **Shopify**, **HubSpot**, **Asana**, **Dropbox**, **Discord**, **Airtable**, **Intercom**,
+   **Snowflake**, **Sentry**, **Datadog**, **PagerDuty**, **Exa**, **Perplexity**, **Resend**,
+   **Calendly**, **ClickUp**, **PostHog**, **Mixpanel**, **CircleCI**, **Mailchimp**, **X**,
+   **Square**, **OpenAI**, **Gemini**, **Anthropic Admin**, **Grafana Cloud**, **Monday.com**,
+   **OneSignal**, and **Amplitude** for
+   that actor. The MCP never stores provider secrets; DO uses the actor’s Connections at invoke time.
+4. Ensure Inference & Agents billing/balance is healthy if DO requires it for your team.
+5. Start stdio with both env vars set:
+
+```sh
+DIGITALOCEAN_TOKEN=... DIGITALOCEAN_AG_ACTOR_ID=... npx -y @warpmetal/skills-mcp
+```
+
+On the first AG `tools/call`, the server creates a policy-bound Action Gateway session that selects
+all catalog tools and forwards the call via `action_invoke`. Catalog contracts live in
+`src/action-gateway/catalog/` (`batch-01.json` through `batch-10.json`); the aggregated surface is
+built by `src/action-gateway/catalog.ts`.
+
 ## Run
 
 ```sh
-# stdio, full profile (46 tools)
+# stdio, full profile (146 tools: 3 skill_* + 43 wm_* + 100 AG)
 npx -y @warpmetal/skills-mcp
 
 # Pin a registry tag

@@ -1,7 +1,7 @@
 {
   "name": "@warpmetal/skills-mcp",
   "version": "0.2.0",
-  "description": "MCP server for WarpMetal Agent Skills discovery plus the WarpMetal CLI surface: 3 skill_* content tools everywhere and 43 wm_* CLI tools over stdio, with a hardened gate for the irreversible ones (named consequence, TOCTOU re-verification, a persistent manual_review latch), a CLI version floor and a concurrency ceiling.",
+  "description": "MCP server for WarpMetal Agent Skills discovery plus the WarpMetal CLI surface: 3 skill_* content tools everywhere, 43 wm_* CLI tools over stdio, and DigitalOcean Action Gateway tools (batches 01-10, full/stdio only), with a hardened gate for the irreversible wm_* verbs (named consequence, TOCTOU re-verification, a persistent manual_review latch), a CLI version floor and a concurrency ceiling.",
   "type": "module",
   "license": "UNLICENSED",
   "bin": {

@@ -23,13 +23,15 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import type { LoadedRegistry } from "../src/registry.js";
 import { loadRegistry } from "../src/registry.js";
 import { createSkillsServer, type ServerProfile } from "../src/server.js";
+import { AG_TOOL_COUNT, agToolSlugs } from "../src/action-gateway/index.js";
 import { ALL_TOOL_SPECS } from "../src/tools/index.js";
 import { makeRegistryFixture } from "./helpers.js";
 
 const CONTENT_TOOLS: readonly string[] = ["skill_list", "skill_read", "skill_search"];
 /** The documented CLI surface. `conformance.test.ts` asserts the same number. */
 const WM_TOOL_COUNT = 43;
-const TOTAL_TOOL_COUNT = WM_TOOL_COUNT + CONTENT_TOOLS.length;
+const TOTAL_TOOL_COUNT = WM_TOOL_COUNT + CONTENT_TOOLS.length + AG_TOOL_COUNT;
+const AG_TOOL_SLUGS = new Set(agToolSlugs());
 
 async function listToolNames(
   loaded: LoadedRegistry,
@@ -59,7 +61,7 @@ async function listToolNames(
   }
 }
 
-test("the full profile exposes the content surface plus every CLI tool", async () => {
+test("the full profile exposes the content surface plus every CLI tool plus Action Gateway", async () => {
   const fixture = await makeRegistryFixture();
   try {
     assert.equal(ALL_TOOL_SPECS.length, WM_TOOL_COUNT, "the CLI surface must stay 43 tools");
@@ -70,7 +72,7 @@ test("the full profile exposes the content surface plus every CLI tool", async (
     assert.equal(
       names.length,
       TOTAL_TOOL_COUNT,
-      `full must expose ${String(TOTAL_TOOL_COUNT)} tools (3 content + ${String(WM_TOOL_COUNT)} CLI)`,
+      `full must expose ${String(TOTAL_TOOL_COUNT)} tools (3 content + ${String(WM_TOOL_COUNT)} CLI + ${String(AG_TOOL_COUNT)} AG)`,
     );
     for (const name of CONTENT_TOOLS) {
       assert.ok(names.includes(name), `the full profile is missing ${name}`);
@@ -79,6 +81,11 @@ test("the full profile exposes the content surface plus every CLI tool", async (
       names.filter((name) => name.startsWith("wm_")).length,
       WM_TOOL_COUNT,
       "the full profile must expose every wm_* tool",
+    );
+    assert.equal(
+      names.filter((name) => AG_TOOL_SLUGS.has(name)).length,
+      AG_TOOL_COUNT,
+      "the full profile must expose every Action Gateway tool",
     );
   } finally {
     await fixture.cleanup();
@@ -100,6 +107,11 @@ test("the content profile never exposes a wm_* tool", async () => {
       names.filter((name) => name.startsWith("wm_")).length,
       0,
       "the unauthenticated HTTP profile must never reach the CLI surface",
+    );
+    assert.equal(
+      names.filter((name) => AG_TOOL_SLUGS.has(name)).length,
+      0,
+      "the unauthenticated HTTP profile must never reach Action Gateway tools",
     );
   } finally {
     await fixture.cleanup();

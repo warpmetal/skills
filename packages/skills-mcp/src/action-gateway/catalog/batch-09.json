@@ -1,0 +1,1218 @@
+{
+  "version": 1,
+  "batch": "09",
+  "source": "digitalocean-action-gateway",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "circleci_get_pipeline_by_id",
+      "name": "get_pipeline_by_id",
+      "title": "Get a pipeline by ID in CircleCI",
+      "description": "Get a pipeline by ID. Use when a global pipeline ID is available, not a project-specific pipeline number.",
+      "toolkitId": "circleci",
+      "version": "v11",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "pipeline_id": {
+            "description": "The unique ID of the pipeline.",
+            "maxLength": 36,
+            "minLength": 36,
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "pipeline_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get a pipeline by ID in CircleCI",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "mailchimp_list_campaigns",
+      "name": "list_campaigns",
+      "title": "List campaigns",
+      "description": "List the campaigns on the account with their status and settings. Use to browse or filter campaigns; use list_campaign_reports for their performance figures.",
+      "toolkitId": "mailchimp",
+      "version": "v8",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "before_create_time": {
+            "description": "Restrict the response to campaigns created before the set time. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "before_send_time": {
+            "description": "Restrict the response to campaigns sent before the set time. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "count": {
+            "default": 10,
+            "description": "The number of records to return. Default value is 10. Maximum value is 1000",
+            "maximum": 1000,
+            "type": "integer"
+          },
+          "exclude_fields": {
+            "description": "A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation. Sent as a comma-separated list.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "fields": {
+            "description": "A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation. Sent as a comma-separated list.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "folder_id": {
+            "description": "The unique folder id.",
+            "type": "string"
+          },
+          "include_resend_shortcut_eligibility": {
+            "description": "Return the `resend_shortcut_eligibility` field in the response, which tells you if the campaign is eligible for the various Campaign Resend Shortcuts offered.",
+            "type": "boolean"
+          },
+          "include_resend_shortcut_usage": {
+            "description": "Return the `resend_shortcut_usage` field in the response.  This includes information about campaigns related by a shortcut.",
+            "type": "boolean"
+          },
+          "list_id": {
+            "description": "The unique id for the list.",
+            "type": "string"
+          },
+          "member_id": {
+            "description": "Retrieve campaigns sent to a particular list member. Member ID is The MD5 hash of the lowercase version of the list member’s email address.",
+            "type": "string"
+          },
+          "offset": {
+            "default": 0,
+            "description": "Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.",
+            "type": "integer"
+          },
+          "since_create_time": {
+            "description": "Restrict the response to campaigns created after the set time. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "since_send_time": {
+            "description": "Restrict the response to campaigns sent after the set time. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "sort_dir": {
+            "description": "Determines the order direction for sorted results.",
+            "enum": [
+              "ASC",
+              "DESC"
+            ],
+            "type": "string"
+          },
+          "sort_field": {
+            "description": "Returns files sorted by the specified field.",
+            "enum": [
+              "create_time",
+              "send_time"
+            ],
+            "type": "string"
+          },
+          "status": {
+            "description": "The status of the campaign.",
+            "enum": [
+              "save",
+              "paused",
+              "schedule",
+              "sending",
+              "sent"
+            ],
+            "type": "string"
+          },
+          "type": {
+            "description": "The campaign type.",
+            "enum": [
+              "regular",
+              "plaintext",
+              "absplit",
+              "rss",
+              "variate"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List campaigns",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "mailchimp_add_member_to_list",
+      "name": "add_member_to_list",
+      "title": "Add member to list",
+      "description": "Subscribe a new email address to an audience with its merge values and status. Use only for an address the audience does not have; use add_or_update_list_member when it may already exist.",
+      "toolkitId": "mailchimp",
+      "version": "v8",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "email_address": {
+            "description": "Email address for a subscriber.",
+            "type": "string"
+          },
+          "email_type": {
+            "description": "Type of email this member asked to get ('html' or 'text').",
+            "type": "string"
+          },
+          "interests": {
+            "additionalProperties": {
+              "description": "Keys are interest IDs, values are booleans that describe whether the list member is in that group or not.",
+              "title": "Interest Value",
+              "type": "boolean"
+            },
+            "description": "The key of this object's properties is the ID of the interest in question.",
+            "type": "object"
+          },
+          "ip_opt": {
+            "description": "The IP address the subscriber used to confirm their opt-in status.",
+            "type": "string"
+          },
+          "ip_signup": {
+            "description": "IP address the subscriber signed up from.",
+            "type": "string"
+          },
+          "language": {
+            "description": "If set/detected, the [subscriber's language](https://mailchimp.com/help/view-and-edit-contact-languages/).",
+            "type": "string"
+          },
+          "list_id": {
+            "description": "The unique ID for the list.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "location": {
+            "description": "Subscriber location information.",
+            "properties": {
+              "latitude": {
+                "description": "The location latitude.",
+                "type": "number"
+              },
+              "longitude": {
+                "description": "The location longitude.",
+                "type": "number"
+              }
+            },
+            "type": "object"
+          },
+          "marketing_permissions": {
+            "description": "The marketing permissions for the subscriber.",
+            "items": {
+              "description": "A single marketing permission a subscriber has either opted-in to or opted-out of.",
+              "properties": {
+                "enabled": {
+                  "description": "If the subscriber has opted-in to the marketing permission.",
+                  "type": "boolean"
+                },
+                "marketing_permission_id": {
+                  "description": "The id for the marketing permission on the list",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "merge_fields": {
+            "additionalProperties": {
+              "description": "This object's keys are merge tags (like FNAME). It's values are the values to be added to the merge field."
+            },
+            "description": "A dictionary of merge fields where the keys are the merge tags. See the [Merge Fields documentation](https://mailchimp.com/developer/marketing/docs/merge-fields/#structure) for more about the structure.",
+            "type": "object"
+          },
+          "skip_merge_validation": {
+            "description": "If skip_merge_validation is true, member data will be accepted without merge field values, even if the merge field is usually required. This defaults to false.",
+            "type": "boolean"
+          },
+          "status": {
+            "description": "Subscriber's current status.",
+            "enum": [
+              "subscribed",
+              "unsubscribed",
+              "cleaned",
+              "pending",
+              "transactional"
+            ],
+            "type": "string"
+          },
+          "tags": {
+            "description": "The tags that are associated with a member.",
+            "items": {
+              "description": "The name of the tag that will be associated with this member.",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "timestamp_opt": {
+            "description": "The date and time the subscriber confirmed their opt-in status in ISO 8601 format.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "timestamp_signup": {
+            "description": "The date and time the subscriber signed up for the list in ISO 8601 format.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "vip": {
+            "description": "[VIP status](https://mailchimp.com/help/designate-and-send-to-vip-contacts/) for subscriber.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "list_id",
+          "email_address",
+          "status"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Add member to list",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "x_create_posts",
+      "name": "create_posts",
+      "title": "Create X Post",
+      "description": "Publish a Post (tweet) as the authenticated user. Provide `text`, and optionally reply to a Post (`reply.in_reply_to_tweet_id`), quote a Post (`quote_tweet_id`), attach uploaded media (`media.media_ids`), or add a poll. Returns the new Post's `id` and `text`. Posts are public unless the account is protected.",
+      "toolkitId": "x",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "card_uri": {
+            "description": "Card URI parameter.",
+            "type": "string"
+          },
+          "community_id": {
+            "description": "Community to post the tweet to.",
+            "pattern": "^[0-9]{1,19}$",
+            "type": "string"
+          },
+          "direct_message_deep_link": {
+            "description": "Direct message deep link.",
+            "type": "string"
+          },
+          "edit_options": {
+            "description": "Edit an existing tweet rather than creating a new one.",
+            "properties": {
+              "previous_post_id": {
+                "description": "The ID of the Post being edited.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "previous_post_id"
+            ],
+            "type": "object"
+          },
+          "for_super_followers_only": {
+            "description": "Restrict tweet to super followers.",
+            "type": "boolean"
+          },
+          "geo": {
+            "description": "Geo location for the tweet.",
+            "properties": {
+              "place_id": {
+                "description": "Place ID for geo tagging.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "place_id"
+            ],
+            "type": "object"
+          },
+          "made_with_ai": {
+            "description": "Disclose that the tweet contains AI-generated media.",
+            "type": "boolean"
+          },
+          "media": {
+            "description": "Media attachments.",
+            "properties": {
+              "call_to_actions": {
+                "description": "Call-to-action button rendered on the media entity.",
+                "properties": {
+                  "app_install": {
+                    "description": "App Install CTA. At least one store id should be provided.",
+                    "type": "string"
+                  },
+                  "visit_site": {
+                    "description": "Visit Site CTA.",
+                    "type": "string"
+                  },
+                  "watch_now": {
+                    "description": "Watch Now CTA.",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "description": {
+                "description": "Description for the media, rendered on the Post card for video and Amplify content.",
+                "type": "string"
+              },
+              "embeddable": {
+                "description": "When true, the media's asset URLs do not expire and external syndicated playback is allowed.",
+                "type": "boolean"
+              },
+              "media_ids": {
+                "description": "Media IDs to attach to the tweet.",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "preview_media_id": {
+                "description": "Media id whose asset is used as the preview image.",
+                "type": "string"
+              },
+              "tagged_user_ids": {
+                "description": "User IDs tagged in the media.",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "description": "Title for the media, rendered on the Post card for video and Amplify content.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "media_ids"
+            ],
+            "type": "object"
+          },
+          "nullcast": {
+            "description": "If true, the tweet is not shown in the public timeline.",
+            "type": "boolean"
+          },
+          "paid_partnership": {
+            "description": "Disclose that the tweet is a paid partnership.",
+            "type": "boolean"
+          },
+          "poll": {
+            "description": "Poll configuration.",
+            "properties": {
+              "duration_minutes": {
+                "description": "Duration of the poll in minutes.",
+                "type": "integer"
+              },
+              "options": {
+                "description": "Poll options (2-4 choices, 1-25 characters each).",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "reply_settings": {
+                "description": "Who can reply to the poll Tweet. Accepted for compatibility; it carries no backend argument and is dropped before the mutation is issued (see `translate_body`).",
+                "enum": [
+                  "following",
+                  "mentionedUsers",
+                  "subscribers",
+                  "verified"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "duration_minutes",
+              "options"
+            ],
+            "type": "object"
+          },
+          "quote_tweet_id": {
+            "description": "Tweet ID to quote.",
+            "pattern": "^[0-9]{1,19}$",
+            "type": "string"
+          },
+          "reply": {
+            "description": "Tweet reply configuration.",
+            "properties": {
+              "auto_populate_reply_metadata": {
+                "description": "If true, reply metadata is automatically populated. Accepted for compatibility; it carries no backend argument and is dropped before the mutation is issued (see `translate_body`).",
+                "type": "boolean"
+              },
+              "exclude_reply_user_ids": {
+                "description": "User IDs to exclude from the reply thread.",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "in_reply_to_tweet_id": {
+                "description": "The ID of the tweet being replied to.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "in_reply_to_tweet_id"
+            ],
+            "type": "object"
+          },
+          "reply_settings": {
+            "description": "Who can reply to this tweet.",
+            "enum": [
+              "following",
+              "mentionedUsers",
+              "subscribers",
+              "verified"
+            ],
+            "type": "string"
+          },
+          "share_with_followers": {
+            "description": "Share an exclusive (super-follower) tweet with all followers.",
+            "type": "boolean"
+          },
+          "text": {
+            "description": "Text of the Post, up to 280 characters for standard accounts.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "properties": {
+          "data": {
+            "additionalProperties": true,
+            "description": "Result returned by X for this action.",
+            "type": "object"
+          },
+          "errors": {
+            "description": "Partial errors reported by X, if any.",
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create X Post",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "x_get_users_me",
+      "name": "get_users_me",
+      "title": "Get Authenticated X User",
+      "description": "Get the authenticated user's profile, including the numeric `id` that other X tools require for user-scoped actions.",
+      "toolkitId": "x",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "expansions": {
+            "description": "A comma separated list of fields to expand. Comma-separated, no spaces; allowed values: affiliation, most_recent_post_id, pinned_post_id.",
+            "pattern": "^(affiliation|most_recent_post_id|pinned_post_id)(,(affiliation|most_recent_post_id|pinned_post_id))*$",
+            "type": "string"
+          },
+          "post_fields": {
+            "description": "A comma separated list of Post fields to display. Comma-separated, no spaces; allowed values: article, article_title, attachments, card_uri, community_id, context_annotations, conversation_id, created_at, display_text_range, edit_controls, entities, geo, id, lang, matched_media_notes, media_metadata, non_public_metrics, note_post, note_request_suggestions, organic_metrics, paid_partnership, possibly_sensitive, promoted_metrics, public_metrics, reply_settings, scopes, source, suggested_source_links, suggested_source_links_with_counts, text, withheld.",
+            "pattern": "^(article|article_title|attachments|card_uri|community_id|context_annotations|conversation_id|created_at|display_text_range|edit_controls|entities|geo|id|lang|matched_media_notes|media_metadata|non_public_metrics|note_post|note_request_suggestions|organic_metrics|paid_partnership|possibly_sensitive|promoted_metrics|public_metrics|reply_settings|scopes|source|suggested_source_links|suggested_source_links_with_counts|text|withheld)(,(article|article_title|attachments|card_uri|community_id|context_annotations|conversation_id|created_at|display_text_range|edit_controls|entities|geo|id|lang|matched_media_notes|media_metadata|non_public_metrics|note_post|note_request_suggestions|organic_metrics|paid_partnership|possibly_sensitive|promoted_metrics|public_metrics|reply_settings|scopes|source|suggested_source_links|suggested_source_links_with_counts|text|withheld))*$",
+            "type": "string"
+          },
+          "user_fields": {
+            "description": "A comma separated list of User fields to display. Comma-separated, no spaces; allowed values: confirmed_email, connection_status, created_at, description, entities, id, is_identity_verified, location, name, parody, profile_banner_url, profile_image_url, protected, public_metrics, receives_your_dm, subscriber_count, subscribes_to_you, subscription, subscription_type, url, username, verified, verified_followers_count, verified_type, withheld.",
+            "pattern": "^(confirmed_email|connection_status|created_at|description|entities|id|is_identity_verified|location|name|parody|profile_banner_url|profile_image_url|protected|public_metrics|receives_your_dm|subscriber_count|subscribes_to_you|subscription|subscription_type|url|username|verified|verified_followers_count|verified_type|withheld)(,(confirmed_email|connection_status|created_at|description|entities|id|is_identity_verified|location|name|parody|profile_banner_url|profile_image_url|protected|public_metrics|receives_your_dm|subscriber_count|subscribes_to_you|subscription|subscription_type|url|username|verified|verified_followers_count|verified_type|withheld))*$",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Authenticated X User",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "x_search_posts_recent",
+      "name": "search_posts_recent",
+      "title": "Search Recent X Posts",
+      "description": "Search public Posts (tweets) from the last seven days with X search `query` syntax (for example `from:handle`, `#tag`, `-is:retweet`), with pagination. For older Posts, use `search_posts_all`.",
+      "toolkitId": "x",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "end_time": {
+            "description": "Newest UTC timestamp to include, in ISO 8601 format.",
+            "type": "string"
+          },
+          "expansions": {
+            "description": "A comma separated list of fields to expand. Comma-separated, no spaces; allowed values: article.cover_media, article.media_entities, attachments.media_keys, attachments.media_source_tweet, attachments.poll_ids, author_id, edit_history_post_ids, entities.mentions.username, geo.place_id, in_reply_to_user_id, referenced_posts, username.",
+            "pattern": "^(article\\.cover_media|article\\.media_entities|attachments\\.media_keys|attachments\\.media_source_tweet|attachments\\.poll_ids|author_id|edit_history_post_ids|entities\\.mentions\\.username|geo\\.place_id|in_reply_to_user_id|referenced_posts|username)(,(article\\.cover_media|article\\.media_entities|attachments\\.media_keys|attachments\\.media_source_tweet|attachments\\.poll_ids|author_id|edit_history_post_ids|entities\\.mentions\\.username|geo\\.place_id|in_reply_to_user_id|referenced_posts|username))*$",
+            "type": "string"
+          },
+          "max_results": {
+            "description": "Maximum number of results to return per page. Between 10 and 100; Default 10.",
+            "type": "integer"
+          },
+          "media_fields": {
+            "description": "A comma separated list of Media fields to display. Comma-separated, no spaces; allowed values: alt_text, duration_ms, height, media_key, non_public_metrics, organic_metrics, preview_image_url, promoted_metrics, public_metrics, type, url, variants, width.",
+            "pattern": "^(alt_text|duration_ms|height|media_key|non_public_metrics|organic_metrics|preview_image_url|promoted_metrics|public_metrics|type|url|variants|width)(,(alt_text|duration_ms|height|media_key|non_public_metrics|organic_metrics|preview_image_url|promoted_metrics|public_metrics|type|url|variants|width))*$",
+            "type": "string"
+          },
+          "next_token": {
+            "description": "A base32hex-encoded pagination token.",
+            "type": "string"
+          },
+          "pagination_token": {
+            "description": "A base32hex-encoded pagination token.",
+            "type": "string"
+          },
+          "place_fields": {
+            "description": "A comma separated list of Place fields to display. Comma-separated, no spaces; allowed values: contained_within, country, country_code, full_name, geo, id, name, place_type.",
+            "pattern": "^(contained_within|country|country_code|full_name|geo|id|name|place_type)(,(contained_within|country|country_code|full_name|geo|id|name|place_type))*$",
+            "type": "string"
+          },
+          "poll_fields": {
+            "description": "A comma separated list of Poll fields to display. Comma-separated, no spaces; allowed values: duration_minutes, end_datetime, id, options, voting_status.",
+            "pattern": "^(duration_minutes|end_datetime|id|options|voting_status)(,(duration_minutes|end_datetime|id|options|voting_status))*$",
+            "type": "string"
+          },
+          "post_fields": {
+            "description": "A comma separated list of Post fields to display. Comma-separated, no spaces; allowed values: article, article_title, attachments, card_uri, community_id, context_annotations, conversation_id, created_at, display_text_range, edit_controls, entities, geo, id, lang, matched_media_notes, media_metadata, non_public_metrics, note_post, note_request_suggestions, organic_metrics, paid_partnership, possibly_sensitive, promoted_metrics, public_metrics, reply_settings, scopes, source, suggested_source_links, suggested_source_links_with_counts, text, withheld.",
+            "pattern": "^(article|article_title|attachments|card_uri|community_id|context_annotations|conversation_id|created_at|display_text_range|edit_controls|entities|geo|id|lang|matched_media_notes|media_metadata|non_public_metrics|note_post|note_request_suggestions|organic_metrics|paid_partnership|possibly_sensitive|promoted_metrics|public_metrics|reply_settings|scopes|source|suggested_source_links|suggested_source_links_with_counts|text|withheld)(,(article|article_title|attachments|card_uri|community_id|context_annotations|conversation_id|created_at|display_text_range|edit_controls|entities|geo|id|lang|matched_media_notes|media_metadata|non_public_metrics|note_post|note_request_suggestions|organic_metrics|paid_partnership|possibly_sensitive|promoted_metrics|public_metrics|reply_settings|scopes|source|suggested_source_links|suggested_source_links_with_counts|text|withheld))*$",
+            "type": "string"
+          },
+          "query": {
+            "description": "X search query, for example `from:XDevelopers -is:retweet` or `\"digital ocean\" lang:en`. Up to 512 characters.",
+            "type": "string"
+          },
+          "since_id": {
+            "description": "Return only results with an ID greater than this Post ID.",
+            "pattern": "^[0-9]{1,19}$",
+            "type": "string"
+          },
+          "sort_order": {
+            "description": "Order of results: `recency` or `relevancy`.",
+            "enum": [
+              "recency",
+              "relevancy"
+            ],
+            "type": "string"
+          },
+          "start_time": {
+            "description": "Must be within the last 7 days.",
+            "type": "string"
+          },
+          "until_id": {
+            "description": "Return only results with an ID less than this Post ID.",
+            "pattern": "^[0-9]{1,19}$",
+            "type": "string"
+          },
+          "user_fields": {
+            "description": "A comma separated list of User fields to display. Comma-separated, no spaces; allowed values: confirmed_email, connection_status, created_at, description, entities, id, is_identity_verified, location, name, parody, profile_banner_url, profile_image_url, protected, public_metrics, receives_your_dm, subscriber_count, subscribes_to_you, subscription, subscription_type, url, username, verified, verified_followers_count, verified_type, withheld.",
+            "pattern": "^(confirmed_email|connection_status|created_at|description|entities|id|is_identity_verified|location|name|parody|profile_banner_url|profile_image_url|protected|public_metrics|receives_your_dm|subscriber_count|subscribes_to_you|subscription|subscription_type|url|username|verified|verified_followers_count|verified_type|withheld)(,(confirmed_email|connection_status|created_at|description|entities|id|is_identity_verified|location|name|parody|profile_banner_url|profile_image_url|protected|public_metrics|receives_your_dm|subscriber_count|subscribes_to_you|subscription|subscription_type|url|username|verified|verified_followers_count|verified_type|withheld))*$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Search Recent X Posts",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "square_list_payments",
+      "name": "list_payments",
+      "title": "List Payments",
+      "description": "Tool to list payments by location and time range to enable reconciliation and net sales reporting from Square POS. Use when you need to retrieve payment records for reporting, analytics, or reconciliation purposes.",
+      "toolkitId": "square",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "begin_time": {
+            "description": "Indicates the start of the time range to retrieve payments for, in RFC 3339 format.\nThe range is determined using the `created_at` field for each Payment.\nInclusive. Default: The current time minus one year.",
+            "type": "string"
+          },
+          "card_brand": {
+            "description": "The brand of the payment card (for example, VISA).",
+            "type": "string"
+          },
+          "cursor": {
+            "description": "A pagination cursor returned by a previous call to this endpoint.\nProvide this cursor to retrieve the next set of results for the original query.\n\nFor more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).",
+            "type": "string"
+          },
+          "end_time": {
+            "description": "Indicates the end of the time range to retrieve payments for, in RFC 3339 format.  The\nrange is determined using the `created_at` field for each Payment.\n\nDefault: The current time.",
+            "type": "string"
+          },
+          "is_offline_payment": {
+            "description": "Whether the payment was taken offline or not.",
+            "type": "boolean"
+          },
+          "last_4": {
+            "description": "The last four digits of a payment card.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "The maximum number of results to be returned in a single page.\nIt is possible to receive fewer results than the specified limit on a given page.\n\nThe default value of 100 is also the maximum allowed value. If the provided value is \ngreater than 100, it is ignored and the default value is used instead.\n\nDefault: `100`",
+            "type": "integer"
+          },
+          "location_id": {
+            "description": "Limit results to the location supplied. By default, results are returned\nfor the default (main) location associated with the seller.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "type": "string"
+          },
+          "offline_begin_time": {
+            "description": "Indicates the start of the time range for which to retrieve offline payments, in RFC 3339\nformat for timestamps. The range is determined using the\n`offline_payment_details.client_created_at` field for each Payment. If set, payments without a\nvalue set in `offline_payment_details.client_created_at` will not be returned.\n\nDefault: The current time.",
+            "type": "string"
+          },
+          "offline_end_time": {
+            "description": "Indicates the end of the time range for which to retrieve offline payments, in RFC 3339\nformat for timestamps. The range is determined using the\n`offline_payment_details.client_created_at` field for each Payment. If set, payments without a\nvalue set in `offline_payment_details.client_created_at` will not be returned.\n\nDefault: The current time.",
+            "type": "string"
+          },
+          "sort_field": {
+            "description": "The field used to sort results by. The default is `CREATED_AT`.",
+            "enum": [
+              "CREATED_AT",
+              "OFFLINE_CREATED_AT",
+              "UPDATED_AT"
+            ],
+            "type": "string"
+          },
+          "sort_order": {
+            "description": "The order in which results are listed by `ListPaymentsRequest.sort_field`:\n- `ASC` - Oldest to newest.\n- `DESC` - Newest to oldest (default).",
+            "type": "string"
+          },
+          "total": {
+            "description": "The exact amount in the `total_money` for a payment.",
+            "type": "integer"
+          },
+          "updated_at_begin_time": {
+            "description": "Indicates the start of the time range to retrieve payments for, in RFC 3339 format.  The\nrange is determined using the `updated_at` field for each Payment.",
+            "type": "string"
+          },
+          "updated_at_end_time": {
+            "description": "Indicates the end of the time range to retrieve payments for, in RFC 3339 format.  The\nrange is determined using the `updated_at` field for each Payment.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Payments",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "square_create_payment",
+      "name": "create_payment",
+      "title": "Create Payment",
+      "description": "Create a Square payment. Use when adding a new record, rather than modifying an existing one.",
+      "toolkitId": "square",
+      "version": "v14",
+      "inputSchema": {
+        "properties": {
+          "accept_partial_authorization": {
+            "description": "If set to `true` and charging a Square Gift Card, a payment might be returned with\n`amount_money` equal to less than what was requested. For example, a request for $20 when charging\na Square Gift Card with a balance of $5 results in an APPROVED payment of $5. You might choose\nto prompt the buyer for an additional payment to cover the remainder or cancel the Gift Card\npayment. This field cannot be `true` when `autocomplete = true`.\n\nFor more information, see\n[Partial amount with Square Gift Cards](https://developer.squareup.com/docs/payments-api/take-payments#partial-payment-gift-card).\n\nDefault: false",
+            "type": "boolean"
+          },
+          "amount_money": {
+            "description": "Represents an amount of money. `Money` fields can be signed or unsigned.\nFields that do not explicitly define whether they are signed or unsigned are\nconsidered unsigned and can only hold positive amounts. For signed fields, the\nsign of the value indicates the purpose of the money transfer. See\n[Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts)\nfor more information.",
+            "properties": {
+              "amount": {
+                "description": "The amount of money, in the smallest denomination of the currency\nindicated by `currency`. For example, when `currency` is `USD`, `amount` is\nin cents. Monetary amounts can be positive or negative. See the specific\nfield description to determine the meaning of the sign in a particular case.",
+                "type": "integer"
+              },
+              "currency": {
+                "description": "The type of currency, in __ISO 4217 format__. For example, the currency code for US dollars is `USD`.\n\nSee [Currency](entity:Currency) for possible values.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "app_fee_allocations": {
+            "description": "Details pertaining to recipients of the application fee. The sum of the amounts in the\napp_fee_allocations must equal the app_fee_money amount, if present. If populated, an\nallocation must be present for every party that expects to receive a portion of the application\nfee, including the application developer.",
+            "items": {
+              "additionalProperties": true,
+              "description": "Stub for dangling official OpenAPI $ref AppFeeAllocation (schema absent from published api.json).",
+              "properties": {},
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "app_fee_money": {
+            "description": "Represents an amount of money. `Money` fields can be signed or unsigned.\nFields that do not explicitly define whether they are signed or unsigned are\nconsidered unsigned and can only hold positive amounts. For signed fields, the\nsign of the value indicates the purpose of the money transfer. See\n[Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts)\nfor more information.",
+            "properties": {
+              "amount": {
+                "description": "The amount of money, in the smallest denomination of the currency\nindicated by `currency`. For example, when `currency` is `USD`, `amount` is\nin cents. Monetary amounts can be positive or negative. See the specific\nfield description to determine the meaning of the sign in a particular case.",
+                "type": "integer"
+              },
+              "currency": {
+                "description": "The type of currency, in __ISO 4217 format__. For example, the currency code for US dollars is `USD`.\n\nSee [Currency](entity:Currency) for possible values.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "autocomplete": {
+            "description": "If set to `true`, this payment will be completed when possible. If\nset to `false`, this payment is held in an approved state until either\nexplicitly completed (captured) or canceled (voided). For more information, see\n[Delayed capture](https://developer.squareup.com/docs/payments-api/take-payments/card-payments#delayed-capture-of-a-card-payment).\n\nDefault: true",
+            "type": "boolean"
+          },
+          "billing_address": {
+            "description": "Represents a postal address in a country. \nFor more information, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+            "properties": {
+              "address_line_1": {
+                "description": "The first line of the address.\n\nFields that start with `address_line` provide the address's most specific\ndetails, like street number, street name, and building name. They do *not*\nprovide less specific details like city, state/province, or country (these\ndetails are provided in other fields).",
+                "type": "string"
+              },
+              "address_line_2": {
+                "description": "The second line of the address, if any.",
+                "type": "string"
+              },
+              "address_line_3": {
+                "description": "The third line of the address, if any.",
+                "type": "string"
+              },
+              "administrative_district_level_1": {
+                "description": "A civil entity within the address's country. In the US, this\nis the state. For a full list of field meanings by country, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+                "type": "string"
+              },
+              "administrative_district_level_2": {
+                "description": "A civil entity within the address's `administrative_district_level_1`.\nIn the US, this is the county.",
+                "type": "string"
+              },
+              "administrative_district_level_3": {
+                "description": "A civil entity within the address's `administrative_district_level_2`,\nif any.",
+                "type": "string"
+              },
+              "country": {
+                "description": "Indicates the country associated with another entity, such as a business.\nValues are in [ISO 3166-1-alpha-2 format](http://www.iso.org/iso/home/standards/country_codes.htm).",
+                "type": "string"
+              },
+              "first_name": {
+                "description": "Optional first name when it's representing recipient.",
+                "type": "string"
+              },
+              "last_name": {
+                "description": "Optional last name when it's representing recipient.",
+                "type": "string"
+              },
+              "locality": {
+                "description": "The city or town of the address. For a full list of field meanings by country, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+                "type": "string"
+              },
+              "postal_code": {
+                "description": "The address's postal code. For a full list of field meanings by country, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+                "type": "string"
+              },
+              "sublocality": {
+                "description": "A civil region within the address's `locality`, if any.",
+                "type": "string"
+              },
+              "sublocality_2": {
+                "description": "A civil region within the address's `sublocality`, if any.",
+                "type": "string"
+              },
+              "sublocality_3": {
+                "description": "A civil region within the address's `sublocality_2`, if any.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "buyer_email_address": {
+            "description": "The buyer's email address.",
+            "type": "string"
+          },
+          "buyer_phone_number": {
+            "description": "The buyer's phone number.\nMust follow the following format:\n1. A leading + symbol (followed by a country code)\n2. The phone number can contain spaces and the special characters `(` , `)` , `-` , and `.`.\nAlphabetical characters aren't allowed.\n3. The phone number must contain between 9 and 16 digits.",
+            "type": "string"
+          },
+          "cash_details": {
+            "description": "Stores details about a cash payment. Contains only non-confidential information. For more information, see \n[Take Cash Payments](https://developer.squareup.com/docs/payments-api/take-payments/cash-payments).",
+            "properties": {
+              "buyer_supplied_money": {
+                "description": "Represents an amount of money. `Money` fields can be signed or unsigned.\nFields that do not explicitly define whether they are signed or unsigned are\nconsidered unsigned and can only hold positive amounts. For signed fields, the\nsign of the value indicates the purpose of the money transfer. See\n[Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts)\nfor more information.",
+                "properties": {
+                  "amount": {
+                    "description": "The amount of money, in the smallest denomination of the currency\nindicated by `currency`. For example, when `currency` is `USD`, `amount` is\nin cents. Monetary amounts can be positive or negative. See the specific\nfield description to determine the meaning of the sign in a particular case.",
+                    "type": "integer"
+                  },
+                  "currency": {
+                    "description": "The type of currency, in __ISO 4217 format__. For example, the currency\ncode for US dollars is `USD`.\n\nSee [Currency](entity:Currency) for possible values.\nSee [Currency](#type-currency) for possible values",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "change_back_money": {
+                "description": "Represents an amount of money. `Money` fields can be signed or unsigned.\nFields that do not explicitly define whether they are signed or unsigned are\nconsidered unsigned and can only hold positive amounts. For signed fields, the\nsign of the value indicates the purpose of the money transfer. See\n[Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts)\nfor more information.",
+                "properties": {
+                  "amount": {
+                    "description": "The amount of money, in the smallest denomination of the currency\nindicated by `currency`. For example, when `currency` is `USD`, `amount` is\nin cents. Monetary amounts can be positive or negative. See the specific\nfield description to determine the meaning of the sign in a particular case.",
+                    "type": "integer"
+                  },
+                  "currency": {
+                    "description": "The type of currency, in __ISO 4217 format__. For example, the currency\ncode for US dollars is `USD`.\n\nSee [Currency](entity:Currency) for possible values.\nSee [Currency](#type-currency) for possible values",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "required": [
+              "buyer_supplied_money"
+            ],
+            "type": "object"
+          },
+          "customer_id": {
+            "description": "The [Customer](entity:Customer) ID of the customer associated with the payment.\n\nThis is required if the `source_id` refers to a card on file created using the Cards API.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "type": "string"
+          },
+          "delay_action": {
+            "description": "The action to be applied to the payment when the `delay_duration` has elapsed. The action must be\nCANCEL or COMPLETE. For more information, see\n[Time Threshold](https://developer.squareup.com/docs/payments-api/take-payments/card-payments/delayed-capture#time-threshold).\n\nDefault: CANCEL",
+            "type": "string"
+          },
+          "delay_duration": {
+            "description": "The duration of time after the payment's creation when Square automatically\neither completes or cancels the payment depending on the `delay_action` field value.\nFor more information, see\n[Time threshold](https://developer.squareup.com/docs/payments-api/take-payments/card-payments/delayed-capture#time-threshold).\n\nThis parameter should be specified as a time duration, in RFC 3339 format.\n\nNote: This feature is only supported for card payments. This parameter can only be set for a delayed\ncapture payment (`autocomplete=false`).\n\nDefault:\n\n- Card-present payments: \"PT36H\" (36 hours) from the creation time.\n- Card-not-present payments: \"P7D\" (7 days) from the creation time.",
+            "type": "string"
+          },
+          "external_details": {
+            "description": "Stores details about an external payment. Contains only non-confidential information.\nFor more information, see \n[Take External Payments](https://developer.squareup.com/docs/payments-api/take-payments/external-payments).",
+            "properties": {
+              "source": {
+                "description": "A description of the external payment source. For example, \n\"Food Delivery Service\".",
+                "type": "string"
+              },
+              "source_fee_money": {
+                "description": "Represents an amount of money. `Money` fields can be signed or unsigned.\nFields that do not explicitly define whether they are signed or unsigned are\nconsidered unsigned and can only hold positive amounts. For signed fields, the\nsign of the value indicates the purpose of the money transfer. See\n[Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts)\nfor more information.",
+                "properties": {
+                  "amount": {
+                    "description": "The amount of money, in the smallest denomination of the currency\nindicated by `currency`. For example, when `currency` is `USD`, `amount` is\nin cents. Monetary amounts can be positive or negative. See the specific\nfield description to determine the meaning of the sign in a particular case.",
+                    "type": "integer"
+                  },
+                  "currency": {
+                    "description": "The type of currency, in __ISO 4217 format__. For example, the currency\ncode for US dollars is `USD`.\n\nSee [Currency](entity:Currency) for possible values.\nSee [Currency](#type-currency) for possible values",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "source_id": {
+                "description": "An ID to associate the payment to its originating source.",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_:-]*(?:\\.[A-Za-z0-9_:-]+)*$",
+                "type": "string"
+              },
+              "type": {
+                "description": "The type of external payment the seller received. It can be one of the following:\n- CHECK - Paid using a physical check.\n- BANK_TRANSFER - Paid using external bank transfer.\n- OTHER\\_GIFT\\_CARD - Paid using a non-Square gift card.\n- CRYPTO - Paid using a crypto currency.\n- SQUARE_CASH - Paid using Square Cash App.\n- SOCIAL - Paid using peer-to-peer payment applications.\n- EXTERNAL - A third-party application gathered this payment outside of Square.\n- EMONEY - Paid using an E-money provider.\n- CARD - A credit or debit card that Square does not support.\n- STORED_BALANCE - Use for house accounts, store credit, and so forth.\n- FOOD_VOUCHER - Restaurant voucher provided by employers to employees to pay for meals\n- OTHER - A type not listed here.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "source"
+            ],
+            "type": "object"
+          },
+          "idempotency_key": {
+            "description": "A unique string that identifies this `CreatePayment` request. Keys can be any valid string\nbut must be unique for every `CreatePayment` request.\n\nNote: The number of allowed characters might be less than the stated maximum, if multi-byte\ncharacters are used.\n\nFor more information, see [Idempotency](https://developer.squareup.com/docs/working-with-apis/idempotency).",
+            "maxLength": 192,
+            "minLength": 1,
+            "type": "string"
+          },
+          "location_id": {
+            "description": "The location ID to associate with the payment. If not specified, the [main location](https://developer.squareup.com/docs/locations-api#about-the-main-location) is\nused.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "type": "string"
+          },
+          "note": {
+            "description": "An optional note to be entered by the developer when creating a payment.",
+            "type": "string"
+          },
+          "order_id": {
+            "description": "Associates a previously created order with this payment.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "type": "string"
+          },
+          "reference_id": {
+            "description": "A user-defined ID to associate with the payment.\n\nYou can use this field to associate the payment to an entity in an external system\n(for example, you might specify an order ID that is generated by a third-party shopping cart).",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "type": "string"
+          },
+          "shipping_address": {
+            "description": "Represents a postal address in a country. \nFor more information, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+            "properties": {
+              "address_line_1": {
+                "description": "The first line of the address.\n\nFields that start with `address_line` provide the address's most specific\ndetails, like street number, street name, and building name. They do *not*\nprovide less specific details like city, state/province, or country (these\ndetails are provided in other fields).",
+                "type": "string"
+              },
+              "address_line_2": {
+                "description": "The second line of the address, if any.",
+                "type": "string"
+              },
+              "address_line_3": {
+                "description": "The third line of the address, if any.",
+                "type": "string"
+              },
+              "administrative_district_level_1": {
+                "description": "A civil entity within the address's country. In the US, this\nis the state. For a full list of field meanings by country, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+                "type": "string"
+              },
+              "administrative_district_level_2": {
+                "description": "A civil entity within the address's `administrative_district_level_1`.\nIn the US, this is the county.",
+                "type": "string"
+              },
+              "administrative_district_level_3": {
+                "description": "A civil entity within the address's `administrative_district_level_2`,\nif any.",
+                "type": "string"
+              },
+              "country": {
+                "description": "Indicates the country associated with another entity, such as a business.\nValues are in [ISO 3166-1-alpha-2 format](http://www.iso.org/iso/home/standards/country_codes.htm).",
+                "type": "string"
+              },
+              "first_name": {
+                "description": "Optional first name when it's representing recipient.",
+                "type": "string"
+              },
+              "last_name": {
+                "description": "Optional last name when it's representing recipient.",
+                "type": "string"
+              },
+              "locality": {
+                "description": "The city or town of the address. For a full list of field meanings by country, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+                "type": "string"
+              },
+              "postal_code": {
+                "description": "The address's postal code. For a full list of field meanings by country, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+                "type": "string"
+              },
+              "sublocality": {
+                "description": "A civil region within the address's `locality`, if any.",
+                "type": "string"
+              },
+              "sublocality_2": {
+                "description": "A civil region within the address's `sublocality`, if any.",
+                "type": "string"
+              },
+              "sublocality_3": {
+                "description": "A civil region within the address's `sublocality_2`, if any.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "source_id": {
+            "description": "The ID for the source of funds for this payment.\nThis could be a payment token generated by the Web Payments SDK for any of its\n[supported methods](https://developer.squareup.com/docs/web-payments/overview#explore-payment-methods),\nincluding cards, bank transfers, Afterpay or Cash App Pay. If recording a payment\nthat the seller received outside of Square, specify either \"CASH\" or \"EXTERNAL\".\nFor more information, see\n[Take Payments](https://developer.squareup.com/docs/payments-api/take-payments).",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_:-]*(?:\\.[A-Za-z0-9_:-]+)*$",
+            "type": "string"
+          },
+          "statement_description_identifier": {
+            "description": "Optional additional payment information to include on the customer's card statement\nas part of the statement description. This can be, for example, an invoice number, ticket number,\nor short description that uniquely identifies the purchase.\n\nNote that the `statement_description_identifier` might get truncated on the statement description\nto fit the required information including the Square identifier (SQ *) and name of the\nseller taking the payment.",
+            "type": "string"
+          },
+          "team_member_id": {
+            "description": "An optional [TeamMember](entity:TeamMember) ID to associate with\nthis payment.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "type": "string"
+          },
+          "tip_money": {
+            "description": "Represents an amount of money. `Money` fields can be signed or unsigned.\nFields that do not explicitly define whether they are signed or unsigned are\nconsidered unsigned and can only hold positive amounts. For signed fields, the\nsign of the value indicates the purpose of the money transfer. See\n[Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts)\nfor more information.",
+            "properties": {
+              "amount": {
+                "description": "The amount of money, in the smallest denomination of the currency\nindicated by `currency`. For example, when `currency` is `USD`, `amount` is\nin cents. Monetary amounts can be positive or negative. See the specific\nfield description to determine the meaning of the sign in a particular case.",
+                "type": "integer"
+              },
+              "currency": {
+                "description": "The type of currency, in __ISO 4217 format__. For example, the currency code for US dollars is `USD`.\n\nSee [Currency](entity:Currency) for possible values.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "verification_token": {
+            "description": "An identifying token generated by [payments.verifyBuyer()](https://developer.squareup.com/reference/sdks/web/payments/objects/Payments#Payments.verifyBuyer).\nVerification tokens encapsulate customer device information and 3-D Secure\nchallenge results to indicate that Square has verified the buyer identity.\n\nFor more information, see [SCA Overview](https://developer.squareup.com/docs/sca-overview).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_id",
+          "idempotency_key"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Payment",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "square_list_customers",
+      "name": "list_customers",
+      "title": "List Customers",
+      "description": "Tool to retrieve customer profiles associated with a Square account. Use when you need to list customers for CRM, reporting, or customer management purposes. Only returns profiles with public information (given_name, family_name, company_name, email_address, or phone_number).",
+      "toolkitId": "square",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "count": {
+            "description": "Indicates whether to return the total count of customers in the `count` field of the response.\n\nThe default value is `false`.",
+            "type": "boolean"
+          },
+          "cursor": {
+            "description": "A pagination cursor returned by a previous call to this endpoint.\nProvide this cursor to retrieve the next set of results for your original query.\n\nFor more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).",
+            "type": "string"
+          },
+          "limit": {
+            "description": "The maximum number of results to return in a single page. This limit is advisory. The response might contain more or fewer results.\nIf the specified limit is less than 1 or greater than 100, Square returns a `400 VALUE_TOO_LOW` or `400 VALUE_TOO_HIGH` error. The default value is 100.\n\nFor more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).",
+            "type": "integer"
+          },
+          "sort_field": {
+            "description": "Specifies customer attributes as the sort key to customer profiles returned from a search.",
+            "enum": [
+              "DEFAULT",
+              "CREATED_AT"
+            ],
+            "type": "string"
+          },
+          "sort_order": {
+            "description": "The order (e.g., chronological or alphabetical) in which results from a request are returned.",
+            "enum": [
+              "DESC",
+              "ASC"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Customers",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "openai_list_models",
+      "name": "list_models",
+      "title": "List models",
+      "description": "Lists the currently available models, and provides basic information about each one such as the owner and availability.",
+      "toolkitId": "openai",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "description": "Exact JSON response returned by OpenAI.",
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List models",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}
