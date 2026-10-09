@@ -120,6 +120,7 @@ async function dispatch(argv: readonly string[], deps: ResolvedDeps): Promise<nu
       run: deps.run ?? createRunner(),
       http: createHttp(deps.fetchFn ?? fetch),
       redactor: new Redactor(),
+      readStdin: deps.readStdin ?? defaultReadStdin,
     });
   }
 

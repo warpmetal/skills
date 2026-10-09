@@ -281,7 +281,13 @@ const PACKAGE_SUBDIRS: readonly string[] = [
   path.join("node_modules", "@warpmetal", "warpmetal"),
 ];
 
+/** Integration/env surface from this monorepo (`@warpmetal/cli`). */
+const INTEGRATION_CLI_SUBDIRS: readonly string[] = [
+  path.join("node_modules", "@warpmetal", "cli"),
+];
+
 const KNOWN_BIN_RELATIVE = path.join("bin", "warpmetal.js");
+const CLI_PACKAGE_BIN_RELATIVE = path.join("dist", "cli.js");
 
 /**
  * The project's own root, found by walking up until a directory owns a
@@ -317,8 +323,11 @@ interface PackageBin {
  * version from the same public manifest. The manifest is read once and never
  * for anything but `bin` and `version`.
  */
-function resolvePackageBin(root: string): PackageBin | null {
-  for (const sub of PACKAGE_SUBDIRS) {
+function resolvePackageBin(
+  root: string,
+  subdirs: readonly string[] = PACKAGE_SUBDIRS,
+): PackageBin | null {
+  for (const sub of subdirs) {
     const dir = path.join(root, sub);
     const manifest = path.join(dir, "package.json");
 
@@ -341,6 +350,10 @@ function resolvePackageBin(root: string): PackageBin | null {
     const known = path.join(dir, KNOWN_BIN_RELATIVE);
     if (existsSync(known)) {
       return { bin: known, version };
+    }
+    const integrationBin = path.join(dir, CLI_PACKAGE_BIN_RELATIVE);
+    if (existsSync(integrationBin)) {
+      return { bin: integrationBin, version };
     }
 
     if (record === null) {
@@ -365,6 +378,72 @@ function resolvePackageBin(root: string): PackageBin | null {
     }
   }
   return null;
+}
+
+/**
+ * Resolves `@warpmetal/cli` for provider integration calls. Distinct from
+ * `resolveCliTarget`, which prefers the upstream `warpmetal` package for `wm_*`.
+ */
+export function resolveIntegrationCliTarget(
+  env: NodeJS.ProcessEnv = process.env,
+  execPath: string = process.execPath,
+  projectRoot: string | null = env["WARPMETAL_MCP_CLI_ROOT"] ?? null,
+): CliTarget {
+  const tried: string[] = [];
+  const override = env["WARPMETAL_INTEGRATION_CLI_JS"] ?? env["WARPMETAL_CLI_JS"];
+  if (override !== undefined && override.length > 0) {
+    tried.push(`WARPMETAL_INTEGRATION_CLI_JS=${override}`);
+    if (existsSync(override)) {
+      return {
+        command: execPath,
+        prefixArgs: [override],
+        degraded: null,
+        description: `integration CLI override (${override})`,
+        version: null,
+      };
+    }
+  }
+
+  const roots = new Set<string>();
+  if (projectRoot !== null && projectRoot.length > 0) {
+    roots.add(path.normalize(projectRoot));
+  }
+  roots.add(path.dirname(execPath));
+  for (const entry of splitPath(env["PATH"], path.delimiter)) {
+    roots.add(path.normalize(entry));
+  }
+  // The npm global prefix on Windows, mirroring `resolveCliTarget`, so a
+  // globally installed @warpmetal/cli is found without a manual override.
+  const appData = env["APPDATA"];
+  if (appData !== undefined && appData.length > 0) {
+    roots.add(path.join(appData, "npm"));
+  }
+  // A POSIX global install keeps the package under <prefix>/lib/node_modules,
+  // and a PATH entry is usually <prefix>/bin, so probe the parent's lib dir.
+  for (const root of [...roots]) {
+    roots.add(path.join(path.dirname(root), "lib"));
+  }
+
+  for (const root of roots) {
+    for (const sub of INTEGRATION_CLI_SUBDIRS) {
+      tried.push(path.join(root, sub));
+    }
+    const pkg = resolvePackageBin(root, INTEGRATION_CLI_SUBDIRS);
+    if (pkg !== null) {
+      return {
+        command: execPath,
+        prefixArgs: [pkg.bin],
+        degraded: null,
+        description: `integration package bin ${pkg.bin}`,
+        version: pkg.version,
+      };
+    }
+  }
+
+  throw new CliResolutionError(
+    "WarpMetal integration CLI (@warpmetal/cli) not found. Install it beside skills-mcp or set WARPMETAL_INTEGRATION_CLI_JS.",
+    tried,
+  );
 }
 
 function splitPath(value: string | undefined, delimiter: string): string[] {

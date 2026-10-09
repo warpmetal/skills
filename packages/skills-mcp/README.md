@@ -6,8 +6,8 @@ Unified MCP (Model Context Protocol) server for WarpMetal. One package, one host
   (`registry.json`) with checksum verification and the `skill://` URI semantics the hosts already use.
 - **CLI** — exposes the `warpmetal` command-line tool as 43 typed tools: 16 read-only, 3 task tools,
   and 12 plan/apply pairs, six of which guard the verbs that cannot be taken back.
-- **Action Gateway (batches 01-10)** — 100 DigitalOcean Action Gateway tools (GitHub / GitLab / Notion / Stripe / Jira / Confluence / Linear / Supabase / Cloudflare / Vercel / Figma / Shopify / HubSpot / Asana / Dropbox / Discord / Airtable / Intercom / Snowflake / Sentry / Datadog / PagerDuty / Exa / Perplexity / Resend / Calendly / ClickUp / PostHog / Mixpanel / CircleCI / Mailchimp / X / Square / OpenAI / Gemini / Anthropic Admin / Grafana Cloud / Monday.com / OneSignal / Amplitude)
-  registered only on the `full` (stdio) profile; calls create an AG session and run `action_invoke`.
+- **Providers (batches 01-10)** — 100 WarpMetal-backed provider tools (GitHub / GitLab / Notion / Stripe / Jira / Confluence / Linear / Supabase / Cloudflare / Vercel / Figma / Shopify / HubSpot / Asana / Dropbox / Discord / Airtable / Intercom / Snowflake / Sentry / Datadog / PagerDuty / Exa / Perplexity / Resend / Calendly / ClickUp / PostHog / Mixpanel / CircleCI / Mailchimp / X / Square / OpenAI / Gemini / Anthropic Admin / Grafana Cloud / Monday.com / OneSignal / Amplitude)
+  registered only on the `full` (stdio) profile; calls run `warpmetal integration <provider> <verb>` with secrets from the WarpMetal vault. No DigitalOcean dependency.
 
 ## Two profiles, split by transport
 
@@ -16,24 +16,30 @@ boundary, not a configuration preference.
 
 | Profile | Transport | Tools | Why |
 | --- | --- | --- | --- |
-| `full` | stdio (default) | **146** — 3 `skill_*` + 43 `wm_*` + 100 AG | stdio is a local, operator-controlled channel |
-| `content` | Streamable HTTP (`--http`) | **3** — only `skill_*` | HTTP has no authentication; `wm_*` and AG tools must not be reachable |
+| `full` | stdio (default) | **146** — 3 `skill_*` + 43 `wm_*` + 100 providers | stdio is a local, operator-controlled channel |
+| `content` | Streamable HTTP (`--http`) | **3** — only `skill_*` | HTTP has no authentication; `wm_*` and provider tools must not be reachable |
 
-On the `content` profile the `wm_*` and Action Gateway tools are *not registered at all*, not
+On the `content` profile the `wm_*` and provider tools are *not registered at all*, not
 registered-and-refused: an absent tool cannot be argued with. The `skill://` resources are available
 on both profiles, because reading a skill is a local, read-only operation that exposes no execution.
 
 ## Requirements
 
 - Node.js **>= 22**.
-- The `warpmetal` CLI, version **>= 0.8.1** — only for the `wm_*` tools. Versions below 0.8.10 work,
+- The `warpmetal` CLI, version **>= 0.8.1** — for the `wm_*` tools. Versions below 0.8.10 work,
   but `wm_version` will warn that `sandbox access install-ssh` is missing. The exact version this
   server was built and tested against is declared as an exact devDependency (`0.8.12`), and
   resolution looks in the project's own `node_modules` before anywhere else, so a local install wins.
   `npm install -g warpmetal` remains the fallback.
-- **Optional, for Action Gateway tools:** `DIGITALOCEAN_TOKEN` (PAT with Action Gateway access) and
-  `DIGITALOCEAN_AG_ACTOR_ID` (stable actor that owns provider Connections). Without them the 100 AG
-  tools still appear in `tools/list`, but each `tools/call` returns `ag_unconfigured`.
+- **For provider tools:** `@warpmetal/cli` (env vault + `integration`), declared as an optional
+  peer dependency, so install it explicitly: `npm install @warpmetal/cli`. The peer floor is
+  `>=0.1.0`, the first line with `--args-stdin` and array-safe responses. Neither `@warpmetal/cli`
+  nor this package is on npm yet; when releasing, publish `@warpmetal/cli` **first** so the peer
+  resolves, then `@warpmetal/skills-mcp`. Store provider secrets with
+  `warpmetal env store set <provider.secret>`. Without a resolvable CLI, the server logs a
+  `provider_unconfigured` warning at startup and each provider `tools/call` returns
+  `provider_unconfigured`; set `WARPMETAL_INTEGRATION_CLI_JS` to the CLI entry to point at a
+  non-standard install.
 
 Without the CLI the server still starts and the `skill_*` tools keep working from the registry
 snapshot; every `wm_*` call then returns `FAILED` with an actionable `cli_unavailable` message rather
@@ -43,7 +49,7 @@ A CLI below the version floor is refused rather than warned about: reads still w
 can be diagnosed, but every `*_apply` is answered `DENIED` before any process exists. An *unreadable*
 version refuses nothing, because an override or a bare PATH executable is *unknown* rather than old.
 
-## Action Gateway (batches 01-10)
+## Providers (batches 01-10)
 
 Batch-01 tools (stdio / `full` only):
 
@@ -117,32 +123,129 @@ Batch-10 tools (stdio / `full` only):
 
 Setup:
 
-1. Create a DigitalOcean personal access token authorized for Action Gateway → `DIGITALOCEAN_TOKEN`.
-2. Create or pick a stable **Actor** in Action Gateway → `DIGITALOCEAN_AG_ACTOR_ID`.
-3. In the console, open **Connections** and authorize **GitHub**, **GitLab**, **Notion**, **Stripe**,
-   **Jira**, **Confluence**, **Linear**, **Supabase**, **Cloudflare**, **Vercel**, **Figma**,
-   **Shopify**, **HubSpot**, **Asana**, **Dropbox**, **Discord**, **Airtable**, **Intercom**,
-   **Snowflake**, **Sentry**, **Datadog**, **PagerDuty**, **Exa**, **Perplexity**, **Resend**,
-   **Calendly**, **ClickUp**, **PostHog**, **Mixpanel**, **CircleCI**, **Mailchimp**, **X**,
-   **Square**, **OpenAI**, **Gemini**, **Anthropic Admin**, **Grafana Cloud**, **Monday.com**,
-   **OneSignal**, and **Amplitude** for
-   that actor. The MCP never stores provider secrets; DO uses the actor’s Connections at invoke time.
-4. Ensure Inference & Agents billing/balance is healthy if DO requires it for your team.
-5. Start stdio with both env vars set:
+1. Install `@warpmetal/cli` (provides `warpmetal env` and `warpmetal integration`).
+2. Store provider secrets in the vault, for example:
+   `warpmetal env store set github.token --stdin`
+3. For site-scoped providers, also store `jira.site`, `confluence.site`, `shopify.shop`, etc.,
+   and for Atlassian Cloud store the account email (`jira.email`, `confluence.email`) used for
+   `Basic base64(email:token)` (`warpmetal env plan` shows what each provider expects.)
+4. Start stdio:
 
 ```sh
-DIGITALOCEAN_TOKEN=... DIGITALOCEAN_AG_ACTOR_ID=... npx -y @warpmetal/skills-mcp
+npx -y @warpmetal/skills-mcp
 ```
 
-On the first AG `tools/call`, the server creates a policy-bound Action Gateway session that selects
-all catalog tools and forwards the call via `action_invoke`. Catalog contracts live in
-`src/action-gateway/catalog/` (`batch-01.json` through `batch-10.json`); the aggregated surface is
-built by `src/action-gateway/catalog.ts`.
+Each provider `tools/call` maps to `warpmetal integration <provider> <verb> --args-stdin --json`
+(and `--confirm <gate>` for mutations). The arguments are written to the CLI's stdin rather than the
+command line, so payloads never appear in `ps` or shell history; `--args-json` remains available for
+manual use. Catalog contracts live in
+`src/providers/catalog/` (`batch-01.json` through `batch-10.json`); the aggregated surface is
+built by `src/providers/catalog.ts`. The MCP never holds provider OAuth tokens in process env;
+they stay in the WarpMetal vault.
+
+### Provider secrets
+
+Store the primary secret for each provider you use. Providers marked *contextual* also need extra
+secrets to build the request URL or an auth header; without them, `integration status` reports
+`DEGRADED` with a warning and the affected tools fail rather than sending a malformed request.
+
+| Provider | Primary secret | Contextual secrets |
+| --- | --- | --- |
+| GitHub | `github.token` | — |
+| GitLab | `gitlab.token` | — |
+| Notion | `notion.token` | — |
+| Jira | `jira.token` | `jira.site`, `jira.email` |
+| Confluence | `confluence.token` | `confluence.site`, `confluence.email` |
+| Linear | `linear.token` | — |
+| Supabase | `supabase.token` | — |
+| Cloudflare | `cloudflare.token` | — |
+| Vercel | `vercel.token` | — |
+| Figma | `figma.token` | — |
+| Shopify | `shopify.token` | `shopify.shop` |
+| HubSpot | `hubspot.token` | — |
+| Asana | `asana.token` | — |
+| Dropbox | `dropbox.token` | — |
+| Discord | `discord.token` | — |
+| Airtable | `airtable.token` | — |
+| Intercom | `intercom.token` | — |
+| Snowflake | `snowflake.token` | `snowflake.account_url`, `snowflake.warehouse` |
+| Sentry | `sentry.token` | — |
+| Datadog | `datadog.token` | — |
+| PagerDuty | `pagerduty.token` | `pagerduty.email` (the API `From` header) |
+| Exa | `exa.token` | — |
+| Perplexity | `perplexity.token` | — |
+| Resend (email) | `email.api_key` | — |
+| Calendly | `calendly.token` | — |
+| ClickUp | `clickup.token` | — |
+| PostHog | `posthog.token` | `posthog.host` (defaults to `https://us.posthog.com`) |
+| Mixpanel | `mixpanel.token` (Export API only: base64 of `service_account_user:service_account_secret`) | — |
+| CircleCI | `circleci.token` | — |
+| Mailchimp | `mailchimp.token` | `mailchimp.dc` (defaults to `us1`) |
+| X | `x.token` | — |
+| Square | `square.token` | — |
+| OpenAI | `openai.token` | — |
+| Google Gemini | `gemini.token` | — |
+| Anthropic Admin | `anthropic-admin.token` | — |
+| Grafana Cloud | `grafana-cloud.token` | — |
+| Monday.com | `monday.token` | — |
+| OneSignal | `onesignal.token` | — |
+| Amplitude | `amplitude.token` | — |
+
+### How the provider requests are verified
+
+Each tool is verified at one of three tiers, and the tier is visible in the repo:
+
+- **live-verified** — the request was exercised against the real API with a credential.
+- **docs-confirmed** — the request shape was checked against the provider's published API
+  reference, pinned in `packages/warpmetal-cli/test/fixtures/provider-contracts.json` (host, HTTP
+  method and auth header) and enforced by `provider-contract.test.ts`.
+- **experimental** — the shape could not be confirmed; see below.
+
+Two credential-free checks back the docs-confirmed tier, so a builder that drifts is caught even
+without a token:
+
+1. `provider-contract.test.ts` builds all 100 requests from the reviewed sample args and asserts the
+   URL host, method and auth header against the hand-authored manifest.
+2. `npm run probe` (in `packages/warpmetal-cli`, opt-in, needs network) sends every request with a
+   sentinel token. A route the provider does not serve answers 404/405, while a real route answers
+   401/403 (auth required), 400/422 (reachable) or 2xx (public). It also sends a control request to a
+   bogus path on each host, so auth-first hosts and website/SPA hosts that resolve a slug before
+   authenticating are marked `weakSignal` rather than reported as a missing route. The same logic
+   runs as `MCP_PROBE=1 npm test`.
+
+### Response shape
+
+A tool's `data` is the provider body. When the provider's root is a JSON **array**, it is returned
+under `items`; an object root is returned as-is; a non-JSON body is returned under `raw`. Every
+result also carries `toolSlug` so a client can route the response back to the tool that produced it.
+This is why `github_list_issues` (array root) answers `{ items: [...], toolSlug: "github_list_issues" }`
+and never `{ "0": ..., "1": ... }`.
+
+### Experimental tools
+
+Tools whose request shape could not be confirmed against the live API are registered with an
+`[experimental: request shape not verified against the live API]` prefix on their description:
+
+- `x_create_posts` — X rejects app-only bearer tokens on the write endpoint; publishing needs an
+  OAuth 2.0 token with user context, which this server does not collect yet.
+
+The marker is informational: the tool still registers and can be called.
+
+### Destructive tools
+
+Mutating tools carry `destructiveHint: true` only when the action is irreversible or carries direct
+cost (payments, external publishing, billed infrastructure, permanent migrations). A client should
+treat those as requiring confirmation.
+
+The `--confirm <gate>` flag that the CLI requires is injected by **this server**, not by the caller:
+it proves the server routed a mutating verb, not that a human approved it. Consent is the client's
+responsibility, and `destructiveHint` is the signal to build it on. See [SECURITY.md](SECURITY.md)
+for what the gate does and does not prove.
 
 ## Run
 
 ```sh
-# stdio, full profile (146 tools: 3 skill_* + 43 wm_* + 100 AG)
+# stdio, full profile (146 tools: 3 skill_* + 43 wm_* + 100 providers)
 npx -y @warpmetal/skills-mcp
 
 # Pin a registry tag

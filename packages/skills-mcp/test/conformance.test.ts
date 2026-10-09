@@ -779,10 +779,16 @@ describe("4. no HTTP client, no protocol reimplementation", () => {
     "skills.ts", // fetches remote skill files with `fetch`
   ]);
 
-  /** Action Gateway talks to DigitalOcean over HTTPS; it is not part of the CLI stack. */
+  /**
+   * Provider tools are the one part of the CLI stack that legitimately spawns
+   * `@warpmetal/cli` (the integration surface) rather than the upstream
+   * `warpmetal` binary the `wm_*` argv rules describe. They still make no HTTP
+   * call of their own, so they are excluded from these argv-specific checks,
+   * not from the no-HTTP-call invariant.
+   */
   function isCliStackFile(relative: string): boolean {
     if (CONTENT_TRANSPORT_FILES.has(relative)) return false;
-    if (relative === "action-gateway" || relative.startsWith("action-gateway/")) return false;
+    if (relative === "providers" || relative.startsWith("providers/")) return false;
     return true;
   }
 

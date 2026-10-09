@@ -7,13 +7,10 @@ import { discordAdapter } from "./discord.js";
 import { vercelAdapter } from "./vercel.js";
 import { sentryAdapter } from "./sentry.js";
 import { stripeAdapter } from "./stripe.js";
+import { createTokenStatusAdapter } from "./token-status.js";
 import type { Adapter } from "./types.js";
 
-/**
- * The adapter table. One adapter per catalog entry, in catalog order, so
- * `providerNames()` and `adapters()` can never disagree about what exists.
- */
-const ADAPTERS: readonly Adapter[] = [
+const LEGACY: readonly Adapter[] = [
   cloudflareAdapter,
   githubAdapter,
   slackAdapter,
@@ -23,6 +20,66 @@ const ADAPTERS: readonly Adapter[] = [
   sentryAdapter,
   stripeAdapter,
 ];
+
+const LEGACY_NAMES = new Set(LEGACY.map((adapter) => adapter.spec.name));
+
+/**
+ * Cheap, read-only "who am I" probes, so `integration status` can actually
+ * verify a credential instead of only noticing that one is present. Providers
+ * without an entry here report DEGRADED ("present but unverified") rather than
+ * a false OK.
+ */
+interface Probe {
+  readonly probeUrl: string;
+  readonly authHeader?: (token: string) => Record<string, string>;
+}
+
+const bearer = (token: string): Record<string, string> => ({ authorization: `Bearer ${token}` });
+
+const PROBES: Readonly<Record<string, Probe>> = {
+  gitlab: { probeUrl: "https://gitlab.com/api/v4/user", authHeader: (t) => ({ "PRIVATE-TOKEN": t }) },
+  notion: {
+    probeUrl: "https://api.notion.com/v1/users/me",
+    authHeader: (t) => ({ authorization: `Bearer ${t}`, "Notion-Version": "2022-06-28" }),
+  },
+  supabase: { probeUrl: "https://api.supabase.com/v1/projects", authHeader: bearer },
+  figma: { probeUrl: "https://api.figma.com/v1/me", authHeader: (t) => ({ "X-Figma-Token": t }) },
+  hubspot: { probeUrl: "https://api.hubapi.com/crm/v3/objects/contacts?limit=1", authHeader: bearer },
+  asana: { probeUrl: "https://app.asana.com/api/1.0/users/me", authHeader: bearer },
+  airtable: { probeUrl: "https://api.airtable.com/v0/meta/whoami", authHeader: bearer },
+  intercom: { probeUrl: "https://api.intercom.io/me", authHeader: bearer },
+  datadog: { probeUrl: "https://api.datadoghq.com/api/v1/validate", authHeader: (t) => ({ "DD-API-KEY": t }) },
+  pagerduty: {
+    probeUrl: "https://api.pagerduty.com/users/me",
+    authHeader: (t) => ({ authorization: `Token token=${t}`, accept: "application/vnd.pagerduty+json;version=2" }),
+  },
+  calendly: { probeUrl: "https://api.calendly.com/users/me", authHeader: bearer },
+  clickup: { probeUrl: "https://api.clickup.com/api/v2/user", authHeader: (t) => ({ authorization: t }) },
+  circleci: { probeUrl: "https://circleci.com/api/v2/me", authHeader: (t) => ({ "Circle-Token": t }) },
+  // X has no read-only endpoint that an app-only bearer can call: `/2/users/me`
+  // demands user context and returns 403 for a valid app token, which would be a
+  // false NEEDS_AUTH. Left unprobed on purpose (status reports DEGRADED).
+  square: {
+    probeUrl: "https://connect.squareup.com/v2/locations",
+    authHeader: (t) => ({ authorization: `Bearer ${t}`, "Square-Version": "2024-01-18" }),
+  },
+  openai: { probeUrl: "https://api.openai.com/v1/models", authHeader: bearer },
+  "grafana-cloud": { probeUrl: "https://grafana.com/api/instances", authHeader: bearer },
+  "anthropic-admin": {
+    probeUrl: "https://api.anthropic.com/v1/organizations/workspaces",
+    authHeader: (t) => ({ "x-api-key": t, "anthropic-version": "2023-06-01" }),
+  },
+};
+
+const GENERATED: readonly Adapter[] = PROVIDERS.filter(
+  (spec) => !LEGACY_NAMES.has(spec.name),
+).map((spec) => createTokenStatusAdapter(spec, PROBES[spec.name] ?? {}));
+
+/**
+ * The adapter table. One adapter per catalog entry, in catalog order, so
+ * `providerNames()` and `adapters()` can never disagree about what exists.
+ */
+const ADAPTERS: readonly Adapter[] = [...LEGACY, ...GENERATED];
 
 export function adapters(): readonly Adapter[] {
   return ADAPTERS;

@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://circleci.com/api/v2/pipeline/sample_pipeline_id",
+  "headers": {
+    "Circle-Token": "__TOKEN__"
+  }
+}

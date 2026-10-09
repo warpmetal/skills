@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://app.asana.com/api/1.0/tasks/sample_task_gid",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

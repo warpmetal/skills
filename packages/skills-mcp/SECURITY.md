@@ -11,8 +11,8 @@ out of transcripts.
 
 ## Scope
 
-This server sits between an MCP client and (a) the WarpMetal CLI and (b) optionally
-DigitalOcean Action Gateway. In scope:
+This server sits between an MCP client and the WarpMetal CLI (including the
+`wm_*` surface and provider `integration` tools). In scope:
 
 - The approval gate: a token that can be replayed, reused for a different argv,
   forged, or accepted after expiry.
@@ -24,25 +24,44 @@ DigitalOcean Action Gateway. In scope:
   `audit.jsonl`.
 - Binary resolution and process spawning: injection, a shell, or a path that
   escapes the intended install.
-- Action Gateway: leaking `DIGITALOCEAN_TOKEN`, registering AG tools on the HTTP
-  `content` profile, or proxying provider secrets that should stay in DO Connections.
+- Provider tools: registering provider tools on the HTTP `content` profile, or
+  leaking vault secrets into MCP transcripts / env scrubbing bypasses.
 
 ## Transport profiles
 
 The server exposes two surfaces, and which one a client can reach is decided by the
 transport rather than by the caller:
 
-- **`full`** — stdio. The `skill_*` content tools, every `wm_*` CLI tool, and the Action Gateway
-  tools (146 in total). stdio is a local, operator-controlled channel. AG calls use
-  `DIGITALOCEAN_TOKEN` / `DIGITALOCEAN_AG_ACTOR_ID` from the environment; provider OAuth tokens stay
-  in DigitalOcean Connections on the actor, not in this process.
+- **`full`** — stdio. The `skill_*` content tools, every `wm_*` CLI tool, and the provider
+  tools (146 in total). stdio is a local, operator-controlled channel. Provider calls
+  spawn `@warpmetal/cli` `integration` verbs; secrets stay in the WarpMetal vault, not in
+  this process environment. Provider arguments are written to the CLI's stdin
+  (`--args-stdin`), never to argv, so an argument that carries a value never reaches the
+  process list; Atlassian Cloud credentials add a `jira.email` / `confluence.email` vault
+  entry that is combined into `Basic base64(email:token)` in-process and redacted from output.
 - **`content`** — the Streamable HTTP transport. The `skill_*` tools and the
-  `skill://` resources only. The `wm_*` and Action Gateway tools are not registered at all on this
+  `skill://` resources only. The `wm_*` and provider tools are not registered at all on this
   profile, because the HTTP transport has no authentication and those tools can mutate real
   infrastructure / third-party accounts.
 
-A way to reach a `wm_*` or Action Gateway tool over HTTP is a vulnerability. A way to make the
+A way to reach a `wm_*` or provider tool over HTTP is a vulnerability. A way to make the
 `content` profile serve something outside the loaded registry is one too.
+
+### Provider mutations: destructive hints and the confirm gate
+
+Two different things are easy to conflate for provider tools:
+
+- `destructiveHint: true` is advertised on irreversible or costly mutations (payments,
+  external publishing, billed infrastructure, permanent migrations). It is a signal for a
+  client to obtain consent. It is **not** a guarantee that a client did.
+- The `--confirm <gate>` flag the CLI requires is injected by this server for any mutating
+  verb. It proves the server routed a mutation through the reviewed path; it does **not**
+  prove that a human approved the specific call. Treat it as defence in depth, not as
+  consent.
+
+The server-side consent boundary is the client's. A client that calls a destructive provider
+tool without asking its user has not been stopped by this server, and that is by design:
+the MCP surface is where the human is, not inside the vault-backed CLI.
 
 ### Private registries
 
@@ -79,17 +98,7 @@ What it does not do:
 
 ## Not a vulnerability
 
-Some behaviour is deliberate and is documented here so it is not reported as a
-defect:
-
-- `acknowledgedConsequence` does not prove a human read the effect. It proves the
-  caller had the word, which makes a silent approval impossible rather than a lie
-  detectable. The same limit applies to the approval token.
-- The `manual_review` latch only knows what this server observed in its own state
-  directory. An id reviewed through another tool is invisible to it.
-- A retry after an unknown outcome is a second request for `sandbox delete`,
-  `sandbox access revoke` and the lifecycle actions. Only `server power` and
-  `server reload` send an `--idempotency-key`, because those are the two commands
-  where the CLI's own help and the vendor's reference agree the flag exists.
-- `runtime install` failing with `EPERM ... fsync` on Windows is a defect in the
-  published CLI on that host, not in this server.
+- An operator approving a plan that then does what it said.
+- A provider rejecting a call with `NEEDS_AUTH` / `ERROR` after secrets are missing or wrong.
+- A host scrubbing `TOKEN`/`SECRET` env vars from stdio MCP launches — use the vault and
+  `--registry-token-file` instead of ambient credentials.

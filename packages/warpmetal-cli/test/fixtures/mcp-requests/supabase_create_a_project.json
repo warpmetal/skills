@@ -1,0 +1,22 @@
+{
+  "method": "POST",
+  "url": "https://api.supabase.com/v1/projects",
+  "body": {
+    "name": "sample_name",
+    "organization_slug": "sample_organization_slug",
+    "db_pass": "sample_db_pass",
+    "region": "us-east-1",
+    "plan": "free",
+    "desired_instance_size": "nano",
+    "high_availability": true,
+    "kps_enabled": true,
+    "postgres_engine": {},
+    "release_channel": {},
+    "region_selection": {},
+    "template_url": "sample_template_url"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

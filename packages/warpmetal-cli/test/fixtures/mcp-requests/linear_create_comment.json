@@ -1,0 +1,33 @@
+{
+  "method": "POST",
+  "url": "https://api.linear.app/graphql",
+  "body": {
+    "query": "mutation($input: CommentCreateInput!) { commentCreate(input: $input) { success comment { id } } }",
+    "variables": {
+      "input": {
+        "issueId": "sample_issue_id",
+        "body": "sample_body",
+        "bodyData": "sample_body_data",
+        "createAsUser": "sample_create_as_user",
+        "createOnSyncedSlackThread": true,
+        "createdAt": "sample_created_at",
+        "displayIconUrl": "sample_display_icon_url",
+        "doNotSubscribeToIssue": true,
+        "documentContentId": "sample_document_content_id",
+        "id": "sample_id",
+        "initiativeId": "sample_initiative_id",
+        "initiativeUpdateId": "sample_initiative_update_id",
+        "parentId": "sample_parent_id",
+        "postId": "sample_post_id",
+        "projectId": "sample_project_id",
+        "projectUpdateId": "sample_project_update_id",
+        "quotedText": "sample_quoted_text",
+        "subscriberIds": []
+      }
+    }
+  },
+  "headers": {
+    "Authorization": "__TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://circleci.com/api/v2/pipeline?org-slug=sample_org_slug&mine=true&page-token=sample_page_token",
+  "headers": {
+    "Circle-Token": "__TOKEN__"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://api.vercel.com/v10/projects?limit=sample_limit&from=sample_from&repo=sample_repo&repoId=sample_repo_id&repoUrl=sample_repo_url&search=sample_search&slug=sample_slug&teamId=sample_team_id&deprecated=true&edgeConfigId=sample_edge_config_id&edgeConfigTokenId=sample_edge_config_token_id&excludeRepos=sample_exclude_repos&gitForkProtection=1&buildMachineTypes=sample_build_machine_types&buildQueueConfiguration=SKIP_NAMESPACE_QUEUE&elasticConcurrencyEnabled=1&staticIpsEnabled=0",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "method": "POST",
+  "url": "https://gitlab.com/api/v4/projects/sample_project_id/merge_requests",
+  "body": {
+    "add_labels": [],
+    "allow_collaboration": true,
+    "allow_maintainer_to_push": true,
+    "approval_rules_attributes": [],
+    "approvals_before_merge": 1,
+    "assignee_id": 1,
+    "assignee_ids": [],
+    "description": "sample_description",
+    "labels": [],
+    "merge_after": "sample_merge_after",
+    "milestone": "sample_milestone",
+    "milestone_id": 1,
+    "remove_labels": [],
+    "remove_source_branch": true,
+    "reviewer_ids": [],
+    "source_branch": "sample_source_branch",
+    "squash": true,
+    "target_branch": "sample_target_branch",
+    "target_project_id": 1,
+    "title": "sample_title"
+  },
+  "headers": {
+    "PRIVATE-TOKEN": "__TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

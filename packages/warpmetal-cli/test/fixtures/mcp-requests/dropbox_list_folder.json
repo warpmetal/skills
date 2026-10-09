@@ -1,0 +1,13 @@
+{
+  "method": "POST",
+  "url": "https://api.dropboxapi.com/2/files/list_folder",
+  "body": {
+    "path": "sample_path",
+    "recursive": true,
+    "limit": 1
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

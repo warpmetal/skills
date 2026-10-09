@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://api.figma.com/v1/files/sample_file_key/nodes?ids=sample_ids&depth=1&geometry=sample_geometry&version=sample_version",
+  "headers": {
+    "X-Figma-Token": "__TOKEN__"
+  }
+}

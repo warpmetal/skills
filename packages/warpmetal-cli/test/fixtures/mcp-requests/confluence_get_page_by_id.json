@@ -1,0 +1,9 @@
+{
+  "method": "GET",
+  "url": "https://acme.atlassian.net/wiki/api/v2/pages/1?version=1&get-draft=true",
+  "headers": {
+    "Authorization": "Basic __BASIC__",
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+}

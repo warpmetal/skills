@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "url": "https://ip-ranges.datadoghq.com/",
+  "headers": {}
+}

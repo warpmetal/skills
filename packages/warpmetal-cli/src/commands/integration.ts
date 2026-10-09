@@ -6,6 +6,7 @@ import type { CredentialStore } from "../env/store.js";
 import type { HttpFn } from "../integration/http.js";
 import { findProvider, PROVIDERS } from "../integration/registry.js";
 import { adapters, findAdapter, type AdapterContext, type AdapterResult } from "../integration/adapters/index.js";
+import { executeMcpTool, findMcpTool, mcpToolsForProvider } from "../integration/mcp-tools/index.js";
 
 export interface IntegrationCommandDeps {
   readonly store: CredentialStore;
@@ -14,6 +15,7 @@ export interface IntegrationCommandDeps {
   readonly run: CommandRunner;
   readonly http: HttpFn;
   readonly redactor: Redactor;
+  readonly readStdin: () => Promise<string>;
 }
 
 const USAGE = `warpmetal integration - provider integrations
@@ -61,7 +63,14 @@ export async function runIntegrationCommand(
         errorMap: provider.errorMap,
         revoke: provider.revoke,
         ...(provider.notes !== undefined ? { notes: provider.notes } : {}),
-        gates: findAdapter(provider.name)?.gates ?? {},
+        gates: {
+          ...(findAdapter(provider.name)?.gates ?? {}),
+          ...Object.fromEntries(
+            mcpToolsForProvider(provider.name)
+              .filter((tool) => tool.gate !== undefined)
+              .map((tool) => [tool.verb, tool.gate!]),
+          ),
+        },
       })),
     };
     if (args.flags.has("json")) {
@@ -125,7 +134,14 @@ export async function runIntegrationCommand(
 
   const adapter = findAdapter(providerName)!;
   const args: ParsedArgs = parseArgs(rest.slice(1));
-  const result = await adapter.run(verb, args, adapterContext(deps));
+  const mcpTool = findMcpTool(providerName, verb);
+  let result: AdapterResult;
+  if (mcpTool !== undefined) {
+    knownFlags(args, ["json", "args-json", "args-stdin", "confirm"]);
+    result = await executeMcpTool(mcpTool, args, adapterContext(deps));
+  } else {
+    result = await adapter.run(verb, args, adapterContext(deps));
+  }
 
   if (args.flags.has("json")) {
     deps.out.stdout(jsonText({ status: worst([result]), results: [result] }, deps.redactor));
@@ -145,6 +161,7 @@ function adapterContext(deps: IntegrationCommandDeps): AdapterContext {
     run: deps.run,
     http: deps.http,
     redactor: deps.redactor,
+    readStdin: deps.readStdin,
   };
 }
 

@@ -1,0 +1,11 @@
+{
+  "method": "POST",
+  "url": "https://api.mixpanel.com/track",
+  "form": {
+    "data": "W10=",
+    "verbose": 1
+  },
+  "headers": {
+    "Content-Type": "application/x-www-form-urlencoded"
+  }
+}

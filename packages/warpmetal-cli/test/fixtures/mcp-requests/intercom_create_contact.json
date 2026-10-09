@@ -1,0 +1,23 @@
+{
+  "method": "POST",
+  "url": "https://api.intercom.io/contacts",
+  "body": {
+    "avatar": "sample_avatar",
+    "custom_attributes": {},
+    "email": "sample_email",
+    "email_verified": true,
+    "external_id": "sample_external_id",
+    "last_seen_at": 1,
+    "name": "sample_name",
+    "owner_id": "sample_owner_id",
+    "phone": "sample_phone",
+    "role": "sample_role",
+    "signed_up_at": 1,
+    "unsubscribed_from_emails": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  }
+}

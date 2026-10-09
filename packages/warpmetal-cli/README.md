@@ -107,9 +107,16 @@ auth modes it accepts, the secrets it reads, its capabilities, the external
 tools it prefers, what its scopes can and cannot enforce, the files it writes, a
 verification command, a redacted error map, and how confident revocation can be.
 
-Today the catalog covers three families: DNS (`cloudflare`), notifications
-(`slack`, `email`, `discord`), and read-only platform probes (`github`, `vercel`,
-`sentry`, `stripe`).
+Today the catalog has two kinds of entry: hand-written adapters for the original
+families — DNS (`cloudflare`), notifications (`slack`, `email`, `discord`) and
+platform probes (`github`, `vercel`, `sentry`, `stripe`) — and generated
+token-status adapters for the providers behind the MCP tool surface (GitLab,
+Notion, Jira, Confluence, Linear, Supabase, Figma, Shopify, HubSpot, Asana,
+Dropbox, Airtable, Intercom, Snowflake, Datadog, PagerDuty, Exa, Perplexity,
+Calendly, ClickUp, PostHog, Mixpanel, CircleCI, Mailchimp, X, Square, OpenAI,
+Gemini, Anthropic Admin, Grafana Cloud, Monday.com, OneSignal, Amplitude). The
+provider verbs that back the MCP tools are dispatched through
+`--args-stdin`/`--args-json`; the generated adapters implement `status` only.
 
 Two rules hold for every adapter:
 
@@ -134,9 +141,20 @@ API and the exit-code mapping — is in
 npm install
 npm test        # tsc + node:test, no network
 npm run typecheck
+npm run probe   # opt-in, needs network: sentinel-token route probe
 ```
 
 The suite is network-free by construction: the fetch function, the process
 runner and the credential backend are all injected. A secret-canary test proves
 a stored value never appears in any diagnostic, plan, list, error or `--json`
 document, and that it *does* appear on the one sanctioned stream.
+
+`npm run probe` is the one network-bound check, and it is deliberately outside
+`npm test`. It builds each of the 100 provider requests from the reviewed sample
+args, swaps the token for a sentinel and sends it: a real route answers 401/403
+(auth required), 400/422 or 2xx, while a route the provider does not serve answers
+404/405. A per-host control request to a bogus path marks auth-first and
+website/SPA hosts as `weakSignal`, so they are not mistaken for a missing route.
+`test/provider-contract.test.ts` (against `test/fixtures/provider-contracts.json`)
+pins the same requests to their documented host, method and auth offline, so the
+vendor contract fails a red build without the network.

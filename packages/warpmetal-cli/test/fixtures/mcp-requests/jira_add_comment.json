@@ -1,0 +1,26 @@
+{
+  "method": "POST",
+  "url": "https://acme.atlassian.net/rest/api/3/issue/sample_issue_key/comment",
+  "body": {
+    "body": {
+      "type": "doc",
+      "version": 1,
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "sample_comment"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "headers": {
+    "Authorization": "Basic __BASIC__",
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+}

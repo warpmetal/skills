@@ -1,0 +1,9 @@
+{
+  "method": "GET",
+  "url": "https://acme.atlassian.net/rest/api/3/issue/sample_issue_key",
+  "headers": {
+    "Authorization": "Basic __BASIC__",
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+}

@@ -29,7 +29,7 @@ test("stdio server exposes tools and serves skills end to end", async () => {
     await client.connect(transport);
 
     const tools = await client.listTools();
-    // stdio gets the `full` profile: 3 content + 43 CLI + 100 Action Gateway.
+    // stdio gets the `full` profile: 3 content + 43 CLI + 100 provider tools.
     // The unauthenticated HTTP transport is what narrows this down to the
     // `skill_*` surface, and `test/profiles.test.ts` holds that pair of counts.
     const names = tools.tools.map((tool) => tool.name).sort();
@@ -44,7 +44,7 @@ test("stdio server exposes tools and serves skills end to end", async () => {
     );
     assert.ok(
       names.includes("github_list_issues"),
-      "the full profile must include Action Gateway tools",
+      "the full profile must include provider tools",
     );
 
     const listed = parseJsonText(

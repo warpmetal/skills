@@ -1,0 +1,35 @@
+{
+  "method": "POST",
+  "url": "https://acme.atlassian.net/rest/api/3/issue",
+  "body": {
+    "fields": {
+      "project": {
+        "key": "sample_project_key"
+      },
+      "summary": "sample_summary",
+      "issuetype": {
+        "name": "sample_issue_type"
+      },
+      "description": {
+        "type": "doc",
+        "version": 1,
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "sample_description"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "headers": {
+    "Authorization": "Basic __BASIC__",
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+}

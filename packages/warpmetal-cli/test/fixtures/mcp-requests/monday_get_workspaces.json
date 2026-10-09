@@ -1,0 +1,12 @@
+{
+  "method": "POST",
+  "url": "https://api.monday.com/v2",
+  "body": {
+    "query": "{ workspaces(limit: 1, page: 1, kind: closed, state: active, order_by: created_at) { id name } }"
+  },
+  "headers": {
+    "Authorization": "__TOKEN__",
+    "API-Version": "2024-10",
+    "Content-Type": "application/json"
+  }
+}

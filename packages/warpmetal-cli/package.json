@@ -29,6 +29,7 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --import tsx --test test/*.test.ts",
+    "probe": "node --import tsx scripts/probe-mcp-routes.mjs",
     "dev": "tsx src/cli.ts",
     "prepack": "npm run build",
     "prepublishOnly": "npm run typecheck && npm test"

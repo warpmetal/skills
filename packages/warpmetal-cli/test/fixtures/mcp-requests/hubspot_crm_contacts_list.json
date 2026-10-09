@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://api.hubapi.com/crm/v3/objects/contacts?limit=1&after=sample_after&archived=true",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

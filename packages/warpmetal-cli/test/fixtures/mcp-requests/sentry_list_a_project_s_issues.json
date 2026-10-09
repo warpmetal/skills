@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://sentry.io/api/0/projects/sample_organization_id_or_slug/sample_project_id_or_slug/issues/?cursor=sample_cursor&query=sample_query&sort=date&statsPeriod=sample_stats_period&shortIdLookup=true&hashes=sample_hashes&limit=1",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

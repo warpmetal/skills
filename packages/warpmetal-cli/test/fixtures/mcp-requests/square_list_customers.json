@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://connect.squareup.com/v2/customers?count=true&cursor=sample_cursor&limit=1&sort_field=DEFAULT&sort_order=DESC",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Square-Version": "2024-01-18"
+  }
+}

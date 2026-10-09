@@ -83,7 +83,7 @@ describe("integration catalog", () => {
     );
 
     const cloudflare = document.providers.find((provider) => provider.name === "cloudflare")!;
-    assert.deepEqual(cloudflare.capabilities, ["dns.record.list", "dns.record.upsert"]);
+    assert.deepEqual(cloudflare.capabilities, ["dns.record.list", "dns.record.upsert", "mcp.tool"]);
     assert.equal(cloudflare.gates["dns-upsert"], "CONFIRM DNS CHANGE");
     assert.equal(cloudflare.revoke, "unsupported");
   });
@@ -556,6 +556,59 @@ describe("stripe adapter", () => {
     const { fetchFn } = stubFetch(() => ({ status: 401, body: { error: { type: "invalid_request_error" } } }));
     const result = await run(["integration", "status", "stripe", "--json"], store, { fetchFn });
     assert.equal(result.code, 4);
+  });
+});
+
+describe("generated provider status is never a false OK", () => {
+  it("reports DEGRADED when a secret is present but no probe exists", async () => {
+    const { store } = await memoryStore({ "linear.token": "lin_api_token_value_123456" });
+    const { fetchFn, calls } = stubFetch(() => ({ status: 200, body: {} }));
+
+    const result = await run(["integration", "status", "linear", "--json"], store, { fetchFn });
+
+    assert.equal(result.code, 0);
+    assert.match(result.stdout, /"status": "DEGRADED"/);
+    assert.equal(calls.length, 0, "a probe-less status must not hit the network");
+  });
+
+  it("verifies a probe provider, and a rejected credential is NEEDS_AUTH", async () => {
+    const { store } = await memoryStore({ "gitlab.token": "glpat_token_value_123456" });
+    const { fetchFn, calls } = stubFetch(() => ({ status: 200, body: { id: 1, username: "warp" } }));
+
+    const ok = await run(["integration", "status", "gitlab", "--json"], store, { fetchFn });
+    assert.equal(ok.code, 0);
+    assert.match(ok.stdout, /"status": "OK"/);
+    assert.equal(calls[0]!.url, "https://gitlab.com/api/v4/user");
+    assert.equal(calls[0]!.headers["PRIVATE-TOKEN"], "glpat_token_value_123456");
+
+    const rejected = stubFetch(() => ({ status: 401, body: { message: "401 Unauthorized" } }));
+    const bad = await run(["integration", "status", "gitlab", "--json"], store, { fetchFn: rejected.fetchFn });
+    assert.equal(bad.code, 4);
+    assert.match(bad.stdout, /"status": "NEEDS_AUTH"/);
+  });
+
+  it("warns about a missing contextual secret without failing the primary token", async () => {
+    const { store } = await memoryStore({ "jira.token": "jira_token_value_123456" });
+    const { fetchFn, calls } = stubFetch(() => ({ status: 200, body: {} }));
+
+    const result = await run(["integration", "status", "jira", "--json"], store, { fetchFn });
+
+    assert.equal(result.code, 0);
+    assert.match(result.stdout, /"status": "DEGRADED"/);
+    assert.match(result.stdout, /jira\.site/);
+    assert.match(result.stdout, /jira\.email/);
+    assert.equal(calls.length, 0, "jira has no probe; status must not hit the network");
+  });
+
+  it("reports X as DEGRADED because it has no app-token-safe probe", async () => {
+    const { store } = await memoryStore({ "x.token": "x_app_token_value_123456" });
+    const { fetchFn, calls } = stubFetch(() => ({ status: 200, body: {} }));
+
+    const result = await run(["integration", "status", "x", "--json"], store, { fetchFn });
+
+    assert.equal(result.code, 0);
+    assert.match(result.stdout, /"status": "DEGRADED"/);
+    assert.equal(calls.length, 0, "a probe-less status must not hit the network");
   });
 });
 

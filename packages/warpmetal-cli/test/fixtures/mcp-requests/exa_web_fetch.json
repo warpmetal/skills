@@ -1,0 +1,16 @@
+{
+  "method": "POST",
+  "url": "https://api.exa.ai/contents",
+  "body": {
+    "urls": [
+      "sample_url"
+    ],
+    "text": {
+      "maxCharacters": 1
+    }
+  },
+  "headers": {
+    "x-api-key": "__TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

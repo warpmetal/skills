@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.intercom.io/contacts?include_merge_history=true",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Accept": "application/json"
+  }
+}

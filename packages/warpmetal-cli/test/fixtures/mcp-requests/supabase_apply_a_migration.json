@@ -1,0 +1,13 @@
+{
+  "method": "POST",
+  "url": "https://api.supabase.com/v1/projects/sample_ref/database/migrations",
+  "body": {
+    "query": "sample_query",
+    "name": "sample_name",
+    "rollback": "sample_rollback"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

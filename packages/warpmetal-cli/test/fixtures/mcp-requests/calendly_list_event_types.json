@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://api.calendly.com/event_types?active=true&admin_managed=true&count=1&organization=sample_organization&page_token=sample_page_token&sort=sample_sort&user=sample_user&user_availability_schedule=sample_user_availability_schedule",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

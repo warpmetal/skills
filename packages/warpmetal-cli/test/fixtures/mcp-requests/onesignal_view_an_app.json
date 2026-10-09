@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://api.onesignal.com/apps/sample_app_id?view=config",
+  "headers": {
+    "Authorization": "Basic __TOKEN__"
+  }
+}

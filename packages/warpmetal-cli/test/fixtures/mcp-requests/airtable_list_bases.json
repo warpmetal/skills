@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://api.airtable.com/v0/meta/bases?offset=sample_offset",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

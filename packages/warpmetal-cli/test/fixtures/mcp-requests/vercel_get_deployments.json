@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://api.vercel.com/v6/deployments?app=sample_app&branch=sample_branch&from=1&limit=1&projectId=sample_project_id&rollbackCandidate=true&sha=sample_sha&since=1&slug=sample_slug&state=sample_state&target=sample_target&teamId=sample_team_id&to=1&until=1&users=sample_users",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

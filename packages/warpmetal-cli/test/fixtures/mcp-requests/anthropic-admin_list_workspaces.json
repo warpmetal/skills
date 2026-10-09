@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.anthropic.com/v1/organizations/workspaces?after_id=sample_after_id&before_id=sample_before_id&include_archived=true&limit=1",
+  "headers": {
+    "x-api-key": "__TOKEN__",
+    "anthropic-version": "2023-06-01"
+  }
+}

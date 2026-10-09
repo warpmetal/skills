@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://api.stripe.com/v1/payment_intents?limit=1&customer=sample_customer&customer_account=sample_customer_account&ending_before=sample_ending_before&starting_after=sample_starting_after",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

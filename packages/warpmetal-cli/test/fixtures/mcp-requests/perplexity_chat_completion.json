@@ -1,0 +1,17 @@
+{
+  "method": "POST",
+  "url": "https://api.perplexity.ai/chat/completions",
+  "body": {
+    "max_tokens": 1,
+    "messages": [],
+    "model": "sample_model",
+    "return_related_questions": true,
+    "search_mode": "sample_search_mode",
+    "search_recency_filter": "sample_search_recency_filter",
+    "temperature": 1
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

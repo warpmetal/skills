@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://data.mixpanel.com/api/2.0/export/?from_date=sample_from_date&to_date=sample_to_date&limit=1&project_id=1",
+  "headers": {
+    "Authorization": "Basic __TOKEN__"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://sentry.io/api/0/organizations/sample_organization_id_or_slug/projects/?cursor=sample_cursor&per_page=1&query=sample_query",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

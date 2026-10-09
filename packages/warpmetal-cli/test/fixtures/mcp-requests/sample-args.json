@@ -1,0 +1,881 @@
+{
+  "github_create_issue": {
+    "body": "sample_body",
+    "owner": "sample_owner",
+    "repo": "sample_repo",
+    "title": "sample_title"
+  },
+  "github_list_issues": {
+    "max_results": 1,
+    "owner": "sample_owner",
+    "repo": "sample_repo",
+    "state": "open"
+  },
+  "github_get_issue": {
+    "issue_number": 1,
+    "owner": "sample_owner",
+    "repo": "sample_repo"
+  },
+  "github_create_pull_request": {
+    "base": "sample_base",
+    "body": "sample_body",
+    "draft": true,
+    "head": "sample_head",
+    "owner": "sample_owner",
+    "repo": "sample_repo",
+    "title": "sample_title"
+  },
+  "github_get_pull_request": {
+    "owner": "sample_owner",
+    "pull_number": 1,
+    "repo": "sample_repo"
+  },
+  "github_search_repositories": {
+    "max_results": 1,
+    "order": "asc",
+    "q": "sample_q",
+    "sort": "sample_sort"
+  },
+  "gitlab_list_projects": {
+    "active": true,
+    "archived": true,
+    "custom_attributes": {},
+    "id_after": 1,
+    "id_before": 1,
+    "imported": true,
+    "include_hidden": true,
+    "include_pending_delete": true,
+    "last_activity_after": "sample_last_activity_after",
+    "last_activity_before": "sample_last_activity_before",
+    "marked_for_deletion_on": "sample_marked_for_deletion_on",
+    "membership": true,
+    "min_access_level": 10,
+    "order_by": "id",
+    "owned": true,
+    "page": 1,
+    "per_page": 1,
+    "repository_checksum_failed": true,
+    "repository_storage": "sample_repository_storage",
+    "search": "sample_search",
+    "search_namespaces": true,
+    "simple": true,
+    "sort": "asc",
+    "starred": true,
+    "statistics": true,
+    "topic": [],
+    "topic_id": 1,
+    "updated_after": "sample_updated_after",
+    "updated_before": "sample_updated_before",
+    "visibility": "private",
+    "wiki_checksum_failed": true,
+    "with_custom_attributes": true,
+    "with_issues_enabled": true,
+    "with_merge_requests_enabled": true,
+    "with_programming_language": "sample_with_programming_language"
+  },
+  "gitlab_create_project_issue": {
+    "add_labels": [],
+    "assignee_id": 1,
+    "assignee_ids": [],
+    "confidential": true,
+    "created_at": "sample_created_at",
+    "description": "sample_description",
+    "discussion_locked": true,
+    "discussion_to_resolve": "sample_discussion_to_resolve",
+    "due_date": "sample_due_date",
+    "epic_id": 1,
+    "epic_iid": 1,
+    "iid": 1,
+    "issue_type": "issue",
+    "labels": [],
+    "merge_request_to_resolve_discussions_of": 1,
+    "milestone": "sample_milestone",
+    "milestone_id": 1,
+    "project_id": "sample_project_id",
+    "remove_labels": [],
+    "severity": "unknown",
+    "start_date": "sample_start_date",
+    "title": "sample_title",
+    "weight": 1
+  },
+  "gitlab_create_merge_request": {
+    "add_labels": [],
+    "allow_collaboration": true,
+    "allow_maintainer_to_push": true,
+    "approval_rules_attributes": [],
+    "approvals_before_merge": 1,
+    "assignee_id": 1,
+    "assignee_ids": [],
+    "description": "sample_description",
+    "labels": [],
+    "merge_after": "sample_merge_after",
+    "milestone": "sample_milestone",
+    "milestone_id": 1,
+    "project_id": "sample_project_id",
+    "remove_labels": [],
+    "remove_source_branch": true,
+    "reviewer_ids": [],
+    "source_branch": "sample_source_branch",
+    "squash": true,
+    "target_branch": "sample_target_branch",
+    "target_project_id": 1,
+    "title": "sample_title"
+  },
+  "notion_search": {
+    "page_size": 1,
+    "query": "sample_query",
+    "start_cursor": "sample_start_cursor"
+  },
+  "notion_query_database": {
+    "database_id": "sample_database_id",
+    "filter": {},
+    "page_size": 1,
+    "sorts": [],
+    "start_cursor": "sample_start_cursor"
+  },
+  "notion_get_page": {
+    "page_id": "sample_page_id"
+  },
+  "notion_create_page": {
+    "content": "sample_content",
+    "parent_page_id": "sample_parent_page_id",
+    "title": "sample_title"
+  },
+  "notion_append_block_children": {
+    "block_id": "sample_block_id",
+    "content": "sample_content"
+  },
+  "stripe_post_customers": {
+    "address": {},
+    "balance": 1,
+    "business_name": {},
+    "cash_balance": {},
+    "description": "sample_description",
+    "email": "sample_email",
+    "individual_name": {},
+    "invoice_prefix": "sample_invoice_prefix",
+    "invoice_settings": {},
+    "metadata": {},
+    "name": "sample_name",
+    "next_invoice_sequence": 1,
+    "payment_method": "sample_payment_method",
+    "phone": "sample_phone",
+    "preferred_locales": [],
+    "shipping": {},
+    "source": "sample_source",
+    "tax": {},
+    "tax_exempt": "",
+    "tax_id_data": [],
+    "test_clock": "sample_test_clock"
+  },
+  "stripe_get_customers": {
+    "created": {},
+    "email": "sample_email",
+    "ending_before": "sample_ending_before",
+    "limit": 1,
+    "starting_after": "sample_starting_after",
+    "test_clock": "sample_test_clock"
+  },
+  "stripe_post_payment_intents": {
+    "allowed_payment_method_types": [],
+    "amount": 1,
+    "amount_details": {},
+    "application_fee_amount": 1,
+    "automatic_payment_methods": {},
+    "capture_method": "automatic",
+    "confirm": true,
+    "confirmation_method": "automatic",
+    "confirmation_token": "sample_confirmation_token",
+    "currency": "sample_currency",
+    "customer": "sample_customer",
+    "customer_account": "sample_customer_account",
+    "description": "sample_description",
+    "error_on_requires_action": true,
+    "excluded_payment_method_types": [],
+    "hooks": {},
+    "mandate": "sample_mandate",
+    "mandate_data": {},
+    "metadata": {},
+    "off_session": {},
+    "on_behalf_of": "sample_on_behalf_of",
+    "payment_details": {},
+    "payment_method": "sample_payment_method",
+    "payment_method_configuration": "sample_payment_method_configuration",
+    "payment_method_data": {},
+    "payment_method_options": {},
+    "payment_method_types": [],
+    "radar_options": {},
+    "receipt_email": "sample_receipt_email",
+    "return_url": "sample_return_url",
+    "setup_future_usage": "off_session",
+    "shipping": {},
+    "statement_descriptor": "sample_statement_descriptor",
+    "statement_descriptor_suffix": "sample_statement_descriptor_suffix",
+    "transfer_data": {},
+    "transfer_group": "sample_transfer_group",
+    "use_stripe_sdk": true
+  },
+  "stripe_get_payment_intents": {
+    "created": {},
+    "customer": "sample_customer",
+    "customer_account": "sample_customer_account",
+    "ending_before": "sample_ending_before",
+    "limit": 1,
+    "starting_after": "sample_starting_after"
+  },
+  "stripe_get_balance": {},
+  "stripe_post_invoices": {
+    "account_tax_ids": {},
+    "application_fee_amount": 1,
+    "auto_advance": true,
+    "automatic_tax": {},
+    "automatically_finalizes_at": 1,
+    "collection_method": "charge_automatically",
+    "currency": "sample_currency",
+    "custom_fields": {},
+    "customer": "sample_customer",
+    "customer_account": "sample_customer_account",
+    "days_until_due": 1,
+    "default_payment_method": "sample_default_payment_method",
+    "default_source": "sample_default_source",
+    "default_tax_rates": [],
+    "description": "sample_description",
+    "discounts": {},
+    "due_date": 1,
+    "effective_at": 1,
+    "footer": "sample_footer",
+    "from_invoice": {},
+    "issuer": {},
+    "metadata": {},
+    "number": "sample_number",
+    "on_behalf_of": "sample_on_behalf_of",
+    "payment_settings": {},
+    "pending_invoice_items_behavior": "exclude",
+    "rendering": {},
+    "shipping_cost": {},
+    "shipping_details": {},
+    "statement_descriptor": "sample_statement_descriptor",
+    "subscription": "sample_subscription",
+    "transfer_data": {}
+  },
+  "jira_create_issue": {
+    "description": "sample_description",
+    "issue_type": "sample_issue_type",
+    "project_key": "sample_project_key",
+    "summary": "sample_summary"
+  },
+  "jira_get_issue": {
+    "issue_key": "sample_issue_key"
+  },
+  "jira_add_comment": {
+    "comment": "sample_comment",
+    "issue_key": "sample_issue_key"
+  },
+  "jira_transition_issue": {
+    "comment": "sample_comment",
+    "issue_key": "sample_issue_key",
+    "transition_id": "sample_transition_id"
+  },
+  "jira_get_project": {
+    "expand": "sample_expand",
+    "project_key": "sample_project_key",
+    "properties": []
+  },
+  "confluence_get_page_by_id": {
+    "draft": true,
+    "id": 1,
+    "version": 1
+  },
+  "confluence_get_pages": {
+    "body_format": "sample_body_format",
+    "cursor": "sample_cursor",
+    "limit": 1,
+    "sort": "sample_sort",
+    "space_id": 1,
+    "status": "sample_status",
+    "subtype": "sample_subtype",
+    "title": "sample_title"
+  },
+  "linear_create_issue": {
+    "linear_team_id": "sample_linear_team_id",
+    "title": "sample_title"
+  },
+  "linear_list_issues": {
+    "first": 1
+  },
+  "linear_get_issue": {
+    "issue_id": "sample_issue_id"
+  },
+  "linear_create_comment": {
+    "body": "sample_body",
+    "body_data": "sample_body_data",
+    "create_as_user": "sample_create_as_user",
+    "create_on_synced_slack_thread": true,
+    "created_at": "sample_created_at",
+    "display_icon_url": "sample_display_icon_url",
+    "do_not_subscribe_to_issue": true,
+    "document_content_id": "sample_document_content_id",
+    "id": "sample_id",
+    "initiative_id": "sample_initiative_id",
+    "initiative_update_id": "sample_initiative_update_id",
+    "issue_id": "sample_issue_id",
+    "parent_id": "sample_parent_id",
+    "post_id": "sample_post_id",
+    "project_id": "sample_project_id",
+    "project_update_id": "sample_project_update_id",
+    "quoted_text": "sample_quoted_text",
+    "subscriber_ids": []
+  },
+  "supabase_list_projects": {
+    "limit": 1,
+    "offset": 1,
+    "organization_slug": "sample_organization_slug",
+    "search": "sample_search",
+    "sort": "name_asc",
+    "statuses": "sample_statuses"
+  },
+  "supabase_create_a_project": {
+    "db_pass": "sample_db_pass",
+    "desired_instance_size": "nano",
+    "high_availability": true,
+    "kps_enabled": true,
+    "name": "sample_name",
+    "organization_slug": "sample_organization_slug",
+    "plan": "free",
+    "postgres_engine": {},
+    "region": "us-east-1",
+    "region_selection": {},
+    "release_channel": {},
+    "template_url": "sample_template_url"
+  },
+  "supabase_apply_a_migration": {
+    "name": "sample_name",
+    "query": "sample_query",
+    "ref": "sample_ref",
+    "rollback": "sample_rollback"
+  },
+  "cloudflare_zones_get": {
+    "account_id": "sample_account_id",
+    "account_name": "sample_account_name",
+    "direction": "sample_direction",
+    "match": "sample_match",
+    "name": "sample_name",
+    "order": "sample_order",
+    "page": "sample_page",
+    "per_page": "sample_per_page",
+    "status": "sample_status",
+    "type": "sample_type"
+  },
+  "cloudflare_accounts_list_accounts": {
+    "direction": "sample_direction",
+    "name": "sample_name",
+    "page": "sample_page",
+    "per_page": "sample_per_page"
+  },
+  "vercel_get_projects": {
+    "build_machine_types": "sample_build_machine_types",
+    "build_queue_configuration": "SKIP_NAMESPACE_QUEUE",
+    "deprecated": true,
+    "edge_config_id": "sample_edge_config_id",
+    "edge_config_token_id": "sample_edge_config_token_id",
+    "elastic_concurrency_enabled": "1",
+    "exclude_repos": "sample_exclude_repos",
+    "from": "sample_from",
+    "git_fork_protection": "1",
+    "limit": "sample_limit",
+    "repo": "sample_repo",
+    "repo_id": "sample_repo_id",
+    "repo_url": "sample_repo_url",
+    "search": "sample_search",
+    "slug": "sample_slug",
+    "static_ips_enabled": "0",
+    "team_id": "sample_team_id"
+  },
+  "vercel_create_project": {
+    "build_command": "sample_build_command",
+    "command_for_ignoring_build_step": "sample_command_for_ignoring_build_step",
+    "dev_command": "sample_dev_command",
+    "enable_affected_projects_deployments": true,
+    "enable_preview_feedback": true,
+    "enable_production_feedback": true,
+    "environment_variables": [],
+    "framework": null,
+    "git_repository": {},
+    "install_command": "sample_install_command",
+    "name": "sample_name",
+    "oidc_token_config": {},
+    "output_directory": "sample_output_directory",
+    "preview_deployment_suffix": "sample_preview_deployment_suffix",
+    "preview_deployments_disabled": true,
+    "public_source": true,
+    "resource_config": {},
+    "root_directory": "sample_root_directory",
+    "sandbox": {},
+    "serverless_function_region": "sample_serverless_function_region",
+    "serverless_function_zero_config_failover": "sample_serverless_function_zero_config_failover",
+    "skip_git_connect_during_link": true,
+    "slug": "sample_slug",
+    "sso_protection": {},
+    "team_id": "sample_team_id"
+  },
+  "vercel_get_deployments": {
+    "app": "sample_app",
+    "branch": "sample_branch",
+    "from": 1,
+    "limit": 1,
+    "project_id": "sample_project_id",
+    "project_ids": [],
+    "rollback_candidate": true,
+    "sha": "sample_sha",
+    "since": 1,
+    "slug": "sample_slug",
+    "state": "sample_state",
+    "target": "sample_target",
+    "team_id": "sample_team_id",
+    "to": 1,
+    "until": 1,
+    "users": "sample_users"
+  },
+  "figma_get_file": {
+    "branch_data": true,
+    "depth": 1,
+    "file_key": "sample_file_key",
+    "geometry": "sample_geometry",
+    "ids": "sample_ids",
+    "version": "sample_version"
+  },
+  "figma_get_file_nodes": {
+    "depth": 1,
+    "file_key": "sample_file_key",
+    "geometry": "sample_geometry",
+    "ids": "sample_ids",
+    "version": "sample_version"
+  },
+  "shopify_list_products": {
+    "first": 1
+  },
+  "shopify_get_product": {
+    "id": "sample_id"
+  },
+  "shopify_list_orders": {
+    "first": 1
+  },
+  "hubspot_crm_contacts_list": {
+    "after": "sample_after",
+    "archived": true,
+    "associations": [],
+    "limit": 1,
+    "properties": [],
+    "properties_with_history": []
+  },
+  "hubspot_crm_contacts_create": {
+    "associations": [],
+    "properties": {}
+  },
+  "hubspot_crm_deals_list": {
+    "after": "sample_after",
+    "archived": true,
+    "associations": [],
+    "limit": 1,
+    "properties": [],
+    "properties_with_history": []
+  },
+  "asana_get_a_task": {
+    "task_gid": "sample_task_gid"
+  },
+  "asana_create_a_project": {
+    "archived": true,
+    "color": "dark-pink",
+    "current_status": {},
+    "current_status_update": {},
+    "custom_fields": {},
+    "default_view": "list",
+    "due_date": "sample_due_date",
+    "due_on": "sample_due_on",
+    "followers": "sample_followers",
+    "html_notes": "sample_html_notes",
+    "is_template": true,
+    "name": "sample_name",
+    "notes": "sample_notes",
+    "owner": "sample_owner",
+    "public": true,
+    "start_on": "sample_start_on",
+    "team": "sample_team",
+    "workspace": "sample_workspace"
+  },
+  "dropbox_list_folder": {
+    "limit": 1,
+    "path": "sample_path",
+    "recursive": true
+  },
+  "dropbox_search_files": {
+    "max_results": 1,
+    "path": "sample_path",
+    "query": "sample_query"
+  },
+  "discord_get_my_user": {},
+  "discord_list_my_guilds": {
+    "after": "sample_after",
+    "before": "sample_before",
+    "limit": 1,
+    "with_counts": true
+  },
+  "airtable_list_bases": {
+    "offset": "sample_offset"
+  },
+  "intercom_list_all_contacts": {
+    "include_merge_history": true
+  },
+  "intercom_create_contact": {
+    "avatar": "sample_avatar",
+    "custom_attributes": {},
+    "email": "sample_email",
+    "email_verified": true,
+    "external_id": "sample_external_id",
+    "last_seen_at": 1,
+    "name": "sample_name",
+    "owner_id": "sample_owner_id",
+    "phone": "sample_phone",
+    "role": "sample_role",
+    "signed_up_at": 1,
+    "unsubscribed_from_emails": true
+  },
+  "snowflake_list_databases": {
+    "from_name": "sample_from_name",
+    "history": true,
+    "like": "sample_like",
+    "show_limit": 1,
+    "starts_with": "sample_starts_with"
+  },
+  "snowflake_list_tables": {
+    "database": "sample_database",
+    "from_name": "sample_from_name",
+    "history": true,
+    "like": "sample_like",
+    "schema": "sample_schema",
+    "show_limit": 1,
+    "starts_with": "sample_starts_with"
+  },
+  "sentry_list_organization_projects": {
+    "cursor": "sample_cursor",
+    "organization_id_or_slug": "sample_organization_id_or_slug",
+    "per_page": 1,
+    "query": "sample_query"
+  },
+  "sentry_list_a_project_s_issues": {
+    "cursor": "sample_cursor",
+    "hashes": "sample_hashes",
+    "limit": 1,
+    "organization_id_or_slug": "sample_organization_id_or_slug",
+    "project_id_or_slug": "sample_project_id_or_slug",
+    "query": "sample_query",
+    "short_id_lookup": true,
+    "sort": "date",
+    "stats_period": "sample_stats_period"
+  },
+  "datadog_v1_get_ip_ranges": {},
+  "pagerduty_list_incidents": {
+    "date_range": "all",
+    "incident_key": "sample_incident_key",
+    "include": "acknowledgers",
+    "limit": 1,
+    "offset": 1,
+    "service_ids": [],
+    "since": "sample_since",
+    "sort_by": [],
+    "statuses": "triggered",
+    "team_ids": [],
+    "time_zone": "sample_time_zone",
+    "total": true,
+    "until": "sample_until",
+    "urgencies": "high",
+    "user_ids": []
+  },
+  "pagerduty_create_incident": {
+    "body": {}
+  },
+  "pagerduty_list_services": {
+    "include": "escalation_policies",
+    "limit": 1,
+    "name": "sample_name",
+    "offset": 1,
+    "query": "sample_query",
+    "sort_by": "name",
+    "team_ids": [],
+    "time_zone": "sample_time_zone",
+    "total": true
+  },
+  "exa_web_search": {
+    "max_results": 1,
+    "query": "sample_query"
+  },
+  "exa_web_fetch": {
+    "max_characters": 1,
+    "url": "sample_url"
+  },
+  "perplexity_chat_completion": {
+    "max_tokens": 1,
+    "messages": [],
+    "model": "sample_model",
+    "return_related_questions": true,
+    "search_mode": "sample_search_mode",
+    "search_recency_filter": "sample_search_recency_filter",
+    "temperature": 1
+  },
+  "perplexity_search": {
+    "country": "sample_country",
+    "max_results": 1,
+    "max_tokens_per_page": 1,
+    "query": "sample_query",
+    "search_language_filter": [],
+    "search_type": "web"
+  },
+  "resend_list_emails": {
+    "after": "sample_after",
+    "before": "sample_before",
+    "limit": 1
+  },
+  "resend_create_contact": {
+    "audience_id": "sample_audience_id",
+    "email": "sample_email",
+    "first_name": "sample_first_name",
+    "last_name": "sample_last_name",
+    "properties": {},
+    "segments": [],
+    "topics": [],
+    "unsubscribed": true
+  },
+  "calendly_list_event_types": {
+    "active": true,
+    "admin_managed": true,
+    "count": 1,
+    "organization": "sample_organization",
+    "page_token": "sample_page_token",
+    "sort": "sample_sort",
+    "user": "sample_user",
+    "user_availability_schedule": "sample_user_availability_schedule"
+  },
+  "calendly_get_current_user": {},
+  "clickup_create_task": {
+    "list_id": "sample_list_id",
+    "name": "sample_name"
+  },
+  "clickup_get_task": {
+    "task_id": "sample_task_id"
+  },
+  "clickup_create_task_comment": {
+    "comment_text": "sample_comment_text",
+    "task_id": "sample_task_id"
+  },
+  "posthog_list_project_dashboards": {
+    "limit": 1,
+    "offset": 1,
+    "project_id": "sample_project_id"
+  },
+  "posthog_get_feature_flags_matching_ids": {
+    "project_id": "sample_project_id"
+  },
+  "mixpanel_track_event": {
+    "events": []
+  },
+  "mixpanel_raw_event_export": {
+    "from_date": "sample_from_date",
+    "limit": 1,
+    "project_id": 1,
+    "to_date": "sample_to_date"
+  },
+  "circleci_list_pipelines": {
+    "mine": true,
+    "org_slug": "sample_org_slug",
+    "page_token": "sample_page_token"
+  },
+  "circleci_get_pipeline_by_id": {
+    "pipeline_id": "sample_pipeline_id"
+  },
+  "mailchimp_list_campaigns": {
+    "before_create_time": "sample_before_create_time",
+    "before_send_time": "sample_before_send_time",
+    "count": 1,
+    "exclude_fields": [],
+    "fields": [],
+    "folder_id": "sample_folder_id",
+    "include_resend_shortcut_eligibility": true,
+    "include_resend_shortcut_usage": true,
+    "list_id": "sample_list_id",
+    "member_id": "sample_member_id",
+    "offset": 1,
+    "since_create_time": "sample_since_create_time",
+    "since_send_time": "sample_since_send_time",
+    "sort_dir": "ASC",
+    "sort_field": "create_time",
+    "status": "save",
+    "type": "regular"
+  },
+  "mailchimp_add_member_to_list": {
+    "email_address": "sample_email_address",
+    "email_type": "sample_email_type",
+    "interests": {},
+    "ip_opt": "sample_ip_opt",
+    "ip_signup": "sample_ip_signup",
+    "language": "sample_language",
+    "list_id": "sample_list_id",
+    "location": {},
+    "marketing_permissions": [],
+    "merge_fields": {},
+    "skip_merge_validation": true,
+    "status": "subscribed",
+    "tags": [],
+    "timestamp_opt": "sample_timestamp_opt",
+    "timestamp_signup": "sample_timestamp_signup",
+    "vip": true
+  },
+  "x_create_posts": {
+    "card_uri": "sample_card_uri",
+    "community_id": "sample_community_id",
+    "direct_message_deep_link": "sample_direct_message_deep_link",
+    "edit_options": {},
+    "for_super_followers_only": true,
+    "geo": {},
+    "made_with_ai": true,
+    "media": {},
+    "nullcast": true,
+    "paid_partnership": true,
+    "poll": {},
+    "quote_tweet_id": "sample_quote_tweet_id",
+    "reply": {},
+    "reply_settings": "following",
+    "share_with_followers": true,
+    "text": "sample_text"
+  },
+  "x_get_users_me": {
+    "expansions": "sample_expansions",
+    "post_fields": "sample_post_fields",
+    "user_fields": "sample_user_fields"
+  },
+  "x_search_posts_recent": {
+    "end_time": "sample_end_time",
+    "expansions": "sample_expansions",
+    "max_results": 1,
+    "media_fields": "sample_media_fields",
+    "next_token": "sample_next_token",
+    "pagination_token": "sample_pagination_token",
+    "place_fields": "sample_place_fields",
+    "poll_fields": "sample_poll_fields",
+    "post_fields": "sample_post_fields",
+    "query": "sample_query",
+    "since_id": "sample_since_id",
+    "sort_order": "recency",
+    "start_time": "sample_start_time",
+    "until_id": "sample_until_id",
+    "user_fields": "sample_user_fields"
+  },
+  "square_list_payments": {
+    "begin_time": "sample_begin_time",
+    "card_brand": "sample_card_brand",
+    "cursor": "sample_cursor",
+    "end_time": "sample_end_time",
+    "is_offline_payment": true,
+    "last_4": "sample_last_4",
+    "limit": 1,
+    "location_id": "sample_location_id",
+    "offline_begin_time": "sample_offline_begin_time",
+    "offline_end_time": "sample_offline_end_time",
+    "sort_field": "CREATED_AT",
+    "sort_order": "sample_sort_order",
+    "total": 1,
+    "updated_at_begin_time": "sample_updated_at_begin_time",
+    "updated_at_end_time": "sample_updated_at_end_time"
+  },
+  "square_create_payment": {
+    "accept_partial_authorization": true,
+    "amount_money": {},
+    "app_fee_allocations": [],
+    "app_fee_money": {},
+    "autocomplete": true,
+    "billing_address": {},
+    "buyer_email_address": "sample_buyer_email_address",
+    "buyer_phone_number": "sample_buyer_phone_number",
+    "cash_details": {},
+    "customer_id": "sample_customer_id",
+    "delay_action": "sample_delay_action",
+    "delay_duration": "sample_delay_duration",
+    "external_details": {},
+    "idempotency_key": "sample_idempotency_key",
+    "location_id": "sample_location_id",
+    "note": "sample_note",
+    "order_id": "sample_order_id",
+    "reference_id": "sample_reference_id",
+    "shipping_address": {},
+    "source_id": "sample_source_id",
+    "statement_description_identifier": "sample_statement_description_identifier",
+    "team_member_id": "sample_team_member_id",
+    "tip_money": {},
+    "verification_token": "sample_verification_token"
+  },
+  "square_list_customers": {
+    "count": true,
+    "cursor": "sample_cursor",
+    "limit": 1,
+    "sort_field": "DEFAULT",
+    "sort_order": "DESC"
+  },
+  "openai_list_models": {},
+  "gemini_generate_content": {
+    "cachedContent": "sample_cachedContent",
+    "contents": [],
+    "generationConfig": {},
+    "model": "sample_model",
+    "safetySettings": [],
+    "systemInstruction": {},
+    "toolConfig": {},
+    "tools": []
+  },
+  "gemini_list_models": {
+    "page_size": 1,
+    "page_token": "sample_page_token"
+  },
+  "anthropic-admin_list_workspaces": {
+    "after_id": "sample_after_id",
+    "before_id": "sample_before_id",
+    "include_archived": true,
+    "limit": 1
+  },
+  "anthropic-admin_list_api_keys": {
+    "after_id": "sample_after_id",
+    "before_id": "sample_before_id",
+    "created_by_user_id": "sample_created_by_user_id",
+    "limit": 1,
+    "status": "active",
+    "workspace_id": "sample_workspace_id"
+  },
+  "grafana-cloud_list_stacks": {
+    "org_slug": "sample_org_slug"
+  },
+  "grafana-cloud_get_org": {
+    "org_slug": "sample_org_slug"
+  },
+  "monday_boards": {
+    "board_kind": "private",
+    "ids": [],
+    "limit": 1,
+    "order_by": "created_at",
+    "page": 1,
+    "state": "active",
+    "workspace_ids": []
+  },
+  "monday_get_workspaces": {
+    "ids": [],
+    "kind": "closed",
+    "limit": 1,
+    "order_by": "created_at",
+    "page": 1,
+    "state": "active"
+  },
+  "onesignal_view_an_app": {
+    "app_id": "sample_app_id",
+    "view": "config"
+  },
+  "amplitude_get_flags": {
+    "flag_keys": "sample_flag_keys"
+  }
+}

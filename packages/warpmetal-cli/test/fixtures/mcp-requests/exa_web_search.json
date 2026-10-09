@@ -1,0 +1,12 @@
+{
+  "method": "POST",
+  "url": "https://api.exa.ai/search",
+  "body": {
+    "query": "sample_query",
+    "numResults": 1
+  },
+  "headers": {
+    "x-api-key": "__TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "method": "POST",
+  "url": "https://app.asana.com/api/1.0/projects",
+  "body": {
+    "data": {
+      "archived": true,
+      "color": "dark-pink",
+      "current_status": {},
+      "current_status_update": {},
+      "custom_fields": {},
+      "default_view": "list",
+      "due_date": "sample_due_date",
+      "due_on": "sample_due_on",
+      "followers": "sample_followers",
+      "html_notes": "sample_html_notes",
+      "is_template": true,
+      "name": "sample_name",
+      "notes": "sample_notes",
+      "owner": "sample_owner",
+      "public": true,
+      "start_on": "sample_start_on",
+      "team": "sample_team",
+      "workspace": "sample_workspace"
+    }
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -8,6 +8,7 @@ import { SkillError, errorMessage } from "./errors.js";
 import { startHttpServer } from "./http.js";
 import { loadRegistry } from "./registry.js";
 import { SERVER_NAME, createSkillsServer } from "./server.js";
+import { createProviderInvokerFromEnv } from "./providers/index.js";
 import { packageVersion } from "./version.js";
 
 function banner(loadedSource: string, registryVersion: string, stale: boolean): string {
@@ -70,7 +71,15 @@ async function main(): Promise<void> {
   }
 
   // stdio is a local, operator-controlled channel, so it gets everything.
-  const server = createSkillsServer(loaded, { profile: "full" });
+  const providers = createProviderInvokerFromEnv();
+  if (!providers.configured) {
+    // The tools still register, but every call answers `provider_unconfigured`.
+    // Say so once, loudly, instead of leaving it to the first failed call.
+    process.stderr.write(
+      `${SERVER_NAME}: provider tools are enabled but @warpmetal/cli could not be resolved; each provider tools/call will answer provider_unconfigured. Install it with \`npm i @warpmetal/cli\` or set WARPMETAL_INTEGRATION_CLI_JS to its entry file.\n`,
+    );
+  }
+  const server = createSkillsServer(loaded, { profile: "full", providers });
   const transport = new StdioServerTransport();
   await server.connect(transport);
   process.stderr.write(

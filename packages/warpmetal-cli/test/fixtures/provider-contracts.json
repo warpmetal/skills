@@ -1,0 +1,283 @@
+{
+  "version": 1,
+  "note": "Hand-authored provider request contract, derived from each provider's public API reference (docUrl). provider-contract.test.ts builds every MCP tool request from the reviewed sample args and asserts the URL host, HTTP method and auth header match this file. A failing assertion means the builder drifted from the documented API; fix the builder (scripts/gen-mcp-tools.mjs) or correct this file after re-reading the docs.",
+  "providers": {
+    "github": {
+      "docUrl": "https://docs.github.com/en/rest",
+      "allowedHosts": ["api.github.com"],
+      "methods": ["GET", "POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "gitlab": {
+      "docUrl": "https://docs.gitlab.com/ee/api/rest/",
+      "allowedHosts": ["gitlab.com"],
+      "methods": ["GET", "POST"],
+      "auth": { "header": "PRIVATE-TOKEN", "placeholder": "__TOKEN__" }
+    },
+    "notion": {
+      "docUrl": "https://developers.notion.com/reference/intro",
+      "allowedHosts": ["api.notion.com"],
+      "methods": ["GET", "POST", "PATCH"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "stripe": {
+      "docUrl": "https://docs.stripe.com/api",
+      "allowedHosts": ["api.stripe.com"],
+      "methods": ["GET", "POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "jira": {
+      "docUrl": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/",
+      "hostSuffix": ".atlassian.net",
+      "accountScoped": true,
+      "methods": ["GET", "POST"],
+      "auth": { "header": "Authorization", "placeholder": "__BASIC__" }
+    },
+    "confluence": {
+      "docUrl": "https://developer.atlassian.com/cloud/confluence/rest/v2/",
+      "hostSuffix": ".atlassian.net",
+      "accountScoped": true,
+      "methods": ["GET"],
+      "auth": { "header": "Authorization", "placeholder": "__BASIC__" }
+    },
+    "linear": {
+      "docUrl": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api",
+      "allowedHosts": ["api.linear.app"],
+      "methods": ["POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "supabase": {
+      "docUrl": "https://supabase.com/docs/reference/api/introduction",
+      "allowedHosts": ["api.supabase.com"],
+      "methods": ["GET", "POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "cloudflare": {
+      "docUrl": "https://developers.cloudflare.com/api/",
+      "allowedHosts": ["api.cloudflare.com"],
+      "methods": ["GET"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "vercel": {
+      "docUrl": "https://vercel.com/docs/rest-api",
+      "allowedHosts": ["api.vercel.com"],
+      "methods": ["GET", "POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "figma": {
+      "docUrl": "https://www.figma.com/developers/api",
+      "allowedHosts": ["api.figma.com"],
+      "methods": ["GET"],
+      "auth": { "header": "X-Figma-Token", "placeholder": "__TOKEN__" }
+    },
+    "shopify": {
+      "docUrl": "https://shopify.dev/docs/api/admin-rest",
+      "hostSuffix": ".myshopify.com",
+      "accountScoped": true,
+      "methods": ["GET"],
+      "auth": { "header": "X-Shopify-Access-Token", "placeholder": "__TOKEN__" }
+    },
+    "hubspot": {
+      "docUrl": "https://developers.hubspot.com/docs/api/overview",
+      "allowedHosts": ["api.hubapi.com"],
+      "methods": ["GET", "POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "asana": {
+      "docUrl": "https://developers.asana.com/reference/rest-api-reference",
+      "allowedHosts": ["app.asana.com"],
+      "methods": ["GET", "POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "dropbox": {
+      "docUrl": "https://www.dropbox.com/developers/documentation/http/documentation",
+      "allowedHosts": ["api.dropboxapi.com"],
+      "methods": ["POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "discord": {
+      "docUrl": "https://discord.com/developers/docs/reference",
+      "allowedHosts": ["discord.com"],
+      "methods": ["GET"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "airtable": {
+      "docUrl": "https://airtable.com/developers/web/api/introduction",
+      "allowedHosts": ["api.airtable.com"],
+      "methods": ["GET"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "intercom": {
+      "docUrl": "https://developers.intercom.com/docs/references/rest-api/api.intercom.io/",
+      "allowedHosts": ["api.intercom.io"],
+      "methods": ["GET", "POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "snowflake": {
+      "docUrl": "https://docs.snowflake.com/en/developer-guide/sql-api/index",
+      "hostSuffix": ".snowflakecomputing.com",
+      "accountScoped": true,
+      "methods": ["POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "sentry": {
+      "docUrl": "https://docs.sentry.io/api/",
+      "allowedHosts": ["sentry.io"],
+      "methods": ["GET"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "datadog": {
+      "docUrl": "https://docs.datadoghq.com/api/latest/ip-ranges/",
+      "allowedHosts": ["ip-ranges.datadoghq.com"],
+      "methods": ["GET"],
+      "auth": null
+    },
+    "pagerduty": {
+      "docUrl": "https://developer.pagerduty.com/api-reference/",
+      "allowedHosts": ["api.pagerduty.com"],
+      "methods": ["GET", "POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "exa": {
+      "docUrl": "https://docs.exa.ai/reference/getting-started",
+      "allowedHosts": ["api.exa.ai"],
+      "methods": ["POST"],
+      "auth": { "header": "x-api-key", "placeholder": "__TOKEN__" }
+    },
+    "perplexity": {
+      "docUrl": "https://docs.perplexity.ai/api-reference/",
+      "allowedHosts": ["api.perplexity.ai"],
+      "methods": ["POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "email": {
+      "docUrl": "https://resend.com/docs/api-reference/introduction",
+      "allowedHosts": ["api.resend.com"],
+      "methods": ["GET", "POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "calendly": {
+      "docUrl": "https://developer.calendly.com/api-docs",
+      "allowedHosts": ["api.calendly.com"],
+      "methods": ["GET"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "clickup": {
+      "docUrl": "https://developer.clickup.com/reference",
+      "allowedHosts": ["api.clickup.com"],
+      "methods": ["GET", "POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "posthog": {
+      "docUrl": "https://posthog.com/docs/api",
+      "hostSuffix": ".posthog.com",
+      "accountScoped": true,
+      "methods": ["GET"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "mixpanel": {
+      "docUrl": "https://developer.mixpanel.com/reference/overview",
+      "allowedHosts": ["api.mixpanel.com", "data.mixpanel.com"],
+      "methods": ["GET", "POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "circleci": {
+      "docUrl": "https://circleci.com/docs/api/v2/",
+      "allowedHosts": ["circleci.com"],
+      "methods": ["GET"],
+      "auth": { "header": "Circle-Token", "placeholder": "__TOKEN__" }
+    },
+    "mailchimp": {
+      "docUrl": "https://mailchimp.com/developer/marketing/api/",
+      "hostSuffix": ".api.mailchimp.com",
+      "accountScoped": true,
+      "methods": ["GET", "POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "x": {
+      "docUrl": "https://docs.x.com/x-api",
+      "allowedHosts": ["api.x.com"],
+      "methods": ["GET", "POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "square": {
+      "docUrl": "https://developer.squareup.com/reference/square",
+      "allowedHosts": ["connect.squareup.com"],
+      "methods": ["GET", "POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "openai": {
+      "docUrl": "https://platform.openai.com/docs/api-reference",
+      "allowedHosts": ["api.openai.com"],
+      "methods": ["GET"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "gemini": {
+      "docUrl": "https://ai.google.dev/api",
+      "allowedHosts": ["generativelanguage.googleapis.com"],
+      "methods": ["GET", "POST"],
+      "auth": { "header": "", "placeholder": "__TOKEN__" }
+    },
+    "anthropic-admin": {
+      "docUrl": "https://docs.anthropic.com/en/api/administration-api",
+      "allowedHosts": ["api.anthropic.com"],
+      "methods": ["GET"],
+      "auth": { "header": "x-api-key", "placeholder": "__TOKEN__" }
+    },
+    "grafana-cloud": {
+      "docUrl": "https://grafana.com/docs/grafana-cloud/developer-resources/api-reference/cloud-api/",
+      "allowedHosts": ["grafana.com"],
+      "methods": ["GET"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "monday": {
+      "docUrl": "https://developer.monday.com/api-reference/",
+      "allowedHosts": ["api.monday.com"],
+      "methods": ["POST"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "onesignal": {
+      "docUrl": "https://documentation.onesignal.com/reference",
+      "allowedHosts": ["api.onesignal.com"],
+      "methods": ["GET"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "amplitude": {
+      "docUrl": "https://amplitude.com/docs/apis/experiment/experiment-evaluation-api",
+      "allowedHosts": ["api.lab.amplitude.com"],
+      "methods": ["GET"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    }
+  },
+  "tools": {
+    "mixpanel_track_event": {
+      "auth": null,
+      "note": "POST /track is public (`security: []` in the ingestion OpenAPI): the project token travels inside each event's properties.token, and the body is a base64-JSON `data` form field, not a JSON body. Sending a JSON body answers HTTP 200 with status 0 (\"data, missing or empty\"), which is why the tool carries no auth header."
+    },
+    "mixpanel_raw_event_export": {
+      "note": "GET /api/2.0/export/ enforces Basic auth with a service-account user and secret; the probe answers 401 without a credential, so the exact encoding is unconfirmed until one is available."
+    },
+    "posthog_get_feature_flags_matching_ids": {
+      "note": "The matching-ids operation is GET /api/projects/{project_id}/feature_flags/matching_ids/ (a distinct path from the feature_flags list endpoint)."
+    },
+    "grafana-cloud_get_org": {
+      "note": "A single organization is GET /api/orgs/{slugOrId} (path parameter). /api/orgs?orgSlug= is the legacy Grafana-server search endpoint, not this API."
+    },
+    "shopify_list_products": { "note": "Shopify ships a dated API version in the URL; it must be a currently supported stable version." },
+    "shopify_get_product": { "note": "Shopify ships a dated API version in the URL; it must be a currently supported stable version." },
+    "shopify_list_orders": { "note": "Shopify ships a dated API version in the URL; it must be a currently supported stable version." },
+    "mailchimp_add_member_to_list": {
+      "note": "skip_merge_validation is a query parameter and list_id is the path parameter; neither is a body field beyond Mailchimp's optional echo of list_id."
+    },
+    "confluence_get_page_by_id": {
+      "note": "The draft selector on GET /wiki/api/v2/pages/{id} is the get-draft query parameter."
+    },
+    "snowflake_list_databases": {
+      "note": "SHOW DATABASES clause order is [HISTORY] [LIKE] [STARTS WITH] [LIMIT [FROM]]."
+    },
+    "x_create_posts": {
+      "experimental": true,
+      "note": "X rejects app-only bearer tokens on the write endpoint; publishing needs an OAuth 2.0 user token, which this server does not collect yet."
+    }
+  }
+}

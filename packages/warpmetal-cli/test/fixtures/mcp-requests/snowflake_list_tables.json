@@ -1,0 +1,13 @@
+{
+  "method": "POST",
+  "url": "https://acme.snowflakecomputing.com/api/v2/statements",
+  "body": {
+    "statement": "SHOW TABLES HISTORY LIKE 'sample_like' IN SCHEMA sample_database.sample_schema STARTS WITH 'sample_starts_with' LIMIT 1 FROM 'sample_from_name'",
+    "warehouse": "COMPUTE_WH"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  }
+}
