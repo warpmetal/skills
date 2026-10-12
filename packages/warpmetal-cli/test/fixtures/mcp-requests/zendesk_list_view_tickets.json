@@ -1,0 +1,9 @@
+{
+  "method": "GET",
+  "url": "https://acme.zendesk.com/api/v2/views/1/tickets.json",
+  "headers": {
+    "Authorization": "Basic __BASIC__",
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+}

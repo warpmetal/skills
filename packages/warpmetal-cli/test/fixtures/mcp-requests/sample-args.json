@@ -877,5 +877,58 @@
   },
   "amplitude_get_flags": {
     "flag_keys": "sample_flag_keys"
+  },
+  "zendesk_list_tickets": {
+    "external_id": "sample_external_id",
+    "per_page": 1,
+    "sort_by": "id",
+    "sort_order": "asc"
+  },
+  "zendesk_get_ticket": {
+    "ticket_id": 1
+  },
+  "zendesk_list_ticket_comments": {
+    "sort_order": "asc",
+    "ticket_id": 1
+  },
+  "zendesk_search": {
+    "per_page": 1,
+    "query": "sample_query",
+    "sort_by": "updated_at",
+    "sort_order": "asc"
+  },
+  "zendesk_get_current_user": {},
+  "zendesk_list_users": {
+    "external_id": "sample_external_id",
+    "role": "end-user",
+    "sort_by": "sample_sort_by",
+    "sort_order": "asc"
+  },
+  "zendesk_list_organizations": {
+    "page_after": "sample_page_after",
+    "page_size": 1
+  },
+  "zendesk_list_views": {
+    "page_after": "sample_page_after",
+    "page_size": 1
+  },
+  "zendesk_list_view_tickets": {
+    "view_id": 1
+  },
+  "zendesk_create_ticket": {
+    "comment_body": "sample_comment_body",
+    "priority": "urgent",
+    "public": true,
+    "requester_email": "sample_requester_email",
+    "requester_id": 1,
+    "requester_name": "sample_requester_name",
+    "subject": "sample_subject",
+    "tags": [],
+    "type": "problem"
+  },
+  "zendesk_add_ticket_comment": {
+    "comment_body": "sample_comment_body",
+    "public": true,
+    "ticket_id": 1
   }
 }

@@ -41,6 +41,15 @@ function notionHeaders(): Record<string, string> {
   };
 }
 
+/** Zendesk API-token auth: Basic base64(email/token:api_token). */
+function zendeskHeaders(): Record<string, string> {
+  return {
+    Authorization: "Basic __BASIC__",
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+}
+
 /** Notion's paragraph block. Shared by append-block-children and create-page. */
 function paragraphBlock(text: unknown): Record<string, unknown> {
   return {
@@ -231,6 +240,35 @@ const BUILDS: Record<string, BuildFn> = {
   },
   "onesignal_view_an_app": ({args}) => ({ method: "GET", url: `https://api.onesignal.com/apps/${args.app_id}?${qs({ view: args.view })}`, headers: { Authorization: "Basic __TOKEN__" } }),
   "amplitude_get_flags": ({args}) => ({ method: "GET", url: `https://api.lab.amplitude.com/v1/flags?${qs({ flag_keys: args.flag_keys })}`, headers: { Authorization: "Api-Key __TOKEN__" } }),
+  "zendesk_list_tickets": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets.json?${qs({ external_id: args.external_id, sort_by: args.sort_by, sort_order: args.sort_order, per_page: args.per_page })}`, headers: zendeskHeaders() }),
+  "zendesk_get_ticket": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets/${args.ticket_id}.json`, headers: zendeskHeaders() }),
+  "zendesk_list_ticket_comments": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets/${args.ticket_id}/comments.json?${qs({ sort_order: args.sort_order })}`, headers: zendeskHeaders() }),
+  "zendesk_search": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.zendeskSubdomain}.zendesk.com/api/v2/search.json?${qs({ query: args.query, sort_by: args.sort_by, sort_order: args.sort_order, per_page: args.per_page })}`, headers: zendeskHeaders() }),
+  "zendesk_get_current_user": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.zendeskSubdomain}.zendesk.com/api/v2/users/me.json`, headers: zendeskHeaders() }),
+  "zendesk_list_users": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.zendeskSubdomain}.zendesk.com/api/v2/users.json?${qs({ role: args.role, external_id: args.external_id, sort_by: args.sort_by, sort_order: args.sort_order })}`, headers: zendeskHeaders() }),
+  "zendesk_list_organizations": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.zendeskSubdomain}.zendesk.com/api/v2/organizations.json?${qs({ "page[size]": args.page_size, "page[after]": args.page_after })}`, headers: zendeskHeaders() }),
+  "zendesk_list_views": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.zendeskSubdomain}.zendesk.com/api/v2/views.json?${qs({ "page[size]": args.page_size, "page[after]": args.page_after })}`, headers: zendeskHeaders() }),
+  "zendesk_list_view_tickets": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.zendeskSubdomain}.zendesk.com/api/v2/views/${args.view_id}/tickets.json`, headers: zendeskHeaders() }),
+  "zendesk_create_ticket": ({args, ctx}) => {
+    const ticket: Record<string, unknown> = {};
+    if (args.requester_id !== undefined) {
+      ticket.requester_id = args.requester_id;
+    } else {
+      const requester: Record<string, unknown> = {};
+      if (args.requester_email !== undefined) requester.email = args.requester_email;
+      if (args.requester_name !== undefined) requester.name = args.requester_name;
+      if (Object.keys(requester).length > 0) ticket.requester = requester;
+    }
+    if (args.subject !== undefined) ticket.subject = args.subject;
+    if (args.comment_body !== undefined) {
+      ticket.comment = { body: args.comment_body, public: args.public ?? true };
+    }
+    if (args.priority !== undefined) ticket.priority = args.priority;
+    if (args.type !== undefined) ticket.type = args.type;
+    if (args.tags !== undefined) ticket.tags = args.tags;
+    return { method: "POST", url: `https://${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets.json`, body: { ticket }, headers: zendeskHeaders() };
+  },
+  "zendesk_add_ticket_comment": ({args, ctx}) => ({ method: "PUT", url: `https://${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets/${args.ticket_id}.json`, body: { ticket: { comment: { body: args.comment_body, public: args.public ?? true } } }, headers: zendeskHeaders() }),
 };
 
 export const MCP_TOOL_DEFS: readonly McpToolDef[] = [
@@ -1133,6 +1171,105 @@ export const MCP_TOOL_DEFS: readonly McpToolDef[] = [
     
     secretName: "amplitude.token",
     build: BUILDS["amplitude_get_flags"]!,
+  },
+  {
+    toolSlug: "zendesk_list_tickets",
+    provider: "zendesk",
+    verb: "list-tickets",
+    mutating: false,
+    
+    secretName: "zendesk.token",
+    build: BUILDS["zendesk_list_tickets"]!,
+  },
+  {
+    toolSlug: "zendesk_get_ticket",
+    provider: "zendesk",
+    verb: "get-ticket",
+    mutating: false,
+    
+    secretName: "zendesk.token",
+    build: BUILDS["zendesk_get_ticket"]!,
+  },
+  {
+    toolSlug: "zendesk_list_ticket_comments",
+    provider: "zendesk",
+    verb: "list-ticket-comments",
+    mutating: false,
+    
+    secretName: "zendesk.token",
+    build: BUILDS["zendesk_list_ticket_comments"]!,
+  },
+  {
+    toolSlug: "zendesk_search",
+    provider: "zendesk",
+    verb: "search",
+    mutating: false,
+    
+    secretName: "zendesk.token",
+    build: BUILDS["zendesk_search"]!,
+  },
+  {
+    toolSlug: "zendesk_get_current_user",
+    provider: "zendesk",
+    verb: "get-current-user",
+    mutating: false,
+    
+    secretName: "zendesk.token",
+    build: BUILDS["zendesk_get_current_user"]!,
+  },
+  {
+    toolSlug: "zendesk_list_users",
+    provider: "zendesk",
+    verb: "list-users",
+    mutating: false,
+    
+    secretName: "zendesk.token",
+    build: BUILDS["zendesk_list_users"]!,
+  },
+  {
+    toolSlug: "zendesk_list_organizations",
+    provider: "zendesk",
+    verb: "list-organizations",
+    mutating: false,
+    
+    secretName: "zendesk.token",
+    build: BUILDS["zendesk_list_organizations"]!,
+  },
+  {
+    toolSlug: "zendesk_list_views",
+    provider: "zendesk",
+    verb: "list-views",
+    mutating: false,
+    
+    secretName: "zendesk.token",
+    build: BUILDS["zendesk_list_views"]!,
+  },
+  {
+    toolSlug: "zendesk_list_view_tickets",
+    provider: "zendesk",
+    verb: "list-view-tickets",
+    mutating: false,
+    
+    secretName: "zendesk.token",
+    build: BUILDS["zendesk_list_view_tickets"]!,
+  },
+  {
+    toolSlug: "zendesk_create_ticket",
+    provider: "zendesk",
+    verb: "create-ticket",
+    mutating: true,
+    gate: "CONFIRM ZENDESK CREATE TICKET",
+    secretName: "zendesk.token",
+    build: BUILDS["zendesk_create_ticket"]!,
+  },
+  {
+    toolSlug: "zendesk_add_ticket_comment",
+    provider: "zendesk",
+    verb: "add-ticket-comment",
+    mutating: true,
+    gate: "CONFIRM ZENDESK ADD TICKET COMMENT",
+    secretName: "zendesk.token",
+    build: BUILDS["zendesk_add_ticket_comment"]!,
   }
 ];
 

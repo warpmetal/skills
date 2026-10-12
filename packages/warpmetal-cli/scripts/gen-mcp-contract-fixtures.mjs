@@ -59,6 +59,7 @@ const SAMPLE_CTX = {
   posthog: { posthogBase: "https://us.posthog.com" },
   mailchimp: { mailchimpDc: "us1" },
   pagerduty: { pagerdutyEmail: "ops@acme.test" },
+  zendesk: { zendeskSubdomain: "acme", zendeskEmail: "ops@acme.test" },
 };
 
 const schemaBySlug = new Map();

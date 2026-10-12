@@ -1,0 +1,22 @@
+{
+  "method": "POST",
+  "url": "https://acme.zendesk.com/api/v2/tickets.json",
+  "body": {
+    "ticket": {
+      "requester_id": 1,
+      "subject": "sample_subject",
+      "comment": {
+        "body": "sample_comment_body",
+        "public": true
+      },
+      "priority": "urgent",
+      "type": "problem",
+      "tags": []
+    }
+  },
+  "headers": {
+    "Authorization": "Basic __BASIC__",
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+}

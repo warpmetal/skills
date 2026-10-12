@@ -1,0 +1,9 @@
+{
+  "method": "GET",
+  "url": "https://acme.zendesk.com/api/v2/users.json?role=end-user&external_id=sample_external_id&sort_by=sample_sort_by&sort_order=asc",
+  "headers": {
+    "Authorization": "Basic __BASIC__",
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+}

@@ -61,6 +61,7 @@ const SECRETS = {
   monday: "monday.token",
   onesignal: "onesignal.token",
   amplitude: "amplitude.token",
+  zendesk: "zendesk.token",
 };
 
 /**
@@ -328,6 +329,54 @@ const ROUTES = {
   // with `Api-Key <server deployment key>`. The previous host (`experiment.amplitude.com`)
   // is the Management API and 404s on this path.
   amplitude_get_flags: `({args}) => ({ method: "GET", url: \`https://api.lab.amplitude.com/v1/flags?\${qs({ flag_keys: args.flag_keys })}\`, headers: { Authorization: "Api-Key __TOKEN__" } })`,
+
+  // Zendesk is per-tenant: every path lives under
+  // https://<subdomain>.zendesk.com, and the subdomain is not a constant.
+  // API-token auth is `Basic base64(<email>/token:<api_token>)`; a bare
+  // `<email>:<api_token>` is rejected with HTTP 401, so the `/token` literal is
+  // part of the credential (the engine builds it for `__BASIC__`).
+  zendesk_list_tickets: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets.json?\${qs({ external_id: args.external_id, sort_by: args.sort_by, sort_order: args.sort_order, per_page: args.per_page })}\`, headers: zendeskHeaders() })`,
+  zendesk_get_ticket: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets/\${args.ticket_id}.json\`, headers: zendeskHeaders() })`,
+  zendesk_list_ticket_comments: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets/\${args.ticket_id}/comments.json?\${qs({ sort_order: args.sort_order })}\`, headers: zendeskHeaders() })`,
+  // Zendesk's unified search takes the whole filter in `query` (for example
+  // `type:ticket status:open`); there is no per-field parameter to forward.
+  zendesk_search: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/search.json?\${qs({ query: args.query, sort_by: args.sort_by, sort_order: args.sort_order, per_page: args.per_page })}\`, headers: zendeskHeaders() })`,
+  zendesk_get_current_user: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/users/me.json\`, headers: zendeskHeaders() })`,
+  zendesk_list_users: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/users.json?\${qs({ role: args.role, external_id: args.external_id, sort_by: args.sort_by, sort_order: args.sort_order })}\`, headers: zendeskHeaders() })`,
+  // Cursor pagination is the style Zendesk recommends for this endpoint, and it
+  // is the only one exposed: mixing offset `page` with `page[size]` in one
+  // request is a documented error. `qs` encodes the bracketed keys.
+  zendesk_list_organizations: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/organizations.json?\${qs({ "page[size]": args.page_size, "page[after]": args.page_after })}\`, headers: zendeskHeaders() })`,
+  zendesk_list_views: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/views.json?\${qs({ "page[size]": args.page_size, "page[after]": args.page_after })}\`, headers: zendeskHeaders() })`,
+  zendesk_list_view_tickets: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/views/\${args.view_id}/tickets.json\`, headers: zendeskHeaders() })`,
+  // Zendesk wraps every write in a `ticket` envelope and models the requester
+  // two ways: `requester_id` at the top level of the ticket, or a `requester`
+  // object carrying `email`/`name` (its documented fields do not include `id`).
+  // Exactly one form is sent, id first, so the two cannot disagree. `comment` is
+  // omitted when there is none: forwarding the raw args would post
+  // `comment_body` as an unknown field and open the ticket with no comment.
+  zendesk_create_ticket: `({args, ctx}) => {
+    const ticket: Record<string, unknown> = {};
+    if (args.requester_id !== undefined) {
+      ticket.requester_id = args.requester_id;
+    } else {
+      const requester: Record<string, unknown> = {};
+      if (args.requester_email !== undefined) requester.email = args.requester_email;
+      if (args.requester_name !== undefined) requester.name = args.requester_name;
+      if (Object.keys(requester).length > 0) ticket.requester = requester;
+    }
+    if (args.subject !== undefined) ticket.subject = args.subject;
+    if (args.comment_body !== undefined) {
+      ticket.comment = { body: args.comment_body, public: args.public ?? true };
+    }
+    if (args.priority !== undefined) ticket.priority = args.priority;
+    if (args.type !== undefined) ticket.type = args.type;
+    if (args.tags !== undefined) ticket.tags = args.tags;
+    return { method: "POST", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets.json\`, body: { ticket }, headers: zendeskHeaders() };
+  }`,
+  // A comment is added by updating the ticket, not by posting a comment
+  // resource; `public: true` (the default) emails the requester.
+  zendesk_add_ticket_comment: `({args, ctx}) => ({ method: "PUT", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets/\${args.ticket_id}.json\`, body: { ticket: { comment: { body: args.comment_body, public: args.public ?? true } } }, headers: zendeskHeaders() })`,
 };
 
 const missing = tools.filter((t) => !ROUTES[t.toolSlug]).map((t) => t.toolSlug);
@@ -395,6 +444,15 @@ function notionHeaders(): Record<string, string> {
   return {
     Authorization: "Bearer __TOKEN__",
     "Notion-Version": "2022-06-28",
+    "Content-Type": "application/json",
+  };
+}
+
+/** Zendesk API-token auth: Basic base64(email/token:api_token). */
+function zendeskHeaders(): Record<string, string> {
+  return {
+    Authorization: "Basic __BASIC__",
+    Accept: "application/json",
     "Content-Type": "application/json",
   };
 }

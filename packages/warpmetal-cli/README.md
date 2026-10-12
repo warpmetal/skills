@@ -114,8 +114,8 @@ token-status adapters for the providers behind the MCP tool surface (GitLab,
 Notion, Jira, Confluence, Linear, Supabase, Figma, Shopify, HubSpot, Asana,
 Dropbox, Airtable, Intercom, Snowflake, Datadog, PagerDuty, Exa, Perplexity,
 Calendly, ClickUp, PostHog, Mixpanel, CircleCI, Mailchimp, X, Square, OpenAI,
-Gemini, Anthropic Admin, Grafana Cloud, Monday.com, OneSignal, Amplitude). The
-provider verbs that back the MCP tools are dispatched through
+Gemini, Anthropic Admin, Grafana Cloud, Monday.com, OneSignal, Amplitude,
+Zendesk). The provider verbs that back the MCP tools are dispatched through
 `--args-stdin`/`--args-json`; the generated adapters implement `status` only.
 
 Two rules hold for every adapter:
@@ -150,7 +150,7 @@ a stored value never appears in any diagnostic, plan, list, error or `--json`
 document, and that it *does* appear on the one sanctioned stream.
 
 `npm run probe` is the one network-bound check, and it is deliberately outside
-`npm test`. It builds each of the 100 provider requests from the reviewed sample
+`npm test`. It builds each of the 111 provider requests from the reviewed sample
 args, swaps the token for a sentinel and sends it: a real route answers 401/403
 (auth required), 400/422 or 2xx, while a route the provider does not serve answers
 404/405. A per-host control request to a bogus path marks auth-first and

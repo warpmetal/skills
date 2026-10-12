@@ -8,8 +8,8 @@ import { PROVIDERS } from "../src/integration/registry.js";
 import { memoryStore } from "./helpers.js";
 
 describe("mcp provider tools", () => {
-  it("defines exactly 100 tools with unique provider:verb pairs", () => {
-    assert.equal(MCP_TOOL_DEFS.length, 100);
+  it("defines exactly 111 tools with unique provider:verb pairs", () => {
+    assert.equal(MCP_TOOL_DEFS.length, 111);
     const keys = MCP_TOOL_DEFS.map((def) => `${def.provider}:${def.verb}`);
     assert.equal(new Set(keys).size, keys.length);
   });

@@ -18,6 +18,32 @@ import test from "node:test";
 
 import { invalidRoutes, probeAll, summarize } from "../scripts/probe-mcp-routes.mjs";
 
+test("per-customer hosts are classified instead of probed", async () => {
+  // A fetch that always throws: nothing here may leave the process, and a row
+  // that is not account-scoped would come back `unreachable` rather than
+  // `account-scoped`. This is what keeps the Zendesk tenant host (an invented
+  // `acme.zendesk.com`, which does not resolve) out of the probe's failure set.
+  const { rows } = await probeAll({
+    fetchFn: (async () => {
+      throw new Error("a per-customer host must not be probed");
+    }) as unknown as typeof fetch,
+    throttleMs: 0,
+  });
+
+  const accountScopedHosts = new Set(
+    rows.filter((row) => row.verdict === "account-scoped").map((row) => row.host),
+  );
+  for (const host of [
+    "acme.atlassian.net",
+    "acme.myshopify.com",
+    "acme.snowflakecomputing.com",
+    "acme.zendesk.com",
+  ]) {
+    assert.ok(accountScopedHosts.has(host), `${host} must be reported as account-scoped`);
+  }
+  assert.deepEqual(invalidRoutes(rows), [], "an unreachable host is not a missing route");
+});
+
 test(
   "no provider builder resolves to a missing route",
   { skip: process.env.MCP_PROBE ? false : "set MCP_PROBE=1 to run the live route probe" },

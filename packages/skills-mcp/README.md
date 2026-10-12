@@ -6,7 +6,7 @@ Unified MCP (Model Context Protocol) server for WarpMetal. One package, one host
   (`registry.json`) with checksum verification and the `skill://` URI semantics the hosts already use.
 - **CLI** — exposes the `warpmetal` command-line tool as 43 typed tools: 16 read-only, 3 task tools,
   and 12 plan/apply pairs, six of which guard the verbs that cannot be taken back.
-- **Providers (batches 01-10)** — 100 WarpMetal-backed provider tools (GitHub / GitLab / Notion / Stripe / Jira / Confluence / Linear / Supabase / Cloudflare / Vercel / Figma / Shopify / HubSpot / Asana / Dropbox / Discord / Airtable / Intercom / Snowflake / Sentry / Datadog / PagerDuty / Exa / Perplexity / Resend / Calendly / ClickUp / PostHog / Mixpanel / CircleCI / Mailchimp / X / Square / OpenAI / Gemini / Anthropic Admin / Grafana Cloud / Monday.com / OneSignal / Amplitude)
+- **Providers (batches 01-11)** — 111 WarpMetal-backed provider tools (GitHub / GitLab / Notion / Stripe / Jira / Confluence / Linear / Supabase / Cloudflare / Vercel / Figma / Shopify / HubSpot / Asana / Dropbox / Discord / Airtable / Intercom / Snowflake / Sentry / Datadog / PagerDuty / Exa / Perplexity / Resend / Calendly / ClickUp / PostHog / Mixpanel / CircleCI / Mailchimp / X / Square / OpenAI / Gemini / Anthropic Admin / Grafana Cloud / Monday.com / OneSignal / Amplitude / Zendesk)
   registered only on the `full` (stdio) profile; calls run `warpmetal integration <provider> <verb>` with secrets from the WarpMetal vault. No DigitalOcean dependency.
 
 ## Two profiles, split by transport
@@ -16,7 +16,7 @@ boundary, not a configuration preference.
 
 | Profile | Transport | Tools | Why |
 | --- | --- | --- | --- |
-| `full` | stdio (default) | **146** — 3 `skill_*` + 43 `wm_*` + 100 providers | stdio is a local, operator-controlled channel |
+| `full` | stdio (default) | **157** — 3 `skill_*` + 43 `wm_*` + 111 providers | stdio is a local, operator-controlled channel |
 | `content` | Streamable HTTP (`--http`) | **3** — only `skill_*` | HTTP has no authentication; `wm_*` and provider tools must not be reachable |
 
 On the `content` profile the `wm_*` and provider tools are *not registered at all*, not
@@ -49,7 +49,7 @@ A CLI below the version floor is refused rather than warned about: reads still w
 can be diagnosed, but every `*_apply` is answered `DENIED` before any process exists. An *unreadable*
 version refuses nothing, because an override or a bare PATH executable is *unknown* rather than old.
 
-## Providers (batches 01-10)
+## Providers (batches 01-11)
 
 Batch-01 tools (stdio / `full` only):
 
@@ -121,14 +121,23 @@ Batch-10 tools (stdio / `full` only):
 97. `monday_boards` · 98. `monday_get_workspaces` · 99. `onesignal_view_an_app`
 100. `amplitude_get_flags`
 
+Batch-11 tools (stdio / `full` only):
+
+101. `zendesk_list_tickets` · 102. `zendesk_get_ticket` · 103. `zendesk_list_ticket_comments`
+104. `zendesk_search` · 105. `zendesk_get_current_user` · 106. `zendesk_list_users`
+107. `zendesk_list_organizations` · 108. `zendesk_list_views` · 109. `zendesk_list_view_tickets`
+110. `zendesk_create_ticket` · 111. `zendesk_add_ticket_comment`
+
 Setup:
 
 1. Install `@warpmetal/cli` (provides `warpmetal env` and `warpmetal integration`).
 2. Store provider secrets in the vault, for example:
    `warpmetal env store set github.token --stdin`
-3. For site-scoped providers, also store `jira.site`, `confluence.site`, `shopify.shop`, etc.,
-   and for Atlassian Cloud store the account email (`jira.email`, `confluence.email`) used for
-   `Basic base64(email:token)` (`warpmetal env plan` shows what each provider expects.)
+3. For site-scoped providers, also store `jira.site`, `confluence.site`, `shopify.shop`,
+   `zendesk.subdomain`, etc., plus the account email where the provider needs one to build the
+   credential (`jira.email` and `confluence.email` for `Basic base64(email:token)`,
+   `zendesk.email` for `Basic base64(email/token:api_token)`)
+   (`warpmetal env plan` shows what each provider expects.)
 4. Start stdio:
 
 ```sh
@@ -139,7 +148,7 @@ Each provider `tools/call` maps to `warpmetal integration <provider> <verb> --ar
 (and `--confirm <gate>` for mutations). The arguments are written to the CLI's stdin rather than the
 command line, so payloads never appear in `ps` or shell history; `--args-json` remains available for
 manual use. Catalog contracts live in
-`src/providers/catalog/` (`batch-01.json` through `batch-10.json`); the aggregated surface is
+`src/providers/catalog/` (`batch-01.json` through `batch-11.json`); the aggregated surface is
 built by `src/providers/catalog.ts`. The MCP never holds provider OAuth tokens in process env;
 they stay in the WarpMetal vault.
 
@@ -190,6 +199,7 @@ secrets to build the request URL or an auth header; without them, `integration s
 | Monday.com | `monday.token` | — |
 | OneSignal | `onesignal.token` | — |
 | Amplitude | `amplitude.token` | — |
+| Zendesk | `zendesk.token` | `zendesk.subdomain`, `zendesk.email` |
 
 ### How the provider requests are verified
 
@@ -204,7 +214,7 @@ Each tool is verified at one of three tiers, and the tier is visible in the repo
 Two credential-free checks back the docs-confirmed tier, so a builder that drifts is caught even
 without a token:
 
-1. `provider-contract.test.ts` builds all 100 requests from the reviewed sample args and asserts the
+1. `provider-contract.test.ts` builds all 111 requests from the reviewed sample args and asserts the
    URL host, method and auth header against the hand-authored manifest.
 2. `npm run probe` (in `packages/warpmetal-cli`, opt-in, needs network) sends every request with a
    sentinel token. A route the provider does not serve answers 404/405, while a real route answers
@@ -245,7 +255,7 @@ for what the gate does and does not prove.
 ## Run
 
 ```sh
-# stdio, full profile (146 tools: 3 skill_* + 43 wm_* + 100 providers)
+# stdio, full profile (157 tools: 3 skill_* + 43 wm_* + 111 providers)
 npx -y @warpmetal/skills-mcp
 
 # Pin a registry tag

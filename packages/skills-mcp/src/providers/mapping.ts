@@ -638,6 +638,74 @@ export const PROVIDER_TOOL_MAPPINGS: readonly ProviderToolMapping[] = [
     "provider": "amplitude",
     "verb": "get-flags",
     "mutating": false
+  },
+  {
+    "toolSlug": "zendesk_list_tickets",
+    "provider": "zendesk",
+    "verb": "list-tickets",
+    "mutating": false
+  },
+  {
+    "toolSlug": "zendesk_get_ticket",
+    "provider": "zendesk",
+    "verb": "get-ticket",
+    "mutating": false
+  },
+  {
+    "toolSlug": "zendesk_list_ticket_comments",
+    "provider": "zendesk",
+    "verb": "list-ticket-comments",
+    "mutating": false
+  },
+  {
+    "toolSlug": "zendesk_search",
+    "provider": "zendesk",
+    "verb": "search",
+    "mutating": false
+  },
+  {
+    "toolSlug": "zendesk_get_current_user",
+    "provider": "zendesk",
+    "verb": "get-current-user",
+    "mutating": false
+  },
+  {
+    "toolSlug": "zendesk_list_users",
+    "provider": "zendesk",
+    "verb": "list-users",
+    "mutating": false
+  },
+  {
+    "toolSlug": "zendesk_list_organizations",
+    "provider": "zendesk",
+    "verb": "list-organizations",
+    "mutating": false
+  },
+  {
+    "toolSlug": "zendesk_list_views",
+    "provider": "zendesk",
+    "verb": "list-views",
+    "mutating": false
+  },
+  {
+    "toolSlug": "zendesk_list_view_tickets",
+    "provider": "zendesk",
+    "verb": "list-view-tickets",
+    "mutating": false
+  },
+  {
+    "toolSlug": "zendesk_create_ticket",
+    "provider": "zendesk",
+    "verb": "create-ticket",
+    "mutating": true,
+    "gate": "CONFIRM ZENDESK CREATE TICKET"
+  },
+  {
+    "toolSlug": "zendesk_add_ticket_comment",
+    "provider": "zendesk",
+    "verb": "add-ticket-comment",
+    "mutating": true,
+    "gate": "CONFIRM ZENDESK ADD TICKET COMMENT"
   }
 ] as const;
 

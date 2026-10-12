@@ -25,6 +25,13 @@ export const DESTRUCTIVE_SLUGS: ReadonlySet<string> = new Set([
   "mailchimp_add_member_to_list",
   "intercom_create_contact",
   "pagerduty_create_incident",
+  // Zendesk tickets and public comments email the requester and fire the
+  // account's triggers and webhooks, so neither can be taken back. The comment
+  // tools of Jira, Linear and ClickUp sit in the ordinary write surface because
+  // their notifications stay inside the organisation; a Zendesk public comment
+  // reaches the customer, which is the case this set names.
+  "zendesk_create_ticket",
+  "zendesk_add_ticket_comment",
   // Paid model calls and analytics ingestion with a lasting record.
   "gemini_generate_content",
   "mixpanel_track_event",

@@ -47,6 +47,10 @@ const ACCOUNT_SCOPED_HOSTS = new Set([
   "acme.atlassian.net",
   "acme.myshopify.com",
   "acme.snowflakecomputing.com",
+  // The sample ctx subdomain is an invented tenant: it does not resolve, so a
+  // probe would report `unreachable` for all eleven tools rather than saying
+  // that the host itself is per-customer.
+  "acme.zendesk.com",
 ]);
 
 const INVALID_STATUSES = new Set([404, 405, 410, 501]);

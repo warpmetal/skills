@@ -1,0 +1,17 @@
+{
+  "method": "PUT",
+  "url": "https://acme.zendesk.com/api/v2/tickets/1.json",
+  "body": {
+    "ticket": {
+      "comment": {
+        "body": "sample_comment_body",
+        "public": true
+      }
+    }
+  },
+  "headers": {
+    "Authorization": "Basic __BASIC__",
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+}

@@ -67,6 +67,24 @@ async function buildContext(
       await read("pagerduty.email", "pagerdutyEmail");
       ctx.pagerdutyEmail = ctx.pagerdutyEmail ?? context.env["PAGERDUTY_EMAIL"] ?? "";
       break;
+    case "zendesk": {
+      // Zendesk is per-tenant: every request goes to <subdomain>.zendesk.com.
+      // A bare label is expected, but an operator who pastes the full host or
+      // URL is reduced to the label instead of producing a doubled hostname.
+      // The result must still be a DNS label, because it is interpolated into
+      // the host: a value carrying `/`, `:` or `@` would move the request - and
+      // the Basic credential with it - to a host that is not *.zendesk.com.
+      await read("zendesk.subdomain", "zendeskSubdomain");
+      const raw = (ctx.zendeskSubdomain ?? context.env["ZENDESK_SUBDOMAIN"] ?? "").trim();
+      const label = raw
+        .replace(/^https?:\/\//, "")
+        .replace(/\.zendesk\.com.*$/, "")
+        .replace(/\/+$/, "");
+      ctx.zendeskSubdomain = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/i.test(label) ? label : "";
+      await read("zendesk.email", "zendeskEmail");
+      ctx.zendeskEmail = ctx.zendeskEmail ?? context.env["ZENDESK_EMAIL"] ?? "";
+      break;
+    }
     default:
       break;
   }
@@ -97,6 +115,31 @@ async function readArgsJson(
 
 function basicAuthValue(email: string, token: string): string {
   return Buffer.from(`${email}:${token}`, "utf8").toString("base64");
+}
+
+/**
+ * The user part of a Basic credential, per provider.
+ *
+ * Atlassian Cloud takes `<email>:<api_token>`. Zendesk takes
+ * `<email>/token:<api_token>`: a bare `<email>:<api_token>` is rejected with
+ * HTTP 401, so the `/token` literal is part of the credential, not a path.
+ */
+function basicAuthUser(
+  provider: string,
+  ctx: Readonly<Record<string, string>>,
+): string | undefined {
+  switch (provider) {
+    case "jira":
+      return ctx.jiraEmail;
+    case "confluence":
+      return ctx.confluenceEmail;
+    case "zendesk": {
+      const email = ctx.zendeskEmail;
+      return email === undefined || email.length === 0 ? undefined : `${email}/token`;
+    }
+    default:
+      return undefined;
+  }
 }
 
 function substituteToken(
@@ -196,6 +239,13 @@ export async function executeMcpTool(
       "No pagerduty.email in the store (the API requires a From header).",
     );
   }
+  if (def.provider === "zendesk" && !ctx.zendeskSubdomain) {
+    return needsAuth(
+      def.provider,
+      def.verb,
+      "No valid zendesk.subdomain in the store (the label in <subdomain>.zendesk.com).",
+    );
+  }
 
   const built = def.build({ args: toolArgs, ctx });
   const headerValues = Object.values(built.headers ?? {});
@@ -214,20 +264,15 @@ export async function executeMcpTool(
 
   let basic: string | null = null;
   if (needsBasic) {
-    const email =
-      def.provider === "jira"
-        ? ctx.jiraEmail
-        : def.provider === "confluence"
-          ? ctx.confluenceEmail
-          : undefined;
-    if (email === undefined || email.length === 0) {
+    const user = basicAuthUser(def.provider, ctx);
+    if (user === undefined || user.length === 0) {
       return needsAuth(
         def.provider,
         def.verb,
         `No ${def.provider}.email in the store. Run \`warpmetal env store set ${def.provider}.email\`.`,
       );
     }
-    basic = basicAuthValue(email, token);
+    basic = basicAuthValue(user, token);
     context.redactor.add(basic);
   }
 

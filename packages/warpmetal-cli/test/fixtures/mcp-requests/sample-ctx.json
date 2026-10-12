@@ -22,5 +22,9 @@
   },
   "pagerduty": {
     "pagerdutyEmail": "ops@acme.test"
+  },
+  "zendesk": {
+    "zendeskSubdomain": "acme",
+    "zendeskEmail": "ops@acme.test"
   }
 }

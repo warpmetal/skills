@@ -28,10 +28,10 @@ import { makeRegistryFixture } from "./helpers.js";
 
 const CONTENT_TOOLS = ["skill_list", "skill_read", "skill_search"] as const;
 
-test("catalog aggregates one hundred tools across all batches with input schemas", () => {
+test("catalog aggregates one hundred and eleven tools across all batches with input schemas", () => {
   const tools = loadProviderCatalog();
-  assert.equal(tools.length, 100);
-  assert.equal(PROVIDER_TOOL_COUNT, 100);
+  assert.equal(tools.length, 111);
+  assert.equal(PROVIDER_TOOL_COUNT, 111);
 
   const slugs = providerToolSlugs();
   const expected = [
@@ -145,6 +145,18 @@ test("catalog aggregates one hundred tools across all batches with input schemas
     "monday_get_workspaces",
     "onesignal_view_an_app",
     "amplitude_get_flags",
+    // batch-11
+    "zendesk_list_tickets",
+    "zendesk_get_ticket",
+    "zendesk_list_ticket_comments",
+    "zendesk_search",
+    "zendesk_get_current_user",
+    "zendesk_list_users",
+    "zendesk_list_organizations",
+    "zendesk_list_views",
+    "zendesk_list_view_tickets",
+    "zendesk_create_ticket",
+    "zendesk_add_ticket_comment",
   ];
   for (const slug of expected) {
     assert.ok(slugs.includes(slug), `catalog is missing ${slug}`);
@@ -157,7 +169,7 @@ test("catalog aggregates one hundred tools across all batches with input schemas
     assert.ok(tool.description.length > 10);
   }
 
-  assert.equal(PROVIDER_TOOL_MAPPINGS.length, 100);
+  assert.equal(PROVIDER_TOOL_MAPPINGS.length, 111);
   for (const slug of slugs) {
     assert.ok(
       PROVIDER_TOOL_MAPPINGS.some((entry) => entry.toolSlug === slug),

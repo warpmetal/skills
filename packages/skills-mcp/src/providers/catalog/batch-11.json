@@ -1,0 +1,509 @@
+{
+  "version": 1,
+  "batch": "11",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-12",
+  "tools": [
+    {
+      "toolSlug": "zendesk_list_tickets",
+      "name": "list_tickets",
+      "title": "List Zendesk Tickets",
+      "description": "List tickets in the account, most recently updated first, or look them up by external id. Use it to browse the queue; search runs a filtered query and get_ticket reads one ticket in full.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "external_id": {
+            "description": "List the tickets that carry this external id instead of paging through the account.",
+            "type": "string"
+          },
+          "per_page": {
+            "description": "Number of tickets to return per page. The maximum is 100.",
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "sort_by": {
+            "description": "Order the results by this field.",
+            "enum": [
+              "id",
+              "subject",
+              "deleted_at",
+              "created_at",
+              "updated_at",
+              "status",
+              "requester",
+              "requester.name",
+              "group",
+              "assignee",
+              "assignee.name"
+            ],
+            "type": "string"
+          },
+          "sort_order": {
+            "description": "Sort direction for sort_by.",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Zendesk Tickets",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "zendesk_get_ticket",
+      "name": "get_ticket",
+      "title": "Get Zendesk Ticket",
+      "description": "Show one ticket in full: status, priority, tags, assignee, group and custom fields. Use it after list_tickets or search to read a single ticket, and before add_ticket_comment to reply to it.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "ticket_id": {
+            "description": "The id of the ticket.",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Zendesk Ticket",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "zendesk_list_ticket_comments",
+      "name": "list_ticket_comments",
+      "title": "List Zendesk Ticket Comments",
+      "description": "List the comments on a ticket in chronological order, including public replies and internal notes. Use it to read the conversation before replying.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "sort_order": {
+            "description": "Sort direction for the comments.",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "type": "string"
+          },
+          "ticket_id": {
+            "description": "The id of the ticket whose comments should be listed.",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Zendesk Ticket Comments",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "zendesk_search",
+      "name": "search",
+      "title": "Search Zendesk",
+      "description": "Search tickets, users and organizations with Zendesk's query syntax, for example `type:ticket status:open priority:high`. Use it for a filtered lookup; list_tickets is the unfiltered browse.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "per_page": {
+            "description": "Number of results per page. The maximum is 100.",
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "query": {
+            "description": "The search query, in Zendesk search syntax (for example `type:ticket status:open`).",
+            "minLength": 1,
+            "type": "string"
+          },
+          "sort_by": {
+            "description": "Order the results by this field.",
+            "enum": [
+              "updated_at",
+              "created_at",
+              "priority",
+              "status",
+              "ticket_type"
+            ],
+            "type": "string"
+          },
+          "sort_order": {
+            "description": "Sort direction for sort_by.",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Search Zendesk",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "zendesk_get_current_user",
+      "name": "get_current_user",
+      "title": "Get Current Zendesk User",
+      "description": "Show the user record the stored credential authenticates as. Use it to confirm which Zendesk account and identity the vault entry belongs to.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Current Zendesk User",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "zendesk_list_users",
+      "name": "list_users",
+      "title": "List Zendesk Users",
+      "description": "List the users in the account, optionally filtered by role or external id. Use it to find a requester or assignee id before creating a ticket.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "external_id": {
+            "description": "Return the user that carries this external id.",
+            "type": "string"
+          },
+          "role": {
+            "description": "Return only users with this role.",
+            "enum": [
+              "end-user",
+              "agent",
+              "admin"
+            ],
+            "type": "string"
+          },
+          "sort_by": {
+            "description": "Order the results by this field. Zendesk validates the accepted values server-side; see the List Users reference for the current list.",
+            "type": "string"
+          },
+          "sort_order": {
+            "description": "Sort direction for sort_by.",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Zendesk Users",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "zendesk_list_organizations",
+      "name": "list_organizations",
+      "title": "List Zendesk Organizations",
+      "description": "List the organizations in the account, one page at a time. Use it to find an organization id when grouping requesters or reporting on a client's accounts. Pass page_after with the cursor Zendesk reports to read the page that follows.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "page_after": {
+            "description": "Cursor token from the previous page, to read the page that follows it.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Number of organizations to return per page. The maximum is 100.",
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Zendesk Organizations",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "zendesk_list_views",
+      "name": "list_views",
+      "title": "List Zendesk Views",
+      "description": "List the account's views: the saved ticket filters agents work from, such as unsolved tickets or your assigned tickets. Use it to find a view id for list_view_tickets. Pass page_after with the cursor Zendesk reports to read the page that follows.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "page_after": {
+            "description": "Cursor token from the previous page, to read the page that follows it.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Number of views to return per page. The maximum is 100.",
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Zendesk Views",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "zendesk_list_view_tickets",
+      "name": "list_view_tickets",
+      "title": "List Zendesk Tickets In A View",
+      "description": "List the tickets in one view, in the order that view defines. Use list_views first when the view id is unknown.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "view_id": {
+            "description": "The id of the view whose tickets should be listed.",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "view_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Zendesk Tickets In A View",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "zendesk_create_ticket",
+      "name": "create_ticket",
+      "title": "Create Zendesk Ticket",
+      "description": "Create a ticket for a requester, optionally with an opening comment. Use it to open a case; add_ticket_comment replies to a ticket that already exists. A public comment notifies the requester, and creating a ticket fires the account's triggers and webhooks.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "comment_body": {
+            "description": "The first comment on the ticket. Omit it to open the ticket with no comment.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "priority": {
+            "description": "The ticket's priority.",
+            "enum": [
+              "urgent",
+              "high",
+              "normal",
+              "low"
+            ],
+            "type": "string"
+          },
+          "public": {
+            "default": true,
+            "description": "Applies to the opening comment: set false to record it as an internal note instead of emailing the requester.",
+            "type": "boolean"
+          },
+          "requester_email": {
+            "description": "The requester's email address. Zendesk matches an existing user by email; pair it with requester_name to create one that does not exist yet.",
+            "type": "string"
+          },
+          "requester_id": {
+            "description": "The id of an existing user to set as the requester. Takes precedence over requester_email; requester_name is ignored when it is set.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "requester_name": {
+            "description": "The requester's name. Zendesk needs it when requester_email does not match an existing user.",
+            "type": "string"
+          },
+          "subject": {
+            "description": "The ticket's subject line. Optional for Zendesk, but a ticket without one reads as unnamed in the agent queue.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "tags": {
+            "description": "Tags to set on the ticket.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": {
+            "description": "The ticket's type.",
+            "enum": [
+              "problem",
+              "incident",
+              "question",
+              "task"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "requester_email"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Zendesk Ticket",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "zendesk_add_ticket_comment",
+      "name": "add_ticket_comment",
+      "title": "Add Zendesk Ticket Comment",
+      "description": "Append a comment to an existing ticket, either as a public reply to the requester or as an internal note. A public comment emails the requester and cannot be un-sent.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "comment_body": {
+            "description": "The text of the comment.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "public": {
+            "default": true,
+            "description": "Set false to keep the comment as an internal note instead of emailing it to the requester.",
+            "type": "boolean"
+          },
+          "ticket_id": {
+            "description": "The id of the ticket to comment on.",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "ticket_id",
+          "comment_body"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Add Zendesk Ticket Comment",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    }
+  ]
+}

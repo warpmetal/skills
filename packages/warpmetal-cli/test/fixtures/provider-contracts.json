@@ -247,6 +247,13 @@
       "allowedHosts": ["api.lab.amplitude.com"],
       "methods": ["GET"],
       "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
+    "zendesk": {
+      "docUrl": "https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/",
+      "hostSuffix": ".zendesk.com",
+      "accountScoped": true,
+      "methods": ["GET", "POST", "PUT"],
+      "auth": { "header": "Authorization", "placeholder": "__BASIC__" }
     }
   },
   "tools": {

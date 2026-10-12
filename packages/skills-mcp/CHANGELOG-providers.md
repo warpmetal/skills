@@ -110,3 +110,45 @@ Provider tools (the former Action Gateway surface) now call WarpMetal
   `integration status`, without turning the primary token into `NEEDS_AUTH`. The
   X probe was removed (an app-only bearer cannot call `/2/users/me`), so X reports
   `DEGRADED` instead of a false `NEEDS_AUTH`.
+
+## Batch 11 — Zendesk
+
+Added Zendesk Support as an MCP-backed provider: eleven tools over
+`https://<subdomain>.zendesk.com/api/v2`, registered only on the `full` (stdio) profile
+and dispatched through `warpmetal integration zendesk <verb> --args-stdin`.
+
+- **Auth is an API token, not a bearer.** Zendesk takes
+  `Authorization: Basic base64(<email>/token:<api_token>)`; a bare
+  `base64(<email>:<api_token>)` is answered with HTTP 401, so the `/token` literal is part
+  of the credential. Secrets: `zendesk.token`, `zendesk.subdomain`, `zendesk.email`.
+- **The subdomain is validated, not just trimmed.** It is interpolated into the host, so a
+  value carrying `/`, `:`, `@` or a dot would have sent the request — and the credential
+  with it — to a host that is not `*.zendesk.com`. Anything that is not a DNS label now
+  fails closed with `NEEDS_AUTH` and no request at all.
+- **`create_ticket` follows the API's own model of the requester.** `ticket.requester_id`
+  is a top-level field; the nested `requester` object carries only `email`/`name`. The two
+  are never sent together, and the `comment` key is omitted when there is no comment.
+  Required fields are the ones Zendesk requires — `requester_email`; `subject` and the
+  comment are optional, and `public` mirrors `add_ticket_comment` so a ticket can be opened
+  as an internal note.
+- **`sort_by` values are the documented ones.** `list_tickets` and `search` declare them as
+  enums, so an invalid value fails locally instead of at the provider. `list_users` keeps
+  `sort_by` as free text, because the published parameter table does not enumerate its
+  values and inventing a set there would have blocked valid calls.
+- **Every listing tool can page.** `list_tickets` and `search` take `per_page`;
+  `list_organizations` and `list_views` take `page_size`/`page_after`. Zendesk rejects
+  mixing offset `page` with cursor `page[size]` in one request, so each tool exposes exactly
+  one style.
+- **Both writes are `destructiveHint: true`.** A public comment emails the customer and
+  fires the account's triggers, which is the case that set names; the comment tools of Jira,
+  Linear and ClickUp stay in the ordinary write surface because their notifications do not
+  leave the organisation.
+- **One request-shape test per tool.** `packages/warpmetal-cli/test/zendesk.test.ts` states
+  each request in full from the published reference, so it catches a wrong query name or a
+  misplaced body field that a fixture generated from the same builder cannot. A live
+  companion suite is gated behind `ZENDESK_LIVE=1` (reads) and `ZENDESK_LIVE_WRITE=1`
+  (writes); it is skipped until a tenant exists, so the live contract is still unproven.
+- **The route probe skips the tenant host.** `acme.zendesk.com` joins the account-scoped
+  hosts in `packages/warpmetal-cli/scripts/probe-mcp-routes.mjs`, so `npm run probe` reports
+  those eleven tools as `account-scoped` rather than eleven `unreachable` rows against a
+  tenant that does not resolve.
