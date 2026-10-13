@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://acme.grafana.net/api/folders?limit=1&page=1&parentUid=sample_parent_uid&permission=Edit",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

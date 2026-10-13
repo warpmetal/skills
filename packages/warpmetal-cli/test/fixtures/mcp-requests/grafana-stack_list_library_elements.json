@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://acme.grafana.net/api/library-elements?searchString=sample_search_string&sortDirection=alpha-asc&folderFilter=sample_folder_filter&perPage=1&page=1",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

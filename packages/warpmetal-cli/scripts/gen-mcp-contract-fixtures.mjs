@@ -60,6 +60,7 @@ const SAMPLE_CTX = {
   mailchimp: { mailchimpDc: "us1" },
   pagerduty: { pagerdutyEmail: "ops@acme.test" },
   zendesk: { zendeskSubdomain: "acme", zendeskEmail: "ops@acme.test" },
+  "grafana-stack": { grafanaStack: "acme" },
 };
 
 const schemaBySlug = new Map();

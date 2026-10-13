@@ -207,3 +207,63 @@ from eleven to sixteen:
 - **`zendesk.methods` already allowed `PUT`.** The hand-authored `provider-contracts.json`
   listed `["GET", "POST", "PUT"]` for Zendesk in Batch 11 (the comment update is a PUT), so no
   contract change was needed for `update_ticket`.
+
+## Batch 13 — Grafana stack reads
+
+Fifteen read-only tools over the Grafana HTTP API of a stack, written from
+`api-merged.json` (207 paths, 314 operations) as the source of truth. This is a **new
+provider**, `grafana-stack`, not an extension of `grafana-cloud`: the Cloud API answers on
+`grafana.com` with a Cloud Access Policy token, while a stack answers on
+`<stack>.grafana.net` with a stack service-account token. Same vendor, different host,
+different credential, different contract entry.
+
+- **The label is validated before it reaches the host.** `grafana.stack` is the label in
+  `<stack>.grafana.net`, and `buildContext` accepts it only as a DNS label, strips a pasted
+  scheme or `.grafana.net` suffix, and otherwise fails closed with `NEEDS_AUTH` and no
+  request. A value carrying `/`, `:` or `@` would otherwise move the request, and the
+  Bearer token with it, off `*.grafana.net`.
+- **Two collections, two encodings.** `tag` (`search`) and `tags` (`annotations`) are
+  `collectionFormat: multi`, so the key repeats (`?tag=a&tag=b`); `dashboardUIDs` and
+  `folderUIDs` declare no collectionFormat, so they stay comma-separated. The generated
+  `qs` helper joins every array with commas, which is right for the second kind and silently
+  wrong for the first, so it was left untouched and a `repeat` helper was added next to it.
+  A test pins both shapes.
+- **The classic dashboard surface, by decision.** `api-merged.json` documents
+  `GET /api/dashboards/uid/{uid}`; Grafana 12+ also publishes a Kubernetes-style
+  `/apis/dashboard.grafana.app/…` surface. The catalog follows the source of truth and the
+  contract note records the difference, so moving later is a deliberate choice rather than a
+  silent drift.
+- **What was deliberately left out.** The 171 mutations (they would need `methods` beyond
+  `GET`, `CONFIRM` gates and a destructive classification); the data source proxy
+  (`/datasources/proxy/uid/{uid}/…`), whose free-form path suffix no MCP schema can bound -
+  it belongs in a typed `query_prometheus` tool, not a generic proxy; the active-alerts
+  endpoint, which is not in `api-merged.json` (it lives in the Alertmanager API); every token
+  endpoint and `/admin/settings`, which returns the stack's whole configuration; the snapshot
+  routes, because `GET /snapshots-delete/{deleteKey}` is a GET that deletes; and
+  `/reports/render/*`, which renders rather than reads.
+- **Status is honest, not optimistic.** The generated adapter has no probe entry: a
+  per-customer host cannot be probed from a fixed URL, so `integration status grafana-stack`
+  reports `DEGRADED` ("present but unverified") rather than a false `OK`.
+- **Verification.** One request-shape test per tool, plus the multi-versus-csv encodings, the
+  fail-closed matrix for the stack label and the "no parameter the caller did not ask for"
+  cases. The live tier is gated behind `GRAFANA_STACK_LIVE=1` with `GRAFANA_STACK` and
+  `GRAFANA_STACK_TOKEN`; it is the only tier that can prove Grafana accepts these calls,
+  because `npm run probe` classifies `acme.grafana.net` as account-scoped instead of probing
+  it.
+- **Three credential-free verification layers, because no single one is enough.**
+  `test/grafana-stack-params.test.ts` (offline, part of `npm test`) asserts every builder
+  against the operation it claims to call, using `test/fixtures/grafana-stack-params.json` -
+  a distilled copy of the spec, since `api-merged.json` is scratch and not committed. It is
+  the only layer that can catch an invented query parameter: Grafana ignores an unknown one,
+  so a live 200 proves nothing about the name. `npm run probe:grafana-stack` (with
+  `GRAFANA_STACK_PROBE_HOST`) sends each request to a real Grafana with the sentinel token
+  and fails on any 404, which needed two probe changes: `hostRewrite`, because an
+  account-scoped host is skipped by default, and an API-scoped `controlPath`, because Grafana
+  answers 200 to any unknown path at the root and that made every 404 inconclusive.
+  `npm run e2e:grafana-stack` (with `GRAFANA_STACK_E2E_HOST`) chains real ids taken from the
+  target and pins the response shapes the spec does not type - `search` returns an array,
+  `library-elements` returns an object with `result`, `get_dashboard` returns
+  `{ meta, dashboard }` - and proves the two path-id tools the route probe cannot judge. Two
+  findings came out of running them: a bogus `parentUid` makes `/api/folders` answer 404 on a
+  route that exists, so the route probe now sends the argument-free shape; and the classic
+  `/api/dashboards/uid/{uid}` surface is still served by a current Grafana.

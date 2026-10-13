@@ -29,6 +29,14 @@
  *
  * Run it with `npm run probe` (network required). It is not part of `npm test`;
  * `test/mcp-route-probe.test.ts` runs the same logic behind `MCP_PROBE=1`.
+ *
+ * A per-customer host cannot be probed through the sample ctx (the tenant is
+ * invented and does not resolve), so `probeAll` also takes `hostRewrite` to
+ * point one account-scoped host at a real origin, and `controlPath` to choose
+ * where the bogus control request goes - an API host needs it under the API
+ * prefix, because Grafana answers 200 to any unknown path at the root and that
+ * would make every 404 inconclusive. `test/grafana-stack-probe.test.ts` uses
+ * both behind GRAFANA_STACK_PROBE_HOST.
  */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -51,6 +59,10 @@ const ACCOUNT_SCOPED_HOSTS = new Set([
   // probe would report `unreachable` for all eleven tools rather than saying
   // that the host itself is per-customer.
   "acme.zendesk.com",
+  // Same reasoning for the Grafana stack label: every tool is account-scoped,
+  // so the batch-13 routes are classified rather than probed. Verifying them
+  // takes a real stack (the gated live tier in test/grafana-stack.test.ts).
+  "acme.grafana.net",
 ]);
 
 const INVALID_STATUSES = new Set([404, 405, 410, 501]);
@@ -76,6 +88,23 @@ function applySentinel(request) {
     ...request,
     url: request.url.replaceAll("__TOKEN__", SENTINEL_TOKEN),
     headers,
+  };
+}
+
+/**
+ * Points a request at another origin, keeping its path and query.
+ *
+ * An account-scoped provider builds its own host from a context secret, so a
+ * route probe cannot reach a real service through the builder alone. The harness
+ * swaps the origin; the production builder keeps `<label>.grafana.net`, and the
+ * contract test still pins that host. The `/api`-relative path and the query
+ * encoding - the parts under test - travel unchanged.
+ */
+export function rewriteOrigin(request, origin) {
+  const url = new URL(request.url);
+  return {
+    ...request,
+    url: origin.replace(/\/+$/, "") + url.pathname + url.search,
   };
 }
 
@@ -121,6 +150,13 @@ async function send(built, fetchFn, timeoutMs) {
 /**
  * Probes every tool and returns one row per tool plus the control verdict per
  * host. `fetchFn` is injectable so the opt-in test can drive it offline.
+ *
+ * `hostRewrite` maps an account-scoped host (the invented tenant in the sample
+ * ctx) to a real origin, so a per-customer provider can be probed after all;
+ * without an entry for a host, the account-scoped skip below still applies.
+ * `controlPath` is where the bogus control request goes: a host that answers
+ * 2xx there (Grafana serves its SPA for `/-/…`) makes every 404 inconclusive, so
+ * an API host needs the control under its API prefix (`/api/-/…`).
  */
 export async function probeAll({
   defs = MCP_TOOL_DEFS,
@@ -129,27 +165,47 @@ export async function probeAll({
   fetchFn = fetch,
   timeoutMs = 10000,
   throttleMs = 150,
+  hostRewrite = {},
+  controlPath = "/-/warpmetal-probe-",
 } = {}) {
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const builtBySlug = new Map();
   for (const def of defs) {
-    builtBySlug.set(
-      def.toolSlug,
-      def.build({ args: args[def.toolSlug] ?? {}, ctx: ctx[def.provider] ?? {} }),
-    );
+    const request = def.build({
+      args: args[def.toolSlug] ?? {},
+      ctx: ctx[def.provider] ?? {},
+    });
+    const originalHost = new URL(request.url).host;
+    const origin = hostRewrite[originalHost];
+    builtBySlug.set(def.toolSlug, {
+      request: origin === undefined ? request : rewriteOrigin(request, origin),
+      // Account-scoped only while nothing rewrites it to a real origin.
+      accountScoped: origin === undefined && ACCOUNT_SCOPED_HOSTS.has(originalHost),
+    });
   }
 
-  const hosts = [...new Set([...builtBySlug.values()].map((request) => new URL(request.url).host))];
+  // One entry per effective host: the origin the requests really go to, and
+  // whether every tool that lands there is unprobeable.
+  const hosts = new Map();
+  for (const entry of builtBySlug.values()) {
+    const url = new URL(entry.request.url);
+    const previous = hosts.get(url.host);
+    hosts.set(url.host, {
+      origin: url.origin,
+      accountScoped: (previous?.accountScoped ?? true) && entry.accountScoped,
+    });
+  }
+
   const control = new Map();
-  for (const host of hosts) {
-    if (ACCOUNT_SCOPED_HOSTS.has(host)) {
+  for (const [host, entry] of hosts) {
+    if (entry.accountScoped) {
       control.set(host, "account-scoped");
       continue;
     }
     const sentinel = Math.random().toString(36).slice(2);
     const { status } = await send(
-      { method: "GET", url: `https://${host}/-/warpmetal-probe-${sentinel}` },
+      { method: "GET", url: `${entry.origin}${controlPath}${sentinel}` },
       fetchFn,
       timeoutMs,
     );
@@ -159,13 +215,13 @@ export async function probeAll({
 
   const rows = [];
   for (const def of defs) {
-    const request = builtBySlug.get(def.toolSlug);
-    const host = new URL(request.url).host;
-    if (ACCOUNT_SCOPED_HOSTS.has(host)) {
+    const entry = builtBySlug.get(def.toolSlug);
+    const host = new URL(entry.request.url).host;
+    if (entry.accountScoped) {
       rows.push({
         toolSlug: def.toolSlug,
         provider: def.provider,
-        method: request.method,
+        method: entry.request.method,
         host,
         status: null,
         verdict: "account-scoped",
@@ -173,13 +229,13 @@ export async function probeAll({
       });
       continue;
     }
-    const { status } = await send(request, fetchFn, timeoutMs);
+    const { status } = await send(entry.request, fetchFn, timeoutMs);
     const verdict = classify(status);
     const hostControl = control.get(host);
     rows.push({
       toolSlug: def.toolSlug,
       provider: def.provider,
-      method: request.method,
+      method: entry.request.method,
       host,
       status,
       verdict,

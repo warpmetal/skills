@@ -85,6 +85,21 @@ async function buildContext(
       ctx.zendeskEmail = ctx.zendeskEmail ?? context.env["ZENDESK_EMAIL"] ?? "";
       break;
     }
+    case "grafana-stack": {
+      // Grafana Cloud stacks are per-customer too: every request goes to
+      // <stack>.grafana.net. The same allowlist reasoning as Zendesk applies -
+      // the label is interpolated into the host, so a value carrying `/`, `:`
+      // or `@` would move the request, and the Bearer token with it, off
+      // *.grafana.net. A pasted host or URL is reduced to its label.
+      await read("grafana.stack", "grafanaStack");
+      const raw = (ctx.grafanaStack ?? context.env["GRAFANA_STACK"] ?? "").trim();
+      const label = raw
+        .replace(/^https?:\/\//, "")
+        .replace(/\.grafana\.net.*$/, "")
+        .replace(/\/+$/, "");
+      ctx.grafanaStack = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/i.test(label) ? label : "";
+      break;
+    }
     default:
       break;
   }
@@ -252,6 +267,13 @@ export async function executeMcpTool(
       def.provider,
       def.verb,
       "No valid zendesk.subdomain in the store (the label in <subdomain>.zendesk.com).",
+    );
+  }
+  if (def.provider === "grafana-stack" && !ctx.grafanaStack) {
+    return needsAuth(
+      def.provider,
+      def.verb,
+      "No valid grafana.stack in the store (the label in <stack>.grafana.net).",
     );
   }
 

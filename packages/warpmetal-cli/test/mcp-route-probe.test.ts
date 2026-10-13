@@ -38,6 +38,7 @@ test("per-customer hosts are classified instead of probed", async () => {
     "acme.myshopify.com",
     "acme.snowflakecomputing.com",
     "acme.zendesk.com",
+    "acme.grafana.net",
   ]) {
     assert.ok(accountScopedHosts.has(host), `${host} must be reported as account-scoped`);
   }

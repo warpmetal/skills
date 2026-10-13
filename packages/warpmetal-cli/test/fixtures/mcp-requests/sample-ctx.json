@@ -26,5 +26,8 @@
   "zendesk": {
     "zendeskSubdomain": "acme",
     "zendeskEmail": "ops@acme.test"
+  },
+  "grafana-stack": {
+    "grafanaStack": "acme"
   }
 }

@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://acme.grafana.net/api/v1/provisioning/alert-rules",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

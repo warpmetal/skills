@@ -106,6 +106,10 @@ const MCP_PROVIDERS: readonly ProviderSpec[] = [
   mcpProvider("gemini", "Google Gemini", ["gemini.token"]),
   mcpProvider("anthropic-admin", "Anthropic Admin", ["anthropic-admin.token"]),
   mcpProvider("grafana-cloud", "Grafana Cloud", ["grafana-cloud.token"]),
+  mcpProvider("grafana-stack", "Grafana Stack", [
+    "grafana-stack.token",
+    "grafana.stack",
+  ]),
   mcpProvider("monday", "Monday.com", ["monday.token"]),
   mcpProvider("onesignal", "OneSignal", ["onesignal.token"]),
   mcpProvider("amplitude", "Amplitude", ["amplitude.token"]),

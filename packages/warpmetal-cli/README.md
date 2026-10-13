@@ -150,7 +150,7 @@ a stored value never appears in any diagnostic, plan, list, error or `--json`
 document, and that it _does_ appear on the one sanctioned stream.
 
 `npm run probe` is the one network-bound check, and it is deliberately outside
-`npm test`. It builds each of the 116 provider requests from the reviewed sample
+`npm test`. It builds each of the 131 provider requests from the reviewed sample
 args, swaps the token for a sentinel and sends it: a real route answers 401/403
 (auth required), 400/422 or 2xx, while a route the provider does not serve answers
 404/405. A per-host control request to a bogus path marks auth-first and
@@ -158,3 +158,38 @@ website/SPA hosts as `weakSignal`, so they are not mistaken for a missing route.
 `test/provider-contract.test.ts` (against `test/fixtures/provider-contracts.json`)
 pins the same requests to their documented host, method and auth offline, so the
 vendor contract fails a red build without the network.
+
+### Verifying the Grafana stack tools without a credential
+
+An account-scoped provider cannot be probed through the sample context: the
+tenant is invented and does not resolve. The batch-13 tools therefore have three
+layers, all usable with no token, and each one covers what the others cannot:
+
+```bash
+# 1. Offline, part of `npm test`: every builder against the published operation.
+#    This is the only layer that can catch a query parameter the API does not
+#    declare, because Grafana ignores an unknown one instead of rejecting it.
+npm test --prefix packages/warpmetal-cli   # test/grafana-stack-params.test.ts
+
+# 2. Real routes (needs network): does the service serve each path?
+GRAFANA_STACK_PROBE_HOST=https://play.grafana.org npm run probe:grafana-stack
+
+# 3. Real calls with real ids (needs network): does the response have the shape
+#    the tool promises, and do the two path-id tools chain end to end?
+GRAFANA_STACK_E2E_HOST=https://play.grafana.org npm run e2e:grafana-stack
+```
+
+Point both variables at `https://<slug>.grafana.net` to verify the stack the
+tools actually target. Nothing reads a credential: the probe's sentinel goes in
+the `Authorization` header, so the target answers as the anonymous viewer - 200
+for what it exposes publicly, 401/403 for what it does not, and both prove the
+route exists. `scripts/gen-grafana-stack-params.mjs` regenerates the distilled
+spec fixture from the full `api-merged.json`, which is scratch and is not
+committed - download it first and delete it afterwards, since the committed
+fixture is what `npm test` reads:
+
+```bash
+curl -o api-merged.json https://raw.githubusercontent.com/grafana/grafana/main/public/api-merged.json
+npm run gen:grafana-stack-params --prefix packages/warpmetal-cli
+rm api-merged.json
+```

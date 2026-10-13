@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://acme.grafana.net/api/teams/search?page=1&perpage=1&name=sample_name&query=sample_query",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

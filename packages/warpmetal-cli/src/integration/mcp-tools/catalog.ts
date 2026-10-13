@@ -18,6 +18,18 @@ function qs(params: Record<string, unknown>): string {
   return search.toString();
 }
 
+/**
+ * The shape Grafana wants for a "multi" collection: tag=a&tag=b. qs joins an
+ * array with commas, which is right for a "csv" collection (PagerDuty's
+ * statuses, Grafana's dashboardUIDs) and silently wrong for a multi one.
+ */
+function repeat(key: string, values: unknown): string {
+  if (!Array.isArray(values) || values.length === 0) return "";
+  return values
+    .map((value) => key + "=" + encodeURIComponent(String(value)))
+    .join("&");
+}
+
 /** base64 of a JSON payload, for APIs that take their body in a `data` field. */
 function b64(value: unknown): string {
   return Buffer.from(JSON.stringify(value), "utf8").toString("base64");
@@ -284,6 +296,27 @@ const BUILDS: Record<string, BuildFn> = {
   "zendesk_get_organization": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.zendeskSubdomain}.zendesk.com/api/v2/organizations/${args.organization_id}.json`, headers: zendeskHeaders() }),
   "zendesk_count_view_tickets": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.zendeskSubdomain}.zendesk.com/api/v2/views/${args.view_id}/count.json`, headers: zendeskHeaders() }),
   "zendesk_get_ticket_metrics": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets/${args.ticket_id}/metrics.json`, headers: zendeskHeaders() }),
+  "grafana-stack_health": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.grafanaStack}.grafana.net/api/health`, headers: { Authorization: "Bearer __TOKEN__" } }),
+  "grafana-stack_get_current_user": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.grafanaStack}.grafana.net/api/user`, headers: { Authorization: "Bearer __TOKEN__" } }),
+  "grafana-stack_search": ({args, ctx}) => {
+    const query = [qs({ query: args.query, type: args.type, dashboardUIDs: args.dashboard_uids, folderUIDs: args.folder_uids, starred: args.starred, limit: args.limit, page: args.page, permission: args.permission, sort: args.sort, deleted: args.deleted }), repeat("tag", args.tag)].filter(Boolean).join("&");
+    return { method: "GET", url: `https://${ctx.grafanaStack}.grafana.net/api/search?${query}`, headers: { Authorization: "Bearer __TOKEN__" } };
+  },
+  "grafana-stack_get_dashboard": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.grafanaStack}.grafana.net/api/dashboards/uid/${args.uid}`, headers: { Authorization: "Bearer __TOKEN__" } }),
+  "grafana-stack_list_datasources": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.grafanaStack}.grafana.net/api/datasources`, headers: { Authorization: "Bearer __TOKEN__" } }),
+  "grafana-stack_check_datasource_health": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.grafanaStack}.grafana.net/api/datasources/uid/${args.uid}/health`, headers: { Authorization: "Bearer __TOKEN__" } }),
+  "grafana-stack_list_folders": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.grafanaStack}.grafana.net/api/folders?${qs({ limit: args.limit, page: args.page, parentUid: args.parent_uid, permission: args.permission })}`, headers: { Authorization: "Bearer __TOKEN__" } }),
+  "grafana-stack_list_alert_rules": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.grafanaStack}.grafana.net/api/v1/provisioning/alert-rules`, headers: { Authorization: "Bearer __TOKEN__" } }),
+  "grafana-stack_list_annotations": ({args, ctx}) => {
+    const query = [qs({ from: args.from, to: args.to, dashboardUID: args.dashboard_uid, limit: args.limit, type: args.type, matchAny: args.match_any }), repeat("tags", args.tags)].filter(Boolean).join("&");
+    return { method: "GET", url: `https://${ctx.grafanaStack}.grafana.net/api/annotations?${query}`, headers: { Authorization: "Bearer __TOKEN__" } };
+  },
+  "grafana-stack_list_contact_points": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.grafanaStack}.grafana.net/api/v1/provisioning/contact-points?${qs({ name: args.name })}`, headers: { Authorization: "Bearer __TOKEN__" } }),
+  "grafana-stack_list_mute_timings": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.grafanaStack}.grafana.net/api/v1/provisioning/mute-timings`, headers: { Authorization: "Bearer __TOKEN__" } }),
+  "grafana-stack_list_dashboard_tags": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.grafanaStack}.grafana.net/api/dashboards/tags`, headers: { Authorization: "Bearer __TOKEN__" } }),
+  "grafana-stack_search_teams": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.grafanaStack}.grafana.net/api/teams/search?${qs({ page: args.page, perpage: args.per_page, name: args.name, query: args.query })}`, headers: { Authorization: "Bearer __TOKEN__" } }),
+  "grafana-stack_list_org_users": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.grafanaStack}.grafana.net/api/org/users?${qs({ query: args.query, limit: args.limit })}`, headers: { Authorization: "Bearer __TOKEN__" } }),
+  "grafana-stack_list_library_elements": ({args, ctx}) => ({ method: "GET", url: `https://${ctx.grafanaStack}.grafana.net/api/library-elements?${qs({ searchString: args.search_string, sortDirection: args.sort_direction, folderFilter: args.folder_filter, perPage: args.per_page, page: args.page })}`, headers: { Authorization: "Bearer __TOKEN__" } }),
 };
 
 export const MCP_TOOL_DEFS: readonly McpToolDef[] = [
@@ -1331,6 +1364,141 @@ export const MCP_TOOL_DEFS: readonly McpToolDef[] = [
     
     secretName: "zendesk.token",
     build: BUILDS["zendesk_get_ticket_metrics"]!,
+  },
+  {
+    toolSlug: "grafana-stack_health",
+    provider: "grafana-stack",
+    verb: "health",
+    mutating: false,
+    
+    secretName: "grafana-stack.token",
+    build: BUILDS["grafana-stack_health"]!,
+  },
+  {
+    toolSlug: "grafana-stack_get_current_user",
+    provider: "grafana-stack",
+    verb: "get-current-user",
+    mutating: false,
+    
+    secretName: "grafana-stack.token",
+    build: BUILDS["grafana-stack_get_current_user"]!,
+  },
+  {
+    toolSlug: "grafana-stack_search",
+    provider: "grafana-stack",
+    verb: "search",
+    mutating: false,
+    
+    secretName: "grafana-stack.token",
+    build: BUILDS["grafana-stack_search"]!,
+  },
+  {
+    toolSlug: "grafana-stack_get_dashboard",
+    provider: "grafana-stack",
+    verb: "get-dashboard",
+    mutating: false,
+    
+    secretName: "grafana-stack.token",
+    build: BUILDS["grafana-stack_get_dashboard"]!,
+  },
+  {
+    toolSlug: "grafana-stack_list_datasources",
+    provider: "grafana-stack",
+    verb: "list-datasources",
+    mutating: false,
+    
+    secretName: "grafana-stack.token",
+    build: BUILDS["grafana-stack_list_datasources"]!,
+  },
+  {
+    toolSlug: "grafana-stack_check_datasource_health",
+    provider: "grafana-stack",
+    verb: "check-datasource-health",
+    mutating: false,
+    
+    secretName: "grafana-stack.token",
+    build: BUILDS["grafana-stack_check_datasource_health"]!,
+  },
+  {
+    toolSlug: "grafana-stack_list_folders",
+    provider: "grafana-stack",
+    verb: "list-folders",
+    mutating: false,
+    
+    secretName: "grafana-stack.token",
+    build: BUILDS["grafana-stack_list_folders"]!,
+  },
+  {
+    toolSlug: "grafana-stack_list_alert_rules",
+    provider: "grafana-stack",
+    verb: "list-alert-rules",
+    mutating: false,
+    
+    secretName: "grafana-stack.token",
+    build: BUILDS["grafana-stack_list_alert_rules"]!,
+  },
+  {
+    toolSlug: "grafana-stack_list_annotations",
+    provider: "grafana-stack",
+    verb: "list-annotations",
+    mutating: false,
+    
+    secretName: "grafana-stack.token",
+    build: BUILDS["grafana-stack_list_annotations"]!,
+  },
+  {
+    toolSlug: "grafana-stack_list_contact_points",
+    provider: "grafana-stack",
+    verb: "list-contact-points",
+    mutating: false,
+    
+    secretName: "grafana-stack.token",
+    build: BUILDS["grafana-stack_list_contact_points"]!,
+  },
+  {
+    toolSlug: "grafana-stack_list_mute_timings",
+    provider: "grafana-stack",
+    verb: "list-mute-timings",
+    mutating: false,
+    
+    secretName: "grafana-stack.token",
+    build: BUILDS["grafana-stack_list_mute_timings"]!,
+  },
+  {
+    toolSlug: "grafana-stack_list_dashboard_tags",
+    provider: "grafana-stack",
+    verb: "list-dashboard-tags",
+    mutating: false,
+    
+    secretName: "grafana-stack.token",
+    build: BUILDS["grafana-stack_list_dashboard_tags"]!,
+  },
+  {
+    toolSlug: "grafana-stack_search_teams",
+    provider: "grafana-stack",
+    verb: "search-teams",
+    mutating: false,
+    
+    secretName: "grafana-stack.token",
+    build: BUILDS["grafana-stack_search_teams"]!,
+  },
+  {
+    toolSlug: "grafana-stack_list_org_users",
+    provider: "grafana-stack",
+    verb: "list-org-users",
+    mutating: false,
+    
+    secretName: "grafana-stack.token",
+    build: BUILDS["grafana-stack_list_org_users"]!,
+  },
+  {
+    toolSlug: "grafana-stack_list_library_elements",
+    provider: "grafana-stack",
+    verb: "list-library-elements",
+    mutating: false,
+    
+    secretName: "grafana-stack.token",
+    build: BUILDS["grafana-stack_list_library_elements"]!,
   }
 ];
 

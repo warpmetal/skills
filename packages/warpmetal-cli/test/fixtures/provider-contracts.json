@@ -230,6 +230,13 @@
       "methods": ["GET"],
       "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
     },
+    "grafana-stack": {
+      "docUrl": "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/",
+      "hostSuffix": ".grafana.net",
+      "accountScoped": true,
+      "methods": ["GET"],
+      "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
+    },
     "monday": {
       "docUrl": "https://developer.monday.com/api-reference/",
       "allowedHosts": ["api.monday.com"],
@@ -269,6 +276,18 @@
     },
     "grafana-cloud_get_org": {
       "note": "A single organization is GET /api/orgs/{slugOrId} (path parameter). /api/orgs?orgSlug= is the legacy Grafana-server search endpoint, not this API."
+    },
+    "grafana-stack_get_dashboard": {
+      "note": "api-merged.json documents the classic GET /api/dashboards/uid/{uid}. Grafana 12+ also publishes a Kubernetes-style surface (GET /apis/dashboard.grafana.app/v1/namespaces/{ns}/dashboards/{uid}); this catalog follows the source of truth and would need a deliberate migration to move."
+    },
+    "grafana-stack_search": {
+      "note": "tag is collectionFormat: multi, so it repeats the key (?tag=a&tag=b); dashboardUIDs and folderUIDs declare no collectionFormat, so they stay comma-separated (?dashboardUIDs=a,b). Sending a multi collection comma-joined would ask for one tag literally named 'a,b'."
+    },
+    "grafana-stack_list_annotations": {
+      "note": "from and to are epoch milliseconds (int64 in api-merged.json), and tags is collectionFormat: multi, so it repeats the key."
+    },
+    "grafana-stack_list_alert_rules": {
+      "note": "Alert rules, contact points and mute timings live on the provisioning surface under /api/v1/, not under /api/ directly."
     },
     "shopify_list_products": { "note": "Shopify ships a dated API version in the URL; it must be a currently supported stable version." },
     "shopify_get_product": { "note": "Shopify ships a dated API version in the URL; it must be a currently supported stable version." },

@@ -60,6 +60,7 @@ const SECRETS = {
   gemini: "gemini.token",
   "anthropic-admin": "anthropic-admin.token",
   "grafana-cloud": "grafana-cloud.token",
+  "grafana-stack": "grafana-stack.token",
   monday: "monday.token",
   onesignal: "onesignal.token",
   amplitude: "amplitude.token",
@@ -406,6 +407,39 @@ const ROUTES = {
   zendesk_count_view_tickets: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/views/\${args.view_id}/count.json\`, headers: zendeskHeaders() })`,
   // A ticket's metrics are a singular `ticket_metric` resource, not a listing.
   zendesk_get_ticket_metrics: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets/\${args.ticket_id}/metrics.json\`, headers: zendeskHeaders() })`,
+  // Grafana Cloud stacks answer on <stack>.grafana.net, so every URL below is
+  // built from the `grafana.stack` context secret and the paths are the ones in
+  // api-merged.json, which are relative to /api. Read-only: the provider is
+  // Bearer with a stack service-account token.
+  //
+  // Two collections are encoded differently and both appear here. `tag` and
+  // `tags` are `collectionFormat: multi`, so they repeat the key; the rest of
+  // the arrays in this batch are `csv`, which is what `qs` already does. Using
+  // `qs` for a multi collection would send one tag named "a,b".
+  "grafana-stack_health": `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.grafanaStack}.grafana.net/api/health\`, headers: { Authorization: "Bearer __TOKEN__" } })`,
+  "grafana-stack_get_current_user": `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.grafanaStack}.grafana.net/api/user\`, headers: { Authorization: "Bearer __TOKEN__" } })`,
+  "grafana-stack_search": `({args, ctx}) => {
+    const query = [qs({ query: args.query, type: args.type, dashboardUIDs: args.dashboard_uids, folderUIDs: args.folder_uids, starred: args.starred, limit: args.limit, page: args.page, permission: args.permission, sort: args.sort, deleted: args.deleted }), repeat("tag", args.tag)].filter(Boolean).join("&");
+    return { method: "GET", url: \`https://\${ctx.grafanaStack}.grafana.net/api/search?\${query}\`, headers: { Authorization: "Bearer __TOKEN__" } };
+  }`,
+  // api-merged.json documents the classic /api/dashboards/uid/{uid} surface.
+  // Grafana 12+ also publishes a Kubernetes-style dashboard API; this tool
+  // follows the source of truth, and the contract note says so.
+  "grafana-stack_get_dashboard": `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.grafanaStack}.grafana.net/api/dashboards/uid/\${args.uid}\`, headers: { Authorization: "Bearer __TOKEN__" } })`,
+  "grafana-stack_list_datasources": `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.grafanaStack}.grafana.net/api/datasources\`, headers: { Authorization: "Bearer __TOKEN__" } })`,
+  "grafana-stack_check_datasource_health": `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.grafanaStack}.grafana.net/api/datasources/uid/\${args.uid}/health\`, headers: { Authorization: "Bearer __TOKEN__" } })`,
+  "grafana-stack_list_folders": `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.grafanaStack}.grafana.net/api/folders?\${qs({ limit: args.limit, page: args.page, parentUid: args.parent_uid, permission: args.permission })}\`, headers: { Authorization: "Bearer __TOKEN__" } })`,
+  "grafana-stack_list_alert_rules": `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.grafanaStack}.grafana.net/api/v1/provisioning/alert-rules\`, headers: { Authorization: "Bearer __TOKEN__" } })`,
+  "grafana-stack_list_annotations": `({args, ctx}) => {
+    const query = [qs({ from: args.from, to: args.to, dashboardUID: args.dashboard_uid, limit: args.limit, type: args.type, matchAny: args.match_any }), repeat("tags", args.tags)].filter(Boolean).join("&");
+    return { method: "GET", url: \`https://\${ctx.grafanaStack}.grafana.net/api/annotations?\${query}\`, headers: { Authorization: "Bearer __TOKEN__" } };
+  }`,
+  "grafana-stack_list_contact_points": `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.grafanaStack}.grafana.net/api/v1/provisioning/contact-points?\${qs({ name: args.name })}\`, headers: { Authorization: "Bearer __TOKEN__" } })`,
+  "grafana-stack_list_mute_timings": `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.grafanaStack}.grafana.net/api/v1/provisioning/mute-timings\`, headers: { Authorization: "Bearer __TOKEN__" } })`,
+  "grafana-stack_list_dashboard_tags": `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.grafanaStack}.grafana.net/api/dashboards/tags\`, headers: { Authorization: "Bearer __TOKEN__" } })`,
+  "grafana-stack_search_teams": `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.grafanaStack}.grafana.net/api/teams/search?\${qs({ page: args.page, perpage: args.per_page, name: args.name, query: args.query })}\`, headers: { Authorization: "Bearer __TOKEN__" } })`,
+  "grafana-stack_list_org_users": `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.grafanaStack}.grafana.net/api/org/users?\${qs({ query: args.query, limit: args.limit })}\`, headers: { Authorization: "Bearer __TOKEN__" } })`,
+  "grafana-stack_list_library_elements": `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.grafanaStack}.grafana.net/api/library-elements?\${qs({ searchString: args.search_string, sortDirection: args.sort_direction, folderFilter: args.folder_filter, perPage: args.per_page, page: args.page })}\`, headers: { Authorization: "Bearer __TOKEN__" } })`,
 };
 
 /**
@@ -469,6 +503,18 @@ const helpers = `function qs(params: Record<string, unknown>): string {
     search.set(key, String(value));
   }
   return search.toString();
+}
+
+/**
+ * The shape Grafana wants for a "multi" collection: tag=a&tag=b. qs joins an
+ * array with commas, which is right for a "csv" collection (PagerDuty's
+ * statuses, Grafana's dashboardUIDs) and silently wrong for a multi one.
+ */
+function repeat(key: string, values: unknown): string {
+  if (!Array.isArray(values) || values.length === 0) return "";
+  return values
+    .map((value) => key + "=" + encodeURIComponent(String(value)))
+    .join("&");
 }
 
 /** base64 of a JSON payload, for APIs that take their body in a \`data\` field. */

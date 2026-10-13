@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://acme.grafana.net/api/user",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

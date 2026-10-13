@@ -28,10 +28,10 @@ import { makeRegistryFixture } from "./helpers.js";
 
 const CONTENT_TOOLS = ["skill_list", "skill_read", "skill_search"] as const;
 
-test("catalog aggregates one hundred and sixteen tools across all batches with input schemas", () => {
+test("catalog aggregates one hundred and thirty-one tools across all batches with input schemas", () => {
   const tools = loadProviderCatalog();
-  assert.equal(tools.length, 116);
-  assert.equal(PROVIDER_TOOL_COUNT, 116);
+  assert.equal(tools.length, 131);
+  assert.equal(PROVIDER_TOOL_COUNT, 131);
 
   const slugs = providerToolSlugs();
   const expected = [
@@ -163,6 +163,22 @@ test("catalog aggregates one hundred and sixteen tools across all batches with i
     "zendesk_get_organization",
     "zendesk_count_view_tickets",
     "zendesk_get_ticket_metrics",
+    // batch-13
+    "grafana-stack_health",
+    "grafana-stack_get_current_user",
+    "grafana-stack_search",
+    "grafana-stack_get_dashboard",
+    "grafana-stack_list_datasources",
+    "grafana-stack_check_datasource_health",
+    "grafana-stack_list_folders",
+    "grafana-stack_list_alert_rules",
+    "grafana-stack_list_annotations",
+    "grafana-stack_list_contact_points",
+    "grafana-stack_list_mute_timings",
+    "grafana-stack_list_dashboard_tags",
+    "grafana-stack_search_teams",
+    "grafana-stack_list_org_users",
+    "grafana-stack_list_library_elements",
   ];
   for (const slug of expected) {
     assert.ok(slugs.includes(slug), `catalog is missing ${slug}`);
@@ -175,7 +191,7 @@ test("catalog aggregates one hundred and sixteen tools across all batches with i
     assert.ok(tool.description.length > 10);
   }
 
-  assert.equal(PROVIDER_TOOL_MAPPINGS.length, 116);
+  assert.equal(PROVIDER_TOOL_MAPPINGS.length, 131);
   for (const slug of slugs) {
     assert.ok(
       PROVIDER_TOOL_MAPPINGS.some((entry) => entry.toolSlug === slug),
@@ -1085,6 +1101,71 @@ test("a batch-09 provider tool (openai_list_models) is registered and forwards i
       assert.equal(structured.tool, "openai_list_models");
       assert.equal(structured.result?.data?.[0]?.id, "gpt-4o");
       assert.deepEqual(calls, [{ tool: "openai_list_models", args: {} }]);
+    } finally {
+      await client.close();
+    }
+  } finally {
+    await fixture.cleanup();
+  }
+});
+
+test("a batch-13 provider tool (grafana-stack_list_folders) is registered and forwards its args", async () => {
+  const fixture = await makeRegistryFixture();
+  try {
+    const loaded = await loadRegistry({ registry: fixture.dir });
+    const calls: Array<{ tool: string; args: Record<string, unknown> }> = [];
+    const invoker = createMockProviderInvoker({
+      configured: true,
+      async invoke(toolSlug, args) {
+        calls.push({ tool: toolSlug, args });
+        return { items: [{ uid: "root", title: "Infra" }] };
+      },
+    });
+    const server = createSkillsServer(loaded, {
+      profile: "full",
+      auditDir: fixture.dir,
+      auditEnabled: false,
+      providers: invoker,
+      runner: {
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
+      },
+    });
+
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
+    const client = new Client({ name: "providers-batch13", version: "0.0.0" });
+    await Promise.all([
+      client.connect(clientTransport),
+      server.connect(serverTransport),
+    ]);
+
+    try {
+      const { tools } = await client.listTools();
+      assert.ok(
+        tools.map((tool) => tool.name).includes("grafana-stack_list_folders"),
+        "the full profile must register batch-13 tools",
+      );
+
+      const result = await client.callTool({
+        name: "grafana-stack_list_folders",
+        arguments: { page: 2, parent_uid: "root" },
+      });
+      assert.notEqual(result.isError, true);
+      const structured = result.structuredContent as {
+        ok?: boolean;
+        tool?: string;
+        result?: { items?: Array<{ uid?: string }> };
+      };
+      assert.equal(structured.ok, true);
+      assert.equal(structured.tool, "grafana-stack_list_folders");
+      assert.equal(structured.result?.items?.[0]?.uid, "root");
+      assert.deepEqual(calls, [
+        {
+          tool: "grafana-stack_list_folders",
+          args: { page: 2, parent_uid: "root" },
+        },
+      ]);
     } finally {
       await client.close();
     }

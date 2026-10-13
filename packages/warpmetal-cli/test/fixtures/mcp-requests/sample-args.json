@@ -957,5 +957,65 @@
   },
   "zendesk_get_ticket_metrics": {
     "ticket_id": 1
+  },
+  "grafana-stack_health": {},
+  "grafana-stack_get_current_user": {},
+  "grafana-stack_search": {
+    "dashboard_uids": [],
+    "deleted": true,
+    "folder_uids": [],
+    "limit": 1,
+    "page": 1,
+    "permission": "Edit",
+    "query": "sample_query",
+    "sort": "alpha-asc",
+    "starred": true,
+    "tag": [],
+    "type": "dash-folder"
+  },
+  "grafana-stack_get_dashboard": {
+    "uid": "sample_uid"
+  },
+  "grafana-stack_list_datasources": {},
+  "grafana-stack_check_datasource_health": {
+    "uid": "sample_uid"
+  },
+  "grafana-stack_list_folders": {
+    "limit": 1,
+    "page": 1,
+    "parent_uid": "sample_parent_uid",
+    "permission": "Edit"
+  },
+  "grafana-stack_list_alert_rules": {},
+  "grafana-stack_list_annotations": {
+    "dashboard_uid": "sample_dashboard_uid",
+    "from": 1,
+    "limit": 1,
+    "match_any": true,
+    "tags": [],
+    "to": 1,
+    "type": "alert"
+  },
+  "grafana-stack_list_contact_points": {
+    "name": "sample_name"
+  },
+  "grafana-stack_list_mute_timings": {},
+  "grafana-stack_list_dashboard_tags": {},
+  "grafana-stack_search_teams": {
+    "name": "sample_name",
+    "page": 1,
+    "per_page": 1,
+    "query": "sample_query"
+  },
+  "grafana-stack_list_org_users": {
+    "limit": 1,
+    "query": "sample_query"
+  },
+  "grafana-stack_list_library_elements": {
+    "folder_filter": "sample_folder_filter",
+    "page": 1,
+    "per_page": 1,
+    "search_string": "sample_search_string",
+    "sort_direction": "alpha-asc"
   }
 }

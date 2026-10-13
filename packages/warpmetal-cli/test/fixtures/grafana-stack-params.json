@@ -1,0 +1,410 @@
+{
+  "version": 1,
+  "note": "Destilacion revisada de api-merged.json (Grafana HTTP API) para los tools de batch 13. Generado por scripts/gen-grafana-stack-params.mjs; el spec completo no se commitea. Regenerar con: node --import tsx scripts/gen-grafana-stack-params.mjs <ruta/api-merged.json>",
+  "source": {
+    "title": "Grafana HTTP API.",
+    "version": "0.0.1",
+    "document": "https://github.com/grafana/grafana/blob/main/public/api-merged.json",
+    "reference": "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/"
+  },
+  "tools": {
+    "grafana-stack_health": {
+      "method": "GET",
+      "path": "/health",
+      "operationId": "getHealth",
+      "parameters": []
+    },
+    "grafana-stack_get_current_user": {
+      "method": "GET",
+      "path": "/user",
+      "operationId": "getSignedInUser",
+      "parameters": []
+    },
+    "grafana-stack_search": {
+      "method": "GET",
+      "path": "/search",
+      "operationId": "search",
+      "parameters": [
+        {
+          "name": "query",
+          "in": "query",
+          "type": "string"
+        },
+        {
+          "name": "tag",
+          "in": "query",
+          "type": "array",
+          "items": "string",
+          "collectionFormat": "multi"
+        },
+        {
+          "name": "type",
+          "in": "query",
+          "type": "string",
+          "enum": [
+            "dash-folder",
+            "dash-db"
+          ]
+        },
+        {
+          "name": "dashboardIds",
+          "in": "query",
+          "type": "array",
+          "items": "integer"
+        },
+        {
+          "name": "dashboardUIDs",
+          "in": "query",
+          "type": "array",
+          "items": "string"
+        },
+        {
+          "name": "folderIds",
+          "in": "query",
+          "type": "array",
+          "items": "integer"
+        },
+        {
+          "name": "folderUIDs",
+          "in": "query",
+          "type": "array",
+          "items": "string"
+        },
+        {
+          "name": "starred",
+          "in": "query",
+          "type": "boolean"
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "type": "integer"
+        },
+        {
+          "name": "page",
+          "in": "query",
+          "type": "integer"
+        },
+        {
+          "name": "permission",
+          "in": "query",
+          "type": "string",
+          "enum": [
+            "Edit",
+            "View"
+          ]
+        },
+        {
+          "name": "sort",
+          "in": "query",
+          "type": "string",
+          "enum": [
+            "alpha-asc",
+            "alpha-desc"
+          ]
+        },
+        {
+          "name": "deleted",
+          "in": "query",
+          "type": "boolean"
+        }
+      ]
+    },
+    "grafana-stack_get_dashboard": {
+      "method": "GET",
+      "path": "/dashboards/uid/{uid}",
+      "operationId": "getDashboardByUID",
+      "summary": "Get dashboard by uid.",
+      "parameters": [
+        {
+          "name": "uid",
+          "in": "path",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "grafana-stack_list_datasources": {
+      "method": "GET",
+      "path": "/datasources",
+      "operationId": "getDataSources",
+      "summary": "Get all data sources.",
+      "parameters": []
+    },
+    "grafana-stack_check_datasource_health": {
+      "method": "GET",
+      "path": "/datasources/uid/{uid}/health",
+      "operationId": "checkDatasourceHealthWithUID",
+      "summary": "Sends a health check request to the plugin datasource identified by the UID.",
+      "parameters": [
+        {
+          "name": "uid",
+          "in": "path",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "grafana-stack_list_folders": {
+      "method": "GET",
+      "path": "/folders",
+      "operationId": "getFolders",
+      "summary": "Get all folders.",
+      "parameters": [
+        {
+          "name": "limit",
+          "in": "query",
+          "type": "integer"
+        },
+        {
+          "name": "page",
+          "in": "query",
+          "type": "integer"
+        },
+        {
+          "name": "parentUid",
+          "in": "query",
+          "type": "string"
+        },
+        {
+          "name": "permission",
+          "in": "query",
+          "type": "string",
+          "enum": [
+            "Edit",
+            "View"
+          ]
+        }
+      ]
+    },
+    "grafana-stack_list_alert_rules": {
+      "method": "GET",
+      "path": "/v1/provisioning/alert-rules",
+      "operationId": "RouteGetAlertRules",
+      "summary": "Get all the alert rules.",
+      "parameters": []
+    },
+    "grafana-stack_list_annotations": {
+      "method": "GET",
+      "path": "/annotations",
+      "operationId": "getAnnotations",
+      "summary": "Find Annotations.",
+      "parameters": [
+        {
+          "name": "from",
+          "in": "query",
+          "type": "integer"
+        },
+        {
+          "name": "to",
+          "in": "query",
+          "type": "integer"
+        },
+        {
+          "name": "userId",
+          "in": "query",
+          "type": "integer"
+        },
+        {
+          "name": "userUID",
+          "in": "query",
+          "type": "string"
+        },
+        {
+          "name": "alertId",
+          "in": "query",
+          "type": "integer"
+        },
+        {
+          "name": "alertUID",
+          "in": "query",
+          "type": "string"
+        },
+        {
+          "name": "dashboardId",
+          "in": "query",
+          "type": "integer"
+        },
+        {
+          "name": "dashboardUID",
+          "in": "query",
+          "type": "string"
+        },
+        {
+          "name": "panelId",
+          "in": "query",
+          "type": "integer"
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "type": "integer"
+        },
+        {
+          "name": "tags",
+          "in": "query",
+          "type": "array",
+          "items": "string",
+          "collectionFormat": "multi"
+        },
+        {
+          "name": "type",
+          "in": "query",
+          "type": "string",
+          "enum": [
+            "alert",
+            "annotation"
+          ]
+        },
+        {
+          "name": "matchAny",
+          "in": "query",
+          "type": "boolean"
+        }
+      ]
+    },
+    "grafana-stack_list_contact_points": {
+      "method": "GET",
+      "path": "/v1/provisioning/contact-points",
+      "operationId": "RouteGetContactpoints",
+      "summary": "Get all the contact points.",
+      "parameters": [
+        {
+          "name": "name",
+          "in": "query",
+          "type": "string"
+        }
+      ]
+    },
+    "grafana-stack_list_mute_timings": {
+      "method": "GET",
+      "path": "/v1/provisioning/mute-timings",
+      "operationId": "RouteGetMuteTimings",
+      "summary": "Get all the mute timings.",
+      "parameters": []
+    },
+    "grafana-stack_list_dashboard_tags": {
+      "method": "GET",
+      "path": "/dashboards/tags",
+      "operationId": "getDashboardTags",
+      "summary": "Get all dashboards tags of an organization.",
+      "parameters": []
+    },
+    "grafana-stack_search_teams": {
+      "method": "GET",
+      "path": "/teams/search",
+      "operationId": "searchTeams",
+      "summary": "Team Search With Paging.",
+      "parameters": [
+        {
+          "name": "page",
+          "in": "query",
+          "type": "integer"
+        },
+        {
+          "name": "perpage",
+          "in": "query",
+          "type": "integer"
+        },
+        {
+          "name": "name",
+          "in": "query",
+          "type": "string"
+        },
+        {
+          "name": "query",
+          "in": "query",
+          "type": "string"
+        },
+        {
+          "name": "accesscontrol",
+          "in": "query",
+          "type": "boolean"
+        },
+        {
+          "name": "sort",
+          "in": "query",
+          "type": "string"
+        }
+      ]
+    },
+    "grafana-stack_list_org_users": {
+      "method": "GET",
+      "path": "/org/users",
+      "operationId": "getOrgUsersForCurrentOrg",
+      "summary": "Get all users within the current organization.",
+      "parameters": [
+        {
+          "name": "query",
+          "in": "query",
+          "type": "string"
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "type": "integer"
+        }
+      ]
+    },
+    "grafana-stack_list_library_elements": {
+      "method": "GET",
+      "path": "/library-elements",
+      "operationId": "getLibraryElements",
+      "summary": "Get all library elements.",
+      "parameters": [
+        {
+          "name": "searchString",
+          "in": "query",
+          "type": "string"
+        },
+        {
+          "name": "kind",
+          "in": "query",
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        {
+          "name": "sortDirection",
+          "in": "query",
+          "type": "string",
+          "enum": [
+            "alpha-asc",
+            "alpha-desc"
+          ]
+        },
+        {
+          "name": "typeFilter",
+          "in": "query",
+          "type": "string"
+        },
+        {
+          "name": "excludeUid",
+          "in": "query",
+          "type": "string"
+        },
+        {
+          "name": "folderFilter",
+          "in": "query",
+          "type": "string"
+        },
+        {
+          "name": "folderFilterUIDs",
+          "in": "query",
+          "type": "string"
+        },
+        {
+          "name": "perPage",
+          "in": "query",
+          "type": "integer"
+        },
+        {
+          "name": "page",
+          "in": "query",
+          "type": "integer"
+        }
+      ]
+    }
+  }
+}

@@ -737,6 +737,96 @@ export const PROVIDER_TOOL_MAPPINGS: readonly ProviderToolMapping[] = [
     "provider": "zendesk",
     "verb": "get-ticket-metrics",
     "mutating": false
+  },
+  {
+    "toolSlug": "grafana-stack_health",
+    "provider": "grafana-stack",
+    "verb": "health",
+    "mutating": false
+  },
+  {
+    "toolSlug": "grafana-stack_get_current_user",
+    "provider": "grafana-stack",
+    "verb": "get-current-user",
+    "mutating": false
+  },
+  {
+    "toolSlug": "grafana-stack_search",
+    "provider": "grafana-stack",
+    "verb": "search",
+    "mutating": false
+  },
+  {
+    "toolSlug": "grafana-stack_get_dashboard",
+    "provider": "grafana-stack",
+    "verb": "get-dashboard",
+    "mutating": false
+  },
+  {
+    "toolSlug": "grafana-stack_list_datasources",
+    "provider": "grafana-stack",
+    "verb": "list-datasources",
+    "mutating": false
+  },
+  {
+    "toolSlug": "grafana-stack_check_datasource_health",
+    "provider": "grafana-stack",
+    "verb": "check-datasource-health",
+    "mutating": false
+  },
+  {
+    "toolSlug": "grafana-stack_list_folders",
+    "provider": "grafana-stack",
+    "verb": "list-folders",
+    "mutating": false
+  },
+  {
+    "toolSlug": "grafana-stack_list_alert_rules",
+    "provider": "grafana-stack",
+    "verb": "list-alert-rules",
+    "mutating": false
+  },
+  {
+    "toolSlug": "grafana-stack_list_annotations",
+    "provider": "grafana-stack",
+    "verb": "list-annotations",
+    "mutating": false
+  },
+  {
+    "toolSlug": "grafana-stack_list_contact_points",
+    "provider": "grafana-stack",
+    "verb": "list-contact-points",
+    "mutating": false
+  },
+  {
+    "toolSlug": "grafana-stack_list_mute_timings",
+    "provider": "grafana-stack",
+    "verb": "list-mute-timings",
+    "mutating": false
+  },
+  {
+    "toolSlug": "grafana-stack_list_dashboard_tags",
+    "provider": "grafana-stack",
+    "verb": "list-dashboard-tags",
+    "mutating": false
+  },
+  {
+    "toolSlug": "grafana-stack_search_teams",
+    "provider": "grafana-stack",
+    "verb": "search-teams",
+    "mutating": false
+  },
+  {
+    "toolSlug": "grafana-stack_list_org_users",
+    "provider": "grafana-stack",
+    "verb": "list-org-users",
+    "mutating": false
+  },
+  {
+    "toolSlug": "grafana-stack_list_library_elements",
+    "provider": "grafana-stack",
+    "verb": "list-library-elements",
+    "mutating": false
   }
 ] as const;
 
