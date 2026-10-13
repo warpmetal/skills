@@ -13,6 +13,7 @@ import batch08Json from "./catalog/batch-08.json" with { type: "json" };
 import batch09Json from "./catalog/batch-09.json" with { type: "json" };
 import batch10Json from "./catalog/batch-10.json" with { type: "json" };
 import batch11Json from "./catalog/batch-11.json" with { type: "json" };
+import batch12Json from "./catalog/batch-12.json" with { type: "json" };
 
 import type { ProviderCatalogFile, ProviderCatalogTool } from "./types.js";
 
@@ -28,6 +29,7 @@ const BATCHES = [
   batch09Json,
   batch10Json,
   batch11Json,
+  batch12Json,
 ] as unknown as ProviderCatalogFile[];
 
 const tools = BATCHES.flatMap((batch) => batch.tools);

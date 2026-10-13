@@ -706,6 +706,37 @@ export const PROVIDER_TOOL_MAPPINGS: readonly ProviderToolMapping[] = [
     "verb": "add-ticket-comment",
     "mutating": true,
     "gate": "CONFIRM ZENDESK ADD TICKET COMMENT"
+  },
+  {
+    "toolSlug": "zendesk_update_ticket",
+    "provider": "zendesk",
+    "verb": "update-ticket",
+    "mutating": true,
+    "gate": "CONFIRM ZENDESK UPDATE TICKET"
+  },
+  {
+    "toolSlug": "zendesk_get_user",
+    "provider": "zendesk",
+    "verb": "get-user",
+    "mutating": false
+  },
+  {
+    "toolSlug": "zendesk_get_organization",
+    "provider": "zendesk",
+    "verb": "get-organization",
+    "mutating": false
+  },
+  {
+    "toolSlug": "zendesk_count_view_tickets",
+    "provider": "zendesk",
+    "verb": "count-view-tickets",
+    "mutating": false
+  },
+  {
+    "toolSlug": "zendesk_get_ticket_metrics",
+    "provider": "zendesk",
+    "verb": "get-ticket-metrics",
+    "mutating": false
   }
 ] as const;
 

@@ -12,7 +12,12 @@ export interface ProviderToolAnnotations {
 
 /** JSON Schema object for MCP tool input contracts. */
 export interface ProviderJsonSchema {
-  type?: string;
+  /**
+   * A single type, or a list of them. The catalog spells a nullable field as
+   * `["integer", "null"]`, which `jsonSchemaToZodObject` turns into a nullable
+   * schema rather than an unvalidated `z.unknown()`.
+   */
+  type?: string | string[];
   properties?: Record<string, ProviderJsonSchema & { description?: string }>;
   required?: string[];
   items?: ProviderJsonSchema;

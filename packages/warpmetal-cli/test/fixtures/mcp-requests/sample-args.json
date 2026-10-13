@@ -880,6 +880,7 @@
   },
   "zendesk_list_tickets": {
     "external_id": "sample_external_id",
+    "page": 1,
     "per_page": 1,
     "sort_by": "id",
     "sort_order": "asc"
@@ -888,6 +889,8 @@
     "ticket_id": 1
   },
   "zendesk_list_ticket_comments": {
+    "page_after": "sample_page_after",
+    "page_size": 1,
     "sort_order": "asc",
     "ticket_id": 1
   },
@@ -900,9 +903,9 @@
   "zendesk_get_current_user": {},
   "zendesk_list_users": {
     "external_id": "sample_external_id",
-    "role": "end-user",
-    "sort_by": "sample_sort_by",
-    "sort_order": "asc"
+    "page_after": "sample_page_after",
+    "page_size": 1,
+    "role": "end-user"
   },
   "zendesk_list_organizations": {
     "page_after": "sample_page_after",
@@ -913,6 +916,8 @@
     "page_size": 1
   },
   "zendesk_list_view_tickets": {
+    "page_after": "sample_page_after",
+    "page_size": 1,
     "view_id": 1
   },
   "zendesk_create_ticket": {
@@ -929,6 +934,28 @@
   "zendesk_add_ticket_comment": {
     "comment_body": "sample_comment_body",
     "public": true,
+    "ticket_id": 1
+  },
+  "zendesk_update_ticket": {
+    "assignee_id": 1,
+    "group_id": 1,
+    "priority": "urgent",
+    "status": "new",
+    "subject": "sample_subject",
+    "tags": [],
+    "ticket_id": 1,
+    "type": "problem"
+  },
+  "zendesk_get_user": {
+    "user_id": 1
+  },
+  "zendesk_get_organization": {
+    "organization_id": 1
+  },
+  "zendesk_count_view_tickets": {
+    "view_id": 1
+  },
+  "zendesk_get_ticket_metrics": {
     "ticket_id": 1
   }
 }

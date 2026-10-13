@@ -211,6 +211,14 @@ export async function executeMcpTool(
     return failure(def.provider, def.verb, "Provider arguments must be a JSON object.");
   }
 
+  // A shape the schema cannot express (for example "one of these two fields").
+  // Checked before the credential is read and before a request is built, so an
+  // impossible call fails with the reason instead of a provider 4xx.
+  const invalid = def.validate?.(toolArgs) ?? null;
+  if (invalid !== null) {
+    return failure(def.provider, def.verb, invalid);
+  }
+
   const ctx = await buildContext(def, context);
   if (def.provider === "jira" && !ctx.jiraBase) {
     return needsAuth(

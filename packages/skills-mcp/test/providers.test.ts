@@ -28,10 +28,10 @@ import { makeRegistryFixture } from "./helpers.js";
 
 const CONTENT_TOOLS = ["skill_list", "skill_read", "skill_search"] as const;
 
-test("catalog aggregates one hundred and eleven tools across all batches with input schemas", () => {
+test("catalog aggregates one hundred and sixteen tools across all batches with input schemas", () => {
   const tools = loadProviderCatalog();
-  assert.equal(tools.length, 111);
-  assert.equal(PROVIDER_TOOL_COUNT, 111);
+  assert.equal(tools.length, 116);
+  assert.equal(PROVIDER_TOOL_COUNT, 116);
 
   const slugs = providerToolSlugs();
   const expected = [
@@ -157,6 +157,12 @@ test("catalog aggregates one hundred and eleven tools across all batches with in
     "zendesk_list_view_tickets",
     "zendesk_create_ticket",
     "zendesk_add_ticket_comment",
+    // batch-12
+    "zendesk_update_ticket",
+    "zendesk_get_user",
+    "zendesk_get_organization",
+    "zendesk_count_view_tickets",
+    "zendesk_get_ticket_metrics",
   ];
   for (const slug of expected) {
     assert.ok(slugs.includes(slug), `catalog is missing ${slug}`);
@@ -169,7 +175,7 @@ test("catalog aggregates one hundred and eleven tools across all batches with in
     assert.ok(tool.description.length > 10);
   }
 
-  assert.equal(PROVIDER_TOOL_MAPPINGS.length, 111);
+  assert.equal(PROVIDER_TOOL_MAPPINGS.length, 116);
   for (const slug of slugs) {
     assert.ok(
       PROVIDER_TOOL_MAPPINGS.some((entry) => entry.toolSlug === slug),
@@ -211,14 +217,23 @@ test("jsonSchemaToZodObject honours enum, default, items and additionalPropertie
     required: ["state"],
   });
 
-  assert.deepEqual(schema.parse({ state: "open" }), { state: "open", limit: 10 });
-  assert.throws(() => schema.parse({ state: "merged" }), "enum must reject an unknown value");
+  assert.deepEqual(schema.parse({ state: "open" }), {
+    state: "open",
+    limit: 10,
+  });
+  assert.throws(
+    () => schema.parse({ state: "merged" }),
+    "enum must reject an unknown value",
+  );
   assert.deepEqual(schema.parse({ state: "open", tags: ["a", "b"] }), {
     state: "open",
     limit: 10,
     tags: ["a", "b"],
   });
-  assert.throws(() => schema.parse({ state: "open", tags: [1] }), "array items must be enforced");
+  assert.throws(
+    () => schema.parse({ state: "open", tags: [1] }),
+    "array items must be enforced",
+  );
   assert.deepEqual(schema.parse({ state: "open", nested: { id: "x" } }), {
     state: "open",
     limit: 10,
@@ -249,23 +264,81 @@ test("jsonSchemaToZodObject accepts an anyOf field in either shape", () => {
     required: ["project_id"],
   });
 
-  assert.deepEqual(schema.parse({ project_id: "group/project" }), { project_id: "group/project" });
-  assert.deepEqual(schema.parse({ project_id: 87395987 }), { project_id: 87395987 });
-  assert.throws(() => schema.parse({ project_id: true }), "a boolean must not satisfy the union");
+  assert.deepEqual(schema.parse({ project_id: "group/project" }), {
+    project_id: "group/project",
+  });
+  assert.deepEqual(schema.parse({ project_id: 87395987 }), {
+    project_id: 87395987,
+  });
+  assert.throws(
+    () => schema.parse({ project_id: true }),
+    "a boolean must not satisfy the union",
+  );
 });
 
 test("asana create_a_project accepts workspace as a GID string", () => {
-  const tool = loadProviderCatalog().find((entry) => entry.toolSlug === "asana_create_a_project");
+  const tool = loadProviderCatalog().find(
+    (entry) => entry.toolSlug === "asana_create_a_project",
+  );
   assert.ok(tool, "asana_create_a_project must be in the catalog");
   const schema = jsonSchemaToZodObject(tool.inputSchema);
   // Regression: `workspace` was typed as an object, so a real GID string was
   // rejected by validation before any request, and the object form made Asana
   // answer HTTP 400.
-  assert.deepEqual(schema.parse({ name: "New project", workspace: "1219343793000865" }), {
-    name: "New project",
-    workspace: "1219343793000865",
+  assert.deepEqual(
+    schema.parse({ name: "New project", workspace: "1219343793000865" }),
+    {
+      name: "New project",
+      workspace: "1219343793000865",
+    },
+  );
+  assert.throws(() =>
+    schema.parse({ name: "New project", workspace: { gid: "1" } }),
+  );
+});
+
+test("jsonSchemaToZodObject makes a multi-type field nullable instead of unknown", () => {
+  // `"type": ["integer", "null"]` is how the catalog spells a nullable field.
+  // Regression: the array fell through to z.unknown(), so any JSON was accepted
+  // here and only refused by the provider, and `null` - a documented value - was
+  // indistinguishable from an omitted one.
+  const schema = jsonSchemaToZodObject({
+    type: "object",
+    properties: {
+      assignee_id: {
+        description: "The id of the agent to assign the ticket to.",
+        type: ["integer", "null"],
+      },
+    },
+    required: [],
   });
-  assert.throws(() => schema.parse({ name: "New project", workspace: { gid: "1" } }));
+
+  assert.deepEqual(schema.parse({ assignee_id: null }), { assignee_id: null });
+  assert.deepEqual(schema.parse({ assignee_id: 7 }), { assignee_id: 7 });
+  assert.deepEqual(schema.parse({}), {});
+  assert.throws(
+    () => schema.parse({ assignee_id: "7" }),
+    "a string must not satisfy a nullable integer",
+  );
+});
+
+test("zendesk update_ticket accepts null to unassign and rejects a wrong type", () => {
+  const tool = loadProviderCatalog().find(
+    (entry) => entry.toolSlug === "zendesk_update_ticket",
+  );
+  assert.ok(tool, "zendesk_update_ticket must be in the catalog");
+  const schema = jsonSchemaToZodObject(tool.inputSchema);
+  // `assignee_id: null` unassigns, so it must survive validation as a value; a
+  // string is not an id and must not reach the provider.
+  assert.deepEqual(schema.parse({ ticket_id: 42, assignee_id: null }), {
+    ticket_id: 42,
+    assignee_id: null,
+  });
+  assert.deepEqual(schema.parse({ ticket_id: 42, status: "solved" }), {
+    ticket_id: 42,
+    status: "solved",
+  });
+  assert.throws(() => schema.parse({ ticket_id: 42, assignee_id: "7" }));
 });
 
 test("full profile lists every provider tool; content profile does not", async () => {
@@ -280,10 +353,12 @@ test("full profile lists every provider tool; content profile does not", async (
       auditEnabled: false,
       providers: invoker,
       runner: {
-        run: () => Promise.reject(new Error("providers.test must never run the CLI")),
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
       },
     });
-    const [fullClientTransport, fullServerTransport] = InMemoryTransport.createLinkedPair();
+    const [fullClientTransport, fullServerTransport] =
+      InMemoryTransport.createLinkedPair();
     const fullClient = new Client({ name: "providers-full", version: "0.0.0" });
     await Promise.all([
       fullClient.connect(fullClientTransport),
@@ -300,9 +375,14 @@ test("full profile lists every provider tool; content profile does not", async (
         names.length,
         CONTENT_TOOLS.length + ALL_TOOL_SPECS.length + PROVIDER_TOOL_COUNT,
       );
-      const githubList = tools.find((tool) => tool.name === "github_list_issues");
+      const githubList = tools.find(
+        (tool) => tool.name === "github_list_issues",
+      );
       assert.ok(githubList?.inputSchema);
-      assert.equal((githubList?.inputSchema as { type?: string }).type, "object");
+      assert.equal(
+        (githubList?.inputSchema as { type?: string }).type,
+        "object",
+      );
     } finally {
       await fullClient.close();
     }
@@ -313,8 +393,12 @@ test("full profile lists every provider tool; content profile does not", async (
       auditEnabled: false,
       providers: invoker,
     });
-    const [contentClientTransport, contentServerTransport] = InMemoryTransport.createLinkedPair();
-    const contentClient = new Client({ name: "providers-content", version: "0.0.0" });
+    const [contentClientTransport, contentServerTransport] =
+      InMemoryTransport.createLinkedPair();
+    const contentClient = new Client({
+      name: "providers-content",
+      version: "0.0.0",
+    });
     await Promise.all([
       contentClient.connect(contentClientTransport),
       contentServer.connect(contentServerTransport),
@@ -324,7 +408,10 @@ test("full profile lists every provider tool; content profile does not", async (
       const { tools } = await contentClient.listTools();
       const names = tools.map((tool) => tool.name).sort();
       assert.deepEqual(names, [...CONTENT_TOOLS].sort());
-      assert.equal(names.filter((name) => name.startsWith("github_")).length, 0);
+      assert.equal(
+        names.filter((name) => name.startsWith("github_")).length,
+        0,
+      );
     } finally {
       await contentClient.close();
     }
@@ -344,13 +431,21 @@ test("provider call without credentials returns provider_unconfigured", async ()
       auditEnabled: false,
       providers: invoker,
       runner: {
-        run: () => Promise.reject(new Error("providers.test must never run the CLI")),
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
       },
     });
 
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
-    const client = new Client({ name: "providers-unconfigured", version: "0.0.0" });
-    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
+    const client = new Client({
+      name: "providers-unconfigured",
+      version: "0.0.0",
+    });
+    await Promise.all([
+      client.connect(clientTransport),
+      server.connect(serverTransport),
+    ]);
 
     try {
       const result = await client.callTool({
@@ -390,13 +485,21 @@ test("provider call with mock invoker forwards toolSlug and args and returns ok"
       auditEnabled: false,
       providers: invoker,
       runner: {
-        run: () => Promise.reject(new Error("providers.test must never run the CLI")),
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
       },
     });
 
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
-    const client = new Client({ name: "providers-invoke-ok", version: "0.0.0" });
-    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
+    const client = new Client({
+      name: "providers-invoke-ok",
+      version: "0.0.0",
+    });
+    await Promise.all([
+      client.connect(clientTransport),
+      server.connect(serverTransport),
+    ]);
 
     try {
       const result = await client.callTool({
@@ -413,7 +516,73 @@ test("provider call with mock invoker forwards toolSlug and args and returns ok"
       assert.equal(structured.tool, "github_list_issues");
       assert.equal(structured.result?.issues?.length, 1);
       assert.deepEqual(calls, [
-        { tool: "github_list_issues", args: { owner: "acme", repo: "demo", state: "open" } },
+        {
+          tool: "github_list_issues",
+          args: { owner: "acme", repo: "demo", state: "open" },
+        },
+      ]);
+    } finally {
+      await client.close();
+    }
+  } finally {
+    await fixture.cleanup();
+  }
+});
+
+test("zendesk create_ticket accepts requester_id alone, as its description promises", async () => {
+  // Regression: `requester_email` was required in the catalog, so the Zod schema
+  // refused a call that named only `requester_id` - a documented and supported
+  // form ("takes precedence over requester_email") that the CLI's own builder
+  // handles. The requirement made that path unreachable for every MCP client.
+  const fixture = await makeRegistryFixture();
+  try {
+    const loaded = await loadRegistry({ registry: fixture.dir });
+    const calls: Array<{ tool: string; args: Record<string, unknown> }> = [];
+    const invoker = createMockProviderInvoker({
+      configured: true,
+      async invoke(toolSlug, args) {
+        calls.push({ tool: toolSlug, args });
+        return { ticket: { id: 7 } };
+      },
+    });
+    const server = createSkillsServer(loaded, {
+      profile: "full",
+      auditDir: fixture.dir,
+      auditEnabled: false,
+      providers: invoker,
+      runner: {
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
+      },
+    });
+
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
+    const client = new Client({ name: "providers-zendesk", version: "0.0.0" });
+    await Promise.all([
+      client.connect(clientTransport),
+      server.connect(serverTransport),
+    ]);
+
+    try {
+      const result = await client.callTool({
+        name: "zendesk_create_ticket",
+        arguments: { requester_id: 7, subject: "Site down" },
+      });
+      assert.notEqual(
+        result.isError,
+        true,
+        "requester_id alone must pass validation",
+      );
+      const structured = result.structuredContent as { ok?: boolean };
+      assert.equal(structured.ok, true);
+      assert.deepEqual(calls, [
+        {
+          tool: "zendesk_create_ticket",
+          // `public` is absent from the call and arrives as `true` because the
+          // catalog declares that default; the builder would apply the same one.
+          args: { requester_id: 7, subject: "Site down", public: true },
+        },
       ]);
     } finally {
       await client.close();
@@ -441,13 +610,18 @@ test("a batch-02 provider tool (notion_get_page) is registered and forwards its 
       auditEnabled: false,
       providers: invoker,
       runner: {
-        run: () => Promise.reject(new Error("providers.test must never run the CLI")),
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
       },
     });
 
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
     const client = new Client({ name: "providers-batch02", version: "0.0.0" });
-    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
+    await Promise.all([
+      client.connect(clientTransport),
+      server.connect(serverTransport),
+    ]);
 
     try {
       const { tools } = await client.listTools();
@@ -469,7 +643,9 @@ test("a batch-02 provider tool (notion_get_page) is registered and forwards its 
       assert.equal(structured.ok, true);
       assert.equal(structured.tool, "notion_get_page");
       assert.equal(structured.result?.id, "page_123");
-      assert.deepEqual(calls, [{ tool: "notion_get_page", args: { page_id: "page_123" } }]);
+      assert.deepEqual(calls, [
+        { tool: "notion_get_page", args: { page_id: "page_123" } },
+      ]);
     } finally {
       await client.close();
     }
@@ -496,13 +672,18 @@ test("a batch-03 provider tool (jira_get_project) is registered and forwards its
       auditEnabled: false,
       providers: invoker,
       runner: {
-        run: () => Promise.reject(new Error("providers.test must never run the CLI")),
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
       },
     });
 
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
     const client = new Client({ name: "providers-batch03", version: "0.0.0" });
-    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
+    await Promise.all([
+      client.connect(clientTransport),
+      server.connect(serverTransport),
+    ]);
 
     try {
       const { tools } = await client.listTools();
@@ -524,7 +705,9 @@ test("a batch-03 provider tool (jira_get_project) is registered and forwards its
       assert.equal(structured.ok, true);
       assert.equal(structured.tool, "jira_get_project");
       assert.equal(structured.result?.key, "AR");
-      assert.deepEqual(calls, [{ tool: "jira_get_project", args: { project_key: "AR" } }]);
+      assert.deepEqual(calls, [
+        { tool: "jira_get_project", args: { project_key: "AR" } },
+      ]);
     } finally {
       await client.close();
     }
@@ -551,13 +734,18 @@ test("a batch-04 provider tool (cloudflare_zones_get) is registered and forwards
       auditEnabled: false,
       providers: invoker,
       runner: {
-        run: () => Promise.reject(new Error("providers.test must never run the CLI")),
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
       },
     });
 
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
     const client = new Client({ name: "providers-batch04", version: "0.0.0" });
-    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
+    await Promise.all([
+      client.connect(clientTransport),
+      server.connect(serverTransport),
+    ]);
 
     try {
       const { tools } = await client.listTools();
@@ -606,13 +794,18 @@ test("a batch-05 provider tool (dropbox_list_folder) is registered and forwards 
       auditEnabled: false,
       providers: invoker,
       runner: {
-        run: () => Promise.reject(new Error("providers.test must never run the CLI")),
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
       },
     });
 
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
     const client = new Client({ name: "providers-batch05", version: "0.0.0" });
-    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
+    await Promise.all([
+      client.connect(clientTransport),
+      server.connect(serverTransport),
+    ]);
 
     try {
       const { tools } = await client.listTools();
@@ -635,7 +828,10 @@ test("a batch-05 provider tool (dropbox_list_folder) is registered and forwards 
       assert.equal(structured.tool, "dropbox_list_folder");
       assert.equal(structured.result?.entries?.[0]?.name, "report.pdf");
       assert.deepEqual(calls, [
-        { tool: "dropbox_list_folder", args: { path: "/qa_tree", recursive: true } },
+        {
+          tool: "dropbox_list_folder",
+          args: { path: "/qa_tree", recursive: true },
+        },
       ]);
     } finally {
       await client.close();
@@ -663,13 +859,18 @@ test("a batch-06 provider tool (discord_list_my_guilds) is registered and forwar
       auditEnabled: false,
       providers: invoker,
       runner: {
-        run: () => Promise.reject(new Error("providers.test must never run the CLI")),
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
       },
     });
 
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
     const client = new Client({ name: "providers-batch06", version: "0.0.0" });
-    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
+    await Promise.all([
+      client.connect(clientTransport),
+      server.connect(serverTransport),
+    ]);
 
     try {
       const { tools } = await client.listTools();
@@ -692,7 +893,10 @@ test("a batch-06 provider tool (discord_list_my_guilds) is registered and forwar
       assert.equal(structured.tool, "discord_list_my_guilds");
       assert.equal(structured.result?.guilds?.[0]?.name, "WarpMetal");
       assert.deepEqual(calls, [
-        { tool: "discord_list_my_guilds", args: { limit: 50, with_counts: true } },
+        {
+          tool: "discord_list_my_guilds",
+          args: { limit: 50, with_counts: true },
+        },
       ]);
     } finally {
       await client.close();
@@ -720,13 +924,18 @@ test("a batch-07 provider tool (exa_web_search) is registered and forwards its a
       auditEnabled: false,
       providers: invoker,
       runner: {
-        run: () => Promise.reject(new Error("providers.test must never run the CLI")),
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
       },
     });
 
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
     const client = new Client({ name: "providers-batch07", version: "0.0.0" });
-    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
+    await Promise.all([
+      client.connect(clientTransport),
+      server.connect(serverTransport),
+    ]);
 
     try {
       const { tools } = await client.listTools();
@@ -749,7 +958,10 @@ test("a batch-07 provider tool (exa_web_search) is registered and forwards its a
       assert.equal(structured.tool, "exa_web_search");
       assert.equal(structured.result?.results?.[0]?.title, "WarpMetal");
       assert.deepEqual(calls, [
-        { tool: "exa_web_search", args: { query: "warpmetal agent runtime", max_results: 5 } },
+        {
+          tool: "exa_web_search",
+          args: { query: "warpmetal agent runtime", max_results: 5 },
+        },
       ]);
     } finally {
       await client.close();
@@ -777,13 +989,18 @@ test("a batch-08 provider tool (clickup_get_task) is registered and forwards its
       auditEnabled: false,
       providers: invoker,
       runner: {
-        run: () => Promise.reject(new Error("providers.test must never run the CLI")),
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
       },
     });
 
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
     const client = new Client({ name: "providers-batch08", version: "0.0.0" });
-    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
+    await Promise.all([
+      client.connect(clientTransport),
+      server.connect(serverTransport),
+    ]);
 
     try {
       const { tools } = await client.listTools();
@@ -805,7 +1022,9 @@ test("a batch-08 provider tool (clickup_get_task) is registered and forwards its
       assert.equal(structured.ok, true);
       assert.equal(structured.tool, "clickup_get_task");
       assert.equal(structured.result?.name, "Ship batch 08");
-      assert.deepEqual(calls, [{ tool: "clickup_get_task", args: { task_id: "abc123" } }]);
+      assert.deepEqual(calls, [
+        { tool: "clickup_get_task", args: { task_id: "abc123" } },
+      ]);
     } finally {
       await client.close();
     }
@@ -832,13 +1051,18 @@ test("a batch-09 provider tool (openai_list_models) is registered and forwards i
       auditEnabled: false,
       providers: invoker,
       runner: {
-        run: () => Promise.reject(new Error("providers.test must never run the CLI")),
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
       },
     });
 
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
     const client = new Client({ name: "providers-batch09", version: "0.0.0" });
-    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
+    await Promise.all([
+      client.connect(clientTransport),
+      server.connect(serverTransport),
+    ]);
 
     try {
       const { tools } = await client.listTools();
@@ -887,13 +1111,18 @@ test("a batch-10 provider tool (grafana-cloud_list_stacks) is registered and for
       auditEnabled: false,
       providers: invoker,
       runner: {
-        run: () => Promise.reject(new Error("providers.test must never run the CLI")),
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
       },
     });
 
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
     const client = new Client({ name: "providers-batch10", version: "0.0.0" });
-    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
+    await Promise.all([
+      client.connect(clientTransport),
+      server.connect(serverTransport),
+    ]);
 
     try {
       const { tools } = await client.listTools();
@@ -915,7 +1144,9 @@ test("a batch-10 provider tool (grafana-cloud_list_stacks) is registered and for
       assert.equal(structured.ok, true);
       assert.equal(structured.tool, "grafana-cloud_list_stacks");
       assert.equal(structured.result?.data?.[0]?.slug, "acme");
-      assert.deepEqual(calls, [{ tool: "grafana-cloud_list_stacks", args: { org_slug: "acme" } }]);
+      assert.deepEqual(calls, [
+        { tool: "grafana-cloud_list_stacks", args: { org_slug: "acme" } },
+      ]);
     } finally {
       await client.close();
     }
@@ -935,12 +1166,20 @@ test("experimental slugs carry the marker in their registered description", asyn
       auditEnabled: false,
       providers: invoker,
       runner: {
-        run: () => Promise.reject(new Error("providers.test must never run the CLI")),
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
       },
     });
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
-    const client = new Client({ name: "providers-experimental", version: "0.0.0" });
-    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
+    const client = new Client({
+      name: "providers-experimental",
+      version: "0.0.0",
+    });
+    await Promise.all([
+      client.connect(clientTransport),
+      server.connect(serverTransport),
+    ]);
 
     try {
       const { tools } = await client.listTools();
@@ -971,12 +1210,20 @@ test("destructiveHint marks exactly the irreversible mutations", async () => {
       auditEnabled: false,
       providers: invoker,
       runner: {
-        run: () => Promise.reject(new Error("providers.test must never run the CLI")),
+        run: () =>
+          Promise.reject(new Error("providers.test must never run the CLI")),
       },
     });
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
-    const client = new Client({ name: "providers-destructive", version: "0.0.0" });
-    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
+    const client = new Client({
+      name: "providers-destructive",
+      version: "0.0.0",
+    });
+    await Promise.all([
+      client.connect(clientTransport),
+      server.connect(serverTransport),
+    ]);
 
     try {
       const { tools } = await client.listTools();
@@ -999,9 +1246,15 @@ test("destructiveHint marks exactly the irreversible mutations", async () => {
         }
       }
       for (const slug of DESTRUCTIVE_SLUGS) {
-        assert.ok(providerSlugs.has(slug), `${slug}: destructive slug must be a registered tool`);
+        assert.ok(
+          providerSlugs.has(slug),
+          `${slug}: destructive slug must be a registered tool`,
+        );
       }
-      assert.ok(DESTRUCTIVE_SLUGS.size >= 10, "the destructive set must be non-trivial");
+      assert.ok(
+        DESTRUCTIVE_SLUGS.size >= 10,
+        "the destructive set must be non-trivial",
+      );
     } finally {
       await client.close();
     }

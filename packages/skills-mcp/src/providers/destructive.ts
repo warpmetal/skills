@@ -29,9 +29,12 @@ export const DESTRUCTIVE_SLUGS: ReadonlySet<string> = new Set([
   // account's triggers and webhooks, so neither can be taken back. The comment
   // tools of Jira, Linear and ClickUp sit in the ordinary write surface because
   // their notifications stay inside the organisation; a Zendesk public comment
-  // reaches the customer, which is the case this set names.
+  // reaches the customer, which is the case this set names. Updating a ticket is
+  // in the same class: a status or assignee change fires the same triggers and
+  // can notify the requester, and closing a ticket is not silently reversible.
   "zendesk_create_ticket",
   "zendesk_add_ticket_comment",
+  "zendesk_update_ticket",
   // Paid model calls and analytics ingestion with a lasting record.
   "gemini_generate_content",
   "mixpanel_track_event",

@@ -82,6 +82,25 @@ function zodBase(prop: ProviderJsonSchema): z.ZodType {
     return z.union(options as unknown as [z.ZodType, z.ZodType, ...z.ZodType[]]);
   }
 
+  // `"type": ["integer", "null"]` is how the catalog spells a nullable field
+  // (Zendesk's `assignee_id`, Vercel's `framework`, Intercom's `phone`). The
+  // switch below reads a single type, so without this branch the whole property
+  // fell to z.unknown(): a wrong type was accepted here and only refused by the
+  // provider, and `null` - a documented value - was indistinguishable from a
+  // missing one. Each non-null type is built as if it stood alone, then the
+  // union is made nullable when the list carries `"null"`.
+  if (Array.isArray(prop.type)) {
+    const types = prop.type.filter((entry) => entry !== "null");
+    const options = types.map((entry) => zodBase({ ...prop, type: entry }));
+    const base =
+      options.length === 0
+        ? z.unknown()
+        : options.length === 1
+          ? options[0]!
+          : z.union(options as unknown as [z.ZodType, z.ZodType, ...z.ZodType[]]);
+    return prop.type.includes("null") ? base.nullable() : base;
+  }
+
   const enumValues = prop.enum;
   if (Array.isArray(enumValues) && enumValues.length > 0) {
     if (enumValues.every((value): value is string => typeof value === "string")) {

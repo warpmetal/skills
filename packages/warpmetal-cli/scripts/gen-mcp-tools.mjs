@@ -12,7 +12,9 @@ const catalogDir = join(root, "packages/skills-mcp/src/providers/catalog");
 const files = readdirSync(catalogDir)
   .filter((f) => f.endsWith(".json"))
   .sort();
-const tools = files.flatMap((f) => JSON.parse(readFileSync(join(catalogDir, f), "utf8")).tools);
+const tools = files.flatMap(
+  (f) => JSON.parse(readFileSync(join(catalogDir, f), "utf8")).tools,
+);
 
 function providerFromToolkit(t) {
   if (t === "resend") return "email";
@@ -335,20 +337,24 @@ const ROUTES = {
   // API-token auth is `Basic base64(<email>/token:<api_token>)`; a bare
   // `<email>:<api_token>` is rejected with HTTP 401, so the `/token` literal is
   // part of the credential (the engine builds it for `__BASIC__`).
-  zendesk_list_tickets: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets.json?\${qs({ external_id: args.external_id, sort_by: args.sort_by, sort_order: args.sort_order, per_page: args.per_page })}\`, headers: zendeskHeaders() })`,
+  zendesk_list_tickets: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets.json?\${qs({ external_id: args.external_id, page: args.page, per_page: args.per_page, sort_by: args.sort_by, sort_order: args.sort_order })}\`, headers: zendeskHeaders() })`,
   zendesk_get_ticket: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets/\${args.ticket_id}.json\`, headers: zendeskHeaders() })`,
-  zendesk_list_ticket_comments: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets/\${args.ticket_id}/comments.json?\${qs({ sort_order: args.sort_order })}\`, headers: zendeskHeaders() })`,
+  zendesk_list_ticket_comments: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets/\${args.ticket_id}/comments.json?\${qs({ "page[size]": args.page_size, "page[after]": args.page_after, sort_order: args.sort_order })}\`, headers: zendeskHeaders() })`,
   // Zendesk's unified search takes the whole filter in `query` (for example
   // `type:ticket status:open`); there is no per-field parameter to forward.
   zendesk_search: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/search.json?\${qs({ query: args.query, sort_by: args.sort_by, sort_order: args.sort_order, per_page: args.per_page })}\`, headers: zendeskHeaders() })`,
   zendesk_get_current_user: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/users/me.json\`, headers: zendeskHeaders() })`,
-  zendesk_list_users: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/users.json?\${qs({ role: args.role, external_id: args.external_id, sort_by: args.sort_by, sort_order: args.sort_order })}\`, headers: zendeskHeaders() })`,
+  // The users endpoint takes `role`/`roles`/`permission_set`/`external_id` and
+  // pagination, and nothing else: it has no `sort_by`, so the tool must not
+  // expose one. A value Zendesk does not know is ignored, not rejected, which
+  // would let an unsorted page read as if it were sorted.
+  zendesk_list_users: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/users.json?\${qs({ role: args.role, external_id: args.external_id, "page[size]": args.page_size, "page[after]": args.page_after })}\`, headers: zendeskHeaders() })`,
   // Cursor pagination is the style Zendesk recommends for this endpoint, and it
   // is the only one exposed: mixing offset `page` with `page[size]` in one
   // request is a documented error. `qs` encodes the bracketed keys.
   zendesk_list_organizations: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/organizations.json?\${qs({ "page[size]": args.page_size, "page[after]": args.page_after })}\`, headers: zendeskHeaders() })`,
   zendesk_list_views: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/views.json?\${qs({ "page[size]": args.page_size, "page[after]": args.page_after })}\`, headers: zendeskHeaders() })`,
-  zendesk_list_view_tickets: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/views/\${args.view_id}/tickets.json\`, headers: zendeskHeaders() })`,
+  zendesk_list_view_tickets: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/views/\${args.view_id}/tickets.json?\${qs({ "page[size]": args.page_size, "page[after]": args.page_after })}\`, headers: zendeskHeaders() })`,
   // Zendesk wraps every write in a `ticket` envelope and models the requester
   // two ways: `requester_id` at the top level of the ticket, or a `requester`
   // object carrying `email`/`name` (its documented fields do not include `id`).
@@ -377,6 +383,45 @@ const ROUTES = {
   // A comment is added by updating the ticket, not by posting a comment
   // resource; `public: true` (the default) emails the requester.
   zendesk_add_ticket_comment: `({args, ctx}) => ({ method: "PUT", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets/\${args.ticket_id}.json\`, body: { ticket: { comment: { body: args.comment_body, public: args.public ?? true } } }, headers: zendeskHeaders() })`,
+  // Triaging a ticket: the same PUT as add_ticket_comment, but the ticket
+  // resource carries the settable fields, not a comment. Only the fields the
+  // caller actually asked to change travel, so an update never resets a field
+  // it was not told about; `assignee_id: null` is a real value (unassign), so it
+  // is forwarded rather than dropped. `tags` replaces the whole set, per the API.
+  zendesk_update_ticket: `({args, ctx}) => {
+    const ticket: Record<string, unknown> = {};
+    if (args.status !== undefined) ticket.status = args.status;
+    if (args.priority !== undefined) ticket.priority = args.priority;
+    if (args.assignee_id !== undefined) ticket.assignee_id = args.assignee_id;
+    if (args.group_id !== undefined) ticket.group_id = args.group_id;
+    if (args.subject !== undefined) ticket.subject = args.subject;
+    if (args.type !== undefined) ticket.type = args.type;
+    if (args.tags !== undefined) ticket.tags = args.tags;
+    return { method: "PUT", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets/\${args.ticket_id}.json\`, body: { ticket }, headers: zendeskHeaders() };
+  }`,
+  zendesk_get_user: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/users/\${args.user_id}.json\`, headers: zendeskHeaders() })`,
+  zendesk_get_organization: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/organizations/\${args.organization_id}.json\`, headers: zendeskHeaders() })`,
+  // Sizing a view without fetching its tickets. The response is
+  // `{ view_count: { value, fresh } }`, not an array.
+  zendesk_count_view_tickets: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/views/\${args.view_id}/count.json\`, headers: zendeskHeaders() })`,
+  // A ticket's metrics are a singular `ticket_metric` resource, not a listing.
+  zendesk_get_ticket_metrics: `({args, ctx}) => ({ method: "GET", url: \`https://\${ctx.zendeskSubdomain}.zendesk.com/api/v2/tickets/\${args.ticket_id}/metrics.json\`, headers: zendeskHeaders() })`,
+};
+
+/**
+ * Per-tool argument checks the JSON Schema cannot express.
+ *
+ * A call that would send a request the provider is certain to reject gets a
+ * named refusal instead: the message reaches the caller verbatim and no HTTP
+ * request is made. `null` means the arguments are acceptable; a string is the
+ * reason they are not.
+ */
+const VALIDATORS = {
+  // Zendesk needs a requester, and the tool models it two ways: a top-level
+  // `requester_id`, or a `requester` object built from `requester_email`. The
+  // schema cannot say "one of the two", so the pair is checked here rather than
+  // letting Zendesk answer 422 for a request that never had a chance.
+  zendesk_create_ticket: `(args) => (args.requester_id === undefined && args.requester_email === undefined ? "Provide requester_id or requester_email: Zendesk cannot create a ticket without a requester." : null)`,
 };
 
 const missing = tools.filter((t) => !ROUTES[t.toolSlug]).map((t) => t.toolSlug);
@@ -403,6 +448,7 @@ const entries = tools.map((t) => {
     verb,
     mutating,
     gate,
+    validate: VALIDATORS[t.toolSlug],
     secretName: SECRETS[provider],
     build: ROUTES[t.toolSlug],
   };
@@ -508,7 +554,7 @@ ${entries
     provider: ${JSON.stringify(e.provider)},
     verb: ${JSON.stringify(e.verb)},
     mutating: ${e.mutating},
-    ${e.gate ? `gate: ${JSON.stringify(e.gate)},` : ""}
+    ${[e.gate ? `gate: ${JSON.stringify(e.gate)},` : "", e.validate ? `validate: ${e.validate},` : ""].filter(Boolean).join("\n    ")}
     secretName: ${JSON.stringify(e.secretName)},
     build: BUILDS[${JSON.stringify(e.toolSlug)}]!,
   }`,

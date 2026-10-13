@@ -6,3 +6,10 @@ packages/skills-mcp/snapshot/
 snapshot.internal/
 .DS_Store
 *.log
+
+# Scratch from the provider-catalog extraction: the merged API dump and the
+# one-off scripts that turn it into tools-list.txt. Not build inputs.
+api-merged.json
+extract-tools.mjs
+extract-tools.ps1
+tools-list.txt

@@ -10,21 +10,21 @@ import type { McpToolRequest } from "../src/integration/mcp-tools/types.js";
 const here = dirname(fileURLToPath(import.meta.url));
 const fixtures = join(here, "fixtures/mcp-requests");
 
-const sampleArgs = JSON.parse(readFileSync(join(fixtures, "sample-args.json"), "utf8")) as Record<
-  string,
-  Record<string, unknown>
->;
-const sampleCtx = JSON.parse(readFileSync(join(fixtures, "sample-ctx.json"), "utf8")) as Record<
-  string,
-  Record<string, string>
->;
+const sampleArgs = JSON.parse(
+  readFileSync(join(fixtures, "sample-args.json"), "utf8"),
+) as Record<string, Record<string, unknown>>;
+const sampleCtx = JSON.parse(
+  readFileSync(join(fixtures, "sample-ctx.json"), "utf8"),
+) as Record<string, Record<string, string>>;
 
 function readFixture(slug: string): McpToolRequest {
-  return JSON.parse(readFileSync(join(fixtures, `${slug}.json`), "utf8")) as McpToolRequest;
+  return JSON.parse(
+    readFileSync(join(fixtures, `${slug}.json`), "utf8"),
+  ) as McpToolRequest;
 }
 
 describe("mcp provider request contracts", () => {
-  it("has a fixture for every one of the 111 tools", () => {
+  it("has a fixture for every one of the 116 tools", () => {
     for (const def of MCP_TOOL_DEFS) {
       assert.ok(
         existsSync(join(fixtures, `${def.toolSlug}.json`)),
@@ -61,7 +61,10 @@ describe("mcp provider request contracts", () => {
     for (const def of MCP_TOOL_DEFS) {
       const request = readFixture(def.toolSlug);
       // `__BASIC__` is only ever a header value; a URL never carries it.
-      assert.ok(!request.url.includes("__BASIC__"), `${def.toolSlug} leaked __BASIC__ into the URL`);
+      assert.ok(
+        !request.url.includes("__BASIC__"),
+        `${def.toolSlug} leaked __BASIC__ into the URL`,
+      );
       for (const [name, value] of Object.entries(request.headers ?? {})) {
         assert.ok(
           typeof value === "string",

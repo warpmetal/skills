@@ -32,11 +32,11 @@ not own:
 One vault, one API. There is no call that returns the whole vault, so a command
 cannot leak every secret by spreading an object it was handed.
 
-| Backend    | When                         | What it protects                                                                 |
-| ---------- | ---------------------------- | -------------------------------------------------------------------------------- |
+| Backend    | When                         | What it protects                                                                                                                  |
+| ---------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `remote`   | `WARPMETAL_VAULT_URL` is set | Everything, centrally. The value never touches local disk; the server holds the ciphertext and enforces compare-and-set per name. |
-| `keychain` | `@napi-rs/keyring` present   | Everything. No key material is written to the config directory.                   |
-| `file`     | everywhere else (default)    | The vault at rest: backups, copied dotfiles, a stray commit. Not a local attacker who can read the config directory. |
+| `keychain` | `@napi-rs/keyring` present   | Everything. No key material is written to the config directory.                                                                   |
+| `file`     | everywhere else (default)    | The vault at rest: backups, copied dotfiles, a stray commit. Not a local attacker who can read the config directory.              |
 
 The file backend is AES-256-GCM with a scrypt-derived key (`N=2^15, r=8, p=1`).
 The key comes from `WARPMETAL_VAULT_PASSPHRASE`, or from `env/vault.key` created
@@ -87,14 +87,14 @@ serializer is exactly how a secret ends up in a log aggregator.
 
 ## Exit codes
 
-| Code | Meaning                                                     |
-| ---- | ----------------------------------------------------------- |
-| 0    | Reported. Includes `DEGRADED`, which is an honest answer.    |
-| 2    | Usage or configuration error.                                |
-| 3    | Something is missing first (no such secret).                 |
-| 4    | Needs provider authentication.                               |
-| 5    | The provider rejected the action, or the apply failed.       |
-| 6    | Integrity: corrupt or unsupported vault, unsupported platform.|
+| Code | Meaning                                                        |
+| ---- | -------------------------------------------------------------- |
+| 0    | Reported. Includes `DEGRADED`, which is an honest answer.      |
+| 2    | Usage or configuration error.                                  |
+| 3    | Something is missing first (no such secret).                   |
+| 4    | Needs provider authentication.                                 |
+| 5    | The provider rejected the action, or the apply failed.         |
+| 6    | Integrity: corrupt or unsupported vault, unsupported platform. |
 
 `warpmetal env status`, `env list`, `env doctor`, `env plan` and
 `integration status` report names and outcomes only, which is why they are safe
@@ -147,10 +147,10 @@ npm run probe   # opt-in, needs network: sentinel-token route probe
 The suite is network-free by construction: the fetch function, the process
 runner and the credential backend are all injected. A secret-canary test proves
 a stored value never appears in any diagnostic, plan, list, error or `--json`
-document, and that it *does* appear on the one sanctioned stream.
+document, and that it _does_ appear on the one sanctioned stream.
 
 `npm run probe` is the one network-bound check, and it is deliberately outside
-`npm test`. It builds each of the 111 provider requests from the reviewed sample
+`npm test`. It builds each of the 116 provider requests from the reviewed sample
 args, swaps the token for a sentinel and sends it: a real route answers 401/403
 (auth required), 400/422 or 2xx, while a route the provider does not serve answers
 404/405. A per-host control request to a bogus path marks auth-first and

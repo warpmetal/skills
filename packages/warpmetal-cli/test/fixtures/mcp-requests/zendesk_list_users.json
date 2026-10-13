@@ -1,6 +1,6 @@
 {
   "method": "GET",
-  "url": "https://acme.zendesk.com/api/v2/users.json?role=end-user&external_id=sample_external_id&sort_by=sample_sort_by&sort_order=asc",
+  "url": "https://acme.zendesk.com/api/v2/users.json?role=end-user&external_id=sample_external_id&page%5Bsize%5D=1&page%5Bafter%5D=sample_page_after",
   "headers": {
     "Authorization": "Basic __BASIC__",
     "Accept": "application/json",

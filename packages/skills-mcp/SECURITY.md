@@ -33,7 +33,7 @@ The server exposes two surfaces, and which one a client can reach is decided by 
 transport rather than by the caller:
 
 - **`full`** — stdio. The `skill_*` content tools, every `wm_*` CLI tool, and the provider
-  tools (157 in total). stdio is a local, operator-controlled channel. Provider calls
+  tools (162 in total). stdio is a local, operator-controlled channel. Provider calls
   spawn `@warpmetal/cli` `integration` verbs; secrets stay in the WarpMetal vault, not in
   this process environment. Provider arguments are written to the CLI's stdin
   (`--args-stdin`), never to argv, so an argument that carries a value never reaches the
@@ -88,9 +88,9 @@ What that guarantees:
 
 What it does not do:
 
-- It authenticates *the server to the catalog*, not the MCP caller. The edge still proves caller
+- It authenticates _the server to the catalog_, not the MCP caller. The edge still proves caller
   identity, and the server cannot distinguish one authenticated caller from another.
-- It does not change the fallback order for a *network* failure (as opposed to `401`/`403`): the server
+- It does not change the fallback order for a _network_ failure (as opposed to `401`/`403`): the server
   still prefers a stale cache and then the bundled public snapshot. A private instance running without
   a token can therefore serve public content while the internal catalog is unreachable.
 - The boundary is the loaded registry: a name the registry does not declare is `not_found`.

@@ -15,12 +15,12 @@ Provider tools (the former Action Gateway surface) now call WarpMetal
 
 ## Error codes
 
-| Old | New |
-| --- | --- |
-| `ag_unconfigured` | `provider_unconfigured` |
-| `ag_invoke_failed` | `provider_invoke_failed` |
-| `ag_invalid_args` | `provider_invalid_args` |
-| _(n/a)_ | `provider_not_implemented` |
+| Old                | New                        |
+| ------------------ | -------------------------- |
+| `ag_unconfigured`  | `provider_unconfigured`    |
+| `ag_invoke_failed` | `provider_invoke_failed`   |
+| `ag_invalid_args`  | `provider_invalid_args`    |
+| _(n/a)_            | `provider_not_implemented` |
 
 ## Follow-up corrections
 
@@ -43,6 +43,31 @@ Provider tools (the former Action Gateway surface) now call WarpMetal
   providers without one report `DEGRADED` instead of a false `OK`.
 - **Arguments travel over stdin.** The MCP invoker now sends `--args-stdin`
   instead of `--args-json`, keeping payloads out of the process list.
+- **Zendesk's list tools sent parameters the API does not have, and could not
+  page.** `list_users` exposed `sort_by`/`sort_order`; the endpoint accepts only
+  `role`/`roles`/`permission_set`/`external_id` plus pagination, and Zendesk
+  ignores an unknown parameter instead of rejecting it, so an unsorted page read
+  as if it were sorted. Both parameters are gone, and `list_users`,
+  `list_ticket_comments` and `list_view_tickets` now expose the cursor
+  `page_size`/`page_after` their endpoints support; `list_tickets` gains the
+  offset `page` beside the `per_page` it already had. No tool offers both shapes,
+  because Zendesk rejects a request that mixes them.
+- **A ticket can be created from `requester_id` alone.** `requester_email` was
+  `required` in the catalog, so the Zod schema refused the documented
+  "`requester_id` takes precedence" form before the handler ran, even though the
+  CLI's builder supported it. The requirement is gone and the pair is checked
+  instead: `zendesk_create_ticket` carries a validator, so a call naming neither
+  fails with `Provide requester_id or requester_email` (exit 5) without sending a
+  request, rather than letting Zendesk answer 422.
+- **A nullable field is validated, not waved through.** `"type": ["integer",
+  "null"]` (Zendesk `assignee_id`, Vercel `framework`, Intercom `phone` - 24
+  input fields across three tools) fell through to `z.unknown()`: a wrong type was
+  accepted locally and only refused by the provider, and `null` was
+  indistinguishable from an omitted field. `jsonSchemaToZodObject` now builds the
+  union and makes it nullable, so `assignee_id: null` still means "unassign" and
+  `assignee_id: "7"` is refused. The 23 Vercel/Intercom fields are consequently
+  stricter than before: a caller passing the wrong type now gets a validation
+  error instead of a provider 400.
 
 ## Provider readiness for external consumers
 
@@ -52,7 +77,7 @@ Provider tools (the former Action Gateway surface) now call WarpMetal
   `discord_list_my_guilds`, `sentry_list_organization_projects` and
   `sentry_list_a_project_s_issues` keep a real array. The rule: array -> `items`,
   object -> spread, non-JSON -> `raw`; `toolSlug` is always present.
-- **Request contracts are fixture-verified.** All 100 builders are checked against
+- **Request contracts are fixture-verified.** All 116 builders are checked against
   a reviewed fixture (`{ method, url, headers, body?, form? }`) in
   `packages/warpmetal-cli/test/fixtures/mcp-requests/`. Corrections that the
   review produced: Supabase create/migration bodies now send only the documented
@@ -84,7 +109,7 @@ Provider tools (the former Action Gateway surface) now call WarpMetal
 - **Every provider is pinned to its published API, on and offline.**
   `packages/warpmetal-cli/test/fixtures/provider-contracts.json` records each
   provider's `docUrl`, allowed host (or account-scoped host suffix), HTTP methods
-  and auth header; `provider-contract.test.ts` builds all 100 requests from the
+  and auth header; `provider-contract.test.ts` builds all 116 requests from the
   reviewed sample args and fails when a builder's host, method or auth header
   drifts from that file. `npm run probe` (in `packages/warpmetal-cli`, opt-in,
   needs network) then sends every request with a sentinel token: a route the
@@ -152,3 +177,33 @@ and dispatched through `warpmetal integration zendesk <verb> --args-stdin`.
   hosts in `packages/warpmetal-cli/scripts/probe-mcp-routes.mjs`, so `npm run probe` reports
   those eleven tools as `account-scoped` rather than eleven `unreachable` rows against a
   tenant that does not resolve.
+
+## Batch 12 — Zendesk ticket lifecycle
+
+Closed the ticket lifecycle that Batch 11 left open: a ticket could be opened (`create_ticket`)
+and replied to (`add_ticket_comment`) but never triaged. Five tools were added, taking Zendesk
+from eleven to sixteen:
+
+- **`update_ticket` is the missing write.** `PUT /api/v2/tickets/{id}.json` with the ticket's
+  settable fields (`status`, `priority`, `assignee_id`, `group_id`, `subject`, `type`, `tags`).
+  `set status "solved"` resolves a ticket and `"closed"` closes it permanently; `tags` replaces
+  the whole tag set, which the description states rather than leaving the caller to discover it.
+- **Only the fields the caller named travel.** The builder copies each declared argument
+  individually, so an update never resets a field it was not told about, and `assignee_id: null`
+  (a real value: unassign) is forwarded rather than dropped as absent. An update with only
+  `ticket_id` is a documented no-op (`{ ticket: {} }`), matching the API.
+- **`update_ticket` is `destructiveHint: true`.** A status or assignee change fires the same
+  account triggers and webhooks as a create, and closing a ticket is not silently reversible —
+  the same class that already names `create_ticket` and `add_ticket_comment`.
+- **Four read tools give the write its context.** `get_user` and `get_organization` read the
+  requester and client records one id at a time; `count_view_tickets` sizes a queue
+  (`{ view_count: { value, fresh } }`) without fetching it; `get_ticket_metrics` returns the
+  singular `ticket_metric` resource for SLA reporting. All four are `readOnlyHint`.
+- **One request-shape test per tool, plus the negative cases.** `update_ticket` is pinned for
+  the full body, for the subset-only body, for an explicit `null` assignee and for the no-op,
+  and the update gate is proven to send nothing without it. The four reads each assert their
+  path, and the live tier reads the credential's own user and organization, a real view count
+  and a real ticket's metrics.
+- **`zendesk.methods` already allowed `PUT`.** The hand-authored `provider-contracts.json`
+  listed `["GET", "POST", "PUT"]` for Zendesk in Batch 11 (the comment update is a PUT), so no
+  contract change was needed for `update_ticket`.

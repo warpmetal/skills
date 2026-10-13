@@ -7,10 +7,14 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 
 import { makeRegistryFixture } from "./helpers.js";
 
-const SERVER_ENTRY = fileURLToPath(new URL("../dist/index.js", import.meta.url));
+const SERVER_ENTRY = fileURLToPath(
+  new URL("../dist/index.js", import.meta.url),
+);
 const PACKAGE_ROOT = fileURLToPath(new URL("..", import.meta.url));
 
-function parseJsonText(result: { content?: Array<{ type: string; text?: string }> }): unknown {
+function parseJsonText(result: {
+  content?: Array<{ type: string; text?: string }>;
+}): unknown {
   const block = result.content?.find((entry) => entry.type === "text");
   assert.ok(block?.text, "expected a text content block");
   return JSON.parse(block.text);
@@ -29,11 +33,15 @@ test("stdio server exposes tools and serves skills end to end", async () => {
     await client.connect(transport);
 
     const tools = await client.listTools();
-    // stdio gets the `full` profile: 3 content + 43 CLI + 111 provider tools.
+    // stdio gets the `full` profile: 3 content + 43 CLI + 116 provider tools.
     // The unauthenticated HTTP transport is what narrows this down to the
     // `skill_*` surface, and `test/profiles.test.ts` holds that pair of counts.
     const names = tools.tools.map((tool) => tool.name).sort();
-    assert.equal(names.length, 157, "stdio must expose the full 157-tool surface");
+    assert.equal(
+      names.length,
+      162,
+      "stdio must expose the full 162-tool surface",
+    );
     assert.deepEqual(
       names.filter((name) => name.startsWith("skill_")),
       ["skill_list", "skill_read", "skill_search"],
@@ -51,10 +59,10 @@ test("stdio server exposes tools and serves skills end to end", async () => {
       await client.callTool({ name: "skill_list", arguments: {} }),
     ) as { registryVersion: string; skills: Array<{ name: string }> };
     assert.equal(listed.registryVersion, "0.1.0");
-    assert.deepEqual(
-      listed.skills.map((skill) => skill.name).sort(),
-      ["database", "demo"],
-    );
+    assert.deepEqual(listed.skills.map((skill) => skill.name).sort(), [
+      "database",
+      "demo",
+    ]);
 
     const filtered = parseJsonText(
       await client.callTool({
@@ -62,7 +70,10 @@ test("stdio server exposes tools and serves skills end to end", async () => {
         arguments: { role: "planner" },
       }),
     ) as { skills: Array<{ name: string }> };
-    assert.deepEqual(filtered.skills.map((skill) => skill.name), ["demo"]);
+    assert.deepEqual(
+      filtered.skills.map((skill) => skill.name),
+      ["demo"],
+    );
 
     const search = parseJsonText(
       await client.callTool({
@@ -76,7 +87,10 @@ test("stdio server exposes tools and serves skills end to end", async () => {
       name: "skill_read",
       arguments: { name: "demo" },
     });
-    assert.match(read.content[0]?.type === "text" ? (read.content[0].text ?? "") : "", /# Demo/);
+    assert.match(
+      read.content[0]?.type === "text" ? (read.content[0].text ?? "") : "",
+      /# Demo/,
+    );
 
     const tampered = await client.callTool({
       name: "skill_read",
@@ -95,12 +109,16 @@ test("stdio server exposes tools and serves skills end to end", async () => {
     assert.ok(first && "text" in first);
     assert.match(first.text ?? "", /# Demo/);
 
-    const reference = await client.readResource({ uri: "skill://demo/references/notes.md" });
+    const reference = await client.readResource({
+      uri: "skill://demo/references/notes.md",
+    });
     const referenceContent = reference.contents[0];
     assert.ok(referenceContent && "text" in referenceContent);
     assert.match(referenceContent.text ?? "", /Supporting notes/);
 
-    await assert.rejects(() => client.readResource({ uri: "skill://demo/%2E%2E/secret" }));
+    await assert.rejects(() =>
+      client.readResource({ uri: "skill://demo/%2E%2E/secret" }),
+    );
   } finally {
     await client.close().catch(() => undefined);
     await fixture.cleanup();

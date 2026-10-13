@@ -73,7 +73,15 @@ async function call(
   }) as unknown as typeof fetch;
 
   const code = await runCli(
-    ["integration", "zendesk", verb, "--args-json", JSON.stringify(args), ...extra, "--json"],
+    [
+      "integration",
+      "zendesk",
+      verb,
+      "--args-json",
+      JSON.stringify(args),
+      ...extra,
+      "--json",
+    ],
     {
       store,
       out,
@@ -94,7 +102,10 @@ function resultOf(out: ReturnType<typeof captureOut>): Record<string, unknown> {
 }
 
 /** Asserts one of the call's warnings names the thing the operator must fix. */
-function assertWarned(out: ReturnType<typeof captureOut>, fragment: string): void {
+function assertWarned(
+  out: ReturnType<typeof captureOut>,
+  fragment: string,
+): void {
   const warnings = resultOf(out)["warnings"] as string[] | undefined;
   assert.ok(
     warnings?.some((warning) => warning.includes(fragment)),
@@ -113,7 +124,11 @@ async function expectRequest(
   assert.equal(resultOf(out)["status"], "OK");
   if (seen === null) assert.fail("expected an HTTP request");
   const headers = seen.init.headers as Record<string, string>;
-  assert.equal(headers["Authorization"], EXPECTED_AUTH, "auth must be Basic email/token:api_token");
+  assert.equal(
+    headers["Authorization"],
+    EXPECTED_AUTH,
+    "auth must be Basic email/token:api_token",
+  );
   assert.equal(headers["Accept"], "application/json");
   return seen;
 }
@@ -122,17 +137,19 @@ describe("zendesk request shape (offline)", () => {
   it("list_tickets queries the account's tickets", async () => {
     const request = await expectRequest("list-tickets", {
       external_id: "loc-1",
+      page: 3,
+      per_page: 25,
       sort_by: "updated_at",
       sort_order: "desc",
-      per_page: 25,
     });
     const url = new URL(request.url);
     assert.equal(url.origin, HOST);
     assert.equal(url.pathname, "/api/v2/tickets.json");
     assert.equal(url.searchParams.get("external_id"), "loc-1");
+    assert.equal(url.searchParams.get("page"), "3");
+    assert.equal(url.searchParams.get("per_page"), "25");
     assert.equal(url.searchParams.get("sort_by"), "updated_at");
     assert.equal(url.searchParams.get("sort_order"), "desc");
-    assert.equal(url.searchParams.get("per_page"), "25");
     assert.equal(request.init.method, "GET");
   });
 
@@ -152,13 +169,21 @@ describe("zendesk request shape (offline)", () => {
 
   it("list_ticket_comments reads one ticket's conversation", async () => {
     const request = await expectRequest("list-ticket-comments", {
-      ticket_id: 42,
+      page_after: "cursor-token",
+      page_size: 20,
       sort_order: "desc",
+      ticket_id: 42,
     });
     const url = new URL(request.url);
     assert.equal(request.init.method, "GET");
     assert.equal(url.pathname, "/api/v2/tickets/42/comments.json");
     assert.equal(url.searchParams.get("sort_order"), "desc");
+    // Cursor pagination: Zendesk rejects a request that mixes it with the offset
+    // shape, so none of `page`/`per_page` may appear alongside `page[size]`.
+    assert.equal(url.searchParams.get("page[size]"), "20");
+    assert.equal(url.searchParams.get("page[after]"), "cursor-token");
+    assert.equal(url.searchParams.get("page"), null);
+    assert.equal(url.searchParams.get("per_page"), null);
   });
 
   it("search forwards the query syntax and its paging", async () => {
@@ -183,19 +208,27 @@ describe("zendesk request shape (offline)", () => {
     assert.equal(request.url, `${HOST}/api/v2/users/me.json`);
   });
 
-  it("list_users forwards the role filter and the sort", async () => {
+  it("list_users forwards the filters and the cursor, and invents no sort", async () => {
     const request = await expectRequest("list-users", {
-      role: "agent",
       external_id: "loc-2",
-      sort_by: "name",
-      sort_order: "asc",
+      page_after: "cursor-token",
+      page_size: 25,
+      role: "agent",
     });
     const url = new URL(request.url);
     assert.equal(request.init.method, "GET");
     assert.equal(url.pathname, "/api/v2/users.json");
     assert.equal(url.searchParams.get("role"), "agent");
     assert.equal(url.searchParams.get("external_id"), "loc-2");
-    assert.equal(url.searchParams.get("sort_by"), "name");
+    assert.equal(url.searchParams.get("page[size]"), "25");
+    assert.equal(url.searchParams.get("page[after]"), "cursor-token");
+    // Regression: the tool exposed `sort_by`/`sort_order`, which this endpoint
+    // does not accept. Zendesk ignores an unknown parameter instead of rejecting
+    // it, so an unsorted page read as if it were sorted.
+    assert.equal(url.searchParams.get("sort_by"), null);
+    assert.equal(url.searchParams.get("sort_order"), null);
+    assert.equal(url.searchParams.get("page"), null);
+    assert.equal(url.searchParams.get("per_page"), null);
   });
 
   it("list_organizations uses Zendesk's cursor pagination", async () => {
@@ -215,7 +248,10 @@ describe("zendesk request shape (offline)", () => {
   });
 
   it("list_views uses Zendesk's cursor pagination", async () => {
-    const request = await expectRequest("list-views", { page_size: 10, page_after: "cursor" });
+    const request = await expectRequest("list-views", {
+      page_size: 10,
+      page_after: "cursor",
+    });
     const url = new URL(request.url);
     assert.equal(request.init.method, "GET");
     assert.equal(url.pathname, "/api/v2/views.json");
@@ -223,10 +259,19 @@ describe("zendesk request shape (offline)", () => {
     assert.equal(url.searchParams.get("page[after]"), "cursor");
   });
 
-  it("list_view_tickets addresses one view", async () => {
-    const request = await expectRequest("list-view-tickets", { view_id: 7 });
+  it("list_view_tickets addresses one view with cursor paging", async () => {
+    const request = await expectRequest("list-view-tickets", {
+      page_after: "cursor",
+      page_size: 30,
+      view_id: 7,
+    });
+    const url = new URL(request.url);
     assert.equal(request.init.method, "GET");
-    assert.equal(request.url, `${HOST}/api/v2/views/7/tickets.json`);
+    assert.equal(url.pathname, "/api/v2/views/7/tickets.json");
+    assert.equal(url.searchParams.get("page[size]"), "30");
+    assert.equal(url.searchParams.get("page[after]"), "cursor");
+    assert.equal(url.searchParams.get("page"), null);
+    assert.equal(url.searchParams.get("per_page"), null);
   });
 
   it("create_ticket sends requester_id at the top level of the ticket", async () => {
@@ -295,6 +340,101 @@ describe("zendesk request shape (offline)", () => {
       ticket: { comment: { body: "on it", public: true } },
     });
   });
+
+  it("update_ticket sends the settable fields inside the ticket envelope", async () => {
+    const request = await expectRequest(
+      "update-ticket",
+      {
+        ticket_id: 42,
+        status: "open",
+        priority: "high",
+        assignee_id: 7,
+        group_id: 3,
+        subject: "Reopened",
+        type: "incident",
+        tags: ["ops", "urgent"],
+      },
+      ["--confirm", "CONFIRM ZENDESK UPDATE TICKET"],
+    );
+    assert.equal(request.init.method, "PUT");
+    assert.equal(request.url, `${HOST}/api/v2/tickets/42.json`);
+    const headers = request.init.headers as Record<string, string>;
+    assert.equal(headers["Content-Type"], "application/json");
+    assert.deepEqual(JSON.parse(String(request.init.body)), {
+      ticket: {
+        status: "open",
+        priority: "high",
+        assignee_id: 7,
+        group_id: 3,
+        subject: "Reopened",
+        type: "incident",
+        tags: ["ops", "urgent"],
+      },
+    });
+  });
+
+  it("update_ticket forwards only the fields the caller asked to change", async () => {
+    const request = await expectRequest(
+      "update-ticket",
+      { ticket_id: 42, status: "solved" },
+      ["--confirm", "CONFIRM ZENDESK UPDATE TICKET"],
+    );
+    // Regression: forwarding the raw args would carry `ticket_id` into the body
+    // as an unknown field and reset nothing on purpose.
+    assert.deepEqual(JSON.parse(String(request.init.body)), {
+      ticket: { status: "solved" },
+    });
+  });
+
+  it("update_ticket forwards an explicit null assignee as an unassign", async () => {
+    const request = await expectRequest(
+      "update-ticket",
+      { ticket_id: 42, assignee_id: null },
+      ["--confirm", "CONFIRM ZENDESK UPDATE TICKET"],
+    );
+    // `null` is a value the caller asked for, not an absent field, so it travels.
+    assert.deepEqual(JSON.parse(String(request.init.body)), {
+      ticket: { assignee_id: null },
+    });
+  });
+
+  it("update_ticket with no settable field is a documented no-op", async () => {
+    const request = await expectRequest("update-ticket", { ticket_id: 42 }, [
+      "--confirm",
+      "CONFIRM ZENDESK UPDATE TICKET",
+    ]);
+    assert.equal(request.init.method, "PUT");
+    assert.equal(request.url, `${HOST}/api/v2/tickets/42.json`);
+    assert.deepEqual(JSON.parse(String(request.init.body)), { ticket: {} });
+  });
+
+  it("get_user addresses one user by id", async () => {
+    const request = await expectRequest("get-user", { user_id: 7 });
+    assert.equal(request.init.method, "GET");
+    assert.equal(request.url, `${HOST}/api/v2/users/7.json`);
+  });
+
+  it("get_organization addresses one organization by id", async () => {
+    const request = await expectRequest("get-organization", {
+      organization_id: 9,
+    });
+    assert.equal(request.init.method, "GET");
+    assert.equal(request.url, `${HOST}/api/v2/organizations/9.json`);
+  });
+
+  it("count_view_tickets reads a view's count, not its tickets", async () => {
+    const request = await expectRequest("count-view-tickets", { view_id: 7 });
+    assert.equal(request.init.method, "GET");
+    assert.equal(request.url, `${HOST}/api/v2/views/7/count.json`);
+  });
+
+  it("get_ticket_metrics reads a ticket's metrics resource", async () => {
+    const request = await expectRequest("get-ticket-metrics", {
+      ticket_id: 42,
+    });
+    assert.equal(request.init.method, "GET");
+    assert.equal(request.url, `${HOST}/api/v2/tickets/42/metrics.json`);
+  });
 });
 
 describe("zendesk refusals and identity (offline)", () => {
@@ -316,20 +456,33 @@ describe("zendesk refusals and identity (offline)", () => {
       {},
       { "zendesk.token": TOKEN, "zendesk.subdomain": SUBDOMAIN },
     );
-    assert.equal(requested, 0, "API-token auth needs the email that owns the token");
+    assert.equal(
+      requested,
+      0,
+      "API-token auth needs the email that owns the token",
+    );
     assert.equal(code, 4);
     assert.equal(resultOf(out)["status"], "NEEDS_AUTH");
     assertWarned(out, "zendesk.email");
   });
 
   it("refuses a subdomain that is not a DNS label instead of leaving the tenant host", async () => {
-    for (const hostile of ["evil.example/x", "acme:8080", "acme@evil.example", "evil.example"]) {
+    for (const hostile of [
+      "evil.example/x",
+      "acme:8080",
+      "acme@evil.example",
+      "evil.example",
+    ]) {
       const { code, out, requested } = await call(
         "list-tickets",
         {},
         { ...VAULT, "zendesk.subdomain": hostile },
       );
-      assert.equal(requested, 0, `${hostile}: the credential must not leave *.zendesk.com`);
+      assert.equal(
+        requested,
+        0,
+        `${hostile}: the credential must not leave *.zendesk.com`,
+      );
       assert.equal(code, 4, `${hostile}: expected NEEDS_AUTH`);
       assert.equal(resultOf(out)["status"], "NEEDS_AUTH");
     }
@@ -371,16 +524,49 @@ describe("zendesk refusals and identity (offline)", () => {
     assert.match(out.err.join(""), /CONFIRM ZENDESK ADD TICKET COMMENT/);
   });
 
+  it("requires the update gate literal before anything is sent", async () => {
+    const { code, out, requested } = await call("update-ticket", {
+      ticket_id: 42,
+      status: "closed",
+    });
+    assert.equal(requested, 0, "nothing may be sent without the gate");
+    assert.equal(code, 2);
+    assert.match(out.err.join(""), /CONFIRM ZENDESK UPDATE TICKET/);
+  });
+
+  it("refuses a create with no requester at all, before sending anything", async () => {
+    // The schema cannot express "requester_id or requester_email", so the pair
+    // is checked by the CLI's argument validator. Zendesk answers 422 for a
+    // ticket with no requester; the caller deserves the reason and no request.
+    const { code, out, requested } = await call(
+      "create-ticket",
+      { subject: "No requester" },
+      VAULT,
+      ["--confirm", "CONFIRM ZENDESK CREATE TICKET"],
+    );
+    assert.equal(requested, 0, "an impossible create must not reach the network");
+    assert.equal(code, 5);
+    assert.equal(resultOf(out)["status"], "ERROR");
+    const errors = resultOf(out)["errors"] as string[] | undefined;
+    assert.ok(
+      errors?.some((error) => error.includes("requester_id or requester_email")),
+      `expected the reason to name the fix, got ${JSON.stringify(errors)}`,
+    );
+  });
+
   it("rejects an unknown verb without reading the credential store", async () => {
     const { store, backend } = await memoryStore();
     const out = captureOut();
-    const code = await runCli(["integration", "zendesk", "nonsense", "--json"], {
-      store,
-      out,
-      isTTY: false,
-      upstream: null,
-      run: async () => ({ code: 127, stdout: "", stderr: "" }),
-    });
+    const code = await runCli(
+      ["integration", "zendesk", "nonsense", "--json"],
+      {
+        store,
+        out,
+        isTTY: false,
+        upstream: null,
+        run: async () => ({ code: 127, stdout: "", stderr: "" }),
+      },
+    );
     assert.equal(code, 2);
     assert.match(out.err.join(""), /Unknown zendesk verb/);
     assert.equal(backend.loads, 0, "the verb check must precede the store");
@@ -436,13 +622,30 @@ async function liveCall(
   });
   const out = captureOut();
   await runCli(
-    ["integration", "zendesk", verb, "--args-json", JSON.stringify(args), ...extra, "--json"],
-    { store, out, isTTY: false, upstream: null, run: async () => ({ code: 127, stdout: "", stderr: "" }) },
+    [
+      "integration",
+      "zendesk",
+      verb,
+      "--args-json",
+      JSON.stringify(args),
+      ...extra,
+      "--json",
+    ],
+    {
+      store,
+      out,
+      isTTY: false,
+      upstream: null,
+      run: async () => ({ code: 127, stdout: "", stderr: "" }),
+    },
   );
   return resultOf(out);
 }
 
-function liveData(result: Record<string, unknown>, slug: string): Record<string, unknown> {
+function liveData(
+  result: Record<string, unknown>,
+  slug: string,
+): Record<string, unknown> {
   assert.equal(result["status"], "OK", JSON.stringify(result));
   const data = result["data"] as Record<string, unknown> | undefined;
   assert.ok(data, "a successful call must carry data");
@@ -452,69 +655,207 @@ function liveData(result: Record<string, unknown>, slug: string): Record<string,
 
 describe("zendesk live (read-only)", () => {
   it("list_tickets returns the tickets envelope", LIVE_OPTS, async () => {
-    const data = liveData(await liveCall("list-tickets", { per_page: 1 }), "zendesk_list_tickets");
-    assert.ok(Array.isArray(data["tickets"]), "the response must carry a tickets array");
+    const data = liveData(
+      await liveCall("list-tickets", { per_page: 1 }),
+      "zendesk_list_tickets",
+    );
+    assert.ok(
+      Array.isArray(data["tickets"]),
+      "the response must carry a tickets array",
+    );
   });
 
-  it("get_current_user returns the credential's own record", LIVE_OPTS, async () => {
-    const data = liveData(await liveCall("get-current-user", {}), "zendesk_get_current_user");
-    assert.ok(data["user"], "the response must carry the user object");
-  });
+  it(
+    "get_current_user returns the credential's own record",
+    LIVE_OPTS,
+    async () => {
+      const data = liveData(
+        await liveCall("get-current-user", {}),
+        "zendesk_get_current_user",
+      );
+      assert.ok(data["user"], "the response must carry the user object");
+    },
+  );
 
   it("search returns the results envelope", LIVE_OPTS, async () => {
     const data = liveData(
       await liveCall("search", { query: "type:ticket", per_page: 1 }),
       "zendesk_search",
     );
-    assert.ok(Array.isArray(data["results"]), "the response must carry a results array");
+    assert.ok(
+      Array.isArray(data["results"]),
+      "the response must carry a results array",
+    );
   });
 
   it("list_users returns the users envelope", LIVE_OPTS, async () => {
-    const data = liveData(await liveCall("list-users", { role: "agent" }), "zendesk_list_users");
-    assert.ok(Array.isArray(data["users"]), "the response must carry a users array");
+    const data = liveData(
+      await liveCall("list-users", { role: "agent" }),
+      "zendesk_list_users",
+    );
+    assert.ok(
+      Array.isArray(data["users"]),
+      "the response must carry a users array",
+    );
   });
 
-  it("list_organizations returns the organizations envelope", LIVE_OPTS, async () => {
-    const data = liveData(
-      await liveCall("list-organizations", { page_size: 1 }),
-      "zendesk_list_organizations",
-    );
-    assert.ok(Array.isArray(data["organizations"]), "the response must carry an organizations array");
-  });
+  it(
+    "list_organizations returns the organizations envelope",
+    LIVE_OPTS,
+    async () => {
+      const data = liveData(
+        await liveCall("list-organizations", { page_size: 1 }),
+        "zendesk_list_organizations",
+      );
+      assert.ok(
+        Array.isArray(data["organizations"]),
+        "the response must carry an organizations array",
+      );
+    },
+  );
 
   it("list_views returns the views envelope", LIVE_OPTS, async () => {
-    const data = liveData(await liveCall("list-views", { page_size: 1 }), "zendesk_list_views");
-    assert.ok(Array.isArray(data["views"]), "the response must carry a views array");
-  });
-
-  it("get_ticket and list_ticket_comments read a ticket the account already has", LIVE_OPTS, async (t) => {
-    const listed = liveData(await liveCall("list-tickets", { per_page: 1 }), "zendesk_list_tickets");
-    const tickets = listed["tickets"] as Array<{ id?: number }> | undefined;
-    const ticketId = tickets?.[0]?.id;
-    if (typeof ticketId !== "number") return t.skip("the account has no ticket to read");
-
-    const ticket = liveData(await liveCall("get-ticket", { ticket_id: ticketId }), "zendesk_get_ticket");
-    assert.ok(ticket["ticket"], "the response must carry the ticket object");
-
-    const comments = liveData(
-      await liveCall("list-ticket-comments", { ticket_id: ticketId }),
-      "zendesk_list_ticket_comments",
+    const data = liveData(
+      await liveCall("list-views", { page_size: 1 }),
+      "zendesk_list_views",
     );
-    assert.ok(Array.isArray(comments["comments"]), "the response must carry a comments array");
+    assert.ok(
+      Array.isArray(data["views"]),
+      "the response must carry a views array",
+    );
   });
 
-  it("list_view_tickets reads a view the account already has", LIVE_OPTS, async (t) => {
-    const listed = liveData(await liveCall("list-views", { page_size: 1 }), "zendesk_list_views");
+  it(
+    "get_ticket and list_ticket_comments read a ticket the account already has",
+    LIVE_OPTS,
+    async (t) => {
+      const listed = liveData(
+        await liveCall("list-tickets", { per_page: 1 }),
+        "zendesk_list_tickets",
+      );
+      const tickets = listed["tickets"] as Array<{ id?: number }> | undefined;
+      const ticketId = tickets?.[0]?.id;
+      if (typeof ticketId !== "number")
+        return t.skip("the account has no ticket to read");
+
+      const ticket = liveData(
+        await liveCall("get-ticket", { ticket_id: ticketId }),
+        "zendesk_get_ticket",
+      );
+      assert.ok(ticket["ticket"], "the response must carry the ticket object");
+
+      const comments = liveData(
+        await liveCall("list-ticket-comments", { ticket_id: ticketId }),
+        "zendesk_list_ticket_comments",
+      );
+      assert.ok(
+        Array.isArray(comments["comments"]),
+        "the response must carry a comments array",
+      );
+    },
+  );
+
+  it(
+    "list_view_tickets reads a view the account already has",
+    LIVE_OPTS,
+    async (t) => {
+      const listed = liveData(
+        await liveCall("list-views", { page_size: 1 }),
+        "zendesk_list_views",
+      );
+      const views = listed["views"] as Array<{ id?: number }> | undefined;
+      const viewId = views?.[0]?.id;
+      if (typeof viewId !== "number")
+        return t.skip("the account has no view to read");
+
+      const data = liveData(
+        await liveCall("list-view-tickets", { view_id: viewId }),
+        "zendesk_list_view_tickets",
+      );
+      assert.ok(
+        Array.isArray(data["tickets"]),
+        "the response must carry a tickets array",
+      );
+    },
+  );
+
+  it("count_view_tickets returns a view_count object", LIVE_OPTS, async (t) => {
+    const listed = liveData(
+      await liveCall("list-views", { page_size: 1 }),
+      "zendesk_list_views",
+    );
     const views = listed["views"] as Array<{ id?: number }> | undefined;
     const viewId = views?.[0]?.id;
-    if (typeof viewId !== "number") return t.skip("the account has no view to read");
+    if (typeof viewId !== "number")
+      return t.skip("the account has no view to read");
 
     const data = liveData(
-      await liveCall("list-view-tickets", { view_id: viewId }),
-      "zendesk_list_view_tickets",
+      await liveCall("count-view-tickets", { view_id: viewId }),
+      "zendesk_count_view_tickets",
     );
-    assert.ok(Array.isArray(data["tickets"]), "the response must carry a tickets array");
+    assert.ok(
+      data["view_count"],
+      "the response must carry a view_count object",
+    );
   });
+
+  it(
+    "get_user and get_organization read the credential's own records",
+    LIVE_OPTS,
+    async (t) => {
+      const me = liveData(
+        await liveCall("get-current-user", {}),
+        "zendesk_get_current_user",
+      );
+      const userId = (me["user"] as { id?: number } | undefined)?.id;
+      if (typeof userId !== "number")
+        return t.skip("the credential's user has no id to read");
+
+      const user = liveData(
+        await liveCall("get-user", { user_id: userId }),
+        "zendesk_get_user",
+      );
+      assert.ok(user["user"], "the response must carry the user object");
+
+      const orgId = (user["user"] as { organization_id?: number } | undefined)
+        ?.organization_id;
+      if (typeof orgId !== "number")
+        return t.skip("the credential's user has no organization to read");
+
+      const org = liveData(
+        await liveCall("get-organization", { organization_id: orgId }),
+        "zendesk_get_organization",
+      );
+      assert.ok(
+        org["organization"],
+        "the response must carry the organization object",
+      );
+    },
+  );
+
+  it(
+    "get_ticket_metrics reads a ticket's metrics the account already has",
+    LIVE_OPTS,
+    async (t) => {
+      const listed = liveData(
+        await liveCall("list-tickets", { per_page: 1 }),
+        "zendesk_list_tickets",
+      );
+      const tickets = listed["tickets"] as Array<{ id?: number }> | undefined;
+      const ticketId = tickets?.[0]?.id;
+      if (typeof ticketId !== "number")
+        return t.skip("the account has no ticket to read");
+
+      const data = liveData(
+        await liveCall("get-ticket-metrics", { ticket_id: ticketId }),
+        "zendesk_get_ticket_metrics",
+      );
+      assert.ok(
+        data["ticket_metric"],
+        "the response must carry a ticket_metric object",
+      );
+    },
+  );
 });
 
 describe("zendesk live (writes, opt-in)", () => {
@@ -531,7 +872,8 @@ describe("zendesk live (writes, opt-in)", () => {
             requester_email: LIVE_EMAIL,
             requester_name: "WarpMetal provider check",
             subject: `[warpmetal-test] Zendesk provider verification ${new Date().toISOString()}`,
-            comment_body: "Created by the WarpMetal Zendesk provider verification. Safe to close.",
+            comment_body:
+              "Created by the WarpMetal Zendesk provider verification. Safe to close.",
             public: false,
             tags: ["warpmetal-test"],
           },
@@ -540,7 +882,10 @@ describe("zendesk live (writes, opt-in)", () => {
         "zendesk_create_ticket",
       );
       const ticket = created["ticket"] as { id?: number } | undefined;
-      assert.ok(Number.isInteger(ticket?.id), "Zendesk must return the created ticket id");
+      assert.ok(
+        Number.isInteger(ticket?.id),
+        "Zendesk must return the created ticket id",
+      );
 
       const commented = liveData(
         await liveCall(
@@ -554,7 +899,40 @@ describe("zendesk live (writes, opt-in)", () => {
         ),
         "zendesk_add_ticket_comment",
       );
-      assert.ok(commented["ticket"], "the update must return the ticket object");
+      assert.ok(
+        commented["ticket"],
+        "the update must return the ticket object",
+      );
+
+      // Update the ticket we just created: change the priority and tags but do
+      // NOT close it, because the ticket stays behind for a human to close and
+      // the provider exposes no delete tool to clean it up.
+      const updated = liveData(
+        await liveCall(
+          "update-ticket",
+          {
+            ticket_id: ticket?.id,
+            priority: "high",
+            tags: ["warpmetal-test", "verified"],
+          },
+          ["--confirm", "CONFIRM ZENDESK UPDATE TICKET"],
+        ),
+        "zendesk_update_ticket",
+      );
+      const updatedTicket = updated["ticket"] as
+        | { priority?: string; tags?: string[]; status?: string }
+        | undefined;
+      assert.ok(updatedTicket, "the update must return the ticket object");
+      assert.equal(
+        updatedTicket?.priority,
+        "high",
+        "the update must persist the new priority",
+      );
+      assert.ok(
+        Array.isArray(updatedTicket?.tags) &&
+          updatedTicket.tags.includes("verified"),
+        "the update must persist the new tags",
+      );
 
       // No delete tool is exposed on purpose, so the ticket stays behind.
       console.log(

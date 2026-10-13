@@ -18,6 +18,11 @@
             "description": "List the tickets that carry this external id instead of paging through the account.",
             "type": "string"
           },
+          "page": {
+            "description": "Offset page number, for use with per_page. Zendesk rejects mixing the offset shape with the cursor shape.",
+            "minimum": 1,
+            "type": "integer"
+          },
           "per_page": {
             "description": "Number of tickets to return per page. The maximum is 100.",
             "maximum": 100,
@@ -102,12 +107,22 @@
       "toolSlug": "zendesk_list_ticket_comments",
       "name": "list_ticket_comments",
       "title": "List Zendesk Ticket Comments",
-      "description": "List the comments on a ticket in chronological order, including public replies and internal notes. Use it to read the conversation before replying.",
+      "description": "List the comments on a ticket in chronological order, including public replies and internal notes. Use it to read the conversation before replying, and pass page_after with the cursor Zendesk reports to read the page that follows.",
       "toolkitId": "zendesk",
       "version": "v2",
       "inputSchema": {
         "additionalProperties": false,
         "properties": {
+          "page_after": {
+            "description": "Cursor token from the previous page, to read the page that follows it.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Number of comments to return per page. The maximum is 100.",
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
           "sort_order": {
             "description": "Sort direction for the comments.",
             "enum": [
@@ -226,7 +241,7 @@
       "toolSlug": "zendesk_list_users",
       "name": "list_users",
       "title": "List Zendesk Users",
-      "description": "List the users in the account, optionally filtered by role or external id. Use it to find a requester or assignee id before creating a ticket.",
+      "description": "List the users in the account, one page at a time, optionally filtered by role or external id. Use it to find a requester or assignee id before creating a ticket. The API exposes no sort parameter, so users come back in Zendesk's own order; pass page_after with the cursor Zendesk reports to read the page that follows.",
       "toolkitId": "zendesk",
       "version": "v2",
       "inputSchema": {
@@ -236,24 +251,22 @@
             "description": "Return the user that carries this external id.",
             "type": "string"
           },
+          "page_after": {
+            "description": "Cursor token from the previous page, to read the page that follows it.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Number of users to return per page. The maximum is 100.",
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
           "role": {
             "description": "Return only users with this role.",
             "enum": [
               "end-user",
               "agent",
               "admin"
-            ],
-            "type": "string"
-          },
-          "sort_by": {
-            "description": "Order the results by this field. Zendesk validates the accepted values server-side; see the List Users reference for the current list.",
-            "type": "string"
-          },
-          "sort_order": {
-            "description": "Sort direction for sort_by.",
-            "enum": [
-              "asc",
-              "desc"
             ],
             "type": "string"
           }
@@ -349,12 +362,22 @@
       "toolSlug": "zendesk_list_view_tickets",
       "name": "list_view_tickets",
       "title": "List Zendesk Tickets In A View",
-      "description": "List the tickets in one view, in the order that view defines. Use list_views first when the view id is unknown.",
+      "description": "List the tickets in one view, in the order that view defines. Use list_views first when the view id is unknown. Pass page_after with the cursor Zendesk reports to read the page that follows.",
       "toolkitId": "zendesk",
       "version": "v2",
       "inputSchema": {
         "additionalProperties": false,
         "properties": {
+          "page_after": {
+            "description": "Cursor token from the previous page, to read the page that follows it.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Number of tickets to return per page. The maximum is 100.",
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
           "view_id": {
             "description": "The id of the view whose tickets should be listed.",
             "minimum": 1,
@@ -409,7 +432,7 @@
             "type": "boolean"
           },
           "requester_email": {
-            "description": "The requester's email address. Zendesk matches an existing user by email; pair it with requester_name to create one that does not exist yet.",
+            "description": "The requester's email address. Zendesk matches an existing user by email; pair it with requester_name to create one that does not exist yet. Provide requester_email or requester_id: Zendesk needs one of the two.",
             "type": "string"
           },
           "requester_id": {
@@ -444,9 +467,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "requester_email"
-        ],
+        "required": [],
         "type": "object"
       },
       "outputSchema": {
