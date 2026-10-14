@@ -1,5 +1,5 @@
 /**
- * grafana-stack-params.test.ts - every batch-13 builder, asserted against the
+ * grafana-stack-params.test.ts - every Grafana stack builder, asserted against the
  * operation it claims to call in the Grafana HTTP API.
  *
  * The other two suites cannot catch a wrong query name. `mcp-request-contract`
@@ -123,8 +123,8 @@ function normalize(name: string): string {
 }
 
 describe("grafana-stack builders against the Grafana HTTP API", () => {
-  it("records an operation for every batch-13 tool", () => {
-    assert.equal(defs.length, 15, "batch 13 registers fifteen tools");
+  it("records an operation for every Grafana stack tool", () => {
+    assert.equal(defs.length, 15, "the Grafana stack registers fifteen tools");
     for (const def of defs) {
       assert.ok(
         params.tools[def.toolSlug],

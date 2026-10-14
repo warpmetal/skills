@@ -1,6 +1,6 @@
 /**
  * grafana-stack-e2e.test.ts - opt-in, credential-free end-to-end verification of
- * the batch-13 tools against a real Grafana.
+ * the Grafana stack tools against a real Grafana.
  *
  * `npm test` stays offline: without GRAFANA_STACK_E2E_HOST this suite skips with
  * a named reason. Run it with

@@ -1,6 +1,6 @@
 /**
  * grafana-stack-probe.test.ts - opt-in, credential-free verification that the
- * batch-13 tools point at routes a real Grafana serves.
+ * Grafana stack tools point at routes a real Grafana serves.
  *
  * `npm test` stays offline: without GRAFANA_STACK_PROBE_HOST this test skips with
  * a named reason. Run it against a real Grafana with

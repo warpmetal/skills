@@ -1,7 +1,7 @@
 /**
  * Generates `test/fixtures/grafana-stack-params.json`, the reviewed distillation
  * of the Grafana HTTP API that `test/grafana-stack-params.test.ts` asserts the
- * batch-13 builders against.
+ * Grafana stack builders against.
  *
  * The full spec (`api-merged.json`) is not committed - it is a 700 KB scratch
  * dump - so the test cannot read it. This script reads it once, resolves the
