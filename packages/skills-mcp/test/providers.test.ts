@@ -28,142 +28,71 @@ import { makeRegistryFixture } from "./helpers.js";
 
 const CONTENT_TOOLS = ["skill_list", "skill_read", "skill_search"] as const;
 
-test("catalog aggregates one hundred and thirty-one tools across all batches with input schemas", () => {
+test("catalog aggregates one hundred and thirty-one tools across all providers with input schemas", () => {
   const tools = loadProviderCatalog();
   assert.equal(tools.length, 131);
   assert.equal(PROVIDER_TOOL_COUNT, 131);
 
   const slugs = providerToolSlugs();
   const expected = [
-    // batch-01
+    // airtable
+    "airtable_list_bases",
+    // amplitude
+    "amplitude_get_flags",
+    // anthropic-admin
+    "anthropic-admin_list_workspaces",
+    "anthropic-admin_list_api_keys",
+    // asana
+    "asana_get_a_task",
+    "asana_create_a_project",
+    // calendly
+    "calendly_list_event_types",
+    "calendly_get_current_user",
+    // circleci
+    "circleci_list_pipelines",
+    "circleci_get_pipeline_by_id",
+    // clickup
+    "clickup_create_task",
+    "clickup_get_task",
+    "clickup_create_task_comment",
+    // cloudflare
+    "cloudflare_zones_get",
+    "cloudflare_accounts_list_accounts",
+    // confluence
+    "confluence_get_page_by_id",
+    "confluence_get_pages",
+    // datadog
+    "datadog_v1_get_ip_ranges",
+    // discord
+    "discord_get_my_user",
+    "discord_list_my_guilds",
+    // dropbox
+    "dropbox_list_folder",
+    "dropbox_search_files",
+    // exa
+    "exa_web_search",
+    "exa_web_fetch",
+    // figma
+    "figma_get_file",
+    "figma_get_file_nodes",
+    // gemini
+    "gemini_generate_content",
+    "gemini_list_models",
+    // github
     "github_create_issue",
     "github_list_issues",
     "github_get_issue",
     "github_create_pull_request",
     "github_get_pull_request",
     "github_search_repositories",
+    // gitlab
     "gitlab_list_projects",
     "gitlab_create_project_issue",
     "gitlab_create_merge_request",
-    "notion_search",
-    // batch-02
-    "notion_query_database",
-    "notion_get_page",
-    "notion_create_page",
-    "notion_append_block_children",
-    "stripe_post_customers",
-    "stripe_get_customers",
-    "stripe_post_payment_intents",
-    "stripe_get_payment_intents",
-    "stripe_get_balance",
-    "stripe_post_invoices",
-    // batch-03
-    "jira_create_issue",
-    "jira_get_issue",
-    "jira_add_comment",
-    "jira_transition_issue",
-    "jira_get_project",
-    "confluence_get_page_by_id",
-    "confluence_get_pages",
-    "linear_create_issue",
-    "linear_list_issues",
-    "linear_get_issue",
-    // batch-04
-    "linear_create_comment",
-    "supabase_list_projects",
-    "supabase_create_a_project",
-    "supabase_apply_a_migration",
-    "cloudflare_zones_get",
-    "cloudflare_accounts_list_accounts",
-    "vercel_get_projects",
-    "vercel_create_project",
-    "vercel_get_deployments",
-    "figma_get_file",
-    // batch-05
-    "figma_get_file_nodes",
-    "shopify_list_products",
-    "shopify_get_product",
-    "shopify_list_orders",
-    "hubspot_crm_contacts_list",
-    "hubspot_crm_contacts_create",
-    "hubspot_crm_deals_list",
-    "asana_get_a_task",
-    "asana_create_a_project",
-    "dropbox_list_folder",
-    // batch-06
-    "dropbox_search_files",
-    "discord_get_my_user",
-    "discord_list_my_guilds",
-    "airtable_list_bases",
-    "intercom_list_all_contacts",
-    "intercom_create_contact",
-    "snowflake_list_databases",
-    "snowflake_list_tables",
-    "sentry_list_organization_projects",
-    "sentry_list_a_project_s_issues",
-    // batch-07
-    "datadog_v1_get_ip_ranges",
-    "pagerduty_list_incidents",
-    "pagerduty_create_incident",
-    "pagerduty_list_services",
-    "exa_web_search",
-    "exa_web_fetch",
-    "perplexity_chat_completion",
-    "perplexity_search",
-    "resend_list_emails",
-    "resend_create_contact",
-    // batch-08
-    "calendly_list_event_types",
-    "calendly_get_current_user",
-    "clickup_create_task",
-    "clickup_get_task",
-    "clickup_create_task_comment",
-    "posthog_list_project_dashboards",
-    "posthog_get_feature_flags_matching_ids",
-    "mixpanel_track_event",
-    "mixpanel_raw_event_export",
-    "circleci_list_pipelines",
-    // batch-09
-    "circleci_get_pipeline_by_id",
-    "mailchimp_list_campaigns",
-    "mailchimp_add_member_to_list",
-    "x_create_posts",
-    "x_get_users_me",
-    "x_search_posts_recent",
-    "square_list_payments",
-    "square_create_payment",
-    "square_list_customers",
-    "openai_list_models",
-    // batch-10
-    "gemini_generate_content",
-    "gemini_list_models",
-    "anthropic-admin_list_workspaces",
-    "anthropic-admin_list_api_keys",
+    // grafana-cloud
     "grafana-cloud_list_stacks",
     "grafana-cloud_get_org",
-    "monday_boards",
-    "monday_get_workspaces",
-    "onesignal_view_an_app",
-    "amplitude_get_flags",
-    // batch-11
-    "zendesk_list_tickets",
-    "zendesk_get_ticket",
-    "zendesk_list_ticket_comments",
-    "zendesk_search",
-    "zendesk_get_current_user",
-    "zendesk_list_users",
-    "zendesk_list_organizations",
-    "zendesk_list_views",
-    "zendesk_list_view_tickets",
-    "zendesk_create_ticket",
-    "zendesk_add_ticket_comment",
-    // batch-12
-    "zendesk_update_ticket",
-    "zendesk_get_user",
-    "zendesk_get_organization",
-    "zendesk_count_view_tickets",
-    "zendesk_get_ticket_metrics",
-    // batch-13
+    // grafana-stack
     "grafana-stack_health",
     "grafana-stack_get_current_user",
     "grafana-stack_search",
@@ -179,7 +108,108 @@ test("catalog aggregates one hundred and thirty-one tools across all batches wit
     "grafana-stack_search_teams",
     "grafana-stack_list_org_users",
     "grafana-stack_list_library_elements",
+    // hubspot
+    "hubspot_crm_contacts_list",
+    "hubspot_crm_contacts_create",
+    "hubspot_crm_deals_list",
+    // intercom
+    "intercom_list_all_contacts",
+    "intercom_create_contact",
+    // jira
+    "jira_create_issue",
+    "jira_get_issue",
+    "jira_add_comment",
+    "jira_transition_issue",
+    "jira_get_project",
+    // linear
+    "linear_create_issue",
+    "linear_list_issues",
+    "linear_get_issue",
+    "linear_create_comment",
+    // mailchimp
+    "mailchimp_list_campaigns",
+    "mailchimp_add_member_to_list",
+    // mixpanel
+    "mixpanel_track_event",
+    "mixpanel_raw_event_export",
+    // monday
+    "monday_boards",
+    "monday_get_workspaces",
+    // notion
+    "notion_search",
+    "notion_query_database",
+    "notion_get_page",
+    "notion_create_page",
+    "notion_append_block_children",
+    // onesignal
+    "onesignal_view_an_app",
+    // openai
+    "openai_list_models",
+    // pagerduty
+    "pagerduty_list_incidents",
+    "pagerduty_create_incident",
+    "pagerduty_list_services",
+    // perplexity
+    "perplexity_chat_completion",
+    "perplexity_search",
+    // posthog
+    "posthog_list_project_dashboards",
+    "posthog_get_feature_flags_matching_ids",
+    // resend
+    "resend_list_emails",
+    "resend_create_contact",
+    // sentry
+    "sentry_list_organization_projects",
+    "sentry_list_a_project_s_issues",
+    // shopify
+    "shopify_list_products",
+    "shopify_get_product",
+    "shopify_list_orders",
+    // snowflake
+    "snowflake_list_databases",
+    "snowflake_list_tables",
+    // square
+    "square_list_payments",
+    "square_create_payment",
+    "square_list_customers",
+    // stripe
+    "stripe_post_customers",
+    "stripe_get_customers",
+    "stripe_post_payment_intents",
+    "stripe_get_payment_intents",
+    "stripe_get_balance",
+    "stripe_post_invoices",
+    // supabase
+    "supabase_list_projects",
+    "supabase_create_a_project",
+    "supabase_apply_a_migration",
+    // vercel
+    "vercel_get_projects",
+    "vercel_create_project",
+    "vercel_get_deployments",
+    // x
+    "x_create_posts",
+    "x_get_users_me",
+    "x_search_posts_recent",
+    // zendesk
+    "zendesk_list_tickets",
+    "zendesk_get_ticket",
+    "zendesk_list_ticket_comments",
+    "zendesk_search",
+    "zendesk_get_current_user",
+    "zendesk_list_users",
+    "zendesk_list_organizations",
+    "zendesk_list_views",
+    "zendesk_list_view_tickets",
+    "zendesk_create_ticket",
+    "zendesk_add_ticket_comment",
+    "zendesk_update_ticket",
+    "zendesk_get_user",
+    "zendesk_get_organization",
+    "zendesk_count_view_tickets",
+    "zendesk_get_ticket_metrics",
   ];
+
   for (const slug of expected) {
     assert.ok(slugs.includes(slug), `catalog is missing ${slug}`);
   }
@@ -608,7 +638,7 @@ test("zendesk create_ticket accepts requester_id alone, as its description promi
   }
 });
 
-test("a batch-02 provider tool (notion_get_page) is registered and forwards its args", async () => {
+test("a notion provider tool (notion_get_page) is registered and forwards its args", async () => {
   const fixture = await makeRegistryFixture();
   try {
     const loaded = await loadRegistry({ registry: fixture.dir });
@@ -633,7 +663,7 @@ test("a batch-02 provider tool (notion_get_page) is registered and forwards its 
 
     const [clientTransport, serverTransport] =
       InMemoryTransport.createLinkedPair();
-    const client = new Client({ name: "providers-batch02", version: "0.0.0" });
+    const client = new Client({ name: "providers-notion", version: "0.0.0" });
     await Promise.all([
       client.connect(clientTransport),
       server.connect(serverTransport),
@@ -643,7 +673,7 @@ test("a batch-02 provider tool (notion_get_page) is registered and forwards its 
       const { tools } = await client.listTools();
       assert.ok(
         tools.map((tool) => tool.name).includes("notion_get_page"),
-        "the full profile must register batch-02 tools",
+        "the full profile must register notion tools",
       );
 
       const result = await client.callTool({
@@ -670,7 +700,7 @@ test("a batch-02 provider tool (notion_get_page) is registered and forwards its 
   }
 });
 
-test("a batch-03 provider tool (jira_get_project) is registered and forwards its args", async () => {
+test("a jira provider tool (jira_get_project) is registered and forwards its args", async () => {
   const fixture = await makeRegistryFixture();
   try {
     const loaded = await loadRegistry({ registry: fixture.dir });
@@ -695,7 +725,7 @@ test("a batch-03 provider tool (jira_get_project) is registered and forwards its
 
     const [clientTransport, serverTransport] =
       InMemoryTransport.createLinkedPair();
-    const client = new Client({ name: "providers-batch03", version: "0.0.0" });
+    const client = new Client({ name: "providers-jira", version: "0.0.0" });
     await Promise.all([
       client.connect(clientTransport),
       server.connect(serverTransport),
@@ -705,7 +735,7 @@ test("a batch-03 provider tool (jira_get_project) is registered and forwards its
       const { tools } = await client.listTools();
       assert.ok(
         tools.map((tool) => tool.name).includes("jira_get_project"),
-        "the full profile must register batch-03 tools",
+        "the full profile must register jira tools",
       );
 
       const result = await client.callTool({
@@ -732,7 +762,7 @@ test("a batch-03 provider tool (jira_get_project) is registered and forwards its
   }
 });
 
-test("a batch-04 provider tool (cloudflare_zones_get) is registered and forwards its args", async () => {
+test("a cloudflare provider tool (cloudflare_zones_get) is registered and forwards its args", async () => {
   const fixture = await makeRegistryFixture();
   try {
     const loaded = await loadRegistry({ registry: fixture.dir });
@@ -757,7 +787,7 @@ test("a batch-04 provider tool (cloudflare_zones_get) is registered and forwards
 
     const [clientTransport, serverTransport] =
       InMemoryTransport.createLinkedPair();
-    const client = new Client({ name: "providers-batch04", version: "0.0.0" });
+    const client = new Client({ name: "providers-cloudflare", version: "0.0.0" });
     await Promise.all([
       client.connect(clientTransport),
       server.connect(serverTransport),
@@ -767,7 +797,7 @@ test("a batch-04 provider tool (cloudflare_zones_get) is registered and forwards
       const { tools } = await client.listTools();
       assert.ok(
         tools.map((tool) => tool.name).includes("cloudflare_zones_get"),
-        "the full profile must register batch-04 tools",
+        "the full profile must register cloudflare tools",
       );
 
       const result = await client.callTool({
@@ -792,7 +822,7 @@ test("a batch-04 provider tool (cloudflare_zones_get) is registered and forwards
   }
 });
 
-test("a batch-05 provider tool (dropbox_list_folder) is registered and forwards its args", async () => {
+test("a dropbox provider tool (dropbox_list_folder) is registered and forwards its args", async () => {
   const fixture = await makeRegistryFixture();
   try {
     const loaded = await loadRegistry({ registry: fixture.dir });
@@ -817,7 +847,7 @@ test("a batch-05 provider tool (dropbox_list_folder) is registered and forwards 
 
     const [clientTransport, serverTransport] =
       InMemoryTransport.createLinkedPair();
-    const client = new Client({ name: "providers-batch05", version: "0.0.0" });
+    const client = new Client({ name: "providers-dropbox", version: "0.0.0" });
     await Promise.all([
       client.connect(clientTransport),
       server.connect(serverTransport),
@@ -827,7 +857,7 @@ test("a batch-05 provider tool (dropbox_list_folder) is registered and forwards 
       const { tools } = await client.listTools();
       assert.ok(
         tools.map((tool) => tool.name).includes("dropbox_list_folder"),
-        "the full profile must register batch-05 tools",
+        "the full profile must register dropbox tools",
       );
 
       const result = await client.callTool({
@@ -857,7 +887,7 @@ test("a batch-05 provider tool (dropbox_list_folder) is registered and forwards 
   }
 });
 
-test("a batch-06 provider tool (discord_list_my_guilds) is registered and forwards its args", async () => {
+test("a discord provider tool (discord_list_my_guilds) is registered and forwards its args", async () => {
   const fixture = await makeRegistryFixture();
   try {
     const loaded = await loadRegistry({ registry: fixture.dir });
@@ -882,7 +912,7 @@ test("a batch-06 provider tool (discord_list_my_guilds) is registered and forwar
 
     const [clientTransport, serverTransport] =
       InMemoryTransport.createLinkedPair();
-    const client = new Client({ name: "providers-batch06", version: "0.0.0" });
+    const client = new Client({ name: "providers-discord", version: "0.0.0" });
     await Promise.all([
       client.connect(clientTransport),
       server.connect(serverTransport),
@@ -892,7 +922,7 @@ test("a batch-06 provider tool (discord_list_my_guilds) is registered and forwar
       const { tools } = await client.listTools();
       assert.ok(
         tools.map((tool) => tool.name).includes("discord_list_my_guilds"),
-        "the full profile must register batch-06 tools",
+        "the full profile must register discord tools",
       );
 
       const result = await client.callTool({
@@ -922,7 +952,7 @@ test("a batch-06 provider tool (discord_list_my_guilds) is registered and forwar
   }
 });
 
-test("a batch-07 provider tool (exa_web_search) is registered and forwards its args", async () => {
+test("a exa provider tool (exa_web_search) is registered and forwards its args", async () => {
   const fixture = await makeRegistryFixture();
   try {
     const loaded = await loadRegistry({ registry: fixture.dir });
@@ -947,7 +977,7 @@ test("a batch-07 provider tool (exa_web_search) is registered and forwards its a
 
     const [clientTransport, serverTransport] =
       InMemoryTransport.createLinkedPair();
-    const client = new Client({ name: "providers-batch07", version: "0.0.0" });
+    const client = new Client({ name: "providers-exa", version: "0.0.0" });
     await Promise.all([
       client.connect(clientTransport),
       server.connect(serverTransport),
@@ -957,7 +987,7 @@ test("a batch-07 provider tool (exa_web_search) is registered and forwards its a
       const { tools } = await client.listTools();
       assert.ok(
         tools.map((tool) => tool.name).includes("exa_web_search"),
-        "the full profile must register batch-07 tools",
+        "the full profile must register exa tools",
       );
 
       const result = await client.callTool({
@@ -987,7 +1017,7 @@ test("a batch-07 provider tool (exa_web_search) is registered and forwards its a
   }
 });
 
-test("a batch-08 provider tool (clickup_get_task) is registered and forwards its args", async () => {
+test("a clickup provider tool (clickup_get_task) is registered and forwards its args", async () => {
   const fixture = await makeRegistryFixture();
   try {
     const loaded = await loadRegistry({ registry: fixture.dir });
@@ -996,7 +1026,7 @@ test("a batch-08 provider tool (clickup_get_task) is registered and forwards its
       configured: true,
       async invoke(toolSlug, args) {
         calls.push({ tool: toolSlug, args });
-        return { id: "abc123", name: "Ship batch 08" };
+        return { id: "abc123", name: "Ship release 08" };
       },
     });
     const server = createSkillsServer(loaded, {
@@ -1012,7 +1042,7 @@ test("a batch-08 provider tool (clickup_get_task) is registered and forwards its
 
     const [clientTransport, serverTransport] =
       InMemoryTransport.createLinkedPair();
-    const client = new Client({ name: "providers-batch08", version: "0.0.0" });
+    const client = new Client({ name: "providers-clickup", version: "0.0.0" });
     await Promise.all([
       client.connect(clientTransport),
       server.connect(serverTransport),
@@ -1022,7 +1052,7 @@ test("a batch-08 provider tool (clickup_get_task) is registered and forwards its
       const { tools } = await client.listTools();
       assert.ok(
         tools.map((tool) => tool.name).includes("clickup_get_task"),
-        "the full profile must register batch-08 tools",
+        "the full profile must register clickup tools",
       );
 
       const result = await client.callTool({
@@ -1037,7 +1067,7 @@ test("a batch-08 provider tool (clickup_get_task) is registered and forwards its
       };
       assert.equal(structured.ok, true);
       assert.equal(structured.tool, "clickup_get_task");
-      assert.equal(structured.result?.name, "Ship batch 08");
+      assert.equal(structured.result?.name, "Ship release 08");
       assert.deepEqual(calls, [
         { tool: "clickup_get_task", args: { task_id: "abc123" } },
       ]);
@@ -1049,7 +1079,7 @@ test("a batch-08 provider tool (clickup_get_task) is registered and forwards its
   }
 });
 
-test("a batch-09 provider tool (openai_list_models) is registered and forwards its args", async () => {
+test("a openai provider tool (openai_list_models) is registered and forwards its args", async () => {
   const fixture = await makeRegistryFixture();
   try {
     const loaded = await loadRegistry({ registry: fixture.dir });
@@ -1074,7 +1104,7 @@ test("a batch-09 provider tool (openai_list_models) is registered and forwards i
 
     const [clientTransport, serverTransport] =
       InMemoryTransport.createLinkedPair();
-    const client = new Client({ name: "providers-batch09", version: "0.0.0" });
+    const client = new Client({ name: "providers-openai", version: "0.0.0" });
     await Promise.all([
       client.connect(clientTransport),
       server.connect(serverTransport),
@@ -1084,7 +1114,7 @@ test("a batch-09 provider tool (openai_list_models) is registered and forwards i
       const { tools } = await client.listTools();
       assert.ok(
         tools.map((tool) => tool.name).includes("openai_list_models"),
-        "the full profile must register batch-09 tools",
+        "the full profile must register openai tools",
       );
 
       const result = await client.callTool({
@@ -1109,7 +1139,7 @@ test("a batch-09 provider tool (openai_list_models) is registered and forwards i
   }
 });
 
-test("a batch-13 provider tool (grafana-stack_list_folders) is registered and forwards its args", async () => {
+test("a grafana-stack provider tool (grafana-stack_list_folders) is registered and forwards its args", async () => {
   const fixture = await makeRegistryFixture();
   try {
     const loaded = await loadRegistry({ registry: fixture.dir });
@@ -1134,7 +1164,7 @@ test("a batch-13 provider tool (grafana-stack_list_folders) is registered and fo
 
     const [clientTransport, serverTransport] =
       InMemoryTransport.createLinkedPair();
-    const client = new Client({ name: "providers-batch13", version: "0.0.0" });
+    const client = new Client({ name: "providers-grafana-stack", version: "0.0.0" });
     await Promise.all([
       client.connect(clientTransport),
       server.connect(serverTransport),
@@ -1144,7 +1174,7 @@ test("a batch-13 provider tool (grafana-stack_list_folders) is registered and fo
       const { tools } = await client.listTools();
       assert.ok(
         tools.map((tool) => tool.name).includes("grafana-stack_list_folders"),
-        "the full profile must register batch-13 tools",
+        "the full profile must register grafana-stack tools",
       );
 
       const result = await client.callTool({
@@ -1174,7 +1204,7 @@ test("a batch-13 provider tool (grafana-stack_list_folders) is registered and fo
   }
 });
 
-test("a batch-10 provider tool (grafana-cloud_list_stacks) is registered and forwards its args", async () => {
+test("a grafana-cloud provider tool (grafana-cloud_list_stacks) is registered and forwards its args", async () => {
   const fixture = await makeRegistryFixture();
   try {
     const loaded = await loadRegistry({ registry: fixture.dir });
@@ -1199,7 +1229,7 @@ test("a batch-10 provider tool (grafana-cloud_list_stacks) is registered and for
 
     const [clientTransport, serverTransport] =
       InMemoryTransport.createLinkedPair();
-    const client = new Client({ name: "providers-batch10", version: "0.0.0" });
+    const client = new Client({ name: "providers-grafana-cloud", version: "0.0.0" });
     await Promise.all([
       client.connect(clientTransport),
       server.connect(serverTransport),
@@ -1209,7 +1239,7 @@ test("a batch-10 provider tool (grafana-cloud_list_stacks) is registered and for
       const { tools } = await client.listTools();
       assert.ok(
         tools.map((tool) => tool.name).includes("grafana-cloud_list_stacks"),
-        "the full profile must register batch-10 tools",
+        "the full profile must register grafana-cloud tools",
       );
 
       const result = await client.callTool({

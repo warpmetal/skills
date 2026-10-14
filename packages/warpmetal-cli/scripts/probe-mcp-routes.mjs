@@ -60,7 +60,7 @@ const ACCOUNT_SCOPED_HOSTS = new Set([
   // that the host itself is per-customer.
   "acme.zendesk.com",
   // Same reasoning for the Grafana stack label: every tool is account-scoped,
-  // so the batch-13 routes are classified rather than probed. Verifying them
+  // so the Grafana stack routes are classified rather than probed. Verifying them
   // takes a real stack (the gated live tier in test/grafana-stack.test.ts).
   "acme.grafana.net",
 ]);

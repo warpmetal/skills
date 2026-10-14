@@ -162,7 +162,7 @@ vendor contract fails a red build without the network.
 ### Verifying the Grafana stack tools without a credential
 
 An account-scoped provider cannot be probed through the sample context: the
-tenant is invented and does not resolve. The batch-13 tools therefore have three
+tenant is invented and does not resolve. The Grafana stack tools therefore have three
 layers, all usable with no token, and each one covers what the others cannot:
 
 ```bash

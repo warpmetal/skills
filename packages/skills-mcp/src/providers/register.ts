@@ -1,5 +1,5 @@
 /**
- * Register WarpMetal provider tools (all batches) on an MCP server (full profile only).
+ * Register WarpMetal provider tools (all providers) on an MCP server (full profile only).
  */
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";

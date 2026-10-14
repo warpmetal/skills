@@ -267,3 +267,22 @@ different credential, different contract entry.
   findings came out of running them: a bogus `parentUid` makes `/api/folders` answer 404 on a
   route that exists, so the route probe now sends the argument-free shape; and the classic
   `/api/dashboards/uid/{uid}` surface is still served by a current Grafana.
+
+## Catalog layout - one file per provider
+
+The catalog used to be thirteen `batch-NN.json` files, each holding whatever
+providers shipped in that wave, so a provider could be split across two of them
+(Zendesk was half of `batch-11.json` and half of `batch-12.json`). It is now
+one file per provider - `src/providers/catalog/<toolkitId>.json`, 42 files for
+the 131 tools - so growing a provider is a single-file edit.
+
+Nothing changes for callers: the 131 toolSlugs, their input schemas and the
+`warpmetal integration <provider> <verb>` mapping are identical. What changed is
+the layout, the registration order (`tools/list` is now alphabetical by provider)
+and the file header field `batch`, replaced by `provider`.
+
+`src/providers/catalog/index.ts` is generated from the directory: re-run
+`node packages/skills-mcp/scripts/gen-catalog-barrel.mjs` after adding or
+removing a provider file. `test/catalog-layout.test.ts` fails when the barrel
+and the directory drift apart. The entries above keep the names they shipped
+under.

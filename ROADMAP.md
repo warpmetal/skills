@@ -98,7 +98,7 @@ Requires org access or later workstreams:
       `setup`/`plan`/`apply` and host-config writing remain in that workstream.
       See [`docs/coding-env-skill-plan.md`](docs/coding-env-skill-plan.md).
 - [ ] CLI registry client, lockfile, and explicit update semantics land with the `coding-env` workstream.
-- [ ] Cloudflare WAF/firewall adapters and automatic security updates (later batch; this release is
+- [ ] Cloudflare WAF/firewall adapters and automatic security updates (a later release; this release is
       DNS only).
 
 ## Decided
