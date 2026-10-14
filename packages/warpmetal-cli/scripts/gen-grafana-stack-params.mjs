@@ -134,7 +134,7 @@ if (unresolved.length > 0) {
 const body = {
   version: 1,
   note:
-    "Destilacion revisada de api-merged.json (Grafana HTTP API) para los tools de batch 13. " +
+    "Destilacion revisada de api-merged.json (Grafana HTTP API) para los tools de Grafana stack. " +
     "Generado por scripts/gen-grafana-stack-params.mjs; el spec completo no se commitea. " +
     "Regenerar con: node --import tsx scripts/gen-grafana-stack-params.mjs <ruta/api-merged.json>",
   source: {

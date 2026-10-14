@@ -66,7 +66,7 @@ test(
   { skip: SKIP, timeout: 180_000 },
   async () => {
     const defs = MCP_TOOL_DEFS.filter((def) => def.provider === "grafana-stack");
-    assert.equal(defs.length, 15, "batch 13 registers fifteen tools");
+    assert.equal(defs.length, 15, "the Grafana stack registers fifteen tools");
 
     const { rows, control } = await probeAll({
       defs,
