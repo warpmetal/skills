@@ -1,0 +1,16 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/stream/live_inputs",
+  "body": {
+    "defaultCreator": "sample_default_creator",
+    "deleteRecordingAfterDays": 1,
+    "enabled": true,
+    "meta": {},
+    "preferLowLatency": true,
+    "recording": {}
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

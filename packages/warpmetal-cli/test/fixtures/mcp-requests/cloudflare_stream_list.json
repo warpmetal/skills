@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/stream?status=pendingupload&creator=sample_creator&type=sample_type&asc=true&video_name=sample_video_name&search=sample_search&start=sample_start&end=sample_end&include_counts=true&id=sample_id&name=sample_name&live_input_id=sample_live_input_id&before=sample_before&after=sample_after&limit=1",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

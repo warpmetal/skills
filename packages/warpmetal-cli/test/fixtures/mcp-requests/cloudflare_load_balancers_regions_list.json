@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/load_balancers/regions?subdivision_code=sample_subdivision_code&subdivision_code_a2=sample_subdivision_code_a2&country_code_a2=sample_country_code_a2",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

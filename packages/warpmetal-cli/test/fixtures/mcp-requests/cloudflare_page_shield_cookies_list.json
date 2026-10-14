@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/page_shield/cookies?hosts=sample_hosts&page=sample_page&per_page=1&order_by=first_seen_at&direction=asc&page_url=sample_page_url&export=csv&name=sample_name&secure=true&http_only=true&same_site=lax&type=first_party&path=sample_path&domain=sample_domain",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

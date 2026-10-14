@@ -1,0 +1,13 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/email/routing",
+  "body": {
+    "enabled": true,
+    "skip_wizard": true,
+    "support_subaddress": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

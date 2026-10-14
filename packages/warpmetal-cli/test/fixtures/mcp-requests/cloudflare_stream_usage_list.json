@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/stream/usage?metrics=sample_metrics&since=sample_since&until=sample_until&time_delta=hour&limit=1&filters=sample_filters",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

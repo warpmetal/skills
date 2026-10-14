@@ -145,5 +145,24 @@ export const DESTRUCTIVE_SLUGS: ReadonlySet<string> = new Set([
   "cloudflare_teamnet_virtual_networks_delete",
   "cloudflare_zerotrust_routes_hostname_delete",
   "cloudflare_zerotrust_subnets_warp_delete",
+  //
+  // Wave w5 (Radar and the operational collections) is the same question again.
+  // A load balancer, a pool, a monitor, a stored image, an image signing key, a
+  // video, a live input, a Stream key, a video's derived downloads and an
+  // origin's health check are objects the caller has to build again: deleting one
+  // takes routing, delivery or the data itself away. Revoking a member is not in
+  // the list, and neither is a health-check preview: the first is an access
+  // binding that re-inviting restores, the second a draft the caller can retype.
+  "cloudflare_healthchecks_delete",
+  "cloudflare_images_v1_delete",
+  "cloudflare_images_v1_keys_delete",
+  "cloudflare_load_balancers_delete",
+  "cloudflare_load_balancers_monitor_groups_delete",
+  "cloudflare_load_balancers_monitors_delete",
+  "cloudflare_load_balancers_pools_delete",
+  "cloudflare_stream_delete",
+  "cloudflare_stream_identifier_downloads_delete",
+  "cloudflare_stream_keys_delete",
+  "cloudflare_stream_live_inputs_delete",
 ]);
 

@@ -558,6 +558,52 @@ zone scope, and the Cache Rules. The Cloudflare surface goes from 653 tools to
   Logpush and Log Explorer operations that still ship with the marker in their
   description.
 
+## Batch 18 - Cloudflare Radar and the operational collections
+
+316 tools across seven reviewable groups and two the spec hides, reviewed as wave
+`w5`: Radar (the public internet-measurement surface, 152 tools on its own), load
+balancing, Images, Stream, the zone email surface (routing, the DNS that makes it
+work, and sending subdomains), the Registrar and Page Rules, plus the two kept
+groups - account members and health checks. The Cloudflare surface goes from 826
+tools to 1142, and the full stdio profile from 1001 to 1317.
+
+### How the wave decided
+
+- **Radar needs no scope and gets none.** 152 of the 316 tools answer questions
+  about the internet rather than about the caller's account, so they carry no
+  account or zone argument at all: the wave is where the surface becomes useful
+  without a credential on a specific resource.
+- **Three uploads cannot travel through a JSON argument** and are absent: the two
+  Images uploads (multipart) and Stream's TUS handshake, which needs an
+  `Upload-Length` header and answers with an upload URL on another host. What
+  manages the uploaded object - variants, keys, downloads, captions, copies - is
+  there.
+- **One dropped body field.** `PUT /stream/webhook` declares the webhook URL both
+  as a query parameter and as a body field; the query form is kept, with the note
+  that says why.
+- **Four renames.** `cloudflare_stream_update` for the path that edits a video's
+  details (its sibling is the upload handshake this wave leaves out), and three
+  health-check preview tools, whose endpoints derive one name across two paths.
+- **Eleven destructive tools**, asked the same question as w2 and w3: a load
+  balancer, a pool, a monitor, an image, an image signing key, a video, a live
+  input, a Stream key, a video's derived downloads and an origin's health check
+  are objects the caller has to build again. Removing an account member is not on
+  the list (an access binding that re-inviting restores) and neither is a
+  health-check preview (a draft the caller can retype).
+- **A raw body is optional when the spec says so.** The two health-check DELETEs
+  declare an `application/json` body with no field list, and the spec marks one
+  of them required and the other not; the schema now follows that instead of
+  forcing a caller to invent a payload.
+
+### What proves it
+
+- 6244 tests in the CLI suite, all passing: every builder is asserted against the
+  distilled spec, and the query-enum check learned that a boolean query value
+  arrives as text (`?enabled=true` against an enum of `true`, `false`).
+- The five waves together ship 1142 Cloudflare tools from 45 at the start, with
+  37 recorded review notes, a 64-tool destructive set and 99 `keepFiltered`
+  exceptions, all of them asserted in both suites.
+
 ## Catalog layout - one file per provider
 
 The catalog used to be thirteen `batch-NN.json` files, each holding whatever

@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/radar/bgp/hijacks/events?page=1&per_page=1&eventId=1&hijackerAsn=1&victimAsn=1&involvedAsn=1&involvedCountry=sample_involved_country&prefix=sample_prefix&minConfidence=1&maxConfidence=1&dateRange=sample_date_range&dateStart=sample_date_start&dateEnd=sample_date_end&sortBy=ID&sortOrder=ASC&format=JSON",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

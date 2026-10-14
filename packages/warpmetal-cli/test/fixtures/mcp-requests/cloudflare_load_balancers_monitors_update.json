@@ -1,0 +1,26 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/load_balancers/monitors/sample_monitor_id",
+  "body": {
+    "allow_insecure": true,
+    "consecutive_down": 1,
+    "consecutive_up": 1,
+    "description": "sample_description",
+    "expected_body": "sample_expected_body",
+    "expected_codes": "sample_expected_codes",
+    "follow_redirects": true,
+    "header": {},
+    "interval": 1,
+    "method": "sample_method",
+    "path": "sample_path",
+    "port": 1,
+    "probe_zone": "sample_probe_zone",
+    "retries": 1,
+    "timeout": 1,
+    "type": "http"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

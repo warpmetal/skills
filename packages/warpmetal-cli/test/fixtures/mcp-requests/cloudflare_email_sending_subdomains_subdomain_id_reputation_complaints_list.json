@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/email/sending/subdomains/sample_subdomain_id/reputation/complaints?start_at=sample_start_at&end_at=sample_end_at",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

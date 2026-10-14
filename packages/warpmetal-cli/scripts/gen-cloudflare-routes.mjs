@@ -112,9 +112,11 @@ function buildRoute(entry) {
       entry.auth === AUTH_NONE
         ? `, headers: { "Content-Type": ${contentType} }`
         : `, headers: { ...cfHeaders(), "Content-Type": ${contentType} }`;
+    // `?? undefined` and not a bare `args.body`: the spec marks a few raw bodies
+    // optional, and an operation that needs none must not be handed an empty one.
     return (
       `({args}) => ({ method: ${JSON.stringify(op.method)}, url: ${url}, ` +
-      `body: args.body${rawHeaders} })`
+      `body: args.body ?? undefined${rawHeaders} })`
     );
   }
 

@@ -1,0 +1,12 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/email/sending/subdomains/sample_subdomain_id",
+  "body": {
+    "drop_suppressed_recipients": true,
+    "preview_enabled": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

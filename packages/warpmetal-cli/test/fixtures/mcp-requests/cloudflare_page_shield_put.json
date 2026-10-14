@@ -1,0 +1,13 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/page_shield",
+  "body": {
+    "enabled": true,
+    "use_cloudflare_reporting_endpoint": true,
+    "use_connection_url_path": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

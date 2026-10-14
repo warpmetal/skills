@@ -5259,6 +5259,3036 @@
     "url": "sample_url",
     "zone_id": "sample_zone_id"
   },
+  "cloudflare_images_v1_keys_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_images_v1_keys_replace": {
+    "account_id": "sample_account_id",
+    "signing_key_name": "sample_signing_key_name"
+  },
+  "cloudflare_images_v1_keys_delete": {
+    "account_id": "sample_account_id",
+    "signing_key_name": "sample_signing_key_name"
+  },
+  "cloudflare_images_v1_stats_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_images_v1_variants_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_images_v1_variants_create": {
+    "account_id": "sample_account_id",
+    "id": "sample_id",
+    "never_require_signed_urls": true,
+    "options": {}
+  },
+  "cloudflare_images_v1_variants_get": {
+    "account_id": "sample_account_id",
+    "variant_id": "sample_variant_id"
+  },
+  "cloudflare_images_v1_variants_update": {
+    "account_id": "sample_account_id",
+    "never_require_signed_urls": true,
+    "options": {},
+    "variant_id": "sample_variant_id"
+  },
+  "cloudflare_images_v1_variants_delete": {
+    "account_id": "sample_account_id",
+    "variant_id": "sample_variant_id"
+  },
+  "cloudflare_images_v1_get": {
+    "account_id": "sample_account_id",
+    "image_id": "sample_image_id"
+  },
+  "cloudflare_images_v1_update": {
+    "account_id": "sample_account_id",
+    "creator": "sample_creator",
+    "image_id": "sample_image_id",
+    "metadata": {},
+    "require_signed_urls": true
+  },
+  "cloudflare_images_v1_delete": {
+    "account_id": "sample_account_id",
+    "image_id": "sample_image_id"
+  },
+  "cloudflare_images_v1_image_id_blob_list": {
+    "account_id": "sample_account_id",
+    "image_id": "sample_image_id"
+  },
+  "cloudflare_images_v2_list": {
+    "account_id": "sample_account_id",
+    "continuation_token": "sample_continuation_token",
+    "creator": "sample_creator",
+    "meta_field_operator": "sample_meta_field_operator",
+    "per_page": 1,
+    "sort_order": "asc"
+  },
+  "cloudflare_images_v2_sourcingkit_migrations_list": {
+    "account_id": "sample_account_id",
+    "limit": 1,
+    "offset": 1
+  },
+  "cloudflare_images_v2_sourcingkit_migrations_create": {
+    "account_id": "sample_account_id",
+    "conflict_behaviour": "skip",
+    "excluded_content_types": [],
+    "path_prefix": "sample_path_prefix",
+    "root_directory": "sample_root_directory",
+    "source_id": "sample_source_id"
+  },
+  "cloudflare_images_v2_sourcingkit_migrations_get": {
+    "account_id": "sample_account_id",
+    "migration_id": "sample_migration_id"
+  },
+  "cloudflare_images_v2_sourcingkit_migrations_delete": {
+    "account_id": "sample_account_id",
+    "migration_id": "sample_migration_id"
+  },
+  "cloudflare_images_v2_sourcingkit_migrations_migration_id_lifecycle_list": {
+    "account_id": "sample_account_id",
+    "migration_id": "sample_migration_id"
+  },
+  "cloudflare_images_v2_sourcingkit_migrations_migration_id_lifecycle_abort_patch": {
+    "account_id": "sample_account_id",
+    "migration_id": "sample_migration_id"
+  },
+  "cloudflare_images_v2_sourcingkit_migrations_migration_id_lifecycle_start_patch": {
+    "account_id": "sample_account_id",
+    "migration_id": "sample_migration_id"
+  },
+  "cloudflare_images_v2_sourcingkit_migrations_migration_id_logs_list": {
+    "account_id": "sample_account_id",
+    "limit": 1,
+    "migration_id": "sample_migration_id",
+    "offset": 1
+  },
+  "cloudflare_images_v2_sourcingkit_sources_list": {
+    "account_id": "sample_account_id",
+    "limit": 1,
+    "name": "sample_name",
+    "offset": 1
+  },
+  "cloudflare_images_v2_sourcingkit_sources_create": {
+    "account": "sample_account",
+    "account_id": "sample_account_id",
+    "bucket": "sample_bucket",
+    "name": "sample_name",
+    "secret": {},
+    "vendor": "s3"
+  },
+  "cloudflare_images_v2_sourcingkit_sources_connectivity_precheck_create": {
+    "account": "sample_account",
+    "account_id": "sample_account_id",
+    "bucket": "sample_bucket",
+    "region": "sample_region",
+    "secret": {},
+    "vendor": "s3"
+  },
+  "cloudflare_images_v2_sourcingkit_sources_get": {
+    "account_id": "sample_account_id",
+    "source_id": "sample_source_id"
+  },
+  "cloudflare_images_v2_sourcingkit_sources_update": {
+    "account_id": "sample_account_id",
+    "name": "sample_name",
+    "source_id": "sample_source_id"
+  },
+  "cloudflare_images_v2_sourcingkit_sources_delete": {
+    "account_id": "sample_account_id",
+    "source_id": "sample_source_id"
+  },
+  "cloudflare_images_v2_sourcingkit_sources_source_id_connectivity_list": {
+    "account_id": "sample_account_id",
+    "source_id": "sample_source_id"
+  },
+  "cloudflare_load_balancers_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_load_balancers_create": {
+    "account_id": "sample_account_id",
+    "adaptive_routing": {},
+    "country_pools": {},
+    "default_pools": [],
+    "description": "sample_description",
+    "enabled": true,
+    "fallback_pool": "sample_fallback_pool",
+    "location_strategy": {},
+    "name": "sample_name",
+    "networks": [],
+    "pop_pools": {},
+    "proxied": true,
+    "random_steering": {},
+    "region_pools": {},
+    "rules": [],
+    "session_affinity": "none",
+    "session_affinity_attributes": {},
+    "session_affinity_ttl": 1,
+    "steering_policy": "off",
+    "ttl": 1
+  },
+  "cloudflare_load_balancers_monitor_groups_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_load_balancers_monitor_groups_create": {
+    "account_id": "sample_account_id",
+    "created_on": "sample_created_on",
+    "description": "sample_description",
+    "id": "sample_id",
+    "members": [],
+    "modified_on": "sample_modified_on"
+  },
+  "cloudflare_load_balancers_monitor_groups_get": {
+    "account_id": "sample_account_id",
+    "monitor_group_id": "sample_monitor_group_id"
+  },
+  "cloudflare_load_balancers_monitor_groups_replace": {
+    "account_id": "sample_account_id",
+    "created_on": "sample_created_on",
+    "description": "sample_description",
+    "id": "sample_id",
+    "members": [],
+    "modified_on": "sample_modified_on",
+    "monitor_group_id": "sample_monitor_group_id"
+  },
+  "cloudflare_load_balancers_monitor_groups_update": {
+    "account_id": "sample_account_id",
+    "created_on": "sample_created_on",
+    "description": "sample_description",
+    "id": "sample_id",
+    "members": [],
+    "modified_on": "sample_modified_on",
+    "monitor_group_id": "sample_monitor_group_id"
+  },
+  "cloudflare_load_balancers_monitor_groups_delete": {
+    "account_id": "sample_account_id",
+    "monitor_group_id": "sample_monitor_group_id"
+  },
+  "cloudflare_load_balancers_monitor_groups_monitor_group_id_references_list": {
+    "account_id": "sample_account_id",
+    "monitor_group_id": "sample_monitor_group_id"
+  },
+  "cloudflare_load_balancers_monitors_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_load_balancers_monitors_create": {
+    "account_id": "sample_account_id",
+    "allow_insecure": true,
+    "consecutive_down": 1,
+    "consecutive_up": 1,
+    "description": "sample_description",
+    "expected_body": "sample_expected_body",
+    "expected_codes": "sample_expected_codes",
+    "follow_redirects": true,
+    "header": {},
+    "interval": 1,
+    "method": "sample_method",
+    "path": "sample_path",
+    "port": 1,
+    "probe_zone": "sample_probe_zone",
+    "retries": 1,
+    "timeout": 1,
+    "type": "http"
+  },
+  "cloudflare_load_balancers_monitors_get": {
+    "account_id": "sample_account_id",
+    "monitor_id": "sample_monitor_id"
+  },
+  "cloudflare_load_balancers_monitors_replace": {
+    "account_id": "sample_account_id",
+    "allow_insecure": true,
+    "consecutive_down": 1,
+    "consecutive_up": 1,
+    "description": "sample_description",
+    "expected_body": "sample_expected_body",
+    "expected_codes": "sample_expected_codes",
+    "follow_redirects": true,
+    "header": {},
+    "interval": 1,
+    "method": "sample_method",
+    "monitor_id": "sample_monitor_id",
+    "path": "sample_path",
+    "port": 1,
+    "probe_zone": "sample_probe_zone",
+    "retries": 1,
+    "timeout": 1,
+    "type": "http"
+  },
+  "cloudflare_load_balancers_monitors_update": {
+    "account_id": "sample_account_id",
+    "allow_insecure": true,
+    "consecutive_down": 1,
+    "consecutive_up": 1,
+    "description": "sample_description",
+    "expected_body": "sample_expected_body",
+    "expected_codes": "sample_expected_codes",
+    "follow_redirects": true,
+    "header": {},
+    "interval": 1,
+    "method": "sample_method",
+    "monitor_id": "sample_monitor_id",
+    "path": "sample_path",
+    "port": 1,
+    "probe_zone": "sample_probe_zone",
+    "retries": 1,
+    "timeout": 1,
+    "type": "http"
+  },
+  "cloudflare_load_balancers_monitors_delete": {
+    "account_id": "sample_account_id",
+    "monitor_id": "sample_monitor_id"
+  },
+  "cloudflare_load_balancers_monitors_monitor_id_preview": {
+    "account_id": "sample_account_id",
+    "allow_insecure": true,
+    "consecutive_down": 1,
+    "consecutive_up": 1,
+    "description": "sample_description",
+    "expected_body": "sample_expected_body",
+    "expected_codes": "sample_expected_codes",
+    "follow_redirects": true,
+    "header": {},
+    "interval": 1,
+    "method": "sample_method",
+    "monitor_id": "sample_monitor_id",
+    "path": "sample_path",
+    "port": 1,
+    "probe_zone": "sample_probe_zone",
+    "retries": 1,
+    "timeout": 1,
+    "type": "http"
+  },
+  "cloudflare_load_balancers_monitors_monitor_id_references_list": {
+    "account_id": "sample_account_id",
+    "monitor_id": "sample_monitor_id"
+  },
+  "cloudflare_load_balancers_pools_list": {
+    "account_id": "sample_account_id",
+    "monitor": "sample_monitor"
+  },
+  "cloudflare_load_balancers_pools_create": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "enabled": true,
+    "latitude": 1,
+    "load_shedding": {},
+    "longitude": 1,
+    "minimum_origins": 1,
+    "monitor": "sample_monitor",
+    "monitor_group": "sample_monitor_group",
+    "name": "sample_name",
+    "notification_email": "sample_notification_email",
+    "notification_filter": {},
+    "origin_steering": {},
+    "origins": []
+  },
+  "cloudflare_load_balancers_pools_patch": {
+    "account_id": "sample_account_id",
+    "notification_email": ""
+  },
+  "cloudflare_load_balancers_pools_get": {
+    "account_id": "sample_account_id",
+    "pool_id": "sample_pool_id"
+  },
+  "cloudflare_load_balancers_pools_replace": {
+    "account_id": "sample_account_id",
+    "check_regions": [],
+    "description": "sample_description",
+    "disabled_at": "sample_disabled_at",
+    "enabled": true,
+    "health_sources": [],
+    "latitude": 1,
+    "load_shedding": {},
+    "longitude": 1,
+    "minimum_origins": 1,
+    "monitor": "sample_monitor",
+    "monitor_group": "sample_monitor_group",
+    "name": "sample_name",
+    "notification_email": "sample_notification_email",
+    "notification_filter": {},
+    "origin_steering": {},
+    "origins": [],
+    "pool_id": "sample_pool_id"
+  },
+  "cloudflare_load_balancers_pools_update": {
+    "account_id": "sample_account_id",
+    "check_regions": [],
+    "description": "sample_description",
+    "disabled_at": "sample_disabled_at",
+    "enabled": true,
+    "health_sources": [],
+    "latitude": 1,
+    "load_shedding": {},
+    "longitude": 1,
+    "minimum_origins": 1,
+    "monitor": "sample_monitor",
+    "monitor_group": "sample_monitor_group",
+    "name": "sample_name",
+    "notification_email": "sample_notification_email",
+    "notification_filter": {},
+    "origin_steering": {},
+    "origins": [],
+    "pool_id": "sample_pool_id"
+  },
+  "cloudflare_load_balancers_pools_delete": {
+    "account_id": "sample_account_id",
+    "pool_id": "sample_pool_id"
+  },
+  "cloudflare_load_balancers_pools_pool_id_health_list": {
+    "account_id": "sample_account_id",
+    "pool_id": "sample_pool_id"
+  },
+  "cloudflare_load_balancers_pools_pool_id_preview": {
+    "account_id": "sample_account_id",
+    "allow_insecure": true,
+    "consecutive_down": 1,
+    "consecutive_up": 1,
+    "description": "sample_description",
+    "expected_body": "sample_expected_body",
+    "expected_codes": "sample_expected_codes",
+    "follow_redirects": true,
+    "header": {},
+    "interval": 1,
+    "method": "sample_method",
+    "path": "sample_path",
+    "pool_id": "sample_pool_id",
+    "port": 1,
+    "probe_zone": "sample_probe_zone",
+    "retries": 1,
+    "timeout": 1,
+    "type": "http"
+  },
+  "cloudflare_load_balancers_pools_pool_id_references_list": {
+    "account_id": "sample_account_id",
+    "pool_id": "sample_pool_id"
+  },
+  "cloudflare_load_balancers_preview": {
+    "account_id": "sample_account_id",
+    "preview_id": "sample_preview_id"
+  },
+  "cloudflare_load_balancers_regions_list": {
+    "account_id": "sample_account_id",
+    "country_code_a2": "sample_country_code_a2",
+    "subdivision_code": "sample_subdivision_code",
+    "subdivision_code_a2": "sample_subdivision_code_a2"
+  },
+  "cloudflare_load_balancers_regions_get": {
+    "account_id": "sample_account_id",
+    "region_id": "WNAM"
+  },
+  "cloudflare_load_balancers_search": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1,
+    "query": "sample_query",
+    "references": ""
+  },
+  "cloudflare_load_balancers_usage_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_load_balancers_get": {
+    "account_id": "sample_account_id",
+    "load_balancer_id": "sample_load_balancer_id"
+  },
+  "cloudflare_load_balancers_replace": {
+    "account_id": "sample_account_id",
+    "adaptive_routing": {},
+    "country_pools": {},
+    "default_pools": [],
+    "description": "sample_description",
+    "enabled": true,
+    "fallback_pool": "sample_fallback_pool",
+    "load_balancer_id": "sample_load_balancer_id",
+    "location_strategy": {},
+    "name": "sample_name",
+    "networks": [],
+    "pop_pools": {},
+    "proxied": true,
+    "random_steering": {},
+    "region_pools": {},
+    "rules": [],
+    "session_affinity": "none",
+    "session_affinity_attributes": {},
+    "session_affinity_ttl": 1,
+    "steering_policy": "off",
+    "ttl": 1
+  },
+  "cloudflare_load_balancers_update": {
+    "account_id": "sample_account_id",
+    "adaptive_routing": {},
+    "country_pools": {},
+    "default_pools": [],
+    "description": "sample_description",
+    "enabled": true,
+    "fallback_pool": "sample_fallback_pool",
+    "load_balancer_id": "sample_load_balancer_id",
+    "location_strategy": {},
+    "name": "sample_name",
+    "networks": [],
+    "pop_pools": {},
+    "proxied": true,
+    "random_steering": {},
+    "region_pools": {},
+    "rules": [],
+    "session_affinity": "none",
+    "session_affinity_attributes": {},
+    "session_affinity_ttl": 1,
+    "steering_policy": "off",
+    "ttl": 1
+  },
+  "cloudflare_load_balancers_delete": {
+    "account_id": "sample_account_id",
+    "load_balancer_id": "sample_load_balancer_id"
+  },
+  "cloudflare_members_list": {
+    "account_id": "sample_account_id",
+    "direction": "asc",
+    "order": "user.first_name",
+    "page": 1,
+    "per_page": 1,
+    "status": "accepted"
+  },
+  "cloudflare_members_create": {
+    "account_id": "sample_account_id",
+    "email": "sample_email",
+    "policies": [],
+    "roles": [],
+    "status": "accepted"
+  },
+  "cloudflare_members_get": {
+    "account_id": "sample_account_id",
+    "member_id": "sample_member_id"
+  },
+  "cloudflare_members_replace": {
+    "account_id": "sample_account_id",
+    "id": "sample_id",
+    "member_id": "sample_member_id",
+    "policies": [],
+    "roles": [],
+    "status": "accepted",
+    "user": {}
+  },
+  "cloudflare_members_delete": {
+    "account_id": "sample_account_id",
+    "member_id": "sample_member_id"
+  },
+  "cloudflare_registrar_sandbox_domain_check_create": {
+    "account_id": "sample_account_id",
+    "domains": []
+  },
+  "cloudflare_registrar_sandbox_domain_search_list": {
+    "account_id": "sample_account_id",
+    "extensions": [],
+    "limit": 1,
+    "q": "sample_q"
+  },
+  "cloudflare_registrar_sandbox_extensions_list": {
+    "account_id": "sample_account_id",
+    "cursor": "sample_cursor",
+    "direction": "asc",
+    "name": "sample_name",
+    "per_page": 1,
+    "sort_by": "name"
+  },
+  "cloudflare_registrar_sandbox_extensions_get": {
+    "account_id": "sample_account_id",
+    "extension": "sample_extension"
+  },
+  "cloudflare_registrar_sandbox_registrations_list": {
+    "account_id": "sample_account_id",
+    "cursor": "sample_cursor",
+    "direction": "asc",
+    "per_page": 1,
+    "sort_by": "registry_created_at"
+  },
+  "cloudflare_registrar_sandbox_registrations_create": {
+    "account_id": "sample_account_id",
+    "acknowledgements": {},
+    "auto_renew": true,
+    "contact_extensions": {},
+    "contacts": {},
+    "domain_name": "sample_domain_name",
+    "privacy_mode": "off",
+    "years": 1
+  },
+  "cloudflare_registrar_sandbox_registrations_get": {
+    "account_id": "sample_account_id",
+    "domain_name": "sample_domain_name"
+  },
+  "cloudflare_registrar_sandbox_registrations_update": {
+    "account_id": "sample_account_id",
+    "auto_renew": true,
+    "domain_name": "sample_domain_name"
+  },
+  "cloudflare_registrar_sandbox_registrations_domain_name_registration_status_list": {
+    "account_id": "sample_account_id",
+    "domain_name": "sample_domain_name"
+  },
+  "cloudflare_registrar_sandbox_registrations_domain_name_update_status_list": {
+    "account_id": "sample_account_id",
+    "domain_name": "sample_domain_name"
+  },
+  "cloudflare_registrar_domain_check_create": {
+    "account_id": "sample_account_id",
+    "domains": []
+  },
+  "cloudflare_registrar_domain_search_list": {
+    "account_id": "sample_account_id",
+    "extensions": [],
+    "limit": 1,
+    "q": "sample_q"
+  },
+  "cloudflare_registrar_domain_transfer_check_create": {
+    "account_id": "sample_account_id",
+    "domains": []
+  },
+  "cloudflare_registrar_extensions_list": {
+    "account_id": "sample_account_id",
+    "cursor": "sample_cursor",
+    "direction": "asc",
+    "name": "sample_name",
+    "per_page": 1,
+    "sort_by": "name"
+  },
+  "cloudflare_registrar_extensions_get": {
+    "account_id": "sample_account_id",
+    "extension": "sample_extension"
+  },
+  "cloudflare_registrar_registrations_list": {
+    "account_id": "sample_account_id",
+    "cursor": "sample_cursor",
+    "direction": "asc",
+    "per_page": 1,
+    "sort_by": "registry_created_at"
+  },
+  "cloudflare_registrar_registrations_create": {
+    "account_id": "sample_account_id",
+    "acknowledgements": {},
+    "auto_renew": true,
+    "contact_extensions": {},
+    "contacts": {},
+    "domain_name": "sample_domain_name",
+    "privacy_mode": "off",
+    "years": 1
+  },
+  "cloudflare_registrar_registrations_get": {
+    "account_id": "sample_account_id",
+    "domain_name": "sample_domain_name"
+  },
+  "cloudflare_registrar_registrations_update": {
+    "account_id": "sample_account_id",
+    "auto_renew": true,
+    "domain_name": "sample_domain_name"
+  },
+  "cloudflare_registrar_registrations_domain_name_registration_status_list": {
+    "account_id": "sample_account_id",
+    "domain_name": "sample_domain_name"
+  },
+  "cloudflare_registrar_registrations_domain_name_transfer_in_create": {
+    "account_id": "sample_account_id",
+    "auth_code": "sample_auth_code",
+    "auto_renew": true,
+    "contact_extensions": {},
+    "contacts": {},
+    "domain_name": "sample_domain_name",
+    "privacy_mode": "off"
+  },
+  "cloudflare_registrar_registrations_domain_name_transfer_in_status_list": {
+    "account_id": "sample_account_id",
+    "domain_name": "sample_domain_name"
+  },
+  "cloudflare_registrar_registrations_domain_name_update_status_list": {
+    "account_id": "sample_account_id",
+    "domain_name": "sample_domain_name"
+  },
+  "cloudflare_stream_list": {
+    "account_id": "sample_account_id",
+    "after": "sample_after",
+    "asc": true,
+    "before": "sample_before",
+    "creator": "sample_creator",
+    "end": "sample_end",
+    "id": "sample_id",
+    "include_counts": true,
+    "limit": 1,
+    "live_input_id": "sample_live_input_id",
+    "name": "sample_name",
+    "search": "sample_search",
+    "start": "sample_start",
+    "status": "pendingupload",
+    "type": "sample_type",
+    "video_name": "sample_video_name"
+  },
+  "cloudflare_stream_copy": {
+    "account_id": "sample_account_id",
+    "allowed_origins": [],
+    "creator": "sample_creator",
+    "input": "sample_input",
+    "meta": {},
+    "name": "sample_name",
+    "require_signed_urls": true,
+    "scheduled_deletion": "sample_scheduled_deletion",
+    "thumbnail_timestamp_pct": 1,
+    "url": "sample_url",
+    "watermark": {}
+  },
+  "cloudflare_stream_direct_upload": {
+    "account_id": "sample_account_id",
+    "allowed_origins": [],
+    "creator": "sample_creator",
+    "expiry": "sample_expiry",
+    "max_duration_seconds": 1,
+    "meta": {},
+    "require_signed_urls": true,
+    "scheduled_deletion": "sample_scheduled_deletion",
+    "thumbnail_timestamp_pct": 1,
+    "watermark": {}
+  },
+  "cloudflare_stream_keys_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_stream_keys_create": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_stream_keys_delete": {
+    "account_id": "sample_account_id",
+    "identifier": "sample_identifier"
+  },
+  "cloudflare_stream_live_inputs_list": {
+    "account_id": "sample_account_id",
+    "include_counts": true
+  },
+  "cloudflare_stream_live_inputs_create": {
+    "account_id": "sample_account_id",
+    "default_creator": "sample_default_creator",
+    "delete_recording_after_days": 1,
+    "enabled": true,
+    "meta": {},
+    "prefer_low_latency": true,
+    "recording": {}
+  },
+  "cloudflare_stream_live_inputs_get": {
+    "account_id": "sample_account_id",
+    "live_input_identifier": "sample_live_input_identifier"
+  },
+  "cloudflare_stream_live_inputs_replace": {
+    "account_id": "sample_account_id",
+    "default_creator": "sample_default_creator",
+    "delete_recording_after_days": 1,
+    "enabled": true,
+    "live_input_identifier": "sample_live_input_identifier",
+    "meta": {},
+    "prefer_low_latency": true,
+    "recording": {}
+  },
+  "cloudflare_stream_live_inputs_delete": {
+    "account_id": "sample_account_id",
+    "live_input_identifier": "sample_live_input_identifier"
+  },
+  "cloudflare_stream_live_inputs_live_input_identifier_disable": {
+    "account_id": "sample_account_id",
+    "live_input_identifier": "sample_live_input_identifier"
+  },
+  "cloudflare_stream_live_inputs_live_input_identifier_enable": {
+    "account_id": "sample_account_id",
+    "live_input_identifier": "sample_live_input_identifier"
+  },
+  "cloudflare_stream_live_inputs_live_input_identifier_rotate_keys": {
+    "account_id": "sample_account_id",
+    "live_input_identifier": "sample_live_input_identifier"
+  },
+  "cloudflare_stream_storage_usage_list": {
+    "account_id": "sample_account_id",
+    "creator": "sample_creator"
+  },
+  "cloudflare_stream_usage_list": {
+    "account_id": "sample_account_id",
+    "filters": "sample_filters",
+    "limit": 1,
+    "metrics": "sample_metrics",
+    "since": "sample_since",
+    "time_delta": "hour",
+    "until": "sample_until"
+  },
+  "cloudflare_stream_webhook_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_stream_webhook_put": {
+    "account_id": "sample_account_id",
+    "notification_url": "sample_notification_url"
+  },
+  "cloudflare_stream_webhook_delete": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_stream_get": {
+    "account_id": "sample_account_id",
+    "identifier": "sample_identifier"
+  },
+  "cloudflare_stream_update": {
+    "account_id": "sample_account_id",
+    "allowed_origins": [],
+    "creator": "sample_creator",
+    "identifier": "sample_identifier",
+    "max_duration_seconds": 1,
+    "meta": {},
+    "public_details": {},
+    "require_signed_urls": true,
+    "scheduled_deletion": "sample_scheduled_deletion",
+    "thumbnail_timestamp_pct": 1,
+    "uid": "sample_uid",
+    "upload_expiry": "sample_upload_expiry"
+  },
+  "cloudflare_stream_delete": {
+    "account_id": "sample_account_id",
+    "identifier": "sample_identifier"
+  },
+  "cloudflare_stream_identifier_downloads_create": {
+    "account_id": "sample_account_id",
+    "download_type": "default",
+    "identifier": "sample_identifier"
+  },
+  "cloudflare_stream_identifier_downloads_delete": {
+    "account_id": "sample_account_id",
+    "download_type": "default",
+    "identifier": "sample_identifier"
+  },
+  "cloudflare_stream_identifier_token_create": {
+    "access_rules": [],
+    "account_id": "sample_account_id",
+    "downloadable": true,
+    "exp": 1,
+    "flags": {},
+    "id": "sample_id",
+    "identifier": "sample_identifier",
+    "nbf": 1,
+    "pem": "sample_pem"
+  },
+  "cloudflare_radar_agent_readiness_summary_get": {
+    "date": "sample_date",
+    "dimension": "CHECK",
+    "domain_category": [],
+    "format": "JSON",
+    "name": []
+  },
+  "cloudflare_radar_ai_bots_summary_get": {
+    "asn": [],
+    "content_type": [],
+    "continent": [],
+    "crawl_purpose": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "USER_AGENT",
+    "format": "JSON",
+    "industry": [],
+    "limit_per_group": 1,
+    "location": [],
+    "name": [],
+    "response_status": [],
+    "response_status_category": [],
+    "user_agent": [],
+    "vertical": []
+  },
+  "cloudflare_radar_ai_bots_timeseries_list": {
+    "agg_interval": "15m",
+    "asn": [],
+    "content_type": [],
+    "continent": [],
+    "crawl_purpose": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "industry": [],
+    "limit_per_group": 1,
+    "location": [],
+    "name": [],
+    "response_status": [],
+    "response_status_category": [],
+    "user_agent": [],
+    "vertical": []
+  },
+  "cloudflare_radar_ai_bots_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "asn": [],
+    "content_type": [],
+    "continent": [],
+    "crawl_purpose": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "USER_AGENT",
+    "format": "JSON",
+    "industry": [],
+    "limit_per_group": 1,
+    "location": [],
+    "name": [],
+    "normalization": "PERCENTAGE",
+    "response_status": [],
+    "response_status_category": [],
+    "user_agent": [],
+    "vertical": []
+  },
+  "cloudflare_radar_ai_inference_summary_get": {
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "MODEL",
+    "format": "JSON",
+    "limit_per_group": 1,
+    "location": [],
+    "name": []
+  },
+  "cloudflare_radar_ai_inference_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "MODEL",
+    "format": "JSON",
+    "limit_per_group": 1,
+    "location": [],
+    "name": [],
+    "normalization": "PERCENTAGE"
+  },
+  "cloudflare_radar_ai_markdown_for_agents_summary_list": {
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "name": []
+  },
+  "cloudflare_radar_ai_markdown_for_agents_timeseries_list": {
+    "agg_interval": "15m",
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "name": []
+  },
+  "cloudflare_radar_annotations_list": {
+    "asn": 1,
+    "bot": "sample_bot",
+    "ca": "sample_ca",
+    "data_source": "ALL",
+    "date_end": "sample_date_end",
+    "date_range": "sample_date_range",
+    "date_start": "sample_date_start",
+    "event_type": "EVENT",
+    "format": "JSON",
+    "geo_id": "sample_geo_id",
+    "limit": 1,
+    "location": "sample_location",
+    "log": "sample_log",
+    "offset": 1,
+    "origin": "sample_origin",
+    "outage_cause": "BLOCKING",
+    "outage_type": "NATIONWIDE",
+    "query": "sample_query",
+    "tags": [],
+    "tld": "sample_tld"
+  },
+  "cloudflare_radar_annotations_outages_list": {
+    "asn": 1,
+    "bot": "sample_bot",
+    "ca": "sample_ca",
+    "data_source": "ALL",
+    "date_end": "sample_date_end",
+    "date_range": "sample_date_range",
+    "date_start": "sample_date_start",
+    "format": "JSON",
+    "geo_id": "sample_geo_id",
+    "limit": 1,
+    "location": "sample_location",
+    "log": "sample_log",
+    "offset": 1,
+    "origin": "sample_origin",
+    "outage_cause": "BLOCKING",
+    "outage_type": "NATIONWIDE",
+    "query": "sample_query",
+    "tags": [],
+    "tld": "sample_tld"
+  },
+  "cloudflare_radar_annotations_outages_locations_list": {
+    "date_end": "sample_date_end",
+    "date_range": "sample_date_range",
+    "date_start": "sample_date_start",
+    "format": "JSON",
+    "limit": 1
+  },
+  "cloudflare_radar_annotations_get": {
+    "format": "JSON",
+    "id": "sample_id"
+  },
+  "cloudflare_radar_as112_summary_get": {
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "DNSSEC",
+    "format": "JSON",
+    "limit_per_group": 1,
+    "location": [],
+    "name": [],
+    "protocol": [],
+    "query_type": [],
+    "response_code": []
+  },
+  "cloudflare_radar_as112_timeseries_list": {
+    "agg_interval": "15m",
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "location": [],
+    "name": [],
+    "protocol": [],
+    "query_type": [],
+    "response_code": []
+  },
+  "cloudflare_radar_as112_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "DNSSEC",
+    "format": "JSON",
+    "limit_per_group": 1,
+    "location": [],
+    "name": [],
+    "protocol": [],
+    "query_type": [],
+    "response_code": []
+  },
+  "cloudflare_radar_as112_top_locations_list": {
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "limit": 1,
+    "location": [],
+    "name": []
+  },
+  "cloudflare_radar_as112_top_locations_dnssec_get": {
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dnssec": "SUPPORTED",
+    "format": "JSON",
+    "limit": 1,
+    "location": [],
+    "name": []
+  },
+  "cloudflare_radar_as112_top_locations_edns_get": {
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "edns": "SUPPORTED",
+    "format": "JSON",
+    "limit": 1,
+    "location": [],
+    "name": []
+  },
+  "cloudflare_radar_as112_top_locations_ip_version_get": {
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "ip_version": "IPv4",
+    "limit": 1,
+    "location": [],
+    "name": []
+  },
+  "cloudflare_radar_attacks_layer3_summary_get": {
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "PROTOCOL",
+    "direction": "ORIGIN",
+    "format": "JSON",
+    "ip_version": [],
+    "limit_per_group": 1,
+    "location": [],
+    "name": [],
+    "protocol": []
+  },
+  "cloudflare_radar_attacks_layer3_timeseries_list": {
+    "agg_interval": "15m",
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "direction": "ORIGIN",
+    "format": "JSON",
+    "ip_version": [],
+    "location": [],
+    "metric": "BYTES",
+    "name": [],
+    "normalization": "PERCENTAGE_CHANGE",
+    "protocol": []
+  },
+  "cloudflare_radar_attacks_layer3_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "PROTOCOL",
+    "direction": "ORIGIN",
+    "format": "JSON",
+    "ip_version": [],
+    "limit_per_group": 1,
+    "location": [],
+    "name": [],
+    "normalization": "PERCENTAGE",
+    "protocol": []
+  },
+  "cloudflare_radar_attacks_layer3_top_attacks_list": {
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "ip_version": [],
+    "limit": 1,
+    "limit_direction": "ORIGIN",
+    "limit_per_location": 1,
+    "location": [],
+    "magnitude": "MITIGATED_BYTES",
+    "name": [],
+    "normalization": "PERCENTAGE",
+    "protocol": []
+  },
+  "cloudflare_radar_attacks_layer3_top_locations_origin_list": {
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "protocol": []
+  },
+  "cloudflare_radar_attacks_layer3_top_locations_target_list": {
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "protocol": []
+  },
+  "cloudflare_radar_attacks_layer7_summary_get": {
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "HTTP_METHOD",
+    "format": "JSON",
+    "http_method": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit_per_group": 1,
+    "location": [],
+    "mitigation_product": [],
+    "name": []
+  },
+  "cloudflare_radar_attacks_layer7_timeseries_list": {
+    "agg_interval": "15m",
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "http_method": [],
+    "http_version": [],
+    "ip_version": [],
+    "location": [],
+    "mitigation_product": [],
+    "name": [],
+    "normalization": "PERCENTAGE_CHANGE"
+  },
+  "cloudflare_radar_attacks_layer7_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "HTTP_METHOD",
+    "format": "JSON",
+    "http_method": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit_per_group": 1,
+    "location": [],
+    "mitigation_product": [],
+    "name": [],
+    "normalization": "PERCENTAGE"
+  },
+  "cloudflare_radar_attacks_layer7_top_ases_origin_list": {
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "http_method": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "mitigation_product": [],
+    "name": []
+  },
+  "cloudflare_radar_attacks_layer7_top_attacks_list": {
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "limit": 1,
+    "limit_direction": "ORIGIN",
+    "limit_per_location": 1,
+    "location": [],
+    "mitigation_product": [],
+    "name": [],
+    "normalization": "PERCENTAGE"
+  },
+  "cloudflare_radar_attacks_layer7_top_locations_origin_list": {
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "http_method": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "mitigation_product": [],
+    "name": []
+  },
+  "cloudflare_radar_attacks_layer7_top_locations_target_list": {
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "limit": 1,
+    "mitigation_product": [],
+    "name": []
+  },
+  "cloudflare_radar_bgp_hijacks_events_list": {
+    "date_end": "sample_date_end",
+    "date_range": "sample_date_range",
+    "date_start": "sample_date_start",
+    "event_id": 1,
+    "format": "JSON",
+    "hijacker_asn": 1,
+    "involved_asn": 1,
+    "involved_country": "sample_involved_country",
+    "max_confidence": 1,
+    "min_confidence": 1,
+    "page": 1,
+    "per_page": 1,
+    "prefix": "sample_prefix",
+    "sort_by": "ID",
+    "sort_order": "ASC",
+    "victim_asn": 1
+  },
+  "cloudflare_radar_bgp_ips_timeseries_list": {
+    "asn": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "include_delay": true,
+    "ip_version": [],
+    "location": [],
+    "name": []
+  },
+  "cloudflare_radar_bgp_ips_top_ases_list": {
+    "country": "sample_country",
+    "date": "sample_date",
+    "format": "JSON",
+    "limit": 1,
+    "metric": "v4_24s"
+  },
+  "cloudflare_radar_bgp_leaks_events_list": {
+    "date_end": "sample_date_end",
+    "date_range": "sample_date_range",
+    "date_start": "sample_date_start",
+    "event_id": 1,
+    "format": "JSON",
+    "involved_asn": 1,
+    "involved_country": "sample_involved_country",
+    "leak_asn": 1,
+    "page": 1,
+    "per_page": 1,
+    "sort_by": "ID",
+    "sort_order": "ASC"
+  },
+  "cloudflare_radar_bgp_routes_ases_list": {
+    "format": "JSON",
+    "limit": 1,
+    "location": "sample_location",
+    "sort_by": "cone",
+    "sort_order": "ASC"
+  },
+  "cloudflare_radar_bgp_routes_moas_list": {
+    "format": "JSON",
+    "invalid_only": true,
+    "origin": 1,
+    "prefix": "sample_prefix"
+  },
+  "cloudflare_radar_bgp_routes_paths_get": {
+    "asn": 1,
+    "collector": "sample_collector",
+    "format": "JSON",
+    "ip_version": "IPv4"
+  },
+  "cloudflare_radar_bgp_routes_pfx2as_list": {
+    "format": "JSON",
+    "longest_prefix_match": true,
+    "origin": 1,
+    "prefix": "sample_prefix",
+    "rpki_status": "VALID"
+  },
+  "cloudflare_radar_bgp_routes_realtime_list": {
+    "format": "JSON",
+    "prefix": "sample_prefix"
+  },
+  "cloudflare_radar_bgp_routes_stats_list": {
+    "asn": 1,
+    "format": "JSON",
+    "location": "sample_location"
+  },
+  "cloudflare_radar_bgp_routes_upstreams_asn_timeseries_list": {
+    "asn": 1,
+    "date_end": "sample_date_end",
+    "date_start": "sample_date_start",
+    "format": "JSON",
+    "ip_version": "IPv4",
+    "limit": 1
+  },
+  "cloudflare_radar_bgp_rpki_aspa_changes_list": {
+    "asn": 1,
+    "date_end": "sample_date_end",
+    "date_start": "sample_date_start",
+    "format": "JSON",
+    "include_asn_info": true
+  },
+  "cloudflare_radar_bgp_rpki_aspa_snapshot_list": {
+    "customer_asn": 1,
+    "date": "sample_date",
+    "format": "JSON",
+    "include_asn_info": true,
+    "provider_asn": 1
+  },
+  "cloudflare_radar_bgp_rpki_aspa_timeseries_list": {
+    "date_end": "sample_date_end",
+    "date_start": "sample_date_start",
+    "format": "JSON",
+    "location": [],
+    "name": [],
+    "rir": []
+  },
+  "cloudflare_radar_bgp_rpki_roas_timeseries_list": {
+    "asn": [],
+    "date_end": "sample_date_end",
+    "date_start": "sample_date_start",
+    "format": "JSON",
+    "location": [],
+    "metric": "validPfxsRatio",
+    "name": []
+  },
+  "cloudflare_radar_bgp_timeseries_list": {
+    "agg_interval": "15m",
+    "asn": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "name": [],
+    "prefix": [],
+    "update_type": []
+  },
+  "cloudflare_radar_bgp_top_ases_list": {
+    "asn": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "limit": 1,
+    "name": [],
+    "prefix": [],
+    "update_type": []
+  },
+  "cloudflare_radar_bgp_top_ases_prefixes_list": {
+    "country": "sample_country",
+    "format": "JSON",
+    "limit": 1
+  },
+  "cloudflare_radar_bgp_top_prefixes_list": {
+    "asn": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "limit": 1,
+    "name": [],
+    "update_type": []
+  },
+  "cloudflare_radar_bots_list": {
+    "bot_category": "SEARCH_ENGINE_CRAWLER",
+    "bot_operator": "sample_bot_operator",
+    "bot_verification_status": "VERIFIED",
+    "format": "JSON",
+    "kind": "AGENT",
+    "limit": 1,
+    "offset": 1
+  },
+  "cloudflare_radar_bots_crawlers_summary_get": {
+    "bot_operator": [],
+    "client_type": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "CLIENT_TYPE",
+    "format": "JSON",
+    "industry": [],
+    "limit_per_group": 1,
+    "name": [],
+    "response_status": [],
+    "response_status_category": [],
+    "vertical": []
+  },
+  "cloudflare_radar_bots_crawlers_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "bot_operator": [],
+    "client_type": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "CLIENT_TYPE",
+    "format": "JSON",
+    "industry": [],
+    "limit_per_group": 1,
+    "name": [],
+    "normalization": "PERCENTAGE",
+    "response_status": [],
+    "response_status_category": [],
+    "vertical": []
+  },
+  "cloudflare_radar_bots_summary_get": {
+    "asn": [],
+    "bot": [],
+    "bot_category": [],
+    "bot_kind": [],
+    "bot_operator": [],
+    "bot_verification_status": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "BOT",
+    "format": "JSON",
+    "limit_per_group": 1,
+    "location": [],
+    "name": []
+  },
+  "cloudflare_radar_bots_timeseries_list": {
+    "agg_interval": "15m",
+    "asn": [],
+    "bot": [],
+    "bot_category": [],
+    "bot_kind": [],
+    "bot_operator": [],
+    "bot_verification_status": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "location": [],
+    "name": []
+  },
+  "cloudflare_radar_bots_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "asn": [],
+    "bot": [],
+    "bot_category": [],
+    "bot_kind": [],
+    "bot_operator": [],
+    "bot_verification_status": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "BOT",
+    "format": "JSON",
+    "limit_per_group": 1,
+    "location": [],
+    "name": []
+  },
+  "cloudflare_radar_bots_get": {
+    "bot_slug": "sample_bot_slug",
+    "format": "JSON"
+  },
+  "cloudflare_radar_ct_authorities_list": {
+    "format": "JSON",
+    "limit": 1,
+    "offset": 1
+  },
+  "cloudflare_radar_ct_authorities_get": {
+    "ca_slug": "sample_ca_slug",
+    "format": "JSON"
+  },
+  "cloudflare_radar_ct_logs_list": {
+    "format": "JSON",
+    "limit": 1,
+    "offset": 1
+  },
+  "cloudflare_radar_ct_logs_get": {
+    "format": "JSON",
+    "log_slug": "sample_log_slug"
+  },
+  "cloudflare_radar_ct_summary_get": {
+    "ca": [],
+    "ca_owner": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "CA",
+    "duration": [],
+    "entry_type": [],
+    "expiration_status": [],
+    "format": "JSON",
+    "has_ips": [],
+    "has_wildcards": [],
+    "limit_per_group": 1,
+    "log": [],
+    "log_api": [],
+    "log_operator": [],
+    "name": [],
+    "normalization": "RAW_VALUES",
+    "public_key_algorithm": [],
+    "signature_algorithm": [],
+    "tld": [],
+    "unique_entries": [],
+    "validation_level": []
+  },
+  "cloudflare_radar_ct_timeseries_list": {
+    "agg_interval": "15m",
+    "ca": [],
+    "ca_owner": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "duration": [],
+    "entry_type": [],
+    "expiration_status": [],
+    "format": "JSON",
+    "has_ips": [],
+    "has_wildcards": [],
+    "log": [],
+    "log_api": [],
+    "log_operator": [],
+    "name": [],
+    "public_key_algorithm": [],
+    "signature_algorithm": [],
+    "tld": [],
+    "unique_entries": [],
+    "validation_level": []
+  },
+  "cloudflare_radar_ct_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "ca": [],
+    "ca_owner": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "CA",
+    "duration": [],
+    "entry_type": [],
+    "expiration_status": [],
+    "format": "JSON",
+    "has_ips": [],
+    "has_wildcards": [],
+    "limit_per_group": 1,
+    "log": [],
+    "log_api": [],
+    "log_operator": [],
+    "name": [],
+    "normalization": "RAW_VALUES",
+    "public_key_algorithm": [],
+    "signature_algorithm": [],
+    "tld": [],
+    "unique_entries": [],
+    "validation_level": []
+  },
+  "cloudflare_radar_datasets_list": {
+    "dataset_type": "RANKING_BUCKET",
+    "date": "sample_date",
+    "format": "JSON",
+    "limit": 1,
+    "offset": 1
+  },
+  "cloudflare_radar_datasets_download": {
+    "dataset_id": 1,
+    "format": "JSON"
+  },
+  "cloudflare_radar_datasets_get": {
+    "alias": "sample_alias"
+  },
+  "cloudflare_radar_dns_summary_get": {
+    "asn": [],
+    "cache_hit": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "AS",
+    "dnssec": [],
+    "dnssec_aware": [],
+    "dnssec_e2e": [],
+    "format": "JSON",
+    "ip_version": [],
+    "limit_per_group": 1,
+    "location": [],
+    "matching_answer": [],
+    "name": [],
+    "nodata": [],
+    "protocol": [],
+    "query_type": [],
+    "response_code": [],
+    "response_ttl": [],
+    "tld": []
+  },
+  "cloudflare_radar_dns_timeseries_list": {
+    "agg_interval": "15m",
+    "asn": [],
+    "cache_hit": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dnssec": [],
+    "dnssec_aware": [],
+    "dnssec_e2e": [],
+    "format": "JSON",
+    "ip_version": [],
+    "location": [],
+    "matching_answer": [],
+    "name": [],
+    "nodata": [],
+    "protocol": [],
+    "query_type": [],
+    "response_code": [],
+    "response_ttl": [],
+    "tld": []
+  },
+  "cloudflare_radar_dns_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "asn": [],
+    "cache_hit": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "AS",
+    "dnssec": [],
+    "dnssec_aware": [],
+    "dnssec_e2e": [],
+    "format": "JSON",
+    "ip_version": [],
+    "limit_per_group": 1,
+    "location": [],
+    "matching_answer": [],
+    "name": [],
+    "nodata": [],
+    "normalization": "PERCENTAGE",
+    "protocol": [],
+    "query_type": [],
+    "response_code": [],
+    "response_ttl": [],
+    "tld": []
+  },
+  "cloudflare_radar_dns_top_ases_list": {
+    "asn": [],
+    "cache_hit": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dnssec": [],
+    "dnssec_aware": [],
+    "dnssec_e2e": [],
+    "domain": [],
+    "format": "JSON",
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "matching_answer": [],
+    "name": [],
+    "nodata": [],
+    "protocol": [],
+    "query_type": [],
+    "response_code": [],
+    "response_ttl": []
+  },
+  "cloudflare_radar_dns_top_locations_list": {
+    "asn": [],
+    "cache_hit": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dnssec": [],
+    "dnssec_aware": [],
+    "dnssec_e2e": [],
+    "domain": [],
+    "format": "JSON",
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "matching_answer": [],
+    "name": [],
+    "nodata": [],
+    "protocol": [],
+    "query_type": [],
+    "response_code": [],
+    "response_ttl": [],
+    "tld": []
+  },
+  "cloudflare_radar_email_routing_summary_get": {
+    "arc": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "IP_VERSION",
+    "dkim": [],
+    "dmarc": [],
+    "encrypted": [],
+    "format": "JSON",
+    "ip_version": [],
+    "limit_per_group": 1,
+    "name": [],
+    "spf": []
+  },
+  "cloudflare_radar_email_routing_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "arc": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "IP_VERSION",
+    "dkim": [],
+    "dmarc": [],
+    "encrypted": [],
+    "format": "JSON",
+    "ip_version": [],
+    "limit_per_group": 1,
+    "name": [],
+    "spf": []
+  },
+  "cloudflare_radar_email_security_summary_get": {
+    "arc": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "SPAM",
+    "dkim": [],
+    "dmarc": [],
+    "format": "JSON",
+    "limit_per_group": 1,
+    "name": [],
+    "spf": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_email_security_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "arc": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "SPAM",
+    "dkim": [],
+    "dmarc": [],
+    "format": "JSON",
+    "limit_per_group": 1,
+    "name": [],
+    "spf": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_email_security_top_tlds_list": {
+    "arc": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dkim": [],
+    "dmarc": [],
+    "format": "JSON",
+    "limit": 1,
+    "name": [],
+    "spf": [],
+    "tld_category": "CLASSIC",
+    "tls_version": []
+  },
+  "cloudflare_radar_email_security_top_tlds_malicious_get": {
+    "arc": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dkim": [],
+    "dmarc": [],
+    "format": "JSON",
+    "limit": 1,
+    "malicious": "MALICIOUS",
+    "name": [],
+    "spf": [],
+    "tld_category": "CLASSIC",
+    "tls_version": []
+  },
+  "cloudflare_radar_email_security_top_tlds_spam_get": {
+    "arc": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dkim": [],
+    "dmarc": [],
+    "format": "JSON",
+    "limit": 1,
+    "name": [],
+    "spam": "SPAM",
+    "spf": [],
+    "tld_category": "CLASSIC",
+    "tls_version": []
+  },
+  "cloudflare_radar_email_security_top_tlds_spoof_get": {
+    "arc": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dkim": [],
+    "dmarc": [],
+    "format": "JSON",
+    "limit": 1,
+    "name": [],
+    "spf": [],
+    "spoof": "SPOOF",
+    "tld_category": "CLASSIC",
+    "tls_version": []
+  },
+  "cloudflare_radar_entities_asns_list": {
+    "asn": "sample_asn",
+    "format": "JSON",
+    "limit": 1,
+    "location": "sample_location",
+    "offset": 1,
+    "order_by": "ASN"
+  },
+  "cloudflare_radar_entities_asns_botnet_threat_feed_list": {
+    "asn": [],
+    "compare_date_range": "sample_compare_date_range",
+    "date": "sample_date",
+    "format": "JSON",
+    "limit": 1,
+    "location": "sample_location",
+    "metric": "OFFENSE_COUNT",
+    "offset": 1,
+    "sort_order": "ASC"
+  },
+  "cloudflare_radar_entities_asns_ip_list": {
+    "format": "JSON",
+    "ip": "sample_ip"
+  },
+  "cloudflare_radar_entities_asns_get": {
+    "asn": 1,
+    "format": "JSON"
+  },
+  "cloudflare_radar_entities_asns_asn_as_set_list": {
+    "asn": 1,
+    "format": "JSON"
+  },
+  "cloudflare_radar_entities_asns_asn_rel_list": {
+    "asn": 1,
+    "asn2": 1,
+    "format": "JSON"
+  },
+  "cloudflare_radar_entities_ip_list": {
+    "format": "JSON",
+    "ip": "sample_ip"
+  },
+  "cloudflare_radar_entities_locations_list": {
+    "continent": "AF",
+    "format": "JSON",
+    "limit": 1,
+    "location": "sample_location",
+    "offset": 1,
+    "region": "sample_region",
+    "subregion": "sample_subregion"
+  },
+  "cloudflare_radar_entities_locations_get": {
+    "format": "JSON",
+    "location": "sample_location"
+  },
+  "cloudflare_radar_geolocations_list": {
+    "format": "JSON",
+    "geo_id": "sample_geo_id",
+    "limit": 1,
+    "location": "sample_location",
+    "offset": 1
+  },
+  "cloudflare_radar_geolocations_get": {
+    "format": "JSON",
+    "geo_id": "sample_geo_id"
+  },
+  "cloudflare_radar_http_summary_get": {
+    "api_traffic": [],
+    "asn": [],
+    "bot_class": [],
+    "content_type": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "dimension": "ADM1",
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit_per_group": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_timeseries_list": {
+    "agg_interval": "15m",
+    "api_traffic": [],
+    "asn": [],
+    "bot_class": [],
+    "browser_family": [],
+    "content_type": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": [],
+    "location": [],
+    "name": [],
+    "normalization": "PERCENTAGE_CHANGE",
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "api_traffic": [],
+    "asn": [],
+    "bot_class": [],
+    "content_type": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "dimension": "ADM1",
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit_per_group": 1,
+    "location": [],
+    "name": [],
+    "normalization": "PERCENTAGE",
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_ases_list": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_ases_bot_class_get": {
+    "asn": [],
+    "bot_class": "LIKELY_AUTOMATED",
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_ases_browser_family_get": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": "CHROME",
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_ases_device_type_get": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": "DESKTOP",
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_ases_http_protocol_get": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": "HTTP",
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_ases_http_version_get": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": "HTTPv1",
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_ases_ip_version_get": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": "IPv4",
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_ases_os_get": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": "WINDOWS",
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_ases_tls_version_get": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": "TLSv1_0"
+  },
+  "cloudflare_radar_http_top_locations_list": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_locations_bot_class_get": {
+    "asn": [],
+    "bot_class": "LIKELY_AUTOMATED",
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_locations_browser_family_get": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": "CHROME",
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_locations_device_type_get": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": "DESKTOP",
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_locations_http_protocol_get": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": "HTTP",
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_locations_http_version_get": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": "HTTPv1",
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_locations_ip_version_get": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": "IPv4",
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_locations_os_get": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": "WINDOWS",
+    "tls_version": []
+  },
+  "cloudflare_radar_http_top_locations_tls_version_get": {
+    "asn": [],
+    "bot_class": [],
+    "browser_family": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "device_type": [],
+    "format": "JSON",
+    "geo_id": [],
+    "http_protocol": [],
+    "http_version": [],
+    "ip_version": [],
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "os": [],
+    "tls_version": "TLSv1_0"
+  },
+  "cloudflare_radar_leaked_credential_checks_summary_get": {
+    "asn": [],
+    "bot_class": [],
+    "compromised": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "COMPROMISED",
+    "format": "JSON",
+    "limit_per_group": 1,
+    "location": [],
+    "name": []
+  },
+  "cloudflare_radar_leaked_credential_checks_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "asn": [],
+    "bot_class": [],
+    "check_result": [],
+    "compromised": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "COMPROMISED",
+    "format": "JSON",
+    "limit_per_group": 1,
+    "location": [],
+    "name": [],
+    "normalization": "PERCENTAGE_CHANGE"
+  },
+  "cloudflare_radar_netflows_summary_get": {
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "ADM1",
+    "format": "JSON",
+    "geo_id": [],
+    "limit_per_group": 1,
+    "location": [],
+    "name": [],
+    "product": []
+  },
+  "cloudflare_radar_netflows_timeseries_list": {
+    "agg_interval": "15m",
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "geo_id": [],
+    "location": [],
+    "name": [],
+    "normalization": "PERCENTAGE_CHANGE",
+    "product": []
+  },
+  "cloudflare_radar_netflows_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "ADM1",
+    "format": "JSON",
+    "geo_id": [],
+    "limit_per_group": 1,
+    "location": [],
+    "name": [],
+    "normalization": "PERCENTAGE",
+    "product": []
+  },
+  "cloudflare_radar_netflows_top_ases_list": {
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "geo_id": [],
+    "limit": 1,
+    "location": [],
+    "name": []
+  },
+  "cloudflare_radar_netflows_top_locations_list": {
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "geo_id": [],
+    "limit": 1,
+    "location": [],
+    "name": []
+  },
+  "cloudflare_radar_origins_list": {
+    "format": "JSON",
+    "limit": 1,
+    "offset": 1
+  },
+  "cloudflare_radar_origins_summary_get": {
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "ORIGIN",
+    "format": "JSON",
+    "limit_per_group": 1,
+    "metric": "CONNECTION_FAILURES",
+    "name": [],
+    "origin": [],
+    "region": []
+  },
+  "cloudflare_radar_origins_timeseries_list": {
+    "agg_interval": "15m",
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "metric": "CONNECTION_FAILURES",
+    "name": [],
+    "origin": [],
+    "region": []
+  },
+  "cloudflare_radar_origins_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "ORIGIN",
+    "format": "JSON",
+    "limit_per_group": 1,
+    "metric": "CONNECTION_FAILURES",
+    "name": [],
+    "normalization": "PERCENTAGE",
+    "origin": [],
+    "region": []
+  },
+  "cloudflare_radar_origins_get": {
+    "format": "JSON",
+    "slug": "AMAZON"
+  },
+  "cloudflare_radar_post_quantum_origin_summary_get": {
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "KEY_AGREEMENT",
+    "format": "JSON",
+    "name": []
+  },
+  "cloudflare_radar_post_quantum_origin_timeseries_groups_get": {
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "KEY_AGREEMENT",
+    "format": "JSON",
+    "name": []
+  },
+  "cloudflare_radar_post_quantum_tls_support_list": {
+    "host": "sample_host"
+  },
+  "cloudflare_radar_quality_iqi_summary_list": {
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "location": [],
+    "metric": "BANDWIDTH",
+    "name": []
+  },
+  "cloudflare_radar_quality_iqi_timeseries_groups_list": {
+    "agg_interval": "15m",
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "interpolation": true,
+    "location": [],
+    "metric": "BANDWIDTH",
+    "name": []
+  },
+  "cloudflare_radar_quality_speed_histogram_list": {
+    "asn": [],
+    "bucket_size": 1,
+    "continent": [],
+    "date_end": [],
+    "format": "JSON",
+    "location": [],
+    "metric_group": "BANDWIDTH",
+    "name": []
+  },
+  "cloudflare_radar_quality_speed_summary_list": {
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "format": "JSON",
+    "location": [],
+    "name": []
+  },
+  "cloudflare_radar_quality_speed_top_ases_list": {
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "format": "JSON",
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "order_by": "BANDWIDTH_DOWNLOAD",
+    "reverse": true
+  },
+  "cloudflare_radar_quality_speed_top_locations_list": {
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "format": "JSON",
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "order_by": "BANDWIDTH_DOWNLOAD",
+    "reverse": true
+  },
+  "cloudflare_radar_ranking_domain_get": {
+    "date": [],
+    "domain": "sample_domain",
+    "format": "JSON",
+    "include_top_locations": true,
+    "limit": 1,
+    "name": [],
+    "ranking_type": "POPULAR"
+  },
+  "cloudflare_radar_ranking_internet_services_categories_list": {
+    "date": [],
+    "format": "JSON",
+    "limit": 1,
+    "name": []
+  },
+  "cloudflare_radar_ranking_internet_services_timeseries_groups_list": {
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "limit": 1,
+    "name": [],
+    "service_category": []
+  },
+  "cloudflare_radar_ranking_internet_services_top_list": {
+    "date": [],
+    "format": "JSON",
+    "limit": 1,
+    "name": [],
+    "service_category": []
+  },
+  "cloudflare_radar_ranking_timeseries_groups_list": {
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "domain_category": [],
+    "domains": [],
+    "format": "JSON",
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "ranking_type": "POPULAR"
+  },
+  "cloudflare_radar_ranking_top_list": {
+    "date": [],
+    "domain_category": [],
+    "format": "JSON",
+    "limit": 1,
+    "location": [],
+    "name": [],
+    "ranking_type": "POPULAR"
+  },
+  "cloudflare_radar_robots_txt_top_domain_categories_list": {
+    "date": [],
+    "format": "JSON",
+    "limit": 1,
+    "name": [],
+    "user_agent_category": "AI"
+  },
+  "cloudflare_radar_robots_txt_top_user_agents_directive_list": {
+    "date": [],
+    "directive": "ALLOW",
+    "domain_category": [],
+    "format": "JSON",
+    "limit": 1,
+    "name": [],
+    "user_agent_category": "AI"
+  },
+  "cloudflare_radar_search_global_list": {
+    "exclude": [],
+    "format": "JSON",
+    "include": [],
+    "limit": 1,
+    "limit_per_group": 1,
+    "query": "sample_query"
+  },
+  "cloudflare_radar_tcp_resets_timeouts_summary_list": {
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "location": [],
+    "name": []
+  },
+  "cloudflare_radar_tcp_resets_timeouts_timeseries_groups_list": {
+    "agg_interval": "15m",
+    "asn": [],
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "format": "JSON",
+    "location": [],
+    "name": []
+  },
+  "cloudflare_radar_tlds_list": {
+    "format": "JSON",
+    "limit": 1,
+    "offset": 1,
+    "tld": "sample_tld",
+    "tld_manager": "sample_tld_manager",
+    "tld_type": "GENERIC"
+  },
+  "cloudflare_radar_tlds_performance_summary_get": {
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "LATENCY",
+    "format": "JSON",
+    "limit_per_group": 1,
+    "location": [],
+    "name": [],
+    "nameserver": "sample_nameserver",
+    "tld": []
+  },
+  "cloudflare_radar_tlds_performance_timeseries_groups_get": {
+    "agg_interval": "15m",
+    "continent": [],
+    "date_end": [],
+    "date_range": [],
+    "date_start": [],
+    "dimension": "LATENCY",
+    "format": "JSON",
+    "limit_per_group": 1,
+    "location": [],
+    "name": [],
+    "nameserver": "sample_nameserver",
+    "tld": []
+  },
+  "cloudflare_radar_tlds_get": {
+    "format": "JSON",
+    "tld": "sample_tld"
+  },
+  "cloudflare_radar_traffic_anomalies_list": {
+    "asn": 1,
+    "data_source": "ALL",
+    "date_end": "sample_date_end",
+    "date_range": "sample_date_range",
+    "date_start": "sample_date_start",
+    "format": "JSON",
+    "limit": 1,
+    "location": "sample_location",
+    "offset": 1,
+    "origin": "sample_origin",
+    "status": "VERIFIED",
+    "type": []
+  },
+  "cloudflare_radar_traffic_anomalies_locations_list": {
+    "date_end": "sample_date_end",
+    "date_range": "sample_date_range",
+    "date_start": "sample_date_start",
+    "format": "JSON",
+    "limit": 1,
+    "status": "VERIFIED"
+  },
+  "cloudflare_radar_traffic_anomalies_get": {
+    "format": "JSON",
+    "uuid": "sample_uuid"
+  },
+  "cloudflare_email_routing_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_routing_put": {
+    "enabled": true,
+    "skip_wizard": true,
+    "support_subaddress": true,
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_routing_patch": {
+    "enabled": true,
+    "skip_wizard": true,
+    "support_subaddress": true,
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_routing_dns_list": {
+    "subdomain": "sample_subdomain",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_routing_dns_create": {
+    "name": "sample_name",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_routing_dns_patch": {
+    "name": "sample_name",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_routing_dns_delete": {
+    "name": "sample_name",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_routing_rules_list": {
+    "enabled": true,
+    "page": 1,
+    "per_page": 1,
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_routing_rules_create": {
+    "actions": [],
+    "enabled": true,
+    "matchers": [],
+    "name": "sample_name",
+    "owner_worker_tag": "sample_owner_worker_tag",
+    "priority": 1,
+    "source": "api",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_routing_rules_catch_all_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_routing_rules_catch_all_put": {
+    "actions": [],
+    "enabled": true,
+    "matchers": [],
+    "name": "sample_name",
+    "owner_worker_tag": "sample_owner_worker_tag",
+    "source": "api",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_routing_rules_get": {
+    "rule_identifier": "sample_rule_identifier",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_routing_rules_replace": {
+    "actions": [],
+    "enabled": true,
+    "matchers": [],
+    "name": "sample_name",
+    "owner_worker_tag": "sample_owner_worker_tag",
+    "priority": 1,
+    "rule_identifier": "sample_rule_identifier",
+    "source": "api",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_routing_rules_delete": {
+    "rule_identifier": "sample_rule_identifier",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_sending_subdomains_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_sending_subdomains_create": {
+    "name": "sample_name",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_sending_subdomains_preview": {
+    "name": "sample_name",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_sending_subdomains_get": {
+    "subdomain_id": "sample_subdomain_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_sending_subdomains_update": {
+    "drop_suppressed_recipients": true,
+    "preview_enabled": true,
+    "subdomain_id": "sample_subdomain_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_sending_subdomains_delete": {
+    "subdomain_id": "sample_subdomain_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_sending_subdomains_subdomain_id_dns_list": {
+    "subdomain_id": "sample_subdomain_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_sending_subdomains_subdomain_id_dns_create": {
+    "subdomain_id": "sample_subdomain_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_sending_subdomains_subdomain_id_dns_status_list": {
+    "subdomain_id": "sample_subdomain_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_email_sending_subdomains_subdomain_id_reputation_complaints_list": {
+    "end_at": "sample_end_at",
+    "start_at": "sample_start_at",
+    "subdomain_id": "sample_subdomain_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_healthchecks_list": {
+    "page": 1,
+    "per_page": 1,
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_healthchecks_create": {
+    "address": "sample_address",
+    "check_regions": [],
+    "consecutive_fails": 1,
+    "consecutive_successes": 1,
+    "description": "sample_description",
+    "http_config": {},
+    "interval": 1,
+    "name": "sample_name",
+    "retries": 1,
+    "suspended": true,
+    "tcp_config": {},
+    "timeout": 1,
+    "type": "sample_type",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_healthchecks_preview_create": {
+    "address": "sample_address",
+    "check_regions": [],
+    "consecutive_fails": 1,
+    "consecutive_successes": 1,
+    "description": "sample_description",
+    "http_config": {},
+    "interval": 1,
+    "name": "sample_name",
+    "retries": 1,
+    "suspended": true,
+    "tcp_config": {},
+    "timeout": 1,
+    "type": "sample_type",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_healthchecks_preview_get": {
+    "healthcheck_id": "sample_healthcheck_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_healthchecks_preview_delete": {
+    "body": "sample_body",
+    "healthcheck_id": "sample_healthcheck_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_healthchecks_get": {
+    "healthcheck_id": "sample_healthcheck_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_healthchecks_replace": {
+    "address": "sample_address",
+    "check_regions": [],
+    "consecutive_fails": 1,
+    "consecutive_successes": 1,
+    "description": "sample_description",
+    "healthcheck_id": "sample_healthcheck_id",
+    "http_config": {},
+    "interval": 1,
+    "name": "sample_name",
+    "retries": 1,
+    "suspended": true,
+    "tcp_config": {},
+    "timeout": 1,
+    "type": "sample_type",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_healthchecks_update": {
+    "address": "sample_address",
+    "check_regions": [],
+    "consecutive_fails": 1,
+    "consecutive_successes": 1,
+    "description": "sample_description",
+    "healthcheck_id": "sample_healthcheck_id",
+    "http_config": {},
+    "interval": 1,
+    "name": "sample_name",
+    "retries": 1,
+    "suspended": true,
+    "tcp_config": {},
+    "timeout": 1,
+    "type": "sample_type",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_healthchecks_delete": {
+    "body": "sample_body",
+    "healthcheck_id": "sample_healthcheck_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_page_shield_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_page_shield_put": {
+    "enabled": true,
+    "use_cloudflare_reporting_endpoint": true,
+    "use_connection_url_path": true,
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_page_shield_connections_list": {
+    "direction": "asc",
+    "exclude_cdn_cgi": true,
+    "exclude_urls": "sample_exclude_urls",
+    "export": "csv",
+    "hosts": "sample_hosts",
+    "order_by": "first_seen_at",
+    "page": "sample_page",
+    "page_url": "sample_page_url",
+    "per_page": 1,
+    "prioritize_malicious": true,
+    "status": "sample_status",
+    "urls": "sample_urls",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_page_shield_connections_get": {
+    "connection_id": "sample_connection_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_page_shield_cookies_list": {
+    "direction": "asc",
+    "domain": "sample_domain",
+    "export": "csv",
+    "hosts": "sample_hosts",
+    "http_only": true,
+    "name": "sample_name",
+    "order_by": "first_seen_at",
+    "page": "sample_page",
+    "page_url": "sample_page_url",
+    "path": "sample_path",
+    "per_page": 1,
+    "same_site": "lax",
+    "secure": true,
+    "type": "first_party",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_page_shield_cookies_get": {
+    "cookie_id": "sample_cookie_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_page_shield_policies_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_page_shield_policies_create": {
+    "action": "allow",
+    "description": "sample_description",
+    "enabled": true,
+    "expression": "sample_expression",
+    "value": "sample_value",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_page_shield_policies_get": {
+    "policy_id": "sample_policy_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_page_shield_policies_replace": {
+    "action": "allow",
+    "description": "sample_description",
+    "enabled": true,
+    "expression": "sample_expression",
+    "policy_id": "sample_policy_id",
+    "value": "sample_value",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_page_shield_policies_delete": {
+    "policy_id": "sample_policy_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_page_shield_scripts_list": {
+    "direction": "asc",
+    "exclude_cdn_cgi": true,
+    "exclude_duplicates": true,
+    "exclude_urls": "sample_exclude_urls",
+    "export": "csv",
+    "hosts": "sample_hosts",
+    "order_by": "first_seen_at",
+    "page": "sample_page",
+    "page_url": "sample_page_url",
+    "per_page": 1,
+    "prioritize_malicious": true,
+    "status": "sample_status",
+    "urls": "sample_urls",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_page_shield_scripts_get": {
+    "script_id": "sample_script_id",
+    "zone_id": "sample_zone_id"
+  },
   "confluence_get_page_by_id": {
     "draft": true,
     "id": 1,

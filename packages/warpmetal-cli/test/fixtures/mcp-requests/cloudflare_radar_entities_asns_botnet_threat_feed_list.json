@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/radar/entities/asns/botnet_threat_feed?limit=1&offset=1&metric=OFFENSE_COUNT&date=sample_date&compareDateRange=sample_compare_date_range&location=sample_location&sortOrder=ASC&format=JSON&",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

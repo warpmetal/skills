@@ -188,9 +188,12 @@ describe("cloudflare request shapes match the published API", () => {
       for (const [key, value] of url.searchParams) {
         const parameter = operation.queryParams.find((entry) => entry.name === key);
         if (parameter?.enum) {
+          // A query value is always text: an enum of booleans arrives as
+          // `true`/`false`, so the declared values are compared as strings.
+          const allowed = parameter.enum.map(String);
           assert.ok(
-            parameter.enum.includes(value),
-            `${def.toolSlug}: ${key}=${value} is not one of ${parameter.enum.join(", ")}`,
+            allowed.includes(value),
+            `${def.toolSlug}: ${key}=${value} is not one of ${allowed.join(", ")}`,
           );
         }
       }

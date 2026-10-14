@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/radar/quality/speed/top/ases?limit=1&orderBy=BANDWIDTH_DOWNLOAD&reverse=true&format=JSON&&&&&",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

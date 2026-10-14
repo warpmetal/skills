@@ -145,7 +145,9 @@ function inputSchemaOf(entry) {
       description: `The request body, sent verbatim with content type ${op.body.contentType}.`,
       type: "string",
     };
-    required.add("body");
+    // The spec decides whether the payload is mandatory: a DELETE that takes an
+    // optional body must not force a caller to invent one.
+    if (op.body.required === true) required.add("body");
   }
   const groups = [
     { label: "Path parameter", items: op.pathParams },

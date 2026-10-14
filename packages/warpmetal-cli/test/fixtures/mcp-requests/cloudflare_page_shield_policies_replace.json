@@ -1,0 +1,15 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/page_shield/policies/sample_policy_id",
+  "body": {
+    "action": "allow",
+    "description": "sample_description",
+    "enabled": true,
+    "expression": "sample_expression",
+    "value": "sample_value"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

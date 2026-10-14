@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/radar/bots/crawlers/timeseries_groups/CLIENT_TYPE?aggInterval=15m&limitPerGroup=1&normalization=PERCENTAGE&format=JSON&&&&&&&&&&",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

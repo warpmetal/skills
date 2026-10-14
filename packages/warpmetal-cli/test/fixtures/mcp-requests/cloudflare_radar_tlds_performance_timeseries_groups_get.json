@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/radar/tlds/performance/timeseries_groups/LATENCY?aggInterval=15m&nameserver=sample_nameserver&limitPerGroup=1&format=JSON&&&&&&&",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

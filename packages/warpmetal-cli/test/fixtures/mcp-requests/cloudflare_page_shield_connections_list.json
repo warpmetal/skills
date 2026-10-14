@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/page_shield/connections?exclude_urls=sample_exclude_urls&urls=sample_urls&hosts=sample_hosts&page=sample_page&per_page=1&order_by=first_seen_at&direction=asc&prioritize_malicious=true&exclude_cdn_cgi=true&status=sample_status&page_url=sample_page_url&export=csv",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

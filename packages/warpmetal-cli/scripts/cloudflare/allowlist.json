@@ -31,7 +31,7 @@
       "scope": "Observabilidad y analitica: logs, analytics, alertas, WAF"
     },
     "w5": {
-      "status": "planned",
+      "status": "reviewed",
       "scope": "Radar y el resto de colecciones de cuenta con valor operativo"
     }
   },
@@ -7759,6 +7759,2901 @@
       "path": "/zones/{zone_id}/speed_api/schedule/{url}",
       "wave": "w4",
       "reason": "Delete scheduled page test. Part of the Observatory family of wave w4: the speed tests, their schedules and the page-level results for a zone.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v1_keys_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/images/v1/keys",
+      "wave": "w5",
+      "reason": "List Signing Keys. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v1_keys_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/images/v1/keys/{signing_key_name}",
+      "wave": "w5",
+      "reason": "Create a new Signing Key. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v1_keys_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/images/v1/keys/{signing_key_name}",
+      "wave": "w5",
+      "reason": "Delete Signing Key. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v1_stats_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/images/v1/stats",
+      "wave": "w5",
+      "reason": "Images usage statistics. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v1_variants_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/images/v1/variants",
+      "wave": "w5",
+      "reason": "List variants. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v1_variants_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/images/v1/variants",
+      "wave": "w5",
+      "reason": "Create a variant. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v1_variants_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/images/v1/variants/{variant_id}",
+      "wave": "w5",
+      "reason": "Variant details. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v1_variants_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/images/v1/variants/{variant_id}",
+      "wave": "w5",
+      "reason": "Update a variant. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v1_variants_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/images/v1/variants/{variant_id}",
+      "wave": "w5",
+      "reason": "Delete a variant. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_images_v1_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/images/v1/{image_id}",
+      "wave": "w5",
+      "reason": "Image details. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v1_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/images/v1/{image_id}",
+      "wave": "w5",
+      "reason": "Update image. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v1_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/images/v1/{image_id}",
+      "wave": "w5",
+      "reason": "Delete image. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v1_image_id_blob_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/images/v1/{image_id}/blob",
+      "wave": "w5",
+      "reason": "Download image. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/images/v2",
+      "wave": "w5",
+      "reason": "List images V2. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_sourcingkit_migrations_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/images/v2/sourcingkit/migrations",
+      "wave": "w5",
+      "reason": "List sourcing kit migrations. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_sourcingkit_migrations_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/images/v2/sourcingkit/migrations",
+      "wave": "w5",
+      "reason": "Create a sourcing kit migration. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_sourcingkit_migrations_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/images/v2/sourcingkit/migrations/{migration_id}",
+      "wave": "w5",
+      "reason": "Get sourcing kit migration. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_sourcingkit_migrations_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/images/v2/sourcingkit/migrations/{migration_id}",
+      "wave": "w5",
+      "reason": "Delete a sourcing kit migration. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_sourcingkit_migrations_migration_id_lifecycle_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/images/v2/sourcingkit/migrations/{migration_id}/lifecycle",
+      "wave": "w5",
+      "reason": "Get migration progress. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_sourcingkit_migrations_migration_id_lifecycle_abort_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/images/v2/sourcingkit/migrations/{migration_id}/lifecycle/abort",
+      "wave": "w5",
+      "reason": "Abort a migration. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_sourcingkit_migrations_migration_id_lifecycle_start_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/images/v2/sourcingkit/migrations/{migration_id}/lifecycle/start",
+      "wave": "w5",
+      "reason": "Start a migration. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_sourcingkit_migrations_migration_id_logs_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/images/v2/sourcingkit/migrations/{migration_id}/logs",
+      "wave": "w5",
+      "reason": "List migration logs. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_sourcingkit_sources_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/images/v2/sourcingkit/sources",
+      "wave": "w5",
+      "reason": "List sourcing kit sources. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_sourcingkit_sources_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/images/v2/sourcingkit/sources",
+      "wave": "w5",
+      "reason": "Create a sourcing kit source. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_sourcingkit_sources_connectivity_precheck_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/images/v2/sourcingkit/sources/connectivity-precheck",
+      "wave": "w5",
+      "reason": "Precheck source connectivity. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_sourcingkit_sources_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/images/v2/sourcingkit/sources/{source_id}",
+      "wave": "w5",
+      "reason": "Get sourcing kit source. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_sourcingkit_sources_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/images/v2/sourcingkit/sources/{source_id}",
+      "wave": "w5",
+      "reason": "Update a sourcing kit source. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_sourcingkit_sources_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/images/v2/sourcingkit/sources/{source_id}",
+      "wave": "w5",
+      "reason": "Delete a sourcing kit source. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_images_v2_sourcingkit_sources_source_id_connectivity_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/images/v2/sourcingkit/sources/{source_id}/connectivity",
+      "wave": "w5",
+      "reason": "Get source connectivity status. Part of the Images family of wave w5: the stored images, their variants and the signing keys that gate delivery.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers",
+      "wave": "w5",
+      "reason": "List Account Load Balancers. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/load_balancers",
+      "wave": "w5",
+      "reason": "Create Account Load Balancer. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_monitor_groups_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/monitor_groups",
+      "wave": "w5",
+      "reason": "List Monitor Groups. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_monitor_groups_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/load_balancers/monitor_groups",
+      "wave": "w5",
+      "reason": "Create Monitor Group. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_monitor_groups_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/monitor_groups/{monitor_group_id}",
+      "wave": "w5",
+      "reason": "Monitor Group Details. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_monitor_groups_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/load_balancers/monitor_groups/{monitor_group_id}",
+      "wave": "w5",
+      "reason": "Update Monitor Group. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_monitor_groups_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/load_balancers/monitor_groups/{monitor_group_id}",
+      "wave": "w5",
+      "reason": "Patch Monitor Group. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_monitor_groups_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/load_balancers/monitor_groups/{monitor_group_id}",
+      "wave": "w5",
+      "reason": "Delete Monitor Group. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_monitor_groups_monitor_group_id_references_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/monitor_groups/{monitor_group_id}/references",
+      "wave": "w5",
+      "reason": "List Monitor Group References. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_monitors_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/monitors",
+      "wave": "w5",
+      "reason": "List Monitors. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_monitors_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/load_balancers/monitors",
+      "wave": "w5",
+      "reason": "Create Monitor. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_monitors_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/monitors/{monitor_id}",
+      "wave": "w5",
+      "reason": "Monitor Details. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_monitors_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/load_balancers/monitors/{monitor_id}",
+      "wave": "w5",
+      "reason": "Update Monitor. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_monitors_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/load_balancers/monitors/{monitor_id}",
+      "wave": "w5",
+      "reason": "Patch Monitor. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_monitors_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/load_balancers/monitors/{monitor_id}",
+      "wave": "w5",
+      "reason": "Delete Monitor. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_monitors_monitor_id_preview",
+      "method": "POST",
+      "path": "/accounts/{account_id}/load_balancers/monitors/{monitor_id}/preview",
+      "wave": "w5",
+      "reason": "Preview Monitor. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_monitors_monitor_id_references_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/monitors/{monitor_id}/references",
+      "wave": "w5",
+      "reason": "List Monitor References. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_pools_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/pools",
+      "wave": "w5",
+      "reason": "List Pools. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_pools_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/load_balancers/pools",
+      "wave": "w5",
+      "reason": "Create Pool. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_pools_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/load_balancers/pools",
+      "wave": "w5",
+      "reason": "Patch Pools. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_pools_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/pools/{pool_id}",
+      "wave": "w5",
+      "reason": "Pool Details. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_pools_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/load_balancers/pools/{pool_id}",
+      "wave": "w5",
+      "reason": "Update Pool. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_pools_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/load_balancers/pools/{pool_id}",
+      "wave": "w5",
+      "reason": "Patch Pool. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_pools_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/load_balancers/pools/{pool_id}",
+      "wave": "w5",
+      "reason": "Delete Pool. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_pools_pool_id_health_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/pools/{pool_id}/health",
+      "wave": "w5",
+      "reason": "Pool Health Details. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_pools_pool_id_preview",
+      "method": "POST",
+      "path": "/accounts/{account_id}/load_balancers/pools/{pool_id}/preview",
+      "wave": "w5",
+      "reason": "Preview Pool. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_pools_pool_id_references_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/pools/{pool_id}/references",
+      "wave": "w5",
+      "reason": "List Pool References. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_preview",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/preview/{preview_id}",
+      "wave": "w5",
+      "reason": "Preview Result. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_regions_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/regions",
+      "wave": "w5",
+      "reason": "List Regions. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_regions_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/regions/{region_id}",
+      "wave": "w5",
+      "reason": "Get Region. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_search",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/search",
+      "wave": "w5",
+      "reason": "Search Resources. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_usage_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/usage",
+      "wave": "w5",
+      "reason": "List Load Balancer Usage. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/load_balancers/{load_balancer_id}",
+      "wave": "w5",
+      "reason": "Account Load Balancer Details. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/load_balancers/{load_balancer_id}",
+      "wave": "w5",
+      "reason": "Update Account Load Balancer. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/load_balancers/{load_balancer_id}",
+      "wave": "w5",
+      "reason": "Patch Account Load Balancer. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_load_balancers_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/load_balancers/{load_balancer_id}",
+      "wave": "w5",
+      "reason": "Delete Account Load Balancer. Part of the account load-balancing family of wave w5: the load balancers, their pools and monitors, and the regions and settings behind them. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_members_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/members",
+      "wave": "w5",
+      "reason": "List Members. Part of the account membership surface of wave w5: the members and the roles they hold. The spec hides this operation from its own published surface, and it is kept deliberately: the family would be unusable without it.",
+      "destructive": false,
+      "auth": "api-token",
+      "keepFiltered": true,
+      "filterNote": "The spec hides account membership, and the wave keeps it deliberately: an operator who reaches these tools through a token needs to see who else is in the account, and no other tool answers that."
+    },
+    {
+      "toolSlug": "cloudflare_members_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/members",
+      "wave": "w5",
+      "reason": "Add Member. Part of the account membership surface of wave w5: the members and the roles they hold. The spec hides this operation from its own published surface, and it is kept deliberately: the family would be unusable without it.",
+      "destructive": false,
+      "auth": "api-token",
+      "keepFiltered": true,
+      "filterNote": "The spec hides account membership, and the wave keeps it deliberately: an operator who reaches these tools through a token needs to see who else is in the account, and no other tool answers that."
+    },
+    {
+      "toolSlug": "cloudflare_members_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/members/{member_id}",
+      "wave": "w5",
+      "reason": "Member Details. Part of the account membership surface of wave w5: the members and the roles they hold. The spec hides this operation from its own published surface, and it is kept deliberately: the family would be unusable without it.",
+      "destructive": false,
+      "auth": "api-token",
+      "keepFiltered": true,
+      "filterNote": "The spec hides account membership, and the wave keeps it deliberately: an operator who reaches these tools through a token needs to see who else is in the account, and no other tool answers that."
+    },
+    {
+      "toolSlug": "cloudflare_members_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/members/{member_id}",
+      "wave": "w5",
+      "reason": "Update Member. Part of the account membership surface of wave w5: the members and the roles they hold. The spec hides this operation from its own published surface, and it is kept deliberately: the family would be unusable without it.",
+      "destructive": false,
+      "auth": "api-token",
+      "keepFiltered": true,
+      "filterNote": "The spec hides account membership, and the wave keeps it deliberately: an operator who reaches these tools through a token needs to see who else is in the account, and no other tool answers that."
+    },
+    {
+      "toolSlug": "cloudflare_members_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/members/{member_id}",
+      "wave": "w5",
+      "reason": "Remove Member. Part of the account membership surface of wave w5: the members and the roles they hold. The spec hides this operation from its own published surface, and it is kept deliberately: the family would be unusable without it.",
+      "destructive": false,
+      "auth": "api-token",
+      "keepFiltered": true,
+      "filterNote": "The spec hides account membership, and the wave keeps it deliberately: an operator who reaches these tools through a token needs to see who else is in the account, and no other tool answers that.",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_registrar_sandbox_domain_check_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/registrar-sandbox/domain-check",
+      "wave": "w5",
+      "reason": "Check domain availability. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_sandbox_domain_search_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/registrar-sandbox/domain-search",
+      "wave": "w5",
+      "reason": "Search for available domains. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_sandbox_extensions_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/registrar-sandbox/extensions",
+      "wave": "w5",
+      "reason": "List extensions. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_sandbox_extensions_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/registrar-sandbox/extensions/{extension}",
+      "wave": "w5",
+      "reason": "Get extension. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_sandbox_registrations_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/registrar-sandbox/registrations",
+      "wave": "w5",
+      "reason": "List Registrations. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_sandbox_registrations_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/registrar-sandbox/registrations",
+      "wave": "w5",
+      "reason": "Create Registration. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_sandbox_registrations_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/registrar-sandbox/registrations/{domain_name}",
+      "wave": "w5",
+      "reason": "Get Registration. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_sandbox_registrations_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/registrar-sandbox/registrations/{domain_name}",
+      "wave": "w5",
+      "reason": "Update Registration. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_sandbox_registrations_domain_name_registration_status_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/registrar-sandbox/registrations/{domain_name}/registration-status",
+      "wave": "w5",
+      "reason": "Get Registration Status. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_sandbox_registrations_domain_name_update_status_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/registrar-sandbox/registrations/{domain_name}/update-status",
+      "wave": "w5",
+      "reason": "Get Update Status. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_domain_check_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/registrar/domain-check",
+      "wave": "w5",
+      "reason": "Check domain availability. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_domain_search_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/registrar/domain-search",
+      "wave": "w5",
+      "reason": "Search for available domains. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_domain_transfer_check_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/registrar/domain-transfer-check",
+      "wave": "w5",
+      "reason": "Check domain transfer eligibility. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_extensions_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/registrar/extensions",
+      "wave": "w5",
+      "reason": "List extensions. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_extensions_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/registrar/extensions/{extension}",
+      "wave": "w5",
+      "reason": "Get extension. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_registrations_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/registrar/registrations",
+      "wave": "w5",
+      "reason": "List Registrations. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_registrations_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/registrar/registrations",
+      "wave": "w5",
+      "reason": "Create Registration. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_registrations_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/registrar/registrations/{domain_name}",
+      "wave": "w5",
+      "reason": "Get Registration. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_registrations_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/registrar/registrations/{domain_name}",
+      "wave": "w5",
+      "reason": "Update Registration. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_registrations_domain_name_registration_status_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/registrar/registrations/{domain_name}/registration-status",
+      "wave": "w5",
+      "reason": "Get Registration Status. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_registrations_domain_name_transfer_in_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/registrar/registrations/{domain_name}/transfer-in",
+      "wave": "w5",
+      "reason": "Initiate Transfer. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_registrations_domain_name_transfer_in_status_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/registrar/registrations/{domain_name}/transfer-in-status",
+      "wave": "w5",
+      "reason": "Get Transfer Status. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_registrar_registrations_domain_name_update_status_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/registrar/registrations/{domain_name}/update-status",
+      "wave": "w5",
+      "reason": "Get Update Status. Part of the Registrar family of wave w5: the domains the account has registered and the settings on them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/stream",
+      "wave": "w5",
+      "reason": "List videos. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_copy",
+      "method": "POST",
+      "path": "/accounts/{account_id}/stream/copy",
+      "wave": "w5",
+      "reason": "Upload videos from a URL. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_direct_upload",
+      "method": "POST",
+      "path": "/accounts/{account_id}/stream/direct_upload",
+      "wave": "w5",
+      "reason": "Upload videos via direct upload URLs. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_keys_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/stream/keys",
+      "wave": "w5",
+      "reason": "List signing keys. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_keys_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/stream/keys",
+      "wave": "w5",
+      "reason": "Create signing keys. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_keys_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/stream/keys/{identifier}",
+      "wave": "w5",
+      "reason": "Delete signing keys. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_live_inputs_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/stream/live_inputs",
+      "wave": "w5",
+      "reason": "List live inputs. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_live_inputs_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/stream/live_inputs",
+      "wave": "w5",
+      "reason": "Create a live input. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_live_inputs_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/stream/live_inputs/{live_input_identifier}",
+      "wave": "w5",
+      "reason": "Retrieve a live input. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_live_inputs_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/stream/live_inputs/{live_input_identifier}",
+      "wave": "w5",
+      "reason": "Update a live input. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_live_inputs_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/stream/live_inputs/{live_input_identifier}",
+      "wave": "w5",
+      "reason": "Delete a live input. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_live_inputs_live_input_identifier_disable",
+      "method": "POST",
+      "path": "/accounts/{account_id}/stream/live_inputs/{live_input_identifier}/disable",
+      "wave": "w5",
+      "reason": "Disable a live input. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_stream_live_inputs_live_input_identifier_enable",
+      "method": "POST",
+      "path": "/accounts/{account_id}/stream/live_inputs/{live_input_identifier}/enable",
+      "wave": "w5",
+      "reason": "Enable a live input. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_live_inputs_live_input_identifier_rotate_keys",
+      "method": "POST",
+      "path": "/accounts/{account_id}/stream/live_inputs/{live_input_identifier}/rotate_keys",
+      "wave": "w5",
+      "reason": "Rotate keys for a live input. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_stream_storage_usage_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/stream/storage-usage",
+      "wave": "w5",
+      "reason": "Storage use. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_usage_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/stream/usage",
+      "wave": "w5",
+      "reason": "Get account Stream usage. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_webhook_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/stream/webhook",
+      "wave": "w5",
+      "reason": "View webhook. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_webhook_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/stream/webhook",
+      "wave": "w5",
+      "reason": "Create VOD webhooks. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves. One body field the operation declares is not exposed because the path already carries it.",
+      "destructive": false,
+      "auth": "api-token",
+      "dropBodyFields": [
+        "notification_url"
+      ],
+      "dropBodyFieldsNote": "The operation declares the webhook URL both as a query parameter and as a body field; the query form is kept, because one argument name can only carry one of them and the query declaration is the one the path fits.",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_stream_webhook_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/stream/webhook",
+      "wave": "w5",
+      "reason": "Delete webhooks. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_stream_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/stream/{identifier}",
+      "wave": "w5",
+      "reason": "Retrieve video details. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_update",
+      "method": "POST",
+      "path": "/accounts/{account_id}/stream/{identifier}",
+      "wave": "w5",
+      "reason": "Edit video details. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves. The path derives the same name as the upload handshake, which this wave leaves out, so the tool is named after what it does: it edits the details of one video.",
+      "destructive": false,
+      "auth": "api-token",
+      "override": true
+    },
+    {
+      "toolSlug": "cloudflare_stream_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/stream/{identifier}",
+      "wave": "w5",
+      "reason": "Delete video. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_identifier_downloads_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/stream/{identifier}/downloads/{download_type}",
+      "wave": "w5",
+      "reason": "Create download. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_identifier_downloads_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/stream/{identifier}/downloads/{download_type}",
+      "wave": "w5",
+      "reason": "Delete download. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_stream_identifier_token_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/stream/{identifier}/token",
+      "wave": "w5",
+      "reason": "Create signed URL tokens for videos. Part of the Stream family of wave w5: the videos, live inputs, downloads, captions and webhooks the account serves.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_radar_agent_readiness_summary_get",
+      "method": "GET",
+      "path": "/radar/agent_readiness/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get agent readiness summary. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ai_bots_summary_get",
+      "method": "GET",
+      "path": "/radar/ai/bots/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get AI bots HTTP requests distribution by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ai_bots_timeseries_list",
+      "method": "GET",
+      "path": "/radar/ai/bots/timeseries",
+      "wave": "w5",
+      "reason": "Get AI bots HTTP requests time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ai_bots_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/ai/bots/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get time series distribution of AI bots HTTP requests by dimension.. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ai_inference_summary_get",
+      "method": "GET",
+      "path": "/radar/ai/inference/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get Workers AI inference distribution by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ai_inference_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/ai/inference/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get time series distribution of Workers AI inference by dimension.. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ai_markdown_for_agents_summary_list",
+      "method": "GET",
+      "path": "/radar/ai/markdown_for_agents/summary",
+      "wave": "w5",
+      "reason": "Get AI markdown for agents reduction ratio summary. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ai_markdown_for_agents_timeseries_list",
+      "method": "GET",
+      "path": "/radar/ai/markdown_for_agents/timeseries",
+      "wave": "w5",
+      "reason": "Get AI markdown for agents reduction ratio time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_annotations_list",
+      "method": "GET",
+      "path": "/radar/annotations",
+      "wave": "w5",
+      "reason": "Get latest annotations. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_annotations_outages_list",
+      "method": "GET",
+      "path": "/radar/annotations/outages",
+      "wave": "w5",
+      "reason": "Get latest Internet outages and anomalies. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_annotations_outages_locations_list",
+      "method": "GET",
+      "path": "/radar/annotations/outages/locations",
+      "wave": "w5",
+      "reason": "Get the number of outages by location. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_annotations_get",
+      "method": "GET",
+      "path": "/radar/annotations/{id}",
+      "wave": "w5",
+      "reason": "Get annotation by ID. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_as112_summary_get",
+      "method": "GET",
+      "path": "/radar/as112/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get AS112 summary by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_as112_timeseries_list",
+      "method": "GET",
+      "path": "/radar/as112/timeseries",
+      "wave": "w5",
+      "reason": "Get AS112 DNS queries time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_as112_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/as112/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get AS112 time series grouped by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_as112_top_locations_list",
+      "method": "GET",
+      "path": "/radar/as112/top/locations",
+      "wave": "w5",
+      "reason": "Get top locations by AS112 DNS queries. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_as112_top_locations_dnssec_get",
+      "method": "GET",
+      "path": "/radar/as112/top/locations/dnssec/{dnssec}",
+      "wave": "w5",
+      "reason": "Get top locations by AS112 DNS queries with DNSSEC support. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_as112_top_locations_edns_get",
+      "method": "GET",
+      "path": "/radar/as112/top/locations/edns/{edns}",
+      "wave": "w5",
+      "reason": "Get top locations by AS112 DNS queries with EDNS support. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_as112_top_locations_ip_version_get",
+      "method": "GET",
+      "path": "/radar/as112/top/locations/ip_version/{ip_version}",
+      "wave": "w5",
+      "reason": "Get top locations by AS112 DNS queries for an IP version. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_attacks_layer3_summary_get",
+      "method": "GET",
+      "path": "/radar/attacks/layer3/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get layer 3 attacks summary by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_attacks_layer3_timeseries_list",
+      "method": "GET",
+      "path": "/radar/attacks/layer3/timeseries",
+      "wave": "w5",
+      "reason": "Get layer 3 attacks by bytes time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_attacks_layer3_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/attacks/layer3/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get layer 3 attacks time series grouped by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_attacks_layer3_top_attacks_list",
+      "method": "GET",
+      "path": "/radar/attacks/layer3/top/attacks",
+      "wave": "w5",
+      "reason": "Get top layer 3 attack pairs (origin and target locations). Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_attacks_layer3_top_locations_origin_list",
+      "method": "GET",
+      "path": "/radar/attacks/layer3/top/locations/origin",
+      "wave": "w5",
+      "reason": "Get top origin locations of layer 3 attacks. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_attacks_layer3_top_locations_target_list",
+      "method": "GET",
+      "path": "/radar/attacks/layer3/top/locations/target",
+      "wave": "w5",
+      "reason": "Get top target locations of layer 3 attacks. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_attacks_layer7_summary_get",
+      "method": "GET",
+      "path": "/radar/attacks/layer7/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get layer 7 attacks summary by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_attacks_layer7_timeseries_list",
+      "method": "GET",
+      "path": "/radar/attacks/layer7/timeseries",
+      "wave": "w5",
+      "reason": "Get layer 7 attacks time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_attacks_layer7_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/attacks/layer7/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get layer 7 attacks time series grouped by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_attacks_layer7_top_ases_origin_list",
+      "method": "GET",
+      "path": "/radar/attacks/layer7/top/ases/origin",
+      "wave": "w5",
+      "reason": "Get top origin ASes of layer 7 attacks. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_attacks_layer7_top_attacks_list",
+      "method": "GET",
+      "path": "/radar/attacks/layer7/top/attacks",
+      "wave": "w5",
+      "reason": "Get top layer 7 attack pairs (origin and target locations). Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_attacks_layer7_top_locations_origin_list",
+      "method": "GET",
+      "path": "/radar/attacks/layer7/top/locations/origin",
+      "wave": "w5",
+      "reason": "Get top origin locations of layer 7 attacks. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_attacks_layer7_top_locations_target_list",
+      "method": "GET",
+      "path": "/radar/attacks/layer7/top/locations/target",
+      "wave": "w5",
+      "reason": "Get top target locations of layer 7 attacks. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_hijacks_events_list",
+      "method": "GET",
+      "path": "/radar/bgp/hijacks/events",
+      "wave": "w5",
+      "reason": "Get BGP hijack events. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_ips_timeseries_list",
+      "method": "GET",
+      "path": "/radar/bgp/ips/timeseries",
+      "wave": "w5",
+      "reason": "Get announced IP address space time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_ips_top_ases_list",
+      "method": "GET",
+      "path": "/radar/bgp/ips/top/ases",
+      "wave": "w5",
+      "reason": "Get top ASes by announced IP space. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_leaks_events_list",
+      "method": "GET",
+      "path": "/radar/bgp/leaks/events",
+      "wave": "w5",
+      "reason": "Get BGP route leak events. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_routes_ases_list",
+      "method": "GET",
+      "path": "/radar/bgp/routes/ases",
+      "wave": "w5",
+      "reason": "List ASes from global routing tables. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_routes_moas_list",
+      "method": "GET",
+      "path": "/radar/bgp/routes/moas",
+      "wave": "w5",
+      "reason": "Get Multi-Origin AS (MOAS) prefixes. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_routes_paths_get",
+      "method": "GET",
+      "path": "/radar/bgp/routes/paths/{asn}",
+      "wave": "w5",
+      "reason": "Get tier-1 path segments for an AS. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_routes_pfx2as_list",
+      "method": "GET",
+      "path": "/radar/bgp/routes/pfx2as",
+      "wave": "w5",
+      "reason": "Get prefix-to-ASN mapping. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_routes_realtime_list",
+      "method": "GET",
+      "path": "/radar/bgp/routes/realtime",
+      "wave": "w5",
+      "reason": "Get real-time BGP routes for a prefix. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_routes_stats_list",
+      "method": "GET",
+      "path": "/radar/bgp/routes/stats",
+      "wave": "w5",
+      "reason": "Get BGP routing table stats . Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_routes_upstreams_asn_timeseries_list",
+      "method": "GET",
+      "path": "/radar/bgp/routes/upstreams/{asn}/timeseries",
+      "wave": "w5",
+      "reason": "Get upstream composition time series for an AS. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_rpki_aspa_changes_list",
+      "method": "GET",
+      "path": "/radar/bgp/rpki/aspa/changes",
+      "wave": "w5",
+      "reason": "Get ASPA changes over time. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_rpki_aspa_snapshot_list",
+      "method": "GET",
+      "path": "/radar/bgp/rpki/aspa/snapshot",
+      "wave": "w5",
+      "reason": "Get ASPA objects snapshot. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_rpki_aspa_timeseries_list",
+      "method": "GET",
+      "path": "/radar/bgp/rpki/aspa/timeseries",
+      "wave": "w5",
+      "reason": "Get ASPA count time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_rpki_roas_timeseries_list",
+      "method": "GET",
+      "path": "/radar/bgp/rpki/roas/timeseries",
+      "wave": "w5",
+      "reason": "Get RPKI ROA deployment time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_timeseries_list",
+      "method": "GET",
+      "path": "/radar/bgp/timeseries",
+      "wave": "w5",
+      "reason": "Get BGP time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_top_ases_list",
+      "method": "GET",
+      "path": "/radar/bgp/top/ases",
+      "wave": "w5",
+      "reason": "Get top ASes by BGP updates. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_top_ases_prefixes_list",
+      "method": "GET",
+      "path": "/radar/bgp/top/ases/prefixes",
+      "wave": "w5",
+      "reason": "Get top ASes by prefix count. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bgp_top_prefixes_list",
+      "method": "GET",
+      "path": "/radar/bgp/top/prefixes",
+      "wave": "w5",
+      "reason": "Get top prefixes by BGP updates. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bots_list",
+      "method": "GET",
+      "path": "/radar/bots",
+      "wave": "w5",
+      "reason": "List bots. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bots_crawlers_summary_get",
+      "method": "GET",
+      "path": "/radar/bots/crawlers/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get crawler HTTP request distribution by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bots_crawlers_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/bots/crawlers/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get time series of crawler HTTP request distribution by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bots_summary_get",
+      "method": "GET",
+      "path": "/radar/bots/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get bots HTTP requests distribution by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bots_timeseries_list",
+      "method": "GET",
+      "path": "/radar/bots/timeseries",
+      "wave": "w5",
+      "reason": "Get bots HTTP requests time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bots_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/bots/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get time series distribution of bots HTTP requests by dimension.. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_bots_get",
+      "method": "GET",
+      "path": "/radar/bots/{bot_slug}",
+      "wave": "w5",
+      "reason": "Get bot details. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ct_authorities_list",
+      "method": "GET",
+      "path": "/radar/ct/authorities",
+      "wave": "w5",
+      "reason": "List certificate authorities. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ct_authorities_get",
+      "method": "GET",
+      "path": "/radar/ct/authorities/{ca_slug}",
+      "wave": "w5",
+      "reason": "Get certificate authority details. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ct_logs_list",
+      "method": "GET",
+      "path": "/radar/ct/logs",
+      "wave": "w5",
+      "reason": "List certificate logs. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ct_logs_get",
+      "method": "GET",
+      "path": "/radar/ct/logs/{log_slug}",
+      "wave": "w5",
+      "reason": "Get certificate log details. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ct_summary_get",
+      "method": "GET",
+      "path": "/radar/ct/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get certificate distribution by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ct_timeseries_list",
+      "method": "GET",
+      "path": "/radar/ct/timeseries",
+      "wave": "w5",
+      "reason": "Get certificates time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ct_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/ct/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get time series of certificate distribution by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_datasets_list",
+      "method": "GET",
+      "path": "/radar/datasets",
+      "wave": "w5",
+      "reason": "List datasets. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_datasets_download",
+      "method": "POST",
+      "path": "/radar/datasets/download",
+      "wave": "w5",
+      "reason": "Get dataset download URL. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_datasets_get",
+      "method": "GET",
+      "path": "/radar/datasets/{alias}",
+      "wave": "w5",
+      "reason": "Get dataset CSV stream. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_dns_summary_get",
+      "method": "GET",
+      "path": "/radar/dns/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get DNS summary by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_dns_timeseries_list",
+      "method": "GET",
+      "path": "/radar/dns/timeseries",
+      "wave": "w5",
+      "reason": "Get DNS queries time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_dns_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/dns/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get DNS time series grouped by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_dns_top_ases_list",
+      "method": "GET",
+      "path": "/radar/dns/top/ases",
+      "wave": "w5",
+      "reason": "Get top ASes by DNS queries. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_dns_top_locations_list",
+      "method": "GET",
+      "path": "/radar/dns/top/locations",
+      "wave": "w5",
+      "reason": "Get top locations by DNS queries. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_email_routing_summary_get",
+      "method": "GET",
+      "path": "/radar/email/routing/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get email routing summary by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_email_routing_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/email/routing/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get email routing time series grouped by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_email_security_summary_get",
+      "method": "GET",
+      "path": "/radar/email/security/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get email security summary by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_email_security_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/email/security/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get email security time series grouped by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_email_security_top_tlds_list",
+      "method": "GET",
+      "path": "/radar/email/security/top/tlds",
+      "wave": "w5",
+      "reason": "Get top TLDs by email message volume. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_email_security_top_tlds_malicious_get",
+      "method": "GET",
+      "path": "/radar/email/security/top/tlds/malicious/{malicious}",
+      "wave": "w5",
+      "reason": "Get top TLDs by email malicious classification. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_email_security_top_tlds_spam_get",
+      "method": "GET",
+      "path": "/radar/email/security/top/tlds/spam/{spam}",
+      "wave": "w5",
+      "reason": "Get top TLDs by email spam classification. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_email_security_top_tlds_spoof_get",
+      "method": "GET",
+      "path": "/radar/email/security/top/tlds/spoof/{spoof}",
+      "wave": "w5",
+      "reason": "Get top TLDs by email spoof classification. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_entities_asns_list",
+      "method": "GET",
+      "path": "/radar/entities/asns",
+      "wave": "w5",
+      "reason": "List autonomous systems. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_entities_asns_botnet_threat_feed_list",
+      "method": "GET",
+      "path": "/radar/entities/asns/botnet_threat_feed",
+      "wave": "w5",
+      "reason": "Get AS rankings by botnet threat feed activity. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_entities_asns_ip_list",
+      "method": "GET",
+      "path": "/radar/entities/asns/ip",
+      "wave": "w5",
+      "reason": "Get AS details by IP address. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_entities_asns_get",
+      "method": "GET",
+      "path": "/radar/entities/asns/{asn}",
+      "wave": "w5",
+      "reason": "Get AS details by ASN. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_entities_asns_asn_as_set_list",
+      "method": "GET",
+      "path": "/radar/entities/asns/{asn}/as_set",
+      "wave": "w5",
+      "reason": "Get IRR AS-SETs that an AS is a member of. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_entities_asns_asn_rel_list",
+      "method": "GET",
+      "path": "/radar/entities/asns/{asn}/rel",
+      "wave": "w5",
+      "reason": "Get AS-level relationships by ASN. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_entities_ip_list",
+      "method": "GET",
+      "path": "/radar/entities/ip",
+      "wave": "w5",
+      "reason": "Get IP address details. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_entities_locations_list",
+      "method": "GET",
+      "path": "/radar/entities/locations",
+      "wave": "w5",
+      "reason": "List locations. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_entities_locations_get",
+      "method": "GET",
+      "path": "/radar/entities/locations/{location}",
+      "wave": "w5",
+      "reason": "Get location details. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_geolocations_list",
+      "method": "GET",
+      "path": "/radar/geolocations",
+      "wave": "w5",
+      "reason": "List Geolocations. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_geolocations_get",
+      "method": "GET",
+      "path": "/radar/geolocations/{geo_id}",
+      "wave": "w5",
+      "reason": "Get Geolocation details. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_summary_get",
+      "method": "GET",
+      "path": "/radar/http/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get HTTP requests summary by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_timeseries_list",
+      "method": "GET",
+      "path": "/radar/http/timeseries",
+      "wave": "w5",
+      "reason": "Get HTTP requests time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/http/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get HTTP requests time series grouped by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_ases_list",
+      "method": "GET",
+      "path": "/radar/http/top/ases",
+      "wave": "w5",
+      "reason": "Get top ASes by HTTP requests. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_ases_bot_class_get",
+      "method": "GET",
+      "path": "/radar/http/top/ases/bot_class/{bot_class}",
+      "wave": "w5",
+      "reason": "Get top ASes by HTTP requests for a bot class. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_ases_browser_family_get",
+      "method": "GET",
+      "path": "/radar/http/top/ases/browser_family/{browser_family}",
+      "wave": "w5",
+      "reason": "Get top ASes by HTTP requests for a browser family. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_ases_device_type_get",
+      "method": "GET",
+      "path": "/radar/http/top/ases/device_type/{device_type}",
+      "wave": "w5",
+      "reason": "Get top ASes by HTTP requests for a device type. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_ases_http_protocol_get",
+      "method": "GET",
+      "path": "/radar/http/top/ases/http_protocol/{http_protocol}",
+      "wave": "w5",
+      "reason": "Get top ASes by HTTP requests for an HTTP protocol. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_ases_http_version_get",
+      "method": "GET",
+      "path": "/radar/http/top/ases/http_version/{http_version}",
+      "wave": "w5",
+      "reason": "Get top ASes by HTTP requests for an HTTP version. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_ases_ip_version_get",
+      "method": "GET",
+      "path": "/radar/http/top/ases/ip_version/{ip_version}",
+      "wave": "w5",
+      "reason": "Get top ASes by HTTP requests for an IP version. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_ases_os_get",
+      "method": "GET",
+      "path": "/radar/http/top/ases/os/{os}",
+      "wave": "w5",
+      "reason": "Get top ASes by HTTP requests for an OS. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_ases_tls_version_get",
+      "method": "GET",
+      "path": "/radar/http/top/ases/tls_version/{tls_version}",
+      "wave": "w5",
+      "reason": "Get top ASes by HTTP requests for a TLS version. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_locations_list",
+      "method": "GET",
+      "path": "/radar/http/top/locations",
+      "wave": "w5",
+      "reason": "Get top locations by HTTP requests. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_locations_bot_class_get",
+      "method": "GET",
+      "path": "/radar/http/top/locations/bot_class/{bot_class}",
+      "wave": "w5",
+      "reason": "Get top locations by HTTP requests for a bot class. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_locations_browser_family_get",
+      "method": "GET",
+      "path": "/radar/http/top/locations/browser_family/{browser_family}",
+      "wave": "w5",
+      "reason": "Get top locations by HTTP requests for a browser family. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_locations_device_type_get",
+      "method": "GET",
+      "path": "/radar/http/top/locations/device_type/{device_type}",
+      "wave": "w5",
+      "reason": "Get top locations by HTTP requests for a device type. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_locations_http_protocol_get",
+      "method": "GET",
+      "path": "/radar/http/top/locations/http_protocol/{http_protocol}",
+      "wave": "w5",
+      "reason": "Get top locations by HTTP requests for an HTTP protocol. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_locations_http_version_get",
+      "method": "GET",
+      "path": "/radar/http/top/locations/http_version/{http_version}",
+      "wave": "w5",
+      "reason": "Get top locations by HTTP requests for an HTTP version. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_locations_ip_version_get",
+      "method": "GET",
+      "path": "/radar/http/top/locations/ip_version/{ip_version}",
+      "wave": "w5",
+      "reason": "Get top locations by HTTP requests for an IP version. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_locations_os_get",
+      "method": "GET",
+      "path": "/radar/http/top/locations/os/{os}",
+      "wave": "w5",
+      "reason": "Get top locations by HTTP requests for an OS. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_http_top_locations_tls_version_get",
+      "method": "GET",
+      "path": "/radar/http/top/locations/tls_version/{tls_version}",
+      "wave": "w5",
+      "reason": "Get top locations by HTTP requests for a TLS version. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_leaked_credential_checks_summary_get",
+      "method": "GET",
+      "path": "/radar/leaked_credential_checks/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get HTTP authentication requests distribution by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_leaked_credential_checks_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/leaked_credential_checks/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get time series distribution of HTTP authentication requests by dimension.. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_netflows_summary_get",
+      "method": "GET",
+      "path": "/radar/netflows/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get network traffic distribution by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_netflows_timeseries_list",
+      "method": "GET",
+      "path": "/radar/netflows/timeseries",
+      "wave": "w5",
+      "reason": "Get network traffic time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_netflows_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/netflows/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get time series distribution of network traffic by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_netflows_top_ases_list",
+      "method": "GET",
+      "path": "/radar/netflows/top/ases",
+      "wave": "w5",
+      "reason": "Get top ASes by network traffic. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_netflows_top_locations_list",
+      "method": "GET",
+      "path": "/radar/netflows/top/locations",
+      "wave": "w5",
+      "reason": "Get top locations by network traffic. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_origins_list",
+      "method": "GET",
+      "path": "/radar/origins",
+      "wave": "w5",
+      "reason": "List Origins. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_origins_summary_get",
+      "method": "GET",
+      "path": "/radar/origins/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get origin metrics distribution by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_origins_timeseries_list",
+      "method": "GET",
+      "path": "/radar/origins/timeseries",
+      "wave": "w5",
+      "reason": "Get origin metrics time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_origins_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/origins/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get origin metrics time series grouped by dimension. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_origins_get",
+      "method": "GET",
+      "path": "/radar/origins/{slug}",
+      "wave": "w5",
+      "reason": "Get Origin details. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_post_quantum_origin_summary_get",
+      "method": "GET",
+      "path": "/radar/post_quantum/origin/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get Origin Post-Quantum Data Summary. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_post_quantum_origin_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/post_quantum/origin/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get Origin Post-Quantum Data Over Time. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_post_quantum_tls_support_list",
+      "method": "GET",
+      "path": "/radar/post_quantum/tls/support",
+      "wave": "w5",
+      "reason": "Check Post-Quantum TLS support. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_quality_iqi_summary_list",
+      "method": "GET",
+      "path": "/radar/quality/iqi/summary",
+      "wave": "w5",
+      "reason": "Get Internet Quality Index (IQI) summary. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_quality_iqi_timeseries_groups_list",
+      "method": "GET",
+      "path": "/radar/quality/iqi/timeseries_groups",
+      "wave": "w5",
+      "reason": "Get Internet Quality Index (IQI) time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_quality_speed_histogram_list",
+      "method": "GET",
+      "path": "/radar/quality/speed/histogram",
+      "wave": "w5",
+      "reason": "Get speed tests histogram. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_quality_speed_summary_list",
+      "method": "GET",
+      "path": "/radar/quality/speed/summary",
+      "wave": "w5",
+      "reason": "Get speed tests summary. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_quality_speed_top_ases_list",
+      "method": "GET",
+      "path": "/radar/quality/speed/top/ases",
+      "wave": "w5",
+      "reason": "Get top ASes by speed test results. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_quality_speed_top_locations_list",
+      "method": "GET",
+      "path": "/radar/quality/speed/top/locations",
+      "wave": "w5",
+      "reason": "Get top locations by speed test results. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ranking_domain_get",
+      "method": "GET",
+      "path": "/radar/ranking/domain/{domain}",
+      "wave": "w5",
+      "reason": "Get domain rank details. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ranking_internet_services_categories_list",
+      "method": "GET",
+      "path": "/radar/ranking/internet_services/categories",
+      "wave": "w5",
+      "reason": "List Internet services categories. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ranking_internet_services_timeseries_groups_list",
+      "method": "GET",
+      "path": "/radar/ranking/internet_services/timeseries_groups",
+      "wave": "w5",
+      "reason": "Get Internet services rank time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ranking_internet_services_top_list",
+      "method": "GET",
+      "path": "/radar/ranking/internet_services/top",
+      "wave": "w5",
+      "reason": "Get top Internet services. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ranking_timeseries_groups_list",
+      "method": "GET",
+      "path": "/radar/ranking/timeseries_groups",
+      "wave": "w5",
+      "reason": "Get domains rank time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_ranking_top_list",
+      "method": "GET",
+      "path": "/radar/ranking/top",
+      "wave": "w5",
+      "reason": "Get top or trending domains. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_robots_txt_top_domain_categories_list",
+      "method": "GET",
+      "path": "/radar/robots_txt/top/domain_categories",
+      "wave": "w5",
+      "reason": "Get top domain categories by robots.txt files parsed. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_robots_txt_top_user_agents_directive_list",
+      "method": "GET",
+      "path": "/radar/robots_txt/top/user_agents/directive",
+      "wave": "w5",
+      "reason": "Get top user agents on robots.txt files. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_search_global_list",
+      "method": "GET",
+      "path": "/radar/search/global",
+      "wave": "w5",
+      "reason": "Search for locations, ASes, reports, and more. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_tcp_resets_timeouts_summary_list",
+      "method": "GET",
+      "path": "/radar/tcp_resets_timeouts/summary",
+      "wave": "w5",
+      "reason": "Get TCP resets and timeouts summary. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_tcp_resets_timeouts_timeseries_groups_list",
+      "method": "GET",
+      "path": "/radar/tcp_resets_timeouts/timeseries_groups",
+      "wave": "w5",
+      "reason": "Get TCP resets and timeouts time series. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_tlds_list",
+      "method": "GET",
+      "path": "/radar/tlds",
+      "wave": "w5",
+      "reason": "List TLDs. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_tlds_performance_summary_get",
+      "method": "GET",
+      "path": "/radar/tlds/performance/summary/{dimension}",
+      "wave": "w5",
+      "reason": "Get TLD Performance Summary. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_tlds_performance_timeseries_groups_get",
+      "method": "GET",
+      "path": "/radar/tlds/performance/timeseries_groups/{dimension}",
+      "wave": "w5",
+      "reason": "Get TLD Performance Over Time. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_tlds_get",
+      "method": "GET",
+      "path": "/radar/tlds/{tld}",
+      "wave": "w5",
+      "reason": "Get TLD details. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_traffic_anomalies_list",
+      "method": "GET",
+      "path": "/radar/traffic_anomalies",
+      "wave": "w5",
+      "reason": "Get latest Internet traffic anomalies. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_traffic_anomalies_locations_list",
+      "method": "GET",
+      "path": "/radar/traffic_anomalies/locations",
+      "wave": "w5",
+      "reason": "Get top locations by total traffic anomalies. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_radar_traffic_anomalies_get",
+      "method": "GET",
+      "path": "/radar/traffic_anomalies/{uuid}",
+      "wave": "w5",
+      "reason": "Get traffic anomaly by UUID. Part of the Radar family of wave w5: the public internet-measurement surface - traffic, attacks, quality, ranking and the datasets behind them - which needs no zone or account of its own.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_routing_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/email/routing",
+      "wave": "w5",
+      "reason": "Get Email Routing settings. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_routing_put",
+      "method": "PUT",
+      "path": "/zones/{zone_id}/email/routing",
+      "wave": "w5",
+      "reason": "Apply Email Routing settings. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_routing_patch",
+      "method": "PATCH",
+      "path": "/zones/{zone_id}/email/routing",
+      "wave": "w5",
+      "reason": "Update Email Routing settings. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_routing_dns_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/email/routing/dns",
+      "wave": "w5",
+      "reason": "Email Routing - DNS settings. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_routing_dns_create",
+      "method": "POST",
+      "path": "/zones/{zone_id}/email/routing/dns",
+      "wave": "w5",
+      "reason": "Enable Email Routing. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_routing_dns_patch",
+      "method": "PATCH",
+      "path": "/zones/{zone_id}/email/routing/dns",
+      "wave": "w5",
+      "reason": "Unlock Email Routing DNS records. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_routing_dns_delete",
+      "method": "DELETE",
+      "path": "/zones/{zone_id}/email/routing/dns",
+      "wave": "w5",
+      "reason": "Disable Email Routing. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_email_routing_rules_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/email/routing/rules",
+      "wave": "w5",
+      "reason": "List routing rules. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_routing_rules_create",
+      "method": "POST",
+      "path": "/zones/{zone_id}/email/routing/rules",
+      "wave": "w5",
+      "reason": "Create routing rule. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_routing_rules_catch_all_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/email/routing/rules/catch_all",
+      "wave": "w5",
+      "reason": "Get catch-all rule. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_routing_rules_catch_all_put",
+      "method": "PUT",
+      "path": "/zones/{zone_id}/email/routing/rules/catch_all",
+      "wave": "w5",
+      "reason": "Update catch-all rule. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_routing_rules_get",
+      "method": "GET",
+      "path": "/zones/{zone_id}/email/routing/rules/{rule_identifier}",
+      "wave": "w5",
+      "reason": "Get routing rule. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_routing_rules_replace",
+      "method": "PUT",
+      "path": "/zones/{zone_id}/email/routing/rules/{rule_identifier}",
+      "wave": "w5",
+      "reason": "Update routing rule. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_routing_rules_delete",
+      "method": "DELETE",
+      "path": "/zones/{zone_id}/email/routing/rules/{rule_identifier}",
+      "wave": "w5",
+      "reason": "Delete routing rule. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_email_sending_subdomains_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/email/sending/subdomains",
+      "wave": "w5",
+      "reason": "List sending subdomains. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_sending_subdomains_create",
+      "method": "POST",
+      "path": "/zones/{zone_id}/email/sending/subdomains",
+      "wave": "w5",
+      "reason": "Create a sending subdomain. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_sending_subdomains_preview",
+      "method": "POST",
+      "path": "/zones/{zone_id}/email/sending/subdomains/preview",
+      "wave": "w5",
+      "reason": "Preview sending subdomain DNS. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_sending_subdomains_get",
+      "method": "GET",
+      "path": "/zones/{zone_id}/email/sending/subdomains/{subdomain_id}",
+      "wave": "w5",
+      "reason": "Get a sending subdomain. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_sending_subdomains_update",
+      "method": "PATCH",
+      "path": "/zones/{zone_id}/email/sending/subdomains/{subdomain_id}",
+      "wave": "w5",
+      "reason": "Update a sending subdomain. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_sending_subdomains_delete",
+      "method": "DELETE",
+      "path": "/zones/{zone_id}/email/sending/subdomains/{subdomain_id}",
+      "wave": "w5",
+      "reason": "Delete a sending subdomain. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_email_sending_subdomains_subdomain_id_dns_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/email/sending/subdomains/{subdomain_id}/dns",
+      "wave": "w5",
+      "reason": "Get sending subdomain DNS records. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_sending_subdomains_subdomain_id_dns_create",
+      "method": "POST",
+      "path": "/zones/{zone_id}/email/sending/subdomains/{subdomain_id}/dns",
+      "wave": "w5",
+      "reason": "Fix sending subdomain DNS records. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_sending_subdomains_subdomain_id_dns_status_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/email/sending/subdomains/{subdomain_id}/dns/status",
+      "wave": "w5",
+      "reason": "Get sending subdomain DNS status. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_email_sending_subdomains_subdomain_id_reputation_complaints_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/email/sending/subdomains/{subdomain_id}/reputation/complaints",
+      "wave": "w5",
+      "reason": "Get sending subdomain complaint count. Part of the zone email family of wave w5: the routing rules, the DNS records that make routing work, and the sending subdomains.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_healthchecks_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/healthchecks",
+      "wave": "w5",
+      "reason": "List Health Checks. Part of the health-check family of wave w5: the probes that decide whether an origin is served. The spec hides this operation from its own published surface, and it is kept deliberately: the family would be unusable without it.",
+      "destructive": false,
+      "auth": "api-token",
+      "keepFiltered": true,
+      "filterNote": "The spec hides health checks, and they are what a failover or a load-balanced origin depends on: keeping them is the reviewed exception that makes the wave usable for that work."
+    },
+    {
+      "toolSlug": "cloudflare_healthchecks_create",
+      "method": "POST",
+      "path": "/zones/{zone_id}/healthchecks",
+      "wave": "w5",
+      "reason": "Create Health Check. Part of the health-check family of wave w5: the probes that decide whether an origin is served. The spec hides this operation from its own published surface, and it is kept deliberately: the family would be unusable without it.",
+      "destructive": false,
+      "auth": "api-token",
+      "keepFiltered": true,
+      "filterNote": "The spec hides health checks, and they are what a failover or a load-balanced origin depends on: keeping them is the reviewed exception that makes the wave usable for that work."
+    },
+    {
+      "toolSlug": "cloudflare_healthchecks_preview_create",
+      "method": "POST",
+      "path": "/zones/{zone_id}/healthchecks/preview",
+      "wave": "w5",
+      "reason": "Create Preview Health Check. Part of the health-check family of wave w5: the probes that decide whether an origin is served. The spec hides this operation from its own published surface, and it is kept deliberately: the family would be unusable without it. The preview endpoints derive one name across two paths, so each is named after what it does: this one creates a preview of a health check.",
+      "destructive": false,
+      "auth": "api-token",
+      "override": true,
+      "keepFiltered": true,
+      "filterNote": "The spec hides health checks, and they are what a failover or a load-balanced origin depends on: keeping them is the reviewed exception that makes the wave usable for that work."
+    },
+    {
+      "toolSlug": "cloudflare_healthchecks_preview_get",
+      "method": "GET",
+      "path": "/zones/{zone_id}/healthchecks/preview/{healthcheck_id}",
+      "wave": "w5",
+      "reason": "Health Check Preview Details. Part of the health-check family of wave w5: the probes that decide whether an origin is served. The spec hides this operation from its own published surface, and it is kept deliberately: the family would be unusable without it. The preview endpoints derive one name across two paths, so each is named after what it does: this one reads the preview by id.",
+      "destructive": false,
+      "auth": "api-token",
+      "override": true,
+      "keepFiltered": true,
+      "filterNote": "The spec hides health checks, and they are what a failover or a load-balanced origin depends on: keeping them is the reviewed exception that makes the wave usable for that work."
+    },
+    {
+      "toolSlug": "cloudflare_healthchecks_preview_delete",
+      "method": "DELETE",
+      "path": "/zones/{zone_id}/healthchecks/preview/{healthcheck_id}",
+      "wave": "w5",
+      "reason": "Delete Preview Health Check. Part of the health-check family of wave w5: the probes that decide whether an origin is served. Cloudflare publishes no field list for its application/json body, so the tool takes one body argument and sends it verbatim. The spec hides this operation from its own published surface, and it is kept deliberately: the family would be unusable without it. The preview endpoints derive one name across two paths, so each is named after what it does: this one discards a preview, leaving the health check itself untouched.",
+      "destructive": false,
+      "auth": "api-token",
+      "override": true,
+      "rawBody": true,
+      "keepFiltered": true,
+      "filterNote": "The spec hides health checks, and they are what a failover or a load-balanced origin depends on: keeping them is the reviewed exception that makes the wave usable for that work."
+    },
+    {
+      "toolSlug": "cloudflare_healthchecks_get",
+      "method": "GET",
+      "path": "/zones/{zone_id}/healthchecks/{healthcheck_id}",
+      "wave": "w5",
+      "reason": "Health Check Details. Part of the health-check family of wave w5: the probes that decide whether an origin is served. The spec hides this operation from its own published surface, and it is kept deliberately: the family would be unusable without it.",
+      "destructive": false,
+      "auth": "api-token",
+      "keepFiltered": true,
+      "filterNote": "The spec hides health checks, and they are what a failover or a load-balanced origin depends on: keeping them is the reviewed exception that makes the wave usable for that work."
+    },
+    {
+      "toolSlug": "cloudflare_healthchecks_replace",
+      "method": "PUT",
+      "path": "/zones/{zone_id}/healthchecks/{healthcheck_id}",
+      "wave": "w5",
+      "reason": "Update Health Check. Part of the health-check family of wave w5: the probes that decide whether an origin is served. The spec hides this operation from its own published surface, and it is kept deliberately: the family would be unusable without it.",
+      "destructive": false,
+      "auth": "api-token",
+      "keepFiltered": true,
+      "filterNote": "The spec hides health checks, and they are what a failover or a load-balanced origin depends on: keeping them is the reviewed exception that makes the wave usable for that work."
+    },
+    {
+      "toolSlug": "cloudflare_healthchecks_update",
+      "method": "PATCH",
+      "path": "/zones/{zone_id}/healthchecks/{healthcheck_id}",
+      "wave": "w5",
+      "reason": "Patch Health Check. Part of the health-check family of wave w5: the probes that decide whether an origin is served. The spec hides this operation from its own published surface, and it is kept deliberately: the family would be unusable without it.",
+      "destructive": false,
+      "auth": "api-token",
+      "keepFiltered": true,
+      "filterNote": "The spec hides health checks, and they are what a failover or a load-balanced origin depends on: keeping them is the reviewed exception that makes the wave usable for that work."
+    },
+    {
+      "toolSlug": "cloudflare_healthchecks_delete",
+      "method": "DELETE",
+      "path": "/zones/{zone_id}/healthchecks/{healthcheck_id}",
+      "wave": "w5",
+      "reason": "Delete Health Check. Part of the health-check family of wave w5: the probes that decide whether an origin is served. It removes the resource itself; recreating it does not bring back what it held. Cloudflare publishes no field list for its application/json body, so the tool takes one body argument and sends it verbatim. The spec hides this operation from its own published surface, and it is kept deliberately: the family would be unusable without it.",
+      "destructive": true,
+      "auth": "api-token",
+      "rawBody": true,
+      "keepFiltered": true,
+      "filterNote": "The spec hides health checks, and they are what a failover or a load-balanced origin depends on: keeping them is the reviewed exception that makes the wave usable for that work."
+    },
+    {
+      "toolSlug": "cloudflare_page_shield_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/page_shield",
+      "wave": "w5",
+      "reason": "Get client-side security settings. Part of the Page Rules family of wave w5: the per-path rules that act before a request reaches the origin.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_page_shield_put",
+      "method": "PUT",
+      "path": "/zones/{zone_id}/page_shield",
+      "wave": "w5",
+      "reason": "Update client-side security settings. Part of the Page Rules family of wave w5: the per-path rules that act before a request reaches the origin.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_page_shield_connections_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/page_shield/connections",
+      "wave": "w5",
+      "reason": "List detected connections. Part of the Page Rules family of wave w5: the per-path rules that act before a request reaches the origin.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_page_shield_connections_get",
+      "method": "GET",
+      "path": "/zones/{zone_id}/page_shield/connections/{connection_id}",
+      "wave": "w5",
+      "reason": "Get a detected connection. Part of the Page Rules family of wave w5: the per-path rules that act before a request reaches the origin.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_page_shield_cookies_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/page_shield/cookies",
+      "wave": "w5",
+      "reason": "List detected cookies. Part of the Page Rules family of wave w5: the per-path rules that act before a request reaches the origin.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_page_shield_cookies_get",
+      "method": "GET",
+      "path": "/zones/{zone_id}/page_shield/cookies/{cookie_id}",
+      "wave": "w5",
+      "reason": "Get a detected cookie. Part of the Page Rules family of wave w5: the per-path rules that act before a request reaches the origin.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_page_shield_policies_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/page_shield/policies",
+      "wave": "w5",
+      "reason": "List content security rules. Part of the Page Rules family of wave w5: the per-path rules that act before a request reaches the origin.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_page_shield_policies_create",
+      "method": "POST",
+      "path": "/zones/{zone_id}/page_shield/policies",
+      "wave": "w5",
+      "reason": "Create a content security rule. Part of the Page Rules family of wave w5: the per-path rules that act before a request reaches the origin.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_page_shield_policies_get",
+      "method": "GET",
+      "path": "/zones/{zone_id}/page_shield/policies/{policy_id}",
+      "wave": "w5",
+      "reason": "Get a content security rule. Part of the Page Rules family of wave w5: the per-path rules that act before a request reaches the origin.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_page_shield_policies_replace",
+      "method": "PUT",
+      "path": "/zones/{zone_id}/page_shield/policies/{policy_id}",
+      "wave": "w5",
+      "reason": "Update a content security rule. Part of the Page Rules family of wave w5: the per-path rules that act before a request reaches the origin.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_page_shield_policies_delete",
+      "method": "DELETE",
+      "path": "/zones/{zone_id}/page_shield/policies/{policy_id}",
+      "wave": "w5",
+      "reason": "Delete a content security rule. Part of the Page Rules family of wave w5: the per-path rules that act before a request reaches the origin.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_page_shield_scripts_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/page_shield/scripts",
+      "wave": "w5",
+      "reason": "List detected scripts. Part of the Page Rules family of wave w5: the per-path rules that act before a request reaches the origin.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_page_shield_scripts_get",
+      "method": "GET",
+      "path": "/zones/{zone_id}/page_shield/scripts/{script_id}",
+      "wave": "w5",
+      "reason": "Get a detected script. Part of the Page Rules family of wave w5: the per-path rules that act before a request reaches the origin.",
       "destructive": false,
       "auth": "api-token"
     }

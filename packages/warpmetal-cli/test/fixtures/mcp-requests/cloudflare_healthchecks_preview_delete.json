@@ -1,0 +1,9 @@
+{
+  "method": "DELETE",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/healthchecks/preview/sample_healthcheck_id",
+  "body": "sample_body",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

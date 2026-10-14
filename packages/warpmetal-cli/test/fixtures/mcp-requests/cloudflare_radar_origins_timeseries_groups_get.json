@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/radar/origins/timeseries_groups/ORIGIN?aggInterval=15m&limitPerGroup=1&metric=CONNECTION_FAILURES&normalization=PERCENTAGE&format=JSON&&&&&&",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}
