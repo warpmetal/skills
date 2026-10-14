@@ -4217,6 +4217,1048 @@
     "account_id": "sample_account_id",
     "subnet_id": "sample_subnet_id"
   },
+  "cloudflare_alerting_v3_available_alerts_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_alerting_v3_destinations_eligible_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_alerting_v3_destinations_pagerduty_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_alerting_v3_destinations_pagerduty_delete": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_alerting_v3_destinations_pagerduty_connect_create": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_alerting_v3_destinations_pagerduty_connect_get": {
+    "account_id": "sample_account_id",
+    "token_id": "sample_token_id"
+  },
+  "cloudflare_alerting_v3_destinations_webhooks_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_alerting_v3_destinations_webhooks_create": {
+    "account_id": "sample_account_id",
+    "name": "sample_name",
+    "secret": "sample_secret",
+    "url": "sample_url"
+  },
+  "cloudflare_alerting_v3_destinations_webhooks_get": {
+    "account_id": "sample_account_id",
+    "webhook_id": "sample_webhook_id"
+  },
+  "cloudflare_alerting_v3_destinations_webhooks_replace": {
+    "account_id": "sample_account_id",
+    "name": "sample_name",
+    "secret": "sample_secret",
+    "url": "sample_url",
+    "webhook_id": "sample_webhook_id"
+  },
+  "cloudflare_alerting_v3_destinations_webhooks_delete": {
+    "account_id": "sample_account_id",
+    "webhook_id": "sample_webhook_id"
+  },
+  "cloudflare_alerting_v3_history_list": {
+    "account_id": "sample_account_id",
+    "before": "sample_before",
+    "page": 1,
+    "per_page": 1,
+    "since": "sample_since"
+  },
+  "cloudflare_alerting_v3_policies_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_alerting_v3_policies_create": {
+    "account_id": "sample_account_id",
+    "alert_interval": "sample_alert_interval",
+    "alert_type": "abuse_report_alert",
+    "description": "sample_description",
+    "enabled": true,
+    "filters": {},
+    "mechanisms": {},
+    "name": "sample_name"
+  },
+  "cloudflare_alerting_v3_policies_get": {
+    "account_id": "sample_account_id",
+    "policy_id": "sample_policy_id"
+  },
+  "cloudflare_alerting_v3_policies_replace": {
+    "account_id": "sample_account_id",
+    "alert_interval": "sample_alert_interval",
+    "alert_type": "abuse_report_alert",
+    "description": "sample_description",
+    "enabled": true,
+    "filters": {},
+    "mechanisms": {},
+    "name": "sample_name",
+    "policy_id": "sample_policy_id"
+  },
+  "cloudflare_alerting_v3_policies_delete": {
+    "account_id": "sample_account_id",
+    "policy_id": "sample_policy_id"
+  },
+  "cloudflare_alerting_v3_policies_policy_id_email_unsubscribe_list": {
+    "account_id": "sample_account_id",
+    "email": "sample_email",
+    "policy_id": "sample_policy_id",
+    "token": "sample_token"
+  },
+  "cloudflare_alerting_v3_policies_policy_id_email_unsubscribe_create": {
+    "account_id": "sample_account_id",
+    "email": "sample_email",
+    "policy_id": "sample_policy_id",
+    "token": "sample_token"
+  },
+  "cloudflare_alerting_v3_policies_policy_id_test": {
+    "account_id": "sample_account_id",
+    "policy_id": "sample_policy_id",
+    "severity": 0,
+    "source": "sample_source",
+    "state_correlation_id": "sample_state_correlation_id",
+    "state_event": 0
+  },
+  "cloudflare_alerting_v3_silences_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_alerting_v3_silences_create": {
+    "account_id": "sample_account_id",
+    "body": "sample_body"
+  },
+  "cloudflare_alerting_v3_silences_put": {
+    "account_id": "sample_account_id",
+    "body": "sample_body"
+  },
+  "cloudflare_alerting_v3_silences_get": {
+    "account_id": "sample_account_id",
+    "silence_id": "sample_silence_id"
+  },
+  "cloudflare_alerting_v3_silences_delete": {
+    "account_id": "sample_account_id",
+    "silence_id": "sample_silence_id"
+  },
+  "cloudflare_analytics_query_data_security_content_findings_top_n_create": {
+    "account_id": "sample_account_id",
+    "filters": [],
+    "from": "sample_from",
+    "n": 1,
+    "to": "sample_to"
+  },
+  "cloudflare_analytics_query_data_security_findings_summary_create": {
+    "account_id": "sample_account_id",
+    "filters": [],
+    "from": "sample_from",
+    "to": "sample_to"
+  },
+  "cloudflare_analytics_query_data_security_findings_timeseries_create": {
+    "account_id": "sample_account_id",
+    "filters": [],
+    "from": "sample_from",
+    "to": "sample_to"
+  },
+  "cloudflare_analytics_query_dataset_summary_create": {
+    "account_id": "sample_account_id",
+    "dataset": "sample_dataset",
+    "filters": [],
+    "from": "sample_from",
+    "group_by": [],
+    "stats": [],
+    "to": "sample_to"
+  },
+  "cloudflare_analytics_query_dataset_timeseries_create": {
+    "account_id": "sample_account_id",
+    "dataset": "sample_dataset",
+    "filters": [],
+    "from": "sample_from",
+    "group_by": [],
+    "resolution": "sample_resolution",
+    "stats": [],
+    "to": "sample_to"
+  },
+  "cloudflare_analytics_query_dataset_top_n_create": {
+    "account_id": "sample_account_id",
+    "dataset": "sample_dataset",
+    "filters": [],
+    "from": "sample_from",
+    "group_by": [],
+    "n": 1,
+    "order_by": "sample_order_by",
+    "stats": [],
+    "to": "sample_to"
+  },
+  "cloudflare_logpush_datasets_dataset_id_fields_list": {
+    "account_id": "sample_account_id",
+    "dataset_id": "access_requests"
+  },
+  "cloudflare_logpush_datasets_dataset_id_jobs_list": {
+    "account_id": "sample_account_id",
+    "dataset_id": "access_requests"
+  },
+  "cloudflare_logpush_jobs_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_logpush_jobs_create": {
+    "account_id": "sample_account_id",
+    "dataset": "access_requests",
+    "destination_conf": "sample_destination_conf",
+    "enabled": true,
+    "filter": "sample_filter",
+    "filter_attack_traffic": true,
+    "frequency": "high",
+    "kind": "",
+    "logpull_options": "sample_logpull_options",
+    "max_upload_bytes": 1,
+    "max_upload_interval_seconds": 1,
+    "max_upload_records": 1,
+    "name": "sample_name",
+    "output_options": {},
+    "ownership_challenge": "sample_ownership_challenge"
+  },
+  "cloudflare_logpush_jobs_get": {
+    "account_id": "sample_account_id",
+    "job_id": 1
+  },
+  "cloudflare_logpush_jobs_replace": {
+    "account_id": "sample_account_id",
+    "destination_conf": "sample_destination_conf",
+    "enabled": true,
+    "filter": "sample_filter",
+    "filter_attack_traffic": true,
+    "frequency": "high",
+    "job_id": 1,
+    "kind": "",
+    "logpull_options": "sample_logpull_options",
+    "max_upload_bytes": 1,
+    "max_upload_interval_seconds": 1,
+    "max_upload_records": 1,
+    "name": "sample_name",
+    "output_options": {},
+    "ownership_challenge": "sample_ownership_challenge"
+  },
+  "cloudflare_logpush_jobs_delete": {
+    "account_id": "sample_account_id",
+    "job_id": 1
+  },
+  "cloudflare_logpush_ownership_create": {
+    "account_id": "sample_account_id",
+    "destination_conf": "sample_destination_conf"
+  },
+  "cloudflare_logpush_ownership_validate": {
+    "account_id": "sample_account_id",
+    "destination_conf": "sample_destination_conf",
+    "ownership_challenge": "sample_ownership_challenge"
+  },
+  "cloudflare_logpush_transformers_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_logpush_transformers_create": {
+    "account_id": "sample_account_id",
+    "code": "sample_code",
+    "description": "sample_description",
+    "name": "sample_name"
+  },
+  "cloudflare_logpush_transformers_preview": {
+    "account_id": "sample_account_id",
+    "input": {},
+    "sql": "sample_sql"
+  },
+  "cloudflare_logpush_transformers_get": {
+    "account_id": "sample_account_id",
+    "transformer_id": 1
+  },
+  "cloudflare_logpush_transformers_replace": {
+    "account_id": "sample_account_id",
+    "code": "sample_code",
+    "description": "sample_description",
+    "name": "sample_name",
+    "transformer_id": 1
+  },
+  "cloudflare_logpush_transformers_delete": {
+    "account_id": "sample_account_id",
+    "transformer_id": 1
+  },
+  "cloudflare_logpush_transformers_transformer_id_content_list": {
+    "account_id": "sample_account_id",
+    "transformer_id": 1,
+    "version_id": 1
+  },
+  "cloudflare_logpush_transformers_transformer_id_versions_list": {
+    "account_id": "sample_account_id",
+    "limit": 1,
+    "transformer_id": 1
+  },
+  "cloudflare_logpush_validate_destination_create": {
+    "account_id": "sample_account_id",
+    "destination_conf": "sample_destination_conf"
+  },
+  "cloudflare_logpush_validate_destination_exists_create": {
+    "account_id": "sample_account_id",
+    "destination_conf": "sample_destination_conf"
+  },
+  "cloudflare_logpush_validate_origin_create": {
+    "account_id": "sample_account_id",
+    "logpull_options": "sample_logpull_options"
+  },
+  "cloudflare_logs_explorer_datasets_list": {
+    "account_id": "sample_account_id",
+    "include_zones": true
+  },
+  "cloudflare_logs_explorer_datasets_create": {
+    "account_id": "sample_account_id",
+    "dataset": "sample_dataset",
+    "fields": [],
+    "filter": "sample_filter",
+    "filter_attack_traffic": true
+  },
+  "cloudflare_logs_explorer_datasets_available_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_logs_explorer_datasets_get": {
+    "account_id": "sample_account_id",
+    "dataset_id": "sample_dataset_id"
+  },
+  "cloudflare_logs_explorer_datasets_replace": {
+    "account_id": "sample_account_id",
+    "dataset_id": "sample_dataset_id",
+    "deletion_protection": true,
+    "enabled": true,
+    "fields": [],
+    "filter": "sample_filter",
+    "filter_attack_traffic": true
+  },
+  "cloudflare_logs_explorer_datasets_delete": {
+    "account_id": "sample_account_id",
+    "dataset_id": "sample_dataset_id"
+  },
+  "cloudflare_logs_explorer_query_sql_create": {
+    "account_id": "sample_account_id",
+    "body": "sample_body"
+  },
+  "cloudflare_logs_list_list": {
+    "account_id": "sample_account_id",
+    "bucket": "sample_bucket",
+    "end": "sample_end",
+    "limit": 1,
+    "prefix": "sample_prefix",
+    "start": "sample_start"
+  },
+  "cloudflare_logs_retrieve_list": {
+    "account_id": "sample_account_id",
+    "bucket": "sample_bucket",
+    "end": "sample_end",
+    "prefix": "sample_prefix",
+    "start": "sample_start"
+  },
+  "cloudflare_rulesets_list": {
+    "account_id": "sample_account_id",
+    "cursor": "sample_cursor",
+    "per_page": 1
+  },
+  "cloudflare_rulesets_create": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "dry_run": true,
+    "id": "sample_id",
+    "kind": "managed",
+    "last_updated": "sample_last_updated",
+    "name": "sample_name",
+    "phase": "ddos_l4",
+    "rules": [],
+    "version": "sample_version"
+  },
+  "cloudflare_rulesets_phases_ruleset_phase_entrypoint_list": {
+    "account_id": "sample_account_id",
+    "ruleset_phase": "ddos_l4"
+  },
+  "cloudflare_rulesets_phases_ruleset_phase_entrypoint_put": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "dry_run": true,
+    "id": "sample_id",
+    "last_updated": "sample_last_updated",
+    "name": "sample_name",
+    "rules": [],
+    "ruleset_phase": "ddos_l4",
+    "version": "sample_version"
+  },
+  "cloudflare_rulesets_phases_ruleset_phase_entrypoint_versions_list": {
+    "account_id": "sample_account_id",
+    "ruleset_phase": "ddos_l4"
+  },
+  "cloudflare_rulesets_phases_ruleset_phase_entrypoint_versions_get": {
+    "account_id": "sample_account_id",
+    "ruleset_phase": "ddos_l4",
+    "ruleset_version": "sample_ruleset_version"
+  },
+  "cloudflare_rulesets_get": {
+    "account_id": "sample_account_id",
+    "ruleset_id": "sample_ruleset_id"
+  },
+  "cloudflare_rulesets_replace": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "dry_run": true,
+    "id": "sample_id",
+    "kind": "managed",
+    "last_updated": "sample_last_updated",
+    "name": "sample_name",
+    "phase": "ddos_l4",
+    "rules": [],
+    "ruleset_id": "sample_ruleset_id",
+    "version": "sample_version"
+  },
+  "cloudflare_rulesets_delete": {
+    "account_id": "sample_account_id",
+    "dry_run": true,
+    "ruleset_id": "sample_ruleset_id"
+  },
+  "cloudflare_rulesets_ruleset_id_rules_create": {
+    "account_id": "sample_account_id",
+    "action": "block",
+    "action_parameters": {},
+    "categories": [],
+    "description": "sample_description",
+    "dry_run": true,
+    "enabled": true,
+    "exposed_credential_check": {},
+    "expression": "sample_expression",
+    "id": "sample_id",
+    "last_updated": "sample_last_updated",
+    "logging": {},
+    "position": {},
+    "ratelimit": {},
+    "ref": "sample_ref",
+    "ruleset_id": "sample_ruleset_id",
+    "version": "sample_version"
+  },
+  "cloudflare_rulesets_ruleset_id_rules_update": {
+    "account_id": "sample_account_id",
+    "action": "block",
+    "action_parameters": {},
+    "categories": [],
+    "description": "sample_description",
+    "dry_run": true,
+    "enabled": true,
+    "exposed_credential_check": {},
+    "expression": "sample_expression",
+    "id": "sample_id",
+    "last_updated": "sample_last_updated",
+    "logging": {},
+    "position": {},
+    "ratelimit": {},
+    "ref": "sample_ref",
+    "rule_id": "sample_rule_id",
+    "ruleset_id": "sample_ruleset_id",
+    "version": "sample_version"
+  },
+  "cloudflare_rulesets_ruleset_id_rules_delete": {
+    "account_id": "sample_account_id",
+    "dry_run": true,
+    "rule_id": "sample_rule_id",
+    "ruleset_id": "sample_ruleset_id"
+  },
+  "cloudflare_rulesets_ruleset_id_versions_list": {
+    "account_id": "sample_account_id",
+    "ruleset_id": "sample_ruleset_id"
+  },
+  "cloudflare_rulesets_ruleset_id_versions_get": {
+    "account_id": "sample_account_id",
+    "ruleset_id": "sample_ruleset_id",
+    "ruleset_version": "sample_ruleset_version"
+  },
+  "cloudflare_rulesets_ruleset_id_versions_delete": {
+    "account_id": "sample_account_id",
+    "dry_run": true,
+    "ruleset_id": "sample_ruleset_id",
+    "ruleset_version": "sample_ruleset_version"
+  },
+  "cloudflare_rulesets_ruleset_id_versions_ruleset_version_by_tag_get": {
+    "account_id": "sample_account_id",
+    "rule_tag": "sample_rule_tag",
+    "ruleset_id": "sample_ruleset_id",
+    "ruleset_version": "sample_ruleset_version"
+  },
+  "cloudflare_account_analytics_sql_list": {
+    "account_tag": "sample_account_tag",
+    "query": "sample_query"
+  },
+  "cloudflare_account_analytics_sql_create": {
+    "account_tag": "sample_account_tag",
+    "params": "sample_params",
+    "query": "sample_query",
+    "scope": {},
+    "time_range": {}
+  },
+  "cloudflare_account_analytics_sql_introspection_list": {
+    "account_tag": "sample_account_tag",
+    "dataset_name": "sample_dataset_name",
+    "include_attributes": true,
+    "include_columns": true,
+    "include_custom_attributes": true,
+    "include_lex": true,
+    "include_wae": true
+  },
+  "cloudflare_analytics_sql_list": {
+    "query": "sample_query"
+  },
+  "cloudflare_analytics_sql_create": {
+    "params": "sample_params",
+    "query": "sample_query",
+    "scope": {},
+    "time_range": {}
+  },
+  "cloudflare_analytics_sql_introspection_list": {
+    "account_tag": "sample_account_tag",
+    "dataset_name": "sample_dataset_name",
+    "include_attributes": true,
+    "include_columns": true,
+    "include_custom_attributes": true,
+    "include_lex": true,
+    "include_wae": true
+  },
+  "cloudflare_analytics_colos_list": {
+    "continuous": true,
+    "since": "sample_since",
+    "until": "sample_until",
+    "zone_identifier": "sample_zone_identifier"
+  },
+  "cloudflare_analytics_dashboard_list": {
+    "continuous": true,
+    "since": "sample_since",
+    "until": "sample_until",
+    "zone_identifier": "sample_zone_identifier"
+  },
+  "cloudflare_cache_cache_reserve_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_cache_reserve_patch": {
+    "value": "on",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_cache_reserve_clear_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_cache_reserve_clear_create": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_origin_cloud_regions_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_origin_cloud_regions_create": {
+    "ip": "sample_ip",
+    "region": "sample_region",
+    "vendor": "aws",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_origin_cloud_regions_patch": {
+    "ip": "sample_ip",
+    "region": "sample_region",
+    "vendor": "aws",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_origin_cloud_regions_batch": {
+    "body": "sample_body",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_origin_cloud_regions_batch_delete": {
+    "body": "sample_body",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_origin_cloud_regions_supported_regions_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_origin_cloud_regions_get": {
+    "origin_ip": "sample_origin_ip",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_origin_cloud_regions_delete": {
+    "origin_ip": "sample_origin_ip",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_origin_post_quantum_encryption_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_origin_post_quantum_encryption_put": {
+    "value": "preferred",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_regional_tiered_cache_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_regional_tiered_cache_patch": {
+    "value": "on",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_tiered_cache_smart_topology_get": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_tiered_cache_smart_topology_enable": {
+    "value": "on",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_tiered_cache_smart_topology_update": {
+    "value": "on",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_tiered_cache_smart_topology_delete": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_variants_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_variants_patch": {
+    "value": {},
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_cache_variants_delete": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logpush_datasets_dataset_id_fields_list": {
+    "dataset_id": "access_requests",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logpush_datasets_dataset_id_jobs_list": {
+    "dataset_id": "access_requests",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_logpush_edge_jobs_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_logpush_edge_jobs_create": {
+    "fields": "sample_fields",
+    "filter": "sample_filter",
+    "sample": 1,
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logpush_jobs_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logpush_jobs_create": {
+    "dataset": "access_requests",
+    "destination_conf": "sample_destination_conf",
+    "enabled": true,
+    "filter": "sample_filter",
+    "filter_attack_traffic": true,
+    "frequency": "high",
+    "kind": "",
+    "logpull_options": "sample_logpull_options",
+    "max_upload_bytes": 1,
+    "max_upload_interval_seconds": 1,
+    "max_upload_records": 1,
+    "name": "sample_name",
+    "output_options": {},
+    "ownership_challenge": "sample_ownership_challenge",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logpush_jobs_get": {
+    "job_id": 1,
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logpush_jobs_replace": {
+    "destination_conf": "sample_destination_conf",
+    "enabled": true,
+    "filter": "sample_filter",
+    "filter_attack_traffic": true,
+    "frequency": "high",
+    "job_id": 1,
+    "kind": "",
+    "logpull_options": "sample_logpull_options",
+    "max_upload_bytes": 1,
+    "max_upload_interval_seconds": 1,
+    "max_upload_records": 1,
+    "name": "sample_name",
+    "output_options": {},
+    "ownership_challenge": "sample_ownership_challenge",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logpush_jobs_delete": {
+    "job_id": 1,
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logpush_ownership_create": {
+    "destination_conf": "sample_destination_conf",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logpush_ownership_validate": {
+    "destination_conf": "sample_destination_conf",
+    "ownership_challenge": "sample_ownership_challenge",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logpush_validate_destination_create": {
+    "destination_conf": "sample_destination_conf",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logpush_validate_destination_exists_create": {
+    "destination_conf": "sample_destination_conf",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logpush_validate_origin_create": {
+    "logpull_options": "sample_logpull_options",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logs_explorer_datasets_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logs_explorer_datasets_create": {
+    "dataset": "sample_dataset",
+    "fields": [],
+    "filter": "sample_filter",
+    "filter_attack_traffic": true,
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logs_explorer_datasets_available_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logs_explorer_datasets_get": {
+    "dataset_id": "sample_dataset_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logs_explorer_datasets_replace": {
+    "dataset_id": "sample_dataset_id",
+    "deletion_protection": true,
+    "enabled": true,
+    "fields": [],
+    "filter": "sample_filter",
+    "filter_attack_traffic": true,
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logs_explorer_datasets_delete": {
+    "dataset_id": "sample_dataset_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_logs_explorer_query_sql_create": {
+    "body": "sample_body",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_observability_tracing_rules_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_observability_tracing_rules_put": {
+    "rules": [],
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_observability_tracing_rules_delete": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_observability_tracing_settings_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_observability_tracing_settings_patch": {
+    "destinations": [],
+    "enabled": true,
+    "forward_context": true,
+    "persist": true,
+    "propagation_policy": "accept",
+    "sampling_ratio": 1,
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_observability_tracing_settings_delete": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_list": {
+    "cursor": "sample_cursor",
+    "per_page": 1,
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_create": {
+    "description": "sample_description",
+    "dry_run": true,
+    "id": "sample_id",
+    "kind": "managed",
+    "last_updated": "sample_last_updated",
+    "name": "sample_name",
+    "phase": "ddos_l4",
+    "rules": [],
+    "version": "sample_version",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_list": {
+    "ruleset_phase": "ddos_l4",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_put": {
+    "description": "sample_description",
+    "dry_run": true,
+    "id": "sample_id",
+    "last_updated": "sample_last_updated",
+    "name": "sample_name",
+    "rules": [],
+    "ruleset_phase": "ddos_l4",
+    "version": "sample_version",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_versions_list": {
+    "ruleset_phase": "ddos_l4",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_versions_get": {
+    "ruleset_phase": "ddos_l4",
+    "ruleset_version": "sample_ruleset_version",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_get": {
+    "ruleset_id": "sample_ruleset_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_replace": {
+    "description": "sample_description",
+    "dry_run": true,
+    "id": "sample_id",
+    "kind": "managed",
+    "last_updated": "sample_last_updated",
+    "name": "sample_name",
+    "phase": "ddos_l4",
+    "rules": [],
+    "ruleset_id": "sample_ruleset_id",
+    "version": "sample_version",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_delete": {
+    "dry_run": true,
+    "ruleset_id": "sample_ruleset_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_ruleset_id_rules_create": {
+    "action": "block",
+    "action_parameters": {},
+    "categories": [],
+    "description": "sample_description",
+    "dry_run": true,
+    "enabled": true,
+    "exposed_credential_check": {},
+    "expression": "sample_expression",
+    "id": "sample_id",
+    "last_updated": "sample_last_updated",
+    "logging": {},
+    "position": {},
+    "ratelimit": {},
+    "ref": "sample_ref",
+    "ruleset_id": "sample_ruleset_id",
+    "version": "sample_version",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_ruleset_id_rules_update": {
+    "action": "block",
+    "action_parameters": {},
+    "categories": [],
+    "description": "sample_description",
+    "dry_run": true,
+    "enabled": true,
+    "exposed_credential_check": {},
+    "expression": "sample_expression",
+    "id": "sample_id",
+    "last_updated": "sample_last_updated",
+    "logging": {},
+    "position": {},
+    "ratelimit": {},
+    "ref": "sample_ref",
+    "rule_id": "sample_rule_id",
+    "ruleset_id": "sample_ruleset_id",
+    "version": "sample_version",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_ruleset_id_rules_delete": {
+    "dry_run": true,
+    "rule_id": "sample_rule_id",
+    "ruleset_id": "sample_ruleset_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_ruleset_id_versions_list": {
+    "ruleset_id": "sample_ruleset_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_ruleset_id_versions_get": {
+    "ruleset_id": "sample_ruleset_id",
+    "ruleset_version": "sample_ruleset_version",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_ruleset_id_versions_delete": {
+    "dry_run": true,
+    "ruleset_id": "sample_ruleset_id",
+    "ruleset_version": "sample_ruleset_version",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_zone_rulesets_ruleset_id_versions_ruleset_version_by_tag_get": {
+    "rule_tag": "sample_rule_tag",
+    "ruleset_id": "sample_ruleset_id",
+    "ruleset_version": "sample_ruleset_version",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_security_center_insights_list": {
+    "dismissed": true,
+    "issue_class": [],
+    "issue_class_neq": [],
+    "issue_type": [],
+    "issue_type_neq": [],
+    "page": 1,
+    "per_page": 1,
+    "product": [],
+    "product_neq": [],
+    "severity": [],
+    "severity_neq": [],
+    "source": [],
+    "subject": [],
+    "subject_neq": [],
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_security_center_insights_audit_log_list": {
+    "before": "sample_before",
+    "changed_by": "sample_changed_by",
+    "cursor": "sample_cursor",
+    "field_changed": "status",
+    "order": "asc",
+    "per_page": 1,
+    "since": "sample_since",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_security_center_insights_class_list": {
+    "dismissed": true,
+    "issue_class": [],
+    "issue_class_neq": [],
+    "issue_type": [],
+    "issue_type_neq": [],
+    "product": [],
+    "product_neq": [],
+    "severity": [],
+    "severity_neq": [],
+    "source": [],
+    "subject": [],
+    "subject_neq": [],
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_security_center_insights_scans_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_security_center_insights_scans_create": {
+    "issue_class": "sample_issue_class",
+    "issue_type": "compliance_violation",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_security_center_insights_severity_list": {
+    "dismissed": true,
+    "issue_class": [],
+    "issue_class_neq": [],
+    "issue_type": [],
+    "issue_type_neq": [],
+    "product": [],
+    "product_neq": [],
+    "severity": [],
+    "severity_neq": [],
+    "source": [],
+    "subject": [],
+    "subject_neq": [],
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_security_center_insights_type_list": {
+    "dismissed": true,
+    "issue_class": [],
+    "issue_class_neq": [],
+    "issue_type": [],
+    "issue_type_neq": [],
+    "product": [],
+    "product_neq": [],
+    "severity": [],
+    "severity_neq": [],
+    "source": [],
+    "subject": [],
+    "subject_neq": [],
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_security_center_insights_issue_id_audit_log_list": {
+    "before": "sample_before",
+    "changed_by": "sample_changed_by",
+    "cursor": "sample_cursor",
+    "field_changed": "status",
+    "issue_id": "sample_issue_id",
+    "order": "asc",
+    "per_page": 1,
+    "since": "sample_since",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_security_center_insights_issue_id_classification_patch": {
+    "classification": "false_positive",
+    "issue_id": "sample_issue_id",
+    "rationale": "sample_rationale",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_security_center_insights_issue_id_dismiss_put": {
+    "dismiss": true,
+    "issue_id": "sample_issue_id",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_security_center_securitytxt_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_security_center_securitytxt_put": {
+    "acknowledgments": [],
+    "canonical": [],
+    "contact": [],
+    "enabled": true,
+    "encryption": [],
+    "expires": "sample_expires",
+    "hiring": [],
+    "policy": [],
+    "preferred_languages": "sample_preferred_languages",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_security_center_securitytxt_delete": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_speed_api_availabilities_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_speed_api_pages_list": {
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_speed_api_pages_url_tests_list": {
+    "page": 1,
+    "per_page": 1,
+    "region": "asia-east1",
+    "url": "sample_url",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_speed_api_pages_url_tests_create": {
+    "region": "asia-east1",
+    "url": "sample_url",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_speed_api_pages_url_tests_delete": {
+    "region": "asia-east1",
+    "url": "sample_url",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_speed_api_pages_url_tests_get": {
+    "test_id": "sample_test_id",
+    "url": "sample_url",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_speed_api_pages_url_trend_list": {
+    "device_type": "DESKTOP",
+    "end": "sample_end",
+    "metrics": "sample_metrics",
+    "region": "asia-east1",
+    "start": "sample_start",
+    "tz": "sample_tz",
+    "url": "sample_url",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_speed_api_schedule_get": {
+    "region": "asia-east1",
+    "url": "sample_url",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_speed_api_schedule_create": {
+    "frequency": "DAILY",
+    "region": "asia-east1",
+    "url": "sample_url",
+    "zone_id": "sample_zone_id"
+  },
+  "cloudflare_speed_api_schedule_delete": {
+    "region": "asia-east1",
+    "url": "sample_url",
+    "zone_id": "sample_zone_id"
+  },
   "confluence_get_page_by_id": {
     "draft": true,
     "id": 1,

@@ -1,0 +1,15 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/analytics/query/sample_dataset/summary",
+  "body": {
+    "filters": [],
+    "from": "sample_from",
+    "groupBy": [],
+    "stats": [],
+    "to": "sample_to"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

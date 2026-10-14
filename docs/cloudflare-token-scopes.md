@@ -206,10 +206,39 @@ Tools (3):
 - `cloudflare_access_gateway_ca_create` - `POST` `/accounts/{account_id}/access/gateway_ca`
 - `cloudflare_access_gateway_ca_delete` - `DELETE` `/accounts/{account_id}/access/gateway_ca/{certificate_id}`
 
+## Account Analytics Read
+
+Tools (6):
+- `cloudflare_account_analytics_sql_list` - `GET` `/accounts/{account_tag}/analytics/sql`
+- `cloudflare_account_analytics_sql_create` - `POST` `/accounts/{account_tag}/analytics/sql`
+- `cloudflare_account_analytics_sql_introspection_list` - `GET` `/accounts/{account_tag}/analytics/sql/introspection`
+- `cloudflare_analytics_sql_list` - `GET` `/analytics/sql`
+- `cloudflare_analytics_sql_create` - `POST` `/analytics/sql`
+- `cloudflare_analytics_sql_introspection_list` - `GET` `/analytics/sql/introspection`
+
 ## Account Settings Write
 
-Tools (1):
+Tools (14):
 - `cloudflare_workers_account_settings_put` - `PUT` `/accounts/{account_id}/workers/account-settings`
+- `cloudflare_alerting_v3_destinations_pagerduty_delete` - `DELETE` `/accounts/{account_id}/alerting/v3/destinations/pagerduty`
+- `cloudflare_alerting_v3_destinations_pagerduty_connect_create` - `POST` `/accounts/{account_id}/alerting/v3/destinations/pagerduty/connect`
+- `cloudflare_alerting_v3_destinations_pagerduty_connect_get` - `GET` `/accounts/{account_id}/alerting/v3/destinations/pagerduty/connect/{token_id}`
+- `cloudflare_alerting_v3_destinations_webhooks_create` - `POST` `/accounts/{account_id}/alerting/v3/destinations/webhooks`
+- `cloudflare_alerting_v3_destinations_webhooks_replace` - `PUT` `/accounts/{account_id}/alerting/v3/destinations/webhooks/{webhook_id}`
+- `cloudflare_alerting_v3_destinations_webhooks_delete` - `DELETE` `/accounts/{account_id}/alerting/v3/destinations/webhooks/{webhook_id}`
+- `cloudflare_alerting_v3_policies_create` - `POST` `/accounts/{account_id}/alerting/v3/policies`
+- `cloudflare_alerting_v3_policies_replace` - `PUT` `/accounts/{account_id}/alerting/v3/policies/{policy_id}`
+- `cloudflare_alerting_v3_policies_delete` - `DELETE` `/accounts/{account_id}/alerting/v3/policies/{policy_id}`
+- `cloudflare_alerting_v3_policies_policy_id_test` - `POST` `/accounts/{account_id}/alerting/v3/policies/{policy_id}/test`
+- `cloudflare_alerting_v3_silences_create` - `POST` `/accounts/{account_id}/alerting/v3/silences`
+- `cloudflare_alerting_v3_silences_put` - `PUT` `/accounts/{account_id}/alerting/v3/silences`
+- `cloudflare_alerting_v3_silences_delete` - `DELETE` `/accounts/{account_id}/alerting/v3/silences/{silence_id}`
+
+## Analytics Read
+
+Tools (2):
+- `cloudflare_analytics_colos_list` - `GET` `/zones/{zone_identifier}/analytics/colos`
+- `cloudflare_analytics_dashboard_list` - `GET` `/zones/{zone_identifier}/analytics/dashboard`
 
 ## API Tokens Read
 
@@ -375,6 +404,70 @@ Tools (2):
 - `cloudflare_workers_scripts_delete` - `DELETE` `/accounts/{account_id}/workers/scripts/{script_name}`
 - `cloudflare_workers_workers_delete` - `DELETE` `/accounts/{account_id}/workers/workers/{worker_id}`
 
+## Logs Read
+
+Tools (12):
+- `cloudflare_logpush_datasets_dataset_id_fields_list` - `GET` `/accounts/{account_id}/logpush/datasets/{dataset_id}/fields`
+- `cloudflare_logs_explorer_datasets_list` - `GET` `/accounts/{account_id}/logs/explorer/datasets`
+- `cloudflare_logs_explorer_datasets_available_list` - `GET` `/accounts/{account_id}/logs/explorer/datasets/available`
+- `cloudflare_logs_explorer_query_sql_create` - `POST` `/accounts/{account_id}/logs/explorer/query/sql`
+- `cloudflare_logs_list_list` - `GET` `/accounts/{account_id}/logs/list`
+- `cloudflare_logs_retrieve_list` - `GET` `/accounts/{account_id}/logs/retrieve`
+- `cloudflare_zone_logpush_datasets_dataset_id_fields_list` - `GET` `/zones/{zone_id}/logpush/datasets/{dataset_id}/fields`
+- `cloudflare_logpush_edge_jobs_list` - `GET` `/zones/{zone_id}/logpush/edge/jobs`
+- `cloudflare_logpush_edge_jobs_create` - `POST` `/zones/{zone_id}/logpush/edge/jobs`
+- `cloudflare_zone_logs_explorer_datasets_list` - `GET` `/zones/{zone_id}/logs/explorer/datasets`
+- `cloudflare_zone_logs_explorer_datasets_available_list` - `GET` `/zones/{zone_id}/logs/explorer/datasets/available`
+- `cloudflare_zone_logs_explorer_query_sql_create` - `POST` `/zones/{zone_id}/logs/explorer/query/sql`
+
+## Logs Write
+
+Tools (44):
+- `cloudflare_logpush_datasets_dataset_id_jobs_list` - `GET` `/accounts/{account_id}/logpush/datasets/{dataset_id}/jobs`
+- `cloudflare_logpush_jobs_list` - `GET` `/accounts/{account_id}/logpush/jobs`
+- `cloudflare_logpush_jobs_create` - `POST` `/accounts/{account_id}/logpush/jobs`
+- `cloudflare_logpush_jobs_get` - `GET` `/accounts/{account_id}/logpush/jobs/{job_id}`
+- `cloudflare_logpush_jobs_replace` - `PUT` `/accounts/{account_id}/logpush/jobs/{job_id}`
+- `cloudflare_logpush_jobs_delete` - `DELETE` `/accounts/{account_id}/logpush/jobs/{job_id}`
+- `cloudflare_logpush_ownership_create` - `POST` `/accounts/{account_id}/logpush/ownership`
+- `cloudflare_logpush_ownership_validate` - `POST` `/accounts/{account_id}/logpush/ownership/validate`
+- `cloudflare_logpush_transformers_list` - `GET` `/accounts/{account_id}/logpush/transformers`
+- `cloudflare_logpush_transformers_create` - `POST` `/accounts/{account_id}/logpush/transformers`
+- `cloudflare_logpush_transformers_preview` - `POST` `/accounts/{account_id}/logpush/transformers/preview`
+- `cloudflare_logpush_transformers_get` - `GET` `/accounts/{account_id}/logpush/transformers/{transformer_id}`
+- `cloudflare_logpush_transformers_replace` - `PUT` `/accounts/{account_id}/logpush/transformers/{transformer_id}`
+- `cloudflare_logpush_transformers_delete` - `DELETE` `/accounts/{account_id}/logpush/transformers/{transformer_id}`
+- `cloudflare_logpush_transformers_transformer_id_content_list` - `GET` `/accounts/{account_id}/logpush/transformers/{transformer_id}/content`
+- `cloudflare_logpush_transformers_transformer_id_versions_list` - `GET` `/accounts/{account_id}/logpush/transformers/{transformer_id}/versions`
+- `cloudflare_logpush_validate_destination_create` - `POST` `/accounts/{account_id}/logpush/validate/destination`
+- `cloudflare_logpush_validate_destination_exists_create` - `POST` `/accounts/{account_id}/logpush/validate/destination/exists`
+- `cloudflare_logpush_validate_origin_create` - `POST` `/accounts/{account_id}/logpush/validate/origin`
+- `cloudflare_logs_explorer_datasets_list` - `GET` `/accounts/{account_id}/logs/explorer/datasets`
+- `cloudflare_logs_explorer_datasets_create` - `POST` `/accounts/{account_id}/logs/explorer/datasets`
+- `cloudflare_logs_explorer_datasets_available_list` - `GET` `/accounts/{account_id}/logs/explorer/datasets/available`
+- `cloudflare_logs_explorer_datasets_get` - `GET` `/accounts/{account_id}/logs/explorer/datasets/{dataset_id}`
+- `cloudflare_logs_explorer_datasets_replace` - `PUT` `/accounts/{account_id}/logs/explorer/datasets/{dataset_id}`
+- `cloudflare_logs_explorer_query_sql_create` - `POST` `/accounts/{account_id}/logs/explorer/query/sql`
+- `cloudflare_logs_list_list` - `GET` `/accounts/{account_id}/logs/list`
+- `cloudflare_logs_retrieve_list` - `GET` `/accounts/{account_id}/logs/retrieve`
+- `cloudflare_zone_logpush_datasets_dataset_id_jobs_list` - `GET` `/zones/{zone_id}/logpush/datasets/{dataset_id}/jobs`
+- `cloudflare_zone_logpush_jobs_list` - `GET` `/zones/{zone_id}/logpush/jobs`
+- `cloudflare_zone_logpush_jobs_create` - `POST` `/zones/{zone_id}/logpush/jobs`
+- `cloudflare_zone_logpush_jobs_get` - `GET` `/zones/{zone_id}/logpush/jobs/{job_id}`
+- `cloudflare_zone_logpush_jobs_replace` - `PUT` `/zones/{zone_id}/logpush/jobs/{job_id}`
+- `cloudflare_zone_logpush_jobs_delete` - `DELETE` `/zones/{zone_id}/logpush/jobs/{job_id}`
+- `cloudflare_zone_logpush_ownership_create` - `POST` `/zones/{zone_id}/logpush/ownership`
+- `cloudflare_zone_logpush_ownership_validate` - `POST` `/zones/{zone_id}/logpush/ownership/validate`
+- `cloudflare_zone_logpush_validate_destination_create` - `POST` `/zones/{zone_id}/logpush/validate/destination`
+- `cloudflare_zone_logpush_validate_destination_exists_create` - `POST` `/zones/{zone_id}/logpush/validate/destination/exists`
+- `cloudflare_zone_logpush_validate_origin_create` - `POST` `/zones/{zone_id}/logpush/validate/origin`
+- `cloudflare_zone_logs_explorer_datasets_list` - `GET` `/zones/{zone_id}/logs/explorer/datasets`
+- `cloudflare_zone_logs_explorer_datasets_create` - `POST` `/zones/{zone_id}/logs/explorer/datasets`
+- `cloudflare_zone_logs_explorer_datasets_available_list` - `GET` `/zones/{zone_id}/logs/explorer/datasets/available`
+- `cloudflare_zone_logs_explorer_datasets_get` - `GET` `/zones/{zone_id}/logs/explorer/datasets/{dataset_id}`
+- `cloudflare_zone_logs_explorer_datasets_replace` - `PUT` `/zones/{zone_id}/logs/explorer/datasets/{dataset_id}`
+- `cloudflare_zone_logs_explorer_query_sql_create` - `POST` `/zones/{zone_id}/logs/explorer/query/sql`
+
 ## MCP Portals Read
 
 Tools (7):
@@ -403,6 +496,23 @@ Tools (14):
 - `cloudflare_access_ai_controls_mcp_servers_replace` - `PUT` `/accounts/{account_id}/access/ai-controls/mcp/servers/{id}`
 - `cloudflare_access_ai_controls_mcp_servers_delete` - `DELETE` `/accounts/{account_id}/access/ai-controls/mcp/servers/{id}`
 - `cloudflare_access_ai_controls_mcp_servers_id_sync_create` - `POST` `/accounts/{account_id}/access/ai-controls/mcp/servers/{id}/sync`
+
+## Notifications Write
+
+Tools (13):
+- `cloudflare_alerting_v3_destinations_pagerduty_delete` - `DELETE` `/accounts/{account_id}/alerting/v3/destinations/pagerduty`
+- `cloudflare_alerting_v3_destinations_pagerduty_connect_create` - `POST` `/accounts/{account_id}/alerting/v3/destinations/pagerduty/connect`
+- `cloudflare_alerting_v3_destinations_pagerduty_connect_get` - `GET` `/accounts/{account_id}/alerting/v3/destinations/pagerduty/connect/{token_id}`
+- `cloudflare_alerting_v3_destinations_webhooks_create` - `POST` `/accounts/{account_id}/alerting/v3/destinations/webhooks`
+- `cloudflare_alerting_v3_destinations_webhooks_replace` - `PUT` `/accounts/{account_id}/alerting/v3/destinations/webhooks/{webhook_id}`
+- `cloudflare_alerting_v3_destinations_webhooks_delete` - `DELETE` `/accounts/{account_id}/alerting/v3/destinations/webhooks/{webhook_id}`
+- `cloudflare_alerting_v3_policies_create` - `POST` `/accounts/{account_id}/alerting/v3/policies`
+- `cloudflare_alerting_v3_policies_replace` - `PUT` `/accounts/{account_id}/alerting/v3/policies/{policy_id}`
+- `cloudflare_alerting_v3_policies_delete` - `DELETE` `/accounts/{account_id}/alerting/v3/policies/{policy_id}`
+- `cloudflare_alerting_v3_policies_policy_id_test` - `POST` `/accounts/{account_id}/alerting/v3/policies/{policy_id}/test`
+- `cloudflare_alerting_v3_silences_create` - `POST` `/accounts/{account_id}/alerting/v3/silences`
+- `cloudflare_alerting_v3_silences_put` - `PUT` `/accounts/{account_id}/alerting/v3/silences`
+- `cloudflare_alerting_v3_silences_delete` - `DELETE` `/accounts/{account_id}/alerting/v3/silences/{silence_id}`
 
 ## Pages Read
 
@@ -764,7 +874,7 @@ Tools (26):
 
 ## Zero Trust Read
 
-Tools (43):
+Tools (49):
 - `cloudflare_devices_ip_profiles_list` - `GET` `/accounts/{account_id}/devices/ip-profiles`
 - `cloudflare_devices_ip_profiles_get` - `GET` `/accounts/{account_id}/devices/ip-profiles/{profile_id}`
 - `cloudflare_devices_registrations_registration_id_override_codes_list` - `GET` `/accounts/{account_id}/devices/registrations/{registration_id}/override_codes`
@@ -808,6 +918,12 @@ Tools (43):
 - `cloudflare_gateway_pacfiles_list` - `GET` `/accounts/{account_id}/gateway/pacfiles`
 - `cloudflare_gateway_pacfiles_get` - `GET` `/accounts/{account_id}/gateway/pacfiles/{pacfile_id}`
 - `cloudflare_zerotrust_connectivity_settings_list` - `GET` `/accounts/{account_id}/zerotrust/connectivity_settings`
+- `cloudflare_analytics_query_data_security_content_findings_top_n_create` - `POST` `/accounts/{account_id}/analytics/query/data-security/content-findings/top-n`
+- `cloudflare_analytics_query_data_security_findings_summary_create` - `POST` `/accounts/{account_id}/analytics/query/data-security/findings/summary`
+- `cloudflare_analytics_query_data_security_findings_timeseries_create` - `POST` `/accounts/{account_id}/analytics/query/data-security/findings/timeseries`
+- `cloudflare_analytics_query_dataset_summary_create` - `POST` `/accounts/{account_id}/analytics/query/{dataset}/summary`
+- `cloudflare_analytics_query_dataset_timeseries_create` - `POST` `/accounts/{account_id}/analytics/query/{dataset}/timeseries`
+- `cloudflare_analytics_query_dataset_top_n_create` - `POST` `/accounts/{account_id}/analytics/query/{dataset}/top-n`
 
 ## Zero Trust Report
 
@@ -954,26 +1070,80 @@ Tools (1):
 
 ## Zone Settings Read
 
-Tools (2):
+Tools (16):
 - `cloudflare_settings_list` - `GET` `/zones/{zone_id}/settings`
 - `cloudflare_settings_get` - `GET` `/zones/{zone_id}/settings/{setting_id}`
+- `cloudflare_security_center_insights_list` - `GET` `/zones/{zone_id}/security-center/insights`
+- `cloudflare_security_center_insights_audit_log_list` - `GET` `/zones/{zone_id}/security-center/insights/audit-log`
+- `cloudflare_security_center_insights_class_list` - `GET` `/zones/{zone_id}/security-center/insights/class`
+- `cloudflare_security_center_insights_scans_list` - `GET` `/zones/{zone_id}/security-center/insights/scans`
+- `cloudflare_security_center_insights_severity_list` - `GET` `/zones/{zone_id}/security-center/insights/severity`
+- `cloudflare_security_center_insights_type_list` - `GET` `/zones/{zone_id}/security-center/insights/type`
+- `cloudflare_security_center_insights_issue_id_audit_log_list` - `GET` `/zones/{zone_id}/security-center/insights/{issue_id}/audit-log`
+- `cloudflare_security_center_securitytxt_list` - `GET` `/zones/{zone_id}/security-center/securitytxt`
+- `cloudflare_speed_api_availabilities_list` - `GET` `/zones/{zone_id}/speed_api/availabilities`
+- `cloudflare_speed_api_pages_list` - `GET` `/zones/{zone_id}/speed_api/pages`
+- `cloudflare_speed_api_pages_url_tests_list` - `GET` `/zones/{zone_id}/speed_api/pages/{url}/tests`
+- `cloudflare_speed_api_pages_url_tests_get` - `GET` `/zones/{zone_id}/speed_api/pages/{url}/tests/{test_id}`
+- `cloudflare_speed_api_pages_url_trend_list` - `GET` `/zones/{zone_id}/speed_api/pages/{url}/trend`
+- `cloudflare_speed_api_schedule_get` - `GET` `/zones/{zone_id}/speed_api/schedule/{url}`
 
 ## Zone Settings Write
 
-Tools (3):
+Tools (34):
 - `cloudflare_settings_list` - `GET` `/zones/{zone_id}/settings`
 - `cloudflare_settings_get` - `GET` `/zones/{zone_id}/settings/{setting_id}`
 - `cloudflare_settings_update` - `PATCH` `/zones/{zone_id}/settings/{setting_id}`
+- `cloudflare_cache_cache_reserve_patch` - `PATCH` `/zones/{zone_id}/cache/cache_reserve`
+- `cloudflare_cache_cache_reserve_clear_create` - `POST` `/zones/{zone_id}/cache/cache_reserve_clear`
+- `cloudflare_cache_origin_post_quantum_encryption_put` - `PUT` `/zones/{zone_id}/cache/origin_post_quantum_encryption`
+- `cloudflare_cache_regional_tiered_cache_patch` - `PATCH` `/zones/{zone_id}/cache/regional_tiered_cache`
+- `cloudflare_cache_tiered_cache_smart_topology_enable` - `POST` `/zones/{zone_id}/cache/tiered_cache_smart_topology_enable`
+- `cloudflare_cache_tiered_cache_smart_topology_update` - `PATCH` `/zones/{zone_id}/cache/tiered_cache_smart_topology_enable`
+- `cloudflare_cache_tiered_cache_smart_topology_delete` - `DELETE` `/zones/{zone_id}/cache/tiered_cache_smart_topology_enable`
+- `cloudflare_cache_variants_patch` - `PATCH` `/zones/{zone_id}/cache/variants`
+- `cloudflare_cache_variants_delete` - `DELETE` `/zones/{zone_id}/cache/variants`
+- `cloudflare_security_center_insights_list` - `GET` `/zones/{zone_id}/security-center/insights`
+- `cloudflare_security_center_insights_audit_log_list` - `GET` `/zones/{zone_id}/security-center/insights/audit-log`
+- `cloudflare_security_center_insights_class_list` - `GET` `/zones/{zone_id}/security-center/insights/class`
+- `cloudflare_security_center_insights_scans_list` - `GET` `/zones/{zone_id}/security-center/insights/scans`
+- `cloudflare_security_center_insights_scans_create` - `POST` `/zones/{zone_id}/security-center/insights/scans`
+- `cloudflare_security_center_insights_severity_list` - `GET` `/zones/{zone_id}/security-center/insights/severity`
+- `cloudflare_security_center_insights_type_list` - `GET` `/zones/{zone_id}/security-center/insights/type`
+- `cloudflare_security_center_insights_issue_id_audit_log_list` - `GET` `/zones/{zone_id}/security-center/insights/{issue_id}/audit-log`
+- `cloudflare_security_center_insights_issue_id_dismiss_put` - `PUT` `/zones/{zone_id}/security-center/insights/{issue_id}/dismiss`
+- `cloudflare_security_center_securitytxt_list` - `GET` `/zones/{zone_id}/security-center/securitytxt`
+- `cloudflare_security_center_securitytxt_put` - `PUT` `/zones/{zone_id}/security-center/securitytxt`
+- `cloudflare_security_center_securitytxt_delete` - `DELETE` `/zones/{zone_id}/security-center/securitytxt`
+- `cloudflare_speed_api_availabilities_list` - `GET` `/zones/{zone_id}/speed_api/availabilities`
+- `cloudflare_speed_api_pages_list` - `GET` `/zones/{zone_id}/speed_api/pages`
+- `cloudflare_speed_api_pages_url_tests_list` - `GET` `/zones/{zone_id}/speed_api/pages/{url}/tests`
+- `cloudflare_speed_api_pages_url_tests_create` - `POST` `/zones/{zone_id}/speed_api/pages/{url}/tests`
+- `cloudflare_speed_api_pages_url_tests_delete` - `DELETE` `/zones/{zone_id}/speed_api/pages/{url}/tests`
+- `cloudflare_speed_api_pages_url_tests_get` - `GET` `/zones/{zone_id}/speed_api/pages/{url}/tests/{test_id}`
+- `cloudflare_speed_api_pages_url_trend_list` - `GET` `/zones/{zone_id}/speed_api/pages/{url}/trend`
+- `cloudflare_speed_api_schedule_get` - `GET` `/zones/{zone_id}/speed_api/schedule/{url}`
+- `cloudflare_speed_api_schedule_create` - `POST` `/zones/{zone_id}/speed_api/schedule/{url}`
+- `cloudflare_speed_api_schedule_delete` - `DELETE` `/zones/{zone_id}/speed_api/schedule/{url}`
 
 ## Zone Write
 
-Tools (6):
+Tools (15):
 - `cloudflare_zones_update` - `PATCH` `/zones/{zone_id}`
 - `cloudflare_zones_delete` - `DELETE` `/zones/{zone_id}`
 - `cloudflare_activation_check` - `PUT` `/zones/{zone_id}/activation_check`
 - `cloudflare_hold_create` - `POST` `/zones/{zone_id}/hold`
 - `cloudflare_hold_patch` - `PATCH` `/zones/{zone_id}/hold`
 - `cloudflare_hold_delete` - `DELETE` `/zones/{zone_id}/hold`
+- `cloudflare_cache_cache_reserve_patch` - `PATCH` `/zones/{zone_id}/cache/cache_reserve`
+- `cloudflare_cache_cache_reserve_clear_create` - `POST` `/zones/{zone_id}/cache/cache_reserve_clear`
+- `cloudflare_cache_origin_post_quantum_encryption_put` - `PUT` `/zones/{zone_id}/cache/origin_post_quantum_encryption`
+- `cloudflare_cache_regional_tiered_cache_patch` - `PATCH` `/zones/{zone_id}/cache/regional_tiered_cache`
+- `cloudflare_cache_tiered_cache_smart_topology_enable` - `POST` `/zones/{zone_id}/cache/tiered_cache_smart_topology_enable`
+- `cloudflare_cache_tiered_cache_smart_topology_update` - `PATCH` `/zones/{zone_id}/cache/tiered_cache_smart_topology_enable`
+- `cloudflare_cache_tiered_cache_smart_topology_delete` - `DELETE` `/zones/{zone_id}/cache/tiered_cache_smart_topology_enable`
+- `cloudflare_cache_variants_patch` - `PATCH` `/zones/{zone_id}/cache/variants`
+- `cloudflare_cache_variants_delete` - `DELETE` `/zones/{zone_id}/cache/variants`
 
 ## Zone Zone Edit
 
@@ -1046,6 +1216,54 @@ permissions; the count is how many it accepts.
 - `cloudflare_tunnels_list` - `GET` `/accounts/{account_id}/tunnels` - any of 6
 - `cloudflare_zerotrust_routes_hostname_list` - `GET` `/accounts/{account_id}/zerotrust/routes/hostname` - any of 4
 - `cloudflare_zerotrust_routes_hostname_get` - `GET` `/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}` - any of 4
+- `cloudflare_alerting_v3_available_alerts_list` - `GET` `/accounts/{account_id}/alerting/v3/available_alerts` - any of 5
+- `cloudflare_alerting_v3_destinations_pagerduty_list` - `GET` `/accounts/{account_id}/alerting/v3/destinations/pagerduty` - any of 5
+- `cloudflare_alerting_v3_destinations_webhooks_list` - `GET` `/accounts/{account_id}/alerting/v3/destinations/webhooks` - any of 5
+- `cloudflare_alerting_v3_destinations_webhooks_get` - `GET` `/accounts/{account_id}/alerting/v3/destinations/webhooks/{webhook_id}` - any of 5
+- `cloudflare_alerting_v3_history_list` - `GET` `/accounts/{account_id}/alerting/v3/history` - any of 5
+- `cloudflare_alerting_v3_policies_list` - `GET` `/accounts/{account_id}/alerting/v3/policies` - any of 5
+- `cloudflare_alerting_v3_policies_get` - `GET` `/accounts/{account_id}/alerting/v3/policies/{policy_id}` - any of 5
+- `cloudflare_alerting_v3_policies_policy_id_email_unsubscribe_list` - `GET` `/accounts/{account_id}/alerting/v3/policies/{policy_id}/email/unsubscribe` - any of 5
+- `cloudflare_alerting_v3_silences_list` - `GET` `/accounts/{account_id}/alerting/v3/silences` - any of 5
+- `cloudflare_alerting_v3_silences_get` - `GET` `/accounts/{account_id}/alerting/v3/silences/{silence_id}` - any of 5
+- `cloudflare_rulesets_list` - `GET` `/accounts/{account_id}/rulesets` - any of 16
+- `cloudflare_rulesets_create` - `POST` `/accounts/{account_id}/rulesets` - any of 8
+- `cloudflare_rulesets_phases_ruleset_phase_entrypoint_list` - `GET` `/accounts/{account_id}/rulesets/phases/{ruleset_phase}/entrypoint` - any of 16
+- `cloudflare_rulesets_phases_ruleset_phase_entrypoint_put` - `PUT` `/accounts/{account_id}/rulesets/phases/{ruleset_phase}/entrypoint` - any of 8
+- `cloudflare_rulesets_phases_ruleset_phase_entrypoint_versions_list` - `GET` `/accounts/{account_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions` - any of 16
+- `cloudflare_rulesets_phases_ruleset_phase_entrypoint_versions_get` - `GET` `/accounts/{account_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions/{ruleset_version}` - any of 16
+- `cloudflare_rulesets_get` - `GET` `/accounts/{account_id}/rulesets/{ruleset_id}` - any of 16
+- `cloudflare_rulesets_replace` - `PUT` `/accounts/{account_id}/rulesets/{ruleset_id}` - any of 8
+- `cloudflare_rulesets_delete` - `DELETE` `/accounts/{account_id}/rulesets/{ruleset_id}` - any of 8
+- `cloudflare_rulesets_ruleset_id_rules_create` - `POST` `/accounts/{account_id}/rulesets/{ruleset_id}/rules` - any of 8
+- `cloudflare_rulesets_ruleset_id_rules_update` - `PATCH` `/accounts/{account_id}/rulesets/{ruleset_id}/rules/{rule_id}` - any of 8
+- `cloudflare_rulesets_ruleset_id_rules_delete` - `DELETE` `/accounts/{account_id}/rulesets/{ruleset_id}/rules/{rule_id}` - any of 8
+- `cloudflare_rulesets_ruleset_id_versions_list` - `GET` `/accounts/{account_id}/rulesets/{ruleset_id}/versions` - any of 16
+- `cloudflare_rulesets_ruleset_id_versions_get` - `GET` `/accounts/{account_id}/rulesets/{ruleset_id}/versions/{ruleset_version}` - any of 16
+- `cloudflare_rulesets_ruleset_id_versions_delete` - `DELETE` `/accounts/{account_id}/rulesets/{ruleset_id}/versions/{ruleset_version}` - any of 8
+- `cloudflare_rulesets_ruleset_id_versions_ruleset_version_by_tag_get` - `GET` `/accounts/{account_id}/rulesets/{ruleset_id}/versions/{ruleset_version}/by_tag/{rule_tag}` - any of 16
+- `cloudflare_cache_cache_reserve_list` - `GET` `/zones/{zone_id}/cache/cache_reserve` - any of 4
+- `cloudflare_cache_cache_reserve_clear_list` - `GET` `/zones/{zone_id}/cache/cache_reserve_clear` - any of 4
+- `cloudflare_cache_origin_post_quantum_encryption_list` - `GET` `/zones/{zone_id}/cache/origin_post_quantum_encryption` - any of 4
+- `cloudflare_cache_regional_tiered_cache_list` - `GET` `/zones/{zone_id}/cache/regional_tiered_cache` - any of 4
+- `cloudflare_cache_tiered_cache_smart_topology_get` - `GET` `/zones/{zone_id}/cache/tiered_cache_smart_topology_enable` - any of 4
+- `cloudflare_cache_variants_list` - `GET` `/zones/{zone_id}/cache/variants` - any of 4
+- `cloudflare_zone_rulesets_list` - `GET` `/zones/{zone_id}/rulesets` - any of 40
+- `cloudflare_zone_rulesets_create` - `POST` `/zones/{zone_id}/rulesets` - any of 20
+- `cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_list` - `GET` `/zones/{zone_id}/rulesets/phases/{ruleset_phase}/entrypoint` - any of 40
+- `cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_put` - `PUT` `/zones/{zone_id}/rulesets/phases/{ruleset_phase}/entrypoint` - any of 20
+- `cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_versions_list` - `GET` `/zones/{zone_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions` - any of 40
+- `cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_versions_get` - `GET` `/zones/{zone_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions/{ruleset_version}` - any of 40
+- `cloudflare_zone_rulesets_get` - `GET` `/zones/{zone_id}/rulesets/{ruleset_id}` - any of 40
+- `cloudflare_zone_rulesets_replace` - `PUT` `/zones/{zone_id}/rulesets/{ruleset_id}` - any of 20
+- `cloudflare_zone_rulesets_delete` - `DELETE` `/zones/{zone_id}/rulesets/{ruleset_id}` - any of 20
+- `cloudflare_zone_rulesets_ruleset_id_rules_create` - `POST` `/zones/{zone_id}/rulesets/{ruleset_id}/rules` - any of 20
+- `cloudflare_zone_rulesets_ruleset_id_rules_update` - `PATCH` `/zones/{zone_id}/rulesets/{ruleset_id}/rules/{rule_id}` - any of 20
+- `cloudflare_zone_rulesets_ruleset_id_rules_delete` - `DELETE` `/zones/{zone_id}/rulesets/{ruleset_id}/rules/{rule_id}` - any of 20
+- `cloudflare_zone_rulesets_ruleset_id_versions_list` - `GET` `/zones/{zone_id}/rulesets/{ruleset_id}/versions` - any of 40
+- `cloudflare_zone_rulesets_ruleset_id_versions_get` - `GET` `/zones/{zone_id}/rulesets/{ruleset_id}/versions/{ruleset_version}` - any of 40
+- `cloudflare_zone_rulesets_ruleset_id_versions_delete` - `DELETE` `/zones/{zone_id}/rulesets/{ruleset_id}/versions/{ruleset_version}` - any of 20
+- `cloudflare_zone_rulesets_ruleset_id_versions_ruleset_version_by_tag_get` - `GET` `/zones/{zone_id}/rulesets/{ruleset_id}/versions/{ruleset_version}/by_tag/{rule_tag}` - any of 40
 
 ## Cloudflare's internal permission ids
 
@@ -1158,6 +1376,57 @@ quotes back.
 - `cloudflare_access_ai_controls_mcp_servers_replace`: `com.cloudflare.api.account.mcp_portals`
 - `cloudflare_access_ai_controls_mcp_servers_delete`: `com.cloudflare.api.account.mcp_portals`
 - `cloudflare_access_ai_controls_mcp_servers_id_sync_create`: `com.cloudflare.api.account.mcp_portals`
+- `cloudflare_logpush_datasets_dataset_id_fields_list`: `#logs:read`
+- `cloudflare_logpush_datasets_dataset_id_jobs_list`: `#logs:edit`
+- `cloudflare_logpush_jobs_list`: `#logs:edit`
+- `cloudflare_logpush_jobs_create`: `#logs:edit`
+- `cloudflare_logpush_jobs_get`: `#logs:edit`
+- `cloudflare_logpush_jobs_replace`: `#logs:edit`
+- `cloudflare_logpush_jobs_delete`: `#logs:edit`
+- `cloudflare_logpush_ownership_create`: `#logs:edit`
+- `cloudflare_logpush_ownership_validate`: `#logs:edit`
+- `cloudflare_logpush_transformers_list`: `#logs:edit`
+- `cloudflare_logpush_transformers_create`: `#logs:edit`
+- `cloudflare_logpush_transformers_preview`: `#logs:edit`
+- `cloudflare_logpush_transformers_get`: `#logs:edit`
+- `cloudflare_logpush_transformers_replace`: `#logs:edit`
+- `cloudflare_logpush_transformers_delete`: `#logs:edit`
+- `cloudflare_logpush_transformers_transformer_id_content_list`: `#logs:edit`
+- `cloudflare_logpush_transformers_transformer_id_versions_list`: `#logs:edit`
+- `cloudflare_logpush_validate_destination_create`: `#logs:edit`
+- `cloudflare_logpush_validate_destination_exists_create`: `#logs:edit`
+- `cloudflare_logpush_validate_origin_create`: `#logs:edit`
+- `cloudflare_analytics_colos_list`: `#analytics:read`
+- `cloudflare_analytics_dashboard_list`: `#analytics:read`
+- `cloudflare_cache_cache_reserve_list`: `#zone_settings:read`
+- `cloudflare_cache_cache_reserve_patch`: `#zone_settings:edit`
+- `cloudflare_cache_cache_reserve_clear_list`: `#zone_settings:read`
+- `cloudflare_cache_cache_reserve_clear_create`: `#zone_settings:edit`
+- `cloudflare_cache_origin_post_quantum_encryption_list`: `#zone_settings:read`
+- `cloudflare_cache_origin_post_quantum_encryption_put`: `#zone_settings:edit`
+- `cloudflare_cache_regional_tiered_cache_list`: `#zone_settings:read`
+- `cloudflare_cache_regional_tiered_cache_patch`: `#zone_settings:edit`
+- `cloudflare_cache_tiered_cache_smart_topology_get`: `#zone_settings:read`
+- `cloudflare_cache_tiered_cache_smart_topology_enable`: `#zone_settings:read`, `#zone_settings:edit`
+- `cloudflare_cache_tiered_cache_smart_topology_update`: `#zone_settings:read`, `#zone_settings:edit`
+- `cloudflare_cache_tiered_cache_smart_topology_delete`: `#zone_settings:edit`
+- `cloudflare_cache_variants_list`: `#zone_settings:read`
+- `cloudflare_cache_variants_patch`: `#zone_settings:edit`
+- `cloudflare_cache_variants_delete`: `#zone_settings:edit`
+- `cloudflare_zone_logpush_datasets_dataset_id_fields_list`: `#logs:read`
+- `cloudflare_zone_logpush_datasets_dataset_id_jobs_list`: `#logs:edit`
+- `cloudflare_logpush_edge_jobs_list`: `#logs:read`
+- `cloudflare_logpush_edge_jobs_create`: `#logs:read`
+- `cloudflare_zone_logpush_jobs_list`: `#logs:edit`
+- `cloudflare_zone_logpush_jobs_create`: `#logs:edit`
+- `cloudflare_zone_logpush_jobs_get`: `#logs:edit`
+- `cloudflare_zone_logpush_jobs_replace`: `#logs:edit`
+- `cloudflare_zone_logpush_jobs_delete`: `#logs:edit`
+- `cloudflare_zone_logpush_ownership_create`: `#logs:edit`
+- `cloudflare_zone_logpush_ownership_validate`: `#logs:edit`
+- `cloudflare_zone_logpush_validate_destination_create`: `#logs:edit`
+- `cloudflare_zone_logpush_validate_destination_exists_create`: `#logs:edit`
+- `cloudflare_zone_logpush_validate_origin_create`: `#logs:edit`
 
 ## Tools with no permission metadata
 
@@ -1283,4 +1552,22 @@ under a group above. Their allowlist entry carries the reviewed note:
 - `cloudflare_teamnet_virtual_networks_get` - GET /accounts/{account_id}/teamnet/virtual_networks/{virtual_network_id}
 - `cloudflare_zerotrust_subnets_cloudflare_source_get` - GET /accounts/{account_id}/zerotrust/subnets/cloudflare_source/{address_family}
 - `cloudflare_zerotrust_subnets_initial_resolved_ip_replace` - PUT /accounts/{account_id}/zerotrust/subnets/initial_resolved_ip/{address_family}
+- `cloudflare_alerting_v3_destinations_eligible_list` - GET /accounts/{account_id}/alerting/v3/destinations/eligible
+- `cloudflare_logs_explorer_datasets_delete` - DELETE /accounts/{account_id}/logs/explorer/datasets/{dataset_id}
+- `cloudflare_cache_origin_cloud_regions_list` - GET /zones/{zone_id}/cache/origin_cloud_regions
+- `cloudflare_cache_origin_cloud_regions_create` - POST /zones/{zone_id}/cache/origin_cloud_regions
+- `cloudflare_cache_origin_cloud_regions_patch` - PATCH /zones/{zone_id}/cache/origin_cloud_regions
+- `cloudflare_cache_origin_cloud_regions_batch` - PATCH /zones/{zone_id}/cache/origin_cloud_regions/batch
+- `cloudflare_cache_origin_cloud_regions_batch_delete` - DELETE /zones/{zone_id}/cache/origin_cloud_regions/batch
+- `cloudflare_cache_origin_cloud_regions_supported_regions_list` - GET /zones/{zone_id}/cache/origin_cloud_regions/supported_regions
+- `cloudflare_cache_origin_cloud_regions_get` - GET /zones/{zone_id}/cache/origin_cloud_regions/{origin_ip}
+- `cloudflare_cache_origin_cloud_regions_delete` - DELETE /zones/{zone_id}/cache/origin_cloud_regions/{origin_ip}
+- `cloudflare_zone_logs_explorer_datasets_delete` - DELETE /zones/{zone_id}/logs/explorer/datasets/{dataset_id}
+- `cloudflare_observability_tracing_rules_list` - GET /zones/{zone_id}/observability/tracing/rules
+- `cloudflare_observability_tracing_rules_put` - PUT /zones/{zone_id}/observability/tracing/rules
+- `cloudflare_observability_tracing_rules_delete` - DELETE /zones/{zone_id}/observability/tracing/rules
+- `cloudflare_observability_tracing_settings_list` - GET /zones/{zone_id}/observability/tracing/settings
+- `cloudflare_observability_tracing_settings_patch` - PATCH /zones/{zone_id}/observability/tracing/settings
+- `cloudflare_observability_tracing_settings_delete` - DELETE /zones/{zone_id}/observability/tracing/settings
+- `cloudflare_security_center_insights_issue_id_classification_patch` - PATCH /zones/{zone_id}/security-center/insights/{issue_id}/classification
 

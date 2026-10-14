@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/security-center/insights/audit-log?per_page=1&cursor=sample_cursor&field_changed=status&changed_by=sample_changed_by&since=sample_since&before=sample_before&order=asc",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

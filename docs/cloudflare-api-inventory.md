@@ -17,7 +17,7 @@ which is what keeps it true.
 | `x-forge-hidden` | 1093 | hidden from Cloudflare's own Forge docs: internal or unreleased |
 | `x-fern-ignore` | 489 | dropped from the published Fern docs before Forge replaced them |
 | Reviewable | 2227 | what remains, and the pool every wave is chosen from |
-| Shipped | 653 | pinned in `scripts/cloudflare/allowlist.json` |
+| Shipped | 826 | pinned in `scripts/cloudflare/allowlist.json` |
 
 234 reviewable operations carry `x-forge-require-confirmation`,
 30 carry `x-cfDeprecation` and 4 declare `security: []`.
@@ -32,7 +32,7 @@ fields the spec does not publish; either is shipped only where the allowlist say
 | `w1` | reviewed | 45 | Zonas, DNS, ajustes de zona, cache y tokens de identidad | `zones/zones`, `zones/activation`, `zones/hold`, `zones/dns`, `zones/dnssec`, `zones/settings`, `zones/purge`, `zones/firewall`, `accounts/accounts`, `user/user` |
 | `w2` | reviewed | 278 | Almacenamiento y computo: R2, KV, D1, Workers, Queues, Pages | `accounts/d1`, `accounts/hyperdrive`, `accounts/pages`, `accounts/queues`, `accounts/r2`, `accounts/storage`, `accounts/vectorize`, `accounts/workers`, `accounts/workflows` |
 | `w3` | reviewed | 330 | Zero Trust y Access: apps, politicas, identity providers, gateway | `accounts/access`, `accounts/devices`, `accounts/dlp`, `accounts/gateway`, `accounts/teamnet`, `accounts/tunnels`, `accounts/zerotrust` |
-| `w4` | planned | 0 | Observabilidad y analitica: logs, analytics, alertas, WAF | - |
+| `w4` | reviewed | 173 | Observabilidad y analitica: logs, analytics, alertas, WAF | `accounts/alerting`, `accounts/analytics`, `accounts/logpush`, `accounts/logs`, `accounts/rulesets`, `analytics/analytics`, `zones/analytics`, `zones/cache`, `zones/logpush`, `zones/logs`, `zones/observability`, `zones/rulesets`, `zones/security`, `zones/speed` |
 | `w5` | planned | 0 | Radar y el resto de colecciones de cuenta con valor operativo | - |
 
 ## Shipped tools
@@ -692,6 +692,179 @@ fields the spec does not publish; either is shipped only where the allowlist say
 | 651 | `cloudflare_zerotrust_subnets_warp_get` | `GET` | `/accounts/{account_id}/zerotrust/subnets/warp/{subnet_id}` | w3 | - |
 | 652 | `cloudflare_zerotrust_subnets_warp_update` | `PATCH` | `/accounts/{account_id}/zerotrust/subnets/warp/{subnet_id}` | w3 | - |
 | 653 | `cloudflare_zerotrust_subnets_warp_delete` | `DELETE` | `/accounts/{account_id}/zerotrust/subnets/warp/{subnet_id}` | w3 | destructive, needs confirmation |
+| 654 | `cloudflare_alerting_v3_available_alerts_list` | `GET` | `/accounts/{account_id}/alerting/v3/available_alerts` | w4 | spec-hidden |
+| 655 | `cloudflare_alerting_v3_destinations_eligible_list` | `GET` | `/accounts/{account_id}/alerting/v3/destinations/eligible` | w4 | spec-hidden |
+| 656 | `cloudflare_alerting_v3_destinations_pagerduty_list` | `GET` | `/accounts/{account_id}/alerting/v3/destinations/pagerduty` | w4 | spec-hidden |
+| 657 | `cloudflare_alerting_v3_destinations_pagerduty_delete` | `DELETE` | `/accounts/{account_id}/alerting/v3/destinations/pagerduty` | w4 | spec-hidden, needs confirmation |
+| 658 | `cloudflare_alerting_v3_destinations_pagerduty_connect_create` | `POST` | `/accounts/{account_id}/alerting/v3/destinations/pagerduty/connect` | w4 | spec-hidden |
+| 659 | `cloudflare_alerting_v3_destinations_pagerduty_connect_get` | `GET` | `/accounts/{account_id}/alerting/v3/destinations/pagerduty/connect/{token_id}` | w4 | spec-hidden |
+| 660 | `cloudflare_alerting_v3_destinations_webhooks_list` | `GET` | `/accounts/{account_id}/alerting/v3/destinations/webhooks` | w4 | spec-hidden |
+| 661 | `cloudflare_alerting_v3_destinations_webhooks_create` | `POST` | `/accounts/{account_id}/alerting/v3/destinations/webhooks` | w4 | spec-hidden |
+| 662 | `cloudflare_alerting_v3_destinations_webhooks_get` | `GET` | `/accounts/{account_id}/alerting/v3/destinations/webhooks/{webhook_id}` | w4 | spec-hidden |
+| 663 | `cloudflare_alerting_v3_destinations_webhooks_replace` | `PUT` | `/accounts/{account_id}/alerting/v3/destinations/webhooks/{webhook_id}` | w4 | spec-hidden |
+| 664 | `cloudflare_alerting_v3_destinations_webhooks_delete` | `DELETE` | `/accounts/{account_id}/alerting/v3/destinations/webhooks/{webhook_id}` | w4 | spec-hidden, needs confirmation |
+| 665 | `cloudflare_alerting_v3_history_list` | `GET` | `/accounts/{account_id}/alerting/v3/history` | w4 | spec-hidden |
+| 666 | `cloudflare_alerting_v3_policies_list` | `GET` | `/accounts/{account_id}/alerting/v3/policies` | w4 | spec-hidden |
+| 667 | `cloudflare_alerting_v3_policies_create` | `POST` | `/accounts/{account_id}/alerting/v3/policies` | w4 | spec-hidden |
+| 668 | `cloudflare_alerting_v3_policies_get` | `GET` | `/accounts/{account_id}/alerting/v3/policies/{policy_id}` | w4 | spec-hidden |
+| 669 | `cloudflare_alerting_v3_policies_replace` | `PUT` | `/accounts/{account_id}/alerting/v3/policies/{policy_id}` | w4 | spec-hidden |
+| 670 | `cloudflare_alerting_v3_policies_delete` | `DELETE` | `/accounts/{account_id}/alerting/v3/policies/{policy_id}` | w4 | spec-hidden, needs confirmation |
+| 671 | `cloudflare_alerting_v3_policies_policy_id_email_unsubscribe_list` | `GET` | `/accounts/{account_id}/alerting/v3/policies/{policy_id}/email/unsubscribe` | w4 | spec-hidden, no auth |
+| 672 | `cloudflare_alerting_v3_policies_policy_id_email_unsubscribe_create` | `POST` | `/accounts/{account_id}/alerting/v3/policies/{policy_id}/email/unsubscribe` | w4 | spec-hidden, no auth |
+| 673 | `cloudflare_alerting_v3_policies_policy_id_test` | `POST` | `/accounts/{account_id}/alerting/v3/policies/{policy_id}/test` | w4 | spec-hidden |
+| 674 | `cloudflare_alerting_v3_silences_list` | `GET` | `/accounts/{account_id}/alerting/v3/silences` | w4 | spec-hidden |
+| 675 | `cloudflare_alerting_v3_silences_create` | `POST` | `/accounts/{account_id}/alerting/v3/silences` | w4 | spec-hidden, raw body |
+| 676 | `cloudflare_alerting_v3_silences_put` | `PUT` | `/accounts/{account_id}/alerting/v3/silences` | w4 | spec-hidden, raw body |
+| 677 | `cloudflare_alerting_v3_silences_get` | `GET` | `/accounts/{account_id}/alerting/v3/silences/{silence_id}` | w4 | spec-hidden |
+| 678 | `cloudflare_alerting_v3_silences_delete` | `DELETE` | `/accounts/{account_id}/alerting/v3/silences/{silence_id}` | w4 | spec-hidden, needs confirmation |
+| 679 | `cloudflare_analytics_query_data_security_content_findings_top_n_create` | `POST` | `/accounts/{account_id}/analytics/query/data-security/content-findings/top-n` | w4 | beta |
+| 680 | `cloudflare_analytics_query_data_security_findings_summary_create` | `POST` | `/accounts/{account_id}/analytics/query/data-security/findings/summary` | w4 | beta |
+| 681 | `cloudflare_analytics_query_data_security_findings_timeseries_create` | `POST` | `/accounts/{account_id}/analytics/query/data-security/findings/timeseries` | w4 | beta |
+| 682 | `cloudflare_analytics_query_dataset_summary_create` | `POST` | `/accounts/{account_id}/analytics/query/{dataset}/summary` | w4 | beta |
+| 683 | `cloudflare_analytics_query_dataset_timeseries_create` | `POST` | `/accounts/{account_id}/analytics/query/{dataset}/timeseries` | w4 | beta |
+| 684 | `cloudflare_analytics_query_dataset_top_n_create` | `POST` | `/accounts/{account_id}/analytics/query/{dataset}/top-n` | w4 | beta |
+| 685 | `cloudflare_logpush_datasets_dataset_id_fields_list` | `GET` | `/accounts/{account_id}/logpush/datasets/{dataset_id}/fields` | w4 | - |
+| 686 | `cloudflare_logpush_datasets_dataset_id_jobs_list` | `GET` | `/accounts/{account_id}/logpush/datasets/{dataset_id}/jobs` | w4 | - |
+| 687 | `cloudflare_logpush_jobs_list` | `GET` | `/accounts/{account_id}/logpush/jobs` | w4 | - |
+| 688 | `cloudflare_logpush_jobs_create` | `POST` | `/accounts/{account_id}/logpush/jobs` | w4 | - |
+| 689 | `cloudflare_logpush_jobs_get` | `GET` | `/accounts/{account_id}/logpush/jobs/{job_id}` | w4 | - |
+| 690 | `cloudflare_logpush_jobs_replace` | `PUT` | `/accounts/{account_id}/logpush/jobs/{job_id}` | w4 | - |
+| 691 | `cloudflare_logpush_jobs_delete` | `DELETE` | `/accounts/{account_id}/logpush/jobs/{job_id}` | w4 | needs confirmation |
+| 692 | `cloudflare_logpush_ownership_create` | `POST` | `/accounts/{account_id}/logpush/ownership` | w4 | - |
+| 693 | `cloudflare_logpush_ownership_validate` | `POST` | `/accounts/{account_id}/logpush/ownership/validate` | w4 | - |
+| 694 | `cloudflare_logpush_transformers_list` | `GET` | `/accounts/{account_id}/logpush/transformers` | w4 | - |
+| 695 | `cloudflare_logpush_transformers_create` | `POST` | `/accounts/{account_id}/logpush/transformers` | w4 | - |
+| 696 | `cloudflare_logpush_transformers_preview` | `POST` | `/accounts/{account_id}/logpush/transformers/preview` | w4 | - |
+| 697 | `cloudflare_logpush_transformers_get` | `GET` | `/accounts/{account_id}/logpush/transformers/{transformer_id}` | w4 | - |
+| 698 | `cloudflare_logpush_transformers_replace` | `PUT` | `/accounts/{account_id}/logpush/transformers/{transformer_id}` | w4 | - |
+| 699 | `cloudflare_logpush_transformers_delete` | `DELETE` | `/accounts/{account_id}/logpush/transformers/{transformer_id}` | w4 | - |
+| 700 | `cloudflare_logpush_transformers_transformer_id_content_list` | `GET` | `/accounts/{account_id}/logpush/transformers/{transformer_id}/content` | w4 | - |
+| 701 | `cloudflare_logpush_transformers_transformer_id_versions_list` | `GET` | `/accounts/{account_id}/logpush/transformers/{transformer_id}/versions` | w4 | - |
+| 702 | `cloudflare_logpush_validate_destination_create` | `POST` | `/accounts/{account_id}/logpush/validate/destination` | w4 | - |
+| 703 | `cloudflare_logpush_validate_destination_exists_create` | `POST` | `/accounts/{account_id}/logpush/validate/destination/exists` | w4 | - |
+| 704 | `cloudflare_logpush_validate_origin_create` | `POST` | `/accounts/{account_id}/logpush/validate/origin` | w4 | - |
+| 705 | `cloudflare_logs_explorer_datasets_list` | `GET` | `/accounts/{account_id}/logs/explorer/datasets` | w4 | - |
+| 706 | `cloudflare_logs_explorer_datasets_create` | `POST` | `/accounts/{account_id}/logs/explorer/datasets` | w4 | - |
+| 707 | `cloudflare_logs_explorer_datasets_available_list` | `GET` | `/accounts/{account_id}/logs/explorer/datasets/available` | w4 | - |
+| 708 | `cloudflare_logs_explorer_datasets_get` | `GET` | `/accounts/{account_id}/logs/explorer/datasets/{dataset_id}` | w4 | - |
+| 709 | `cloudflare_logs_explorer_datasets_replace` | `PUT` | `/accounts/{account_id}/logs/explorer/datasets/{dataset_id}` | w4 | - |
+| 710 | `cloudflare_logs_explorer_datasets_delete` | `DELETE` | `/accounts/{account_id}/logs/explorer/datasets/{dataset_id}` | w4 | needs confirmation |
+| 711 | `cloudflare_logs_explorer_query_sql_create` | `POST` | `/accounts/{account_id}/logs/explorer/query/sql` | w4 | raw body, beta |
+| 712 | `cloudflare_logs_list_list` | `GET` | `/accounts/{account_id}/logs/list` | w4 | - |
+| 713 | `cloudflare_logs_retrieve_list` | `GET` | `/accounts/{account_id}/logs/retrieve` | w4 | - |
+| 714 | `cloudflare_rulesets_list` | `GET` | `/accounts/{account_id}/rulesets` | w4 | spec-hidden |
+| 715 | `cloudflare_rulesets_create` | `POST` | `/accounts/{account_id}/rulesets` | w4 | spec-hidden |
+| 716 | `cloudflare_rulesets_phases_ruleset_phase_entrypoint_list` | `GET` | `/accounts/{account_id}/rulesets/phases/{ruleset_phase}/entrypoint` | w4 | spec-hidden |
+| 717 | `cloudflare_rulesets_phases_ruleset_phase_entrypoint_put` | `PUT` | `/accounts/{account_id}/rulesets/phases/{ruleset_phase}/entrypoint` | w4 | spec-hidden |
+| 718 | `cloudflare_rulesets_phases_ruleset_phase_entrypoint_versions_list` | `GET` | `/accounts/{account_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions` | w4 | spec-hidden |
+| 719 | `cloudflare_rulesets_phases_ruleset_phase_entrypoint_versions_get` | `GET` | `/accounts/{account_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions/{ruleset_version}` | w4 | spec-hidden |
+| 720 | `cloudflare_rulesets_get` | `GET` | `/accounts/{account_id}/rulesets/{ruleset_id}` | w4 | spec-hidden |
+| 721 | `cloudflare_rulesets_replace` | `PUT` | `/accounts/{account_id}/rulesets/{ruleset_id}` | w4 | spec-hidden |
+| 722 | `cloudflare_rulesets_delete` | `DELETE` | `/accounts/{account_id}/rulesets/{ruleset_id}` | w4 | spec-hidden |
+| 723 | `cloudflare_rulesets_ruleset_id_rules_create` | `POST` | `/accounts/{account_id}/rulesets/{ruleset_id}/rules` | w4 | spec-hidden |
+| 724 | `cloudflare_rulesets_ruleset_id_rules_update` | `PATCH` | `/accounts/{account_id}/rulesets/{ruleset_id}/rules/{rule_id}` | w4 | spec-hidden |
+| 725 | `cloudflare_rulesets_ruleset_id_rules_delete` | `DELETE` | `/accounts/{account_id}/rulesets/{ruleset_id}/rules/{rule_id}` | w4 | spec-hidden |
+| 726 | `cloudflare_rulesets_ruleset_id_versions_list` | `GET` | `/accounts/{account_id}/rulesets/{ruleset_id}/versions` | w4 | spec-hidden |
+| 727 | `cloudflare_rulesets_ruleset_id_versions_get` | `GET` | `/accounts/{account_id}/rulesets/{ruleset_id}/versions/{ruleset_version}` | w4 | spec-hidden |
+| 728 | `cloudflare_rulesets_ruleset_id_versions_delete` | `DELETE` | `/accounts/{account_id}/rulesets/{ruleset_id}/versions/{ruleset_version}` | w4 | spec-hidden |
+| 729 | `cloudflare_rulesets_ruleset_id_versions_ruleset_version_by_tag_get` | `GET` | `/accounts/{account_id}/rulesets/{ruleset_id}/versions/{ruleset_version}/by_tag/{rule_tag}` | w4 | spec-hidden |
+| 730 | `cloudflare_account_analytics_sql_list` | `GET` | `/accounts/{account_tag}/analytics/sql` | w4 | renamed |
+| 731 | `cloudflare_account_analytics_sql_create` | `POST` | `/accounts/{account_tag}/analytics/sql` | w4 | renamed |
+| 732 | `cloudflare_account_analytics_sql_introspection_list` | `GET` | `/accounts/{account_tag}/analytics/sql/introspection` | w4 | renamed |
+| 733 | `cloudflare_analytics_sql_list` | `GET` | `/analytics/sql` | w4 | - |
+| 734 | `cloudflare_analytics_sql_create` | `POST` | `/analytics/sql` | w4 | - |
+| 735 | `cloudflare_analytics_sql_introspection_list` | `GET` | `/analytics/sql/introspection` | w4 | - |
+| 736 | `cloudflare_analytics_colos_list` | `GET` | `/zones/{zone_identifier}/analytics/colos` | w4 | deprecated |
+| 737 | `cloudflare_analytics_dashboard_list` | `GET` | `/zones/{zone_identifier}/analytics/dashboard` | w4 | deprecated |
+| 738 | `cloudflare_cache_cache_reserve_list` | `GET` | `/zones/{zone_id}/cache/cache_reserve` | w4 | spec-hidden |
+| 739 | `cloudflare_cache_cache_reserve_patch` | `PATCH` | `/zones/{zone_id}/cache/cache_reserve` | w4 | spec-hidden |
+| 740 | `cloudflare_cache_cache_reserve_clear_list` | `GET` | `/zones/{zone_id}/cache/cache_reserve_clear` | w4 | spec-hidden |
+| 741 | `cloudflare_cache_cache_reserve_clear_create` | `POST` | `/zones/{zone_id}/cache/cache_reserve_clear` | w4 | spec-hidden, needs confirmation |
+| 742 | `cloudflare_cache_origin_cloud_regions_list` | `GET` | `/zones/{zone_id}/cache/origin_cloud_regions` | w4 | spec-hidden, deprecated |
+| 743 | `cloudflare_cache_origin_cloud_regions_create` | `POST` | `/zones/{zone_id}/cache/origin_cloud_regions` | w4 | spec-hidden, deprecated |
+| 744 | `cloudflare_cache_origin_cloud_regions_patch` | `PATCH` | `/zones/{zone_id}/cache/origin_cloud_regions` | w4 | spec-hidden, deprecated |
+| 745 | `cloudflare_cache_origin_cloud_regions_batch` | `PATCH` | `/zones/{zone_id}/cache/origin_cloud_regions/batch` | w4 | spec-hidden, raw body, deprecated |
+| 746 | `cloudflare_cache_origin_cloud_regions_batch_delete` | `DELETE` | `/zones/{zone_id}/cache/origin_cloud_regions/batch` | w4 | renamed, spec-hidden, raw body, deprecated |
+| 747 | `cloudflare_cache_origin_cloud_regions_supported_regions_list` | `GET` | `/zones/{zone_id}/cache/origin_cloud_regions/supported_regions` | w4 | spec-hidden, deprecated |
+| 748 | `cloudflare_cache_origin_cloud_regions_get` | `GET` | `/zones/{zone_id}/cache/origin_cloud_regions/{origin_ip}` | w4 | spec-hidden, deprecated |
+| 749 | `cloudflare_cache_origin_cloud_regions_delete` | `DELETE` | `/zones/{zone_id}/cache/origin_cloud_regions/{origin_ip}` | w4 | spec-hidden, deprecated |
+| 750 | `cloudflare_cache_origin_post_quantum_encryption_list` | `GET` | `/zones/{zone_id}/cache/origin_post_quantum_encryption` | w4 | spec-hidden, deprecated |
+| 751 | `cloudflare_cache_origin_post_quantum_encryption_put` | `PUT` | `/zones/{zone_id}/cache/origin_post_quantum_encryption` | w4 | spec-hidden, deprecated |
+| 752 | `cloudflare_cache_regional_tiered_cache_list` | `GET` | `/zones/{zone_id}/cache/regional_tiered_cache` | w4 | spec-hidden |
+| 753 | `cloudflare_cache_regional_tiered_cache_patch` | `PATCH` | `/zones/{zone_id}/cache/regional_tiered_cache` | w4 | spec-hidden |
+| 754 | `cloudflare_cache_tiered_cache_smart_topology_get` | `GET` | `/zones/{zone_id}/cache/tiered_cache_smart_topology_enable` | w4 | renamed, spec-hidden |
+| 755 | `cloudflare_cache_tiered_cache_smart_topology_enable` | `POST` | `/zones/{zone_id}/cache/tiered_cache_smart_topology_enable` | w4 | spec-hidden |
+| 756 | `cloudflare_cache_tiered_cache_smart_topology_update` | `PATCH` | `/zones/{zone_id}/cache/tiered_cache_smart_topology_enable` | w4 | renamed, spec-hidden |
+| 757 | `cloudflare_cache_tiered_cache_smart_topology_delete` | `DELETE` | `/zones/{zone_id}/cache/tiered_cache_smart_topology_enable` | w4 | renamed, spec-hidden |
+| 758 | `cloudflare_cache_variants_list` | `GET` | `/zones/{zone_id}/cache/variants` | w4 | spec-hidden |
+| 759 | `cloudflare_cache_variants_patch` | `PATCH` | `/zones/{zone_id}/cache/variants` | w4 | spec-hidden |
+| 760 | `cloudflare_cache_variants_delete` | `DELETE` | `/zones/{zone_id}/cache/variants` | w4 | spec-hidden |
+| 761 | `cloudflare_zone_logpush_datasets_dataset_id_fields_list` | `GET` | `/zones/{zone_id}/logpush/datasets/{dataset_id}/fields` | w4 | renamed |
+| 762 | `cloudflare_zone_logpush_datasets_dataset_id_jobs_list` | `GET` | `/zones/{zone_id}/logpush/datasets/{dataset_id}/jobs` | w4 | renamed |
+| 763 | `cloudflare_logpush_edge_jobs_list` | `GET` | `/zones/{zone_id}/logpush/edge/jobs` | w4 | - |
+| 764 | `cloudflare_logpush_edge_jobs_create` | `POST` | `/zones/{zone_id}/logpush/edge/jobs` | w4 | - |
+| 765 | `cloudflare_zone_logpush_jobs_list` | `GET` | `/zones/{zone_id}/logpush/jobs` | w4 | renamed |
+| 766 | `cloudflare_zone_logpush_jobs_create` | `POST` | `/zones/{zone_id}/logpush/jobs` | w4 | renamed |
+| 767 | `cloudflare_zone_logpush_jobs_get` | `GET` | `/zones/{zone_id}/logpush/jobs/{job_id}` | w4 | renamed |
+| 768 | `cloudflare_zone_logpush_jobs_replace` | `PUT` | `/zones/{zone_id}/logpush/jobs/{job_id}` | w4 | renamed |
+| 769 | `cloudflare_zone_logpush_jobs_delete` | `DELETE` | `/zones/{zone_id}/logpush/jobs/{job_id}` | w4 | renamed, needs confirmation |
+| 770 | `cloudflare_zone_logpush_ownership_create` | `POST` | `/zones/{zone_id}/logpush/ownership` | w4 | renamed |
+| 771 | `cloudflare_zone_logpush_ownership_validate` | `POST` | `/zones/{zone_id}/logpush/ownership/validate` | w4 | renamed |
+| 772 | `cloudflare_zone_logpush_validate_destination_create` | `POST` | `/zones/{zone_id}/logpush/validate/destination` | w4 | renamed |
+| 773 | `cloudflare_zone_logpush_validate_destination_exists_create` | `POST` | `/zones/{zone_id}/logpush/validate/destination/exists` | w4 | renamed |
+| 774 | `cloudflare_zone_logpush_validate_origin_create` | `POST` | `/zones/{zone_id}/logpush/validate/origin` | w4 | renamed |
+| 775 | `cloudflare_zone_logs_explorer_datasets_list` | `GET` | `/zones/{zone_id}/logs/explorer/datasets` | w4 | renamed |
+| 776 | `cloudflare_zone_logs_explorer_datasets_create` | `POST` | `/zones/{zone_id}/logs/explorer/datasets` | w4 | renamed |
+| 777 | `cloudflare_zone_logs_explorer_datasets_available_list` | `GET` | `/zones/{zone_id}/logs/explorer/datasets/available` | w4 | renamed |
+| 778 | `cloudflare_zone_logs_explorer_datasets_get` | `GET` | `/zones/{zone_id}/logs/explorer/datasets/{dataset_id}` | w4 | renamed |
+| 779 | `cloudflare_zone_logs_explorer_datasets_replace` | `PUT` | `/zones/{zone_id}/logs/explorer/datasets/{dataset_id}` | w4 | renamed |
+| 780 | `cloudflare_zone_logs_explorer_datasets_delete` | `DELETE` | `/zones/{zone_id}/logs/explorer/datasets/{dataset_id}` | w4 | renamed, needs confirmation |
+| 781 | `cloudflare_zone_logs_explorer_query_sql_create` | `POST` | `/zones/{zone_id}/logs/explorer/query/sql` | w4 | renamed, raw body, beta |
+| 782 | `cloudflare_observability_tracing_rules_list` | `GET` | `/zones/{zone_id}/observability/tracing/rules` | w4 | - |
+| 783 | `cloudflare_observability_tracing_rules_put` | `PUT` | `/zones/{zone_id}/observability/tracing/rules` | w4 | - |
+| 784 | `cloudflare_observability_tracing_rules_delete` | `DELETE` | `/zones/{zone_id}/observability/tracing/rules` | w4 | - |
+| 785 | `cloudflare_observability_tracing_settings_list` | `GET` | `/zones/{zone_id}/observability/tracing/settings` | w4 | - |
+| 786 | `cloudflare_observability_tracing_settings_patch` | `PATCH` | `/zones/{zone_id}/observability/tracing/settings` | w4 | - |
+| 787 | `cloudflare_observability_tracing_settings_delete` | `DELETE` | `/zones/{zone_id}/observability/tracing/settings` | w4 | - |
+| 788 | `cloudflare_zone_rulesets_list` | `GET` | `/zones/{zone_id}/rulesets` | w4 | renamed, spec-hidden |
+| 789 | `cloudflare_zone_rulesets_create` | `POST` | `/zones/{zone_id}/rulesets` | w4 | renamed, spec-hidden |
+| 790 | `cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_list` | `GET` | `/zones/{zone_id}/rulesets/phases/{ruleset_phase}/entrypoint` | w4 | renamed, spec-hidden |
+| 791 | `cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_put` | `PUT` | `/zones/{zone_id}/rulesets/phases/{ruleset_phase}/entrypoint` | w4 | renamed, spec-hidden |
+| 792 | `cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_versions_list` | `GET` | `/zones/{zone_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions` | w4 | renamed, spec-hidden |
+| 793 | `cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_versions_get` | `GET` | `/zones/{zone_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions/{ruleset_version}` | w4 | renamed, spec-hidden |
+| 794 | `cloudflare_zone_rulesets_get` | `GET` | `/zones/{zone_id}/rulesets/{ruleset_id}` | w4 | renamed, spec-hidden |
+| 795 | `cloudflare_zone_rulesets_replace` | `PUT` | `/zones/{zone_id}/rulesets/{ruleset_id}` | w4 | renamed, spec-hidden |
+| 796 | `cloudflare_zone_rulesets_delete` | `DELETE` | `/zones/{zone_id}/rulesets/{ruleset_id}` | w4 | renamed, spec-hidden |
+| 797 | `cloudflare_zone_rulesets_ruleset_id_rules_create` | `POST` | `/zones/{zone_id}/rulesets/{ruleset_id}/rules` | w4 | renamed, spec-hidden |
+| 798 | `cloudflare_zone_rulesets_ruleset_id_rules_update` | `PATCH` | `/zones/{zone_id}/rulesets/{ruleset_id}/rules/{rule_id}` | w4 | renamed, spec-hidden |
+| 799 | `cloudflare_zone_rulesets_ruleset_id_rules_delete` | `DELETE` | `/zones/{zone_id}/rulesets/{ruleset_id}/rules/{rule_id}` | w4 | renamed, spec-hidden |
+| 800 | `cloudflare_zone_rulesets_ruleset_id_versions_list` | `GET` | `/zones/{zone_id}/rulesets/{ruleset_id}/versions` | w4 | renamed, spec-hidden |
+| 801 | `cloudflare_zone_rulesets_ruleset_id_versions_get` | `GET` | `/zones/{zone_id}/rulesets/{ruleset_id}/versions/{ruleset_version}` | w4 | renamed, spec-hidden |
+| 802 | `cloudflare_zone_rulesets_ruleset_id_versions_delete` | `DELETE` | `/zones/{zone_id}/rulesets/{ruleset_id}/versions/{ruleset_version}` | w4 | renamed, spec-hidden |
+| 803 | `cloudflare_zone_rulesets_ruleset_id_versions_ruleset_version_by_tag_get` | `GET` | `/zones/{zone_id}/rulesets/{ruleset_id}/versions/{ruleset_version}/by_tag/{rule_tag}` | w4 | renamed, spec-hidden |
+| 804 | `cloudflare_security_center_insights_list` | `GET` | `/zones/{zone_id}/security-center/insights` | w4 | - |
+| 805 | `cloudflare_security_center_insights_audit_log_list` | `GET` | `/zones/{zone_id}/security-center/insights/audit-log` | w4 | - |
+| 806 | `cloudflare_security_center_insights_class_list` | `GET` | `/zones/{zone_id}/security-center/insights/class` | w4 | - |
+| 807 | `cloudflare_security_center_insights_scans_list` | `GET` | `/zones/{zone_id}/security-center/insights/scans` | w4 | - |
+| 808 | `cloudflare_security_center_insights_scans_create` | `POST` | `/zones/{zone_id}/security-center/insights/scans` | w4 | - |
+| 809 | `cloudflare_security_center_insights_severity_list` | `GET` | `/zones/{zone_id}/security-center/insights/severity` | w4 | - |
+| 810 | `cloudflare_security_center_insights_type_list` | `GET` | `/zones/{zone_id}/security-center/insights/type` | w4 | - |
+| 811 | `cloudflare_security_center_insights_issue_id_audit_log_list` | `GET` | `/zones/{zone_id}/security-center/insights/{issue_id}/audit-log` | w4 | - |
+| 812 | `cloudflare_security_center_insights_issue_id_classification_patch` | `PATCH` | `/zones/{zone_id}/security-center/insights/{issue_id}/classification` | w4 | - |
+| 813 | `cloudflare_security_center_insights_issue_id_dismiss_put` | `PUT` | `/zones/{zone_id}/security-center/insights/{issue_id}/dismiss` | w4 | - |
+| 814 | `cloudflare_security_center_securitytxt_list` | `GET` | `/zones/{zone_id}/security-center/securitytxt` | w4 | - |
+| 815 | `cloudflare_security_center_securitytxt_put` | `PUT` | `/zones/{zone_id}/security-center/securitytxt` | w4 | - |
+| 816 | `cloudflare_security_center_securitytxt_delete` | `DELETE` | `/zones/{zone_id}/security-center/securitytxt` | w4 | - |
+| 817 | `cloudflare_speed_api_availabilities_list` | `GET` | `/zones/{zone_id}/speed_api/availabilities` | w4 | - |
+| 818 | `cloudflare_speed_api_pages_list` | `GET` | `/zones/{zone_id}/speed_api/pages` | w4 | - |
+| 819 | `cloudflare_speed_api_pages_url_tests_list` | `GET` | `/zones/{zone_id}/speed_api/pages/{url}/tests` | w4 | - |
+| 820 | `cloudflare_speed_api_pages_url_tests_create` | `POST` | `/zones/{zone_id}/speed_api/pages/{url}/tests` | w4 | - |
+| 821 | `cloudflare_speed_api_pages_url_tests_delete` | `DELETE` | `/zones/{zone_id}/speed_api/pages/{url}/tests` | w4 | - |
+| 822 | `cloudflare_speed_api_pages_url_tests_get` | `GET` | `/zones/{zone_id}/speed_api/pages/{url}/tests/{test_id}` | w4 | - |
+| 823 | `cloudflare_speed_api_pages_url_trend_list` | `GET` | `/zones/{zone_id}/speed_api/pages/{url}/trend` | w4 | - |
+| 824 | `cloudflare_speed_api_schedule_get` | `GET` | `/zones/{zone_id}/speed_api/schedule/{url}` | w4 | - |
+| 825 | `cloudflare_speed_api_schedule_create` | `POST` | `/zones/{zone_id}/speed_api/schedule/{url}` | w4 | - |
+| 826 | `cloudflare_speed_api_schedule_delete` | `DELETE` | `/zones/{zone_id}/speed_api/schedule/{url}` | w4 | - |
 
 ## Review notes
 
@@ -719,6 +892,18 @@ fields the spec does not publish; either is shipped only where the allowlist say
 - cloudflare_access_bookmarks_delete: the spec marks this operation deprecated
 - cloudflare_devices_device_id_override_codes_list: the spec marks this operation deprecated
 - cloudflare_gateway_configuration_custom_certificate_list: the spec marks this operation deprecated
+- cloudflare_analytics_colos_list: the spec marks this operation deprecated
+- cloudflare_analytics_dashboard_list: the spec marks this operation deprecated
+- cloudflare_cache_origin_cloud_regions_list: the spec marks this operation deprecated
+- cloudflare_cache_origin_cloud_regions_create: the spec marks this operation deprecated
+- cloudflare_cache_origin_cloud_regions_patch: the spec marks this operation deprecated
+- cloudflare_cache_origin_cloud_regions_batch: the spec marks this operation deprecated
+- cloudflare_cache_origin_cloud_regions_batch_delete: the spec marks this operation deprecated
+- cloudflare_cache_origin_cloud_regions_supported_regions_list: the spec marks this operation deprecated
+- cloudflare_cache_origin_cloud_regions_get: the spec marks this operation deprecated
+- cloudflare_cache_origin_cloud_regions_delete: the spec marks this operation deprecated
+- cloudflare_cache_origin_post_quantum_encryption_list: the spec marks this operation deprecated
+- cloudflare_cache_origin_post_quantum_encryption_put: the spec marks this operation deprecated
 
 ## Renames and retirements
 
@@ -1047,22 +1232,45 @@ Not shipped (88):
 - `GET` `/accounts/{account_id}/ai/tomarkdown/supported`
 - `POST` `/accounts/{account_id}/ai/websearch`
 
-### `accounts/alerting` - 0 of 0 reviewable shipped, 25 filtered out
+### `accounts/alerting` - 25 of 0 reviewable shipped, 25 filtered out
 
+- `cloudflare_alerting_v3_available_alerts_list` - `GET` `/accounts/{account_id}/alerting/v3/available_alerts`
+- `cloudflare_alerting_v3_destinations_eligible_list` - `GET` `/accounts/{account_id}/alerting/v3/destinations/eligible`
+- `cloudflare_alerting_v3_destinations_pagerduty_list` - `GET` `/accounts/{account_id}/alerting/v3/destinations/pagerduty`
+- `cloudflare_alerting_v3_destinations_pagerduty_delete` - `DELETE` `/accounts/{account_id}/alerting/v3/destinations/pagerduty`
+- `cloudflare_alerting_v3_destinations_pagerduty_connect_create` - `POST` `/accounts/{account_id}/alerting/v3/destinations/pagerduty/connect`
+- `cloudflare_alerting_v3_destinations_pagerduty_connect_get` - `GET` `/accounts/{account_id}/alerting/v3/destinations/pagerduty/connect/{token_id}`
+- `cloudflare_alerting_v3_destinations_webhooks_list` - `GET` `/accounts/{account_id}/alerting/v3/destinations/webhooks`
+- `cloudflare_alerting_v3_destinations_webhooks_create` - `POST` `/accounts/{account_id}/alerting/v3/destinations/webhooks`
+- `cloudflare_alerting_v3_destinations_webhooks_get` - `GET` `/accounts/{account_id}/alerting/v3/destinations/webhooks/{webhook_id}`
+- `cloudflare_alerting_v3_destinations_webhooks_replace` - `PUT` `/accounts/{account_id}/alerting/v3/destinations/webhooks/{webhook_id}`
+- `cloudflare_alerting_v3_destinations_webhooks_delete` - `DELETE` `/accounts/{account_id}/alerting/v3/destinations/webhooks/{webhook_id}`
+- `cloudflare_alerting_v3_history_list` - `GET` `/accounts/{account_id}/alerting/v3/history`
+- `cloudflare_alerting_v3_policies_list` - `GET` `/accounts/{account_id}/alerting/v3/policies`
+- `cloudflare_alerting_v3_policies_create` - `POST` `/accounts/{account_id}/alerting/v3/policies`
+- `cloudflare_alerting_v3_policies_get` - `GET` `/accounts/{account_id}/alerting/v3/policies/{policy_id}`
+- `cloudflare_alerting_v3_policies_replace` - `PUT` `/accounts/{account_id}/alerting/v3/policies/{policy_id}`
+- `cloudflare_alerting_v3_policies_delete` - `DELETE` `/accounts/{account_id}/alerting/v3/policies/{policy_id}`
+- `cloudflare_alerting_v3_policies_policy_id_email_unsubscribe_list` - `GET` `/accounts/{account_id}/alerting/v3/policies/{policy_id}/email/unsubscribe`
+- `cloudflare_alerting_v3_policies_policy_id_email_unsubscribe_create` - `POST` `/accounts/{account_id}/alerting/v3/policies/{policy_id}/email/unsubscribe`
+- `cloudflare_alerting_v3_policies_policy_id_test` - `POST` `/accounts/{account_id}/alerting/v3/policies/{policy_id}/test`
+- `cloudflare_alerting_v3_silences_list` - `GET` `/accounts/{account_id}/alerting/v3/silences`
+- `cloudflare_alerting_v3_silences_create` - `POST` `/accounts/{account_id}/alerting/v3/silences`
+- `cloudflare_alerting_v3_silences_put` - `PUT` `/accounts/{account_id}/alerting/v3/silences`
+- `cloudflare_alerting_v3_silences_get` - `GET` `/accounts/{account_id}/alerting/v3/silences/{silence_id}`
+- `cloudflare_alerting_v3_silences_delete` - `DELETE` `/accounts/{account_id}/alerting/v3/silences/{silence_id}`
 
-### `accounts/analytics` - 0 of 9 reviewable shipped, 2 filtered out
+### `accounts/analytics` - 9 of 9 reviewable shipped, 2 filtered out
 
-
-Not shipped (9):
-- `POST` `/accounts/{account_id}/analytics/query/data-security/content-findings/top-n`
-- `POST` `/accounts/{account_id}/analytics/query/data-security/findings/summary`
-- `POST` `/accounts/{account_id}/analytics/query/data-security/findings/timeseries`
-- `POST` `/accounts/{account_id}/analytics/query/{dataset}/summary`
-- `POST` `/accounts/{account_id}/analytics/query/{dataset}/timeseries`
-- `POST` `/accounts/{account_id}/analytics/query/{dataset}/top-n`
-- `GET` `/accounts/{account_tag}/analytics/sql`
-- `POST` `/accounts/{account_tag}/analytics/sql`
-- `GET` `/accounts/{account_tag}/analytics/sql/introspection`
+- `cloudflare_analytics_query_data_security_content_findings_top_n_create` - `POST` `/accounts/{account_id}/analytics/query/data-security/content-findings/top-n`
+- `cloudflare_analytics_query_data_security_findings_summary_create` - `POST` `/accounts/{account_id}/analytics/query/data-security/findings/summary`
+- `cloudflare_analytics_query_data_security_findings_timeseries_create` - `POST` `/accounts/{account_id}/analytics/query/data-security/findings/timeseries`
+- `cloudflare_analytics_query_dataset_summary_create` - `POST` `/accounts/{account_id}/analytics/query/{dataset}/summary`
+- `cloudflare_analytics_query_dataset_timeseries_create` - `POST` `/accounts/{account_id}/analytics/query/{dataset}/timeseries`
+- `cloudflare_analytics_query_dataset_top_n_create` - `POST` `/accounts/{account_id}/analytics/query/{dataset}/top-n`
+- `cloudflare_account_analytics_sql_list` - `GET` `/accounts/{account_tag}/analytics/sql`
+- `cloudflare_account_analytics_sql_create` - `POST` `/accounts/{account_tag}/analytics/sql`
+- `cloudflare_account_analytics_sql_introspection_list` - `GET` `/accounts/{account_tag}/analytics/sql/introspection`
 
 ### `accounts/argo` - 0 of 1 reviewable shipped
 
@@ -1956,44 +2164,40 @@ Not shipped (36):
 - `PATCH` `/accounts/{account_id}/load_balancers/{load_balancer_id}`
 - `DELETE` `/accounts/{account_id}/load_balancers/{load_balancer_id}`
 
-### `accounts/logpush` - 0 of 20 reviewable shipped
+### `accounts/logpush` - 20 of 20 reviewable shipped
 
+- `cloudflare_logpush_datasets_dataset_id_fields_list` - `GET` `/accounts/{account_id}/logpush/datasets/{dataset_id}/fields`
+- `cloudflare_logpush_datasets_dataset_id_jobs_list` - `GET` `/accounts/{account_id}/logpush/datasets/{dataset_id}/jobs`
+- `cloudflare_logpush_jobs_list` - `GET` `/accounts/{account_id}/logpush/jobs`
+- `cloudflare_logpush_jobs_create` - `POST` `/accounts/{account_id}/logpush/jobs`
+- `cloudflare_logpush_jobs_get` - `GET` `/accounts/{account_id}/logpush/jobs/{job_id}`
+- `cloudflare_logpush_jobs_replace` - `PUT` `/accounts/{account_id}/logpush/jobs/{job_id}`
+- `cloudflare_logpush_jobs_delete` - `DELETE` `/accounts/{account_id}/logpush/jobs/{job_id}`
+- `cloudflare_logpush_ownership_create` - `POST` `/accounts/{account_id}/logpush/ownership`
+- `cloudflare_logpush_ownership_validate` - `POST` `/accounts/{account_id}/logpush/ownership/validate`
+- `cloudflare_logpush_transformers_list` - `GET` `/accounts/{account_id}/logpush/transformers`
+- `cloudflare_logpush_transformers_create` - `POST` `/accounts/{account_id}/logpush/transformers`
+- `cloudflare_logpush_transformers_preview` - `POST` `/accounts/{account_id}/logpush/transformers/preview`
+- `cloudflare_logpush_transformers_get` - `GET` `/accounts/{account_id}/logpush/transformers/{transformer_id}`
+- `cloudflare_logpush_transformers_replace` - `PUT` `/accounts/{account_id}/logpush/transformers/{transformer_id}`
+- `cloudflare_logpush_transformers_delete` - `DELETE` `/accounts/{account_id}/logpush/transformers/{transformer_id}`
+- `cloudflare_logpush_transformers_transformer_id_content_list` - `GET` `/accounts/{account_id}/logpush/transformers/{transformer_id}/content`
+- `cloudflare_logpush_transformers_transformer_id_versions_list` - `GET` `/accounts/{account_id}/logpush/transformers/{transformer_id}/versions`
+- `cloudflare_logpush_validate_destination_create` - `POST` `/accounts/{account_id}/logpush/validate/destination`
+- `cloudflare_logpush_validate_destination_exists_create` - `POST` `/accounts/{account_id}/logpush/validate/destination/exists`
+- `cloudflare_logpush_validate_origin_create` - `POST` `/accounts/{account_id}/logpush/validate/origin`
 
-Not shipped (20):
-- `GET` `/accounts/{account_id}/logpush/datasets/{dataset_id}/fields`
-- `GET` `/accounts/{account_id}/logpush/datasets/{dataset_id}/jobs`
-- `GET` `/accounts/{account_id}/logpush/jobs`
-- `POST` `/accounts/{account_id}/logpush/jobs`
-- `GET` `/accounts/{account_id}/logpush/jobs/{job_id}`
-- `PUT` `/accounts/{account_id}/logpush/jobs/{job_id}`
-- `DELETE` `/accounts/{account_id}/logpush/jobs/{job_id}`
-- `POST` `/accounts/{account_id}/logpush/ownership`
-- `POST` `/accounts/{account_id}/logpush/ownership/validate`
-- `GET` `/accounts/{account_id}/logpush/transformers`
-- `POST` `/accounts/{account_id}/logpush/transformers`
-- `POST` `/accounts/{account_id}/logpush/transformers/preview`
-- `GET` `/accounts/{account_id}/logpush/transformers/{transformer_id}`
-- `PUT` `/accounts/{account_id}/logpush/transformers/{transformer_id}`
-- `DELETE` `/accounts/{account_id}/logpush/transformers/{transformer_id}`
-- `GET` `/accounts/{account_id}/logpush/transformers/{transformer_id}/content`
-- `GET` `/accounts/{account_id}/logpush/transformers/{transformer_id}/versions`
-- `POST` `/accounts/{account_id}/logpush/validate/destination`
-- `POST` `/accounts/{account_id}/logpush/validate/destination/exists`
-- `POST` `/accounts/{account_id}/logpush/validate/origin`
+### `accounts/logs` - 9 of 9 reviewable shipped, 7 filtered out
 
-### `accounts/logs` - 0 of 9 reviewable shipped, 7 filtered out
-
-
-Not shipped (9):
-- `GET` `/accounts/{account_id}/logs/explorer/datasets`
-- `POST` `/accounts/{account_id}/logs/explorer/datasets`
-- `GET` `/accounts/{account_id}/logs/explorer/datasets/available`
-- `GET` `/accounts/{account_id}/logs/explorer/datasets/{dataset_id}`
-- `PUT` `/accounts/{account_id}/logs/explorer/datasets/{dataset_id}`
-- `DELETE` `/accounts/{account_id}/logs/explorer/datasets/{dataset_id}`
-- `POST` `/accounts/{account_id}/logs/explorer/query/sql`
-- `GET` `/accounts/{account_id}/logs/list`
-- `GET` `/accounts/{account_id}/logs/retrieve`
+- `cloudflare_logs_explorer_datasets_list` - `GET` `/accounts/{account_id}/logs/explorer/datasets`
+- `cloudflare_logs_explorer_datasets_create` - `POST` `/accounts/{account_id}/logs/explorer/datasets`
+- `cloudflare_logs_explorer_datasets_available_list` - `GET` `/accounts/{account_id}/logs/explorer/datasets/available`
+- `cloudflare_logs_explorer_datasets_get` - `GET` `/accounts/{account_id}/logs/explorer/datasets/{dataset_id}`
+- `cloudflare_logs_explorer_datasets_replace` - `PUT` `/accounts/{account_id}/logs/explorer/datasets/{dataset_id}`
+- `cloudflare_logs_explorer_datasets_delete` - `DELETE` `/accounts/{account_id}/logs/explorer/datasets/{dataset_id}`
+- `cloudflare_logs_explorer_query_sql_create` - `POST` `/accounts/{account_id}/logs/explorer/query/sql`
+- `cloudflare_logs_list_list` - `GET` `/accounts/{account_id}/logs/list`
+- `cloudflare_logs_retrieve_list` - `GET` `/accounts/{account_id}/logs/retrieve`
 
 ### `accounts/magic` - 0 of 95 reviewable shipped, 82 filtered out
 
@@ -2501,8 +2705,24 @@ Not shipped (11):
 - `DELETE` `/accounts/{account_id}/rules/lists/{list_id}/items`
 - `GET` `/accounts/{account_id}/rules/lists/{list_id}/items/{item_id}`
 
-### `accounts/rulesets` - 0 of 0 reviewable shipped, 16 filtered out
+### `accounts/rulesets` - 16 of 0 reviewable shipped, 16 filtered out
 
+- `cloudflare_rulesets_list` - `GET` `/accounts/{account_id}/rulesets`
+- `cloudflare_rulesets_create` - `POST` `/accounts/{account_id}/rulesets`
+- `cloudflare_rulesets_phases_ruleset_phase_entrypoint_list` - `GET` `/accounts/{account_id}/rulesets/phases/{ruleset_phase}/entrypoint`
+- `cloudflare_rulesets_phases_ruleset_phase_entrypoint_put` - `PUT` `/accounts/{account_id}/rulesets/phases/{ruleset_phase}/entrypoint`
+- `cloudflare_rulesets_phases_ruleset_phase_entrypoint_versions_list` - `GET` `/accounts/{account_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions`
+- `cloudflare_rulesets_phases_ruleset_phase_entrypoint_versions_get` - `GET` `/accounts/{account_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions/{ruleset_version}`
+- `cloudflare_rulesets_get` - `GET` `/accounts/{account_id}/rulesets/{ruleset_id}`
+- `cloudflare_rulesets_replace` - `PUT` `/accounts/{account_id}/rulesets/{ruleset_id}`
+- `cloudflare_rulesets_delete` - `DELETE` `/accounts/{account_id}/rulesets/{ruleset_id}`
+- `cloudflare_rulesets_ruleset_id_rules_create` - `POST` `/accounts/{account_id}/rulesets/{ruleset_id}/rules`
+- `cloudflare_rulesets_ruleset_id_rules_update` - `PATCH` `/accounts/{account_id}/rulesets/{ruleset_id}/rules/{rule_id}`
+- `cloudflare_rulesets_ruleset_id_rules_delete` - `DELETE` `/accounts/{account_id}/rulesets/{ruleset_id}/rules/{rule_id}`
+- `cloudflare_rulesets_ruleset_id_versions_list` - `GET` `/accounts/{account_id}/rulesets/{ruleset_id}/versions`
+- `cloudflare_rulesets_ruleset_id_versions_get` - `GET` `/accounts/{account_id}/rulesets/{ruleset_id}/versions/{ruleset_version}`
+- `cloudflare_rulesets_ruleset_id_versions_delete` - `DELETE` `/accounts/{account_id}/rulesets/{ruleset_id}/versions/{ruleset_version}`
+- `cloudflare_rulesets_ruleset_id_versions_ruleset_version_by_tag_get` - `GET` `/accounts/{account_id}/rulesets/{ruleset_id}/versions/{ruleset_version}/by_tag/{rule_tag}`
 
 ### `accounts/rum` - 0 of 0 reviewable shipped, 13 filtered out
 
@@ -2920,13 +3140,11 @@ Not shipped (8):
 ### `accounts/zt` - 0 of 0 reviewable shipped, 11 filtered out
 
 
-### `analytics/analytics` - 0 of 3 reviewable shipped
+### `analytics/analytics` - 3 of 3 reviewable shipped
 
-
-Not shipped (3):
-- `GET` `/analytics/sql`
-- `POST` `/analytics/sql`
-- `GET` `/analytics/sql/introspection`
+- `cloudflare_analytics_sql_list` - `GET` `/analytics/sql`
+- `cloudflare_analytics_sql_create` - `POST` `/analytics/sql`
+- `cloudflare_analytics_sql_introspection_list` - `GET` `/analytics/sql/introspection`
 
 ### `api/api` - 0 of 0 reviewable shipped, 1 filtered out
 
@@ -3268,12 +3486,10 @@ Not shipped (6):
 - `GET` `/zones/{zone_id}/ai-security/settings`
 - `PUT` `/zones/{zone_id}/ai-security/settings`
 
-### `zones/analytics` - 0 of 2 reviewable shipped, 2 filtered out
+### `zones/analytics` - 2 of 2 reviewable shipped, 2 filtered out
 
-
-Not shipped (2):
-- `GET` `/zones/{zone_identifier}/analytics/colos`
-- `GET` `/zones/{zone_identifier}/analytics/dashboard`
+- `cloudflare_analytics_colos_list` - `GET` `/zones/{zone_identifier}/analytics/colos`
+- `cloudflare_analytics_dashboard_list` - `GET` `/zones/{zone_identifier}/analytics/dashboard`
 
 ### `zones/api` - 0 of 31 reviewable shipped, 13 filtered out
 
@@ -3329,8 +3545,31 @@ Not shipped (3):
 ### `zones/bot` - 0 of 0 reviewable shipped, 4 filtered out
 
 
-### `zones/cache` - 0 of 0 reviewable shipped, 23 filtered out
+### `zones/cache` - 23 of 0 reviewable shipped, 23 filtered out
 
+- `cloudflare_cache_cache_reserve_list` - `GET` `/zones/{zone_id}/cache/cache_reserve`
+- `cloudflare_cache_cache_reserve_patch` - `PATCH` `/zones/{zone_id}/cache/cache_reserve`
+- `cloudflare_cache_cache_reserve_clear_list` - `GET` `/zones/{zone_id}/cache/cache_reserve_clear`
+- `cloudflare_cache_cache_reserve_clear_create` - `POST` `/zones/{zone_id}/cache/cache_reserve_clear`
+- `cloudflare_cache_origin_cloud_regions_list` - `GET` `/zones/{zone_id}/cache/origin_cloud_regions`
+- `cloudflare_cache_origin_cloud_regions_create` - `POST` `/zones/{zone_id}/cache/origin_cloud_regions`
+- `cloudflare_cache_origin_cloud_regions_patch` - `PATCH` `/zones/{zone_id}/cache/origin_cloud_regions`
+- `cloudflare_cache_origin_cloud_regions_batch` - `PATCH` `/zones/{zone_id}/cache/origin_cloud_regions/batch`
+- `cloudflare_cache_origin_cloud_regions_batch_delete` - `DELETE` `/zones/{zone_id}/cache/origin_cloud_regions/batch`
+- `cloudflare_cache_origin_cloud_regions_supported_regions_list` - `GET` `/zones/{zone_id}/cache/origin_cloud_regions/supported_regions`
+- `cloudflare_cache_origin_cloud_regions_get` - `GET` `/zones/{zone_id}/cache/origin_cloud_regions/{origin_ip}`
+- `cloudflare_cache_origin_cloud_regions_delete` - `DELETE` `/zones/{zone_id}/cache/origin_cloud_regions/{origin_ip}`
+- `cloudflare_cache_origin_post_quantum_encryption_list` - `GET` `/zones/{zone_id}/cache/origin_post_quantum_encryption`
+- `cloudflare_cache_origin_post_quantum_encryption_put` - `PUT` `/zones/{zone_id}/cache/origin_post_quantum_encryption`
+- `cloudflare_cache_regional_tiered_cache_list` - `GET` `/zones/{zone_id}/cache/regional_tiered_cache`
+- `cloudflare_cache_regional_tiered_cache_patch` - `PATCH` `/zones/{zone_id}/cache/regional_tiered_cache`
+- `cloudflare_cache_tiered_cache_smart_topology_get` - `GET` `/zones/{zone_id}/cache/tiered_cache_smart_topology_enable`
+- `cloudflare_cache_tiered_cache_smart_topology_enable` - `POST` `/zones/{zone_id}/cache/tiered_cache_smart_topology_enable`
+- `cloudflare_cache_tiered_cache_smart_topology_update` - `PATCH` `/zones/{zone_id}/cache/tiered_cache_smart_topology_enable`
+- `cloudflare_cache_tiered_cache_smart_topology_delete` - `DELETE` `/zones/{zone_id}/cache/tiered_cache_smart_topology_enable`
+- `cloudflare_cache_variants_list` - `GET` `/zones/{zone_id}/cache/variants`
+- `cloudflare_cache_variants_patch` - `PATCH` `/zones/{zone_id}/cache/variants`
+- `cloudflare_cache_variants_delete` - `DELETE` `/zones/{zone_id}/cache/variants`
 
 ### `zones/certificate` - 0 of 0 reviewable shipped, 2 filtered out
 
@@ -3528,36 +3767,32 @@ Not shipped (6):
 - `PATCH` `/zones/{zone_id}/load_balancers/{load_balancer_id}`
 - `DELETE` `/zones/{zone_id}/load_balancers/{load_balancer_id}`
 
-### `zones/logpush` - 0 of 14 reviewable shipped
+### `zones/logpush` - 14 of 14 reviewable shipped
 
+- `cloudflare_zone_logpush_datasets_dataset_id_fields_list` - `GET` `/zones/{zone_id}/logpush/datasets/{dataset_id}/fields`
+- `cloudflare_zone_logpush_datasets_dataset_id_jobs_list` - `GET` `/zones/{zone_id}/logpush/datasets/{dataset_id}/jobs`
+- `cloudflare_logpush_edge_jobs_list` - `GET` `/zones/{zone_id}/logpush/edge/jobs`
+- `cloudflare_logpush_edge_jobs_create` - `POST` `/zones/{zone_id}/logpush/edge/jobs`
+- `cloudflare_zone_logpush_jobs_list` - `GET` `/zones/{zone_id}/logpush/jobs`
+- `cloudflare_zone_logpush_jobs_create` - `POST` `/zones/{zone_id}/logpush/jobs`
+- `cloudflare_zone_logpush_jobs_get` - `GET` `/zones/{zone_id}/logpush/jobs/{job_id}`
+- `cloudflare_zone_logpush_jobs_replace` - `PUT` `/zones/{zone_id}/logpush/jobs/{job_id}`
+- `cloudflare_zone_logpush_jobs_delete` - `DELETE` `/zones/{zone_id}/logpush/jobs/{job_id}`
+- `cloudflare_zone_logpush_ownership_create` - `POST` `/zones/{zone_id}/logpush/ownership`
+- `cloudflare_zone_logpush_ownership_validate` - `POST` `/zones/{zone_id}/logpush/ownership/validate`
+- `cloudflare_zone_logpush_validate_destination_create` - `POST` `/zones/{zone_id}/logpush/validate/destination`
+- `cloudflare_zone_logpush_validate_destination_exists_create` - `POST` `/zones/{zone_id}/logpush/validate/destination/exists`
+- `cloudflare_zone_logpush_validate_origin_create` - `POST` `/zones/{zone_id}/logpush/validate/origin`
 
-Not shipped (14):
-- `GET` `/zones/{zone_id}/logpush/datasets/{dataset_id}/fields`
-- `GET` `/zones/{zone_id}/logpush/datasets/{dataset_id}/jobs`
-- `GET` `/zones/{zone_id}/logpush/edge/jobs`
-- `POST` `/zones/{zone_id}/logpush/edge/jobs`
-- `GET` `/zones/{zone_id}/logpush/jobs`
-- `POST` `/zones/{zone_id}/logpush/jobs`
-- `GET` `/zones/{zone_id}/logpush/jobs/{job_id}`
-- `PUT` `/zones/{zone_id}/logpush/jobs/{job_id}`
-- `DELETE` `/zones/{zone_id}/logpush/jobs/{job_id}`
-- `POST` `/zones/{zone_id}/logpush/ownership`
-- `POST` `/zones/{zone_id}/logpush/ownership/validate`
-- `POST` `/zones/{zone_id}/logpush/validate/destination`
-- `POST` `/zones/{zone_id}/logpush/validate/destination/exists`
-- `POST` `/zones/{zone_id}/logpush/validate/origin`
+### `zones/logs` - 7 of 7 reviewable shipped, 6 filtered out
 
-### `zones/logs` - 0 of 7 reviewable shipped, 6 filtered out
-
-
-Not shipped (7):
-- `GET` `/zones/{zone_id}/logs/explorer/datasets`
-- `POST` `/zones/{zone_id}/logs/explorer/datasets`
-- `GET` `/zones/{zone_id}/logs/explorer/datasets/available`
-- `GET` `/zones/{zone_id}/logs/explorer/datasets/{dataset_id}`
-- `PUT` `/zones/{zone_id}/logs/explorer/datasets/{dataset_id}`
-- `DELETE` `/zones/{zone_id}/logs/explorer/datasets/{dataset_id}`
-- `POST` `/zones/{zone_id}/logs/explorer/query/sql`
+- `cloudflare_zone_logs_explorer_datasets_list` - `GET` `/zones/{zone_id}/logs/explorer/datasets`
+- `cloudflare_zone_logs_explorer_datasets_create` - `POST` `/zones/{zone_id}/logs/explorer/datasets`
+- `cloudflare_zone_logs_explorer_datasets_available_list` - `GET` `/zones/{zone_id}/logs/explorer/datasets/available`
+- `cloudflare_zone_logs_explorer_datasets_get` - `GET` `/zones/{zone_id}/logs/explorer/datasets/{dataset_id}`
+- `cloudflare_zone_logs_explorer_datasets_replace` - `PUT` `/zones/{zone_id}/logs/explorer/datasets/{dataset_id}`
+- `cloudflare_zone_logs_explorer_datasets_delete` - `DELETE` `/zones/{zone_id}/logs/explorer/datasets/{dataset_id}`
+- `cloudflare_zone_logs_explorer_query_sql_create` - `POST` `/zones/{zone_id}/logs/explorer/query/sql`
 
 ### `zones/managed` - 0 of 0 reviewable shipped, 3 filtered out
 
@@ -3581,16 +3816,14 @@ Not shipped (8):
 - `PATCH` `/zones/{zone_id}/monetization/rules/{rule_id}`
 - `DELETE` `/zones/{zone_id}/monetization/rules/{rule_id}`
 
-### `zones/observability` - 0 of 6 reviewable shipped
+### `zones/observability` - 6 of 6 reviewable shipped
 
-
-Not shipped (6):
-- `GET` `/zones/{zone_id}/observability/tracing/rules`
-- `PUT` `/zones/{zone_id}/observability/tracing/rules`
-- `DELETE` `/zones/{zone_id}/observability/tracing/rules`
-- `GET` `/zones/{zone_id}/observability/tracing/settings`
-- `PATCH` `/zones/{zone_id}/observability/tracing/settings`
-- `DELETE` `/zones/{zone_id}/observability/tracing/settings`
+- `cloudflare_observability_tracing_rules_list` - `GET` `/zones/{zone_id}/observability/tracing/rules`
+- `cloudflare_observability_tracing_rules_put` - `PUT` `/zones/{zone_id}/observability/tracing/rules`
+- `cloudflare_observability_tracing_rules_delete` - `DELETE` `/zones/{zone_id}/observability/tracing/rules`
+- `cloudflare_observability_tracing_settings_list` - `GET` `/zones/{zone_id}/observability/tracing/settings`
+- `cloudflare_observability_tracing_settings_patch` - `PATCH` `/zones/{zone_id}/observability/tracing/settings`
+- `cloudflare_observability_tracing_settings_delete` - `DELETE` `/zones/{zone_id}/observability/tracing/settings`
 
 ### `zones/origin` - 0 of 0 reviewable shipped, 20 filtered out
 
@@ -3645,8 +3878,24 @@ Not shipped (11):
 Not shipped (1):
 - `GET` `/zones/{zone_id}/rate_limit_analytics`
 
-### `zones/rulesets` - 0 of 0 reviewable shipped, 16 filtered out
+### `zones/rulesets` - 16 of 0 reviewable shipped, 16 filtered out
 
+- `cloudflare_zone_rulesets_list` - `GET` `/zones/{zone_id}/rulesets`
+- `cloudflare_zone_rulesets_create` - `POST` `/zones/{zone_id}/rulesets`
+- `cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_list` - `GET` `/zones/{zone_id}/rulesets/phases/{ruleset_phase}/entrypoint`
+- `cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_put` - `PUT` `/zones/{zone_id}/rulesets/phases/{ruleset_phase}/entrypoint`
+- `cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_versions_list` - `GET` `/zones/{zone_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions`
+- `cloudflare_zone_rulesets_phases_ruleset_phase_entrypoint_versions_get` - `GET` `/zones/{zone_id}/rulesets/phases/{ruleset_phase}/entrypoint/versions/{ruleset_version}`
+- `cloudflare_zone_rulesets_get` - `GET` `/zones/{zone_id}/rulesets/{ruleset_id}`
+- `cloudflare_zone_rulesets_replace` - `PUT` `/zones/{zone_id}/rulesets/{ruleset_id}`
+- `cloudflare_zone_rulesets_delete` - `DELETE` `/zones/{zone_id}/rulesets/{ruleset_id}`
+- `cloudflare_zone_rulesets_ruleset_id_rules_create` - `POST` `/zones/{zone_id}/rulesets/{ruleset_id}/rules`
+- `cloudflare_zone_rulesets_ruleset_id_rules_update` - `PATCH` `/zones/{zone_id}/rulesets/{ruleset_id}/rules/{rule_id}`
+- `cloudflare_zone_rulesets_ruleset_id_rules_delete` - `DELETE` `/zones/{zone_id}/rulesets/{ruleset_id}/rules/{rule_id}`
+- `cloudflare_zone_rulesets_ruleset_id_versions_list` - `GET` `/zones/{zone_id}/rulesets/{ruleset_id}/versions`
+- `cloudflare_zone_rulesets_ruleset_id_versions_get` - `GET` `/zones/{zone_id}/rulesets/{ruleset_id}/versions/{ruleset_version}`
+- `cloudflare_zone_rulesets_ruleset_id_versions_delete` - `DELETE` `/zones/{zone_id}/rulesets/{ruleset_id}/versions/{ruleset_version}`
+- `cloudflare_zone_rulesets_ruleset_id_versions_ruleset_version_by_tag_get` - `GET` `/zones/{zone_id}/rulesets/{ruleset_id}/versions/{ruleset_version}/by_tag/{rule_tag}`
 
 ### `zones/schema` - 0 of 15 reviewable shipped
 
@@ -3686,23 +3935,21 @@ Not shipped (13):
 - `POST` `/zones/{zone_id}/secondary_dns/outgoing/force_notify`
 - `GET` `/zones/{zone_id}/secondary_dns/outgoing/status`
 
-### `zones/security` - 0 of 13 reviewable shipped, 2 filtered out
+### `zones/security` - 13 of 13 reviewable shipped, 2 filtered out
 
-
-Not shipped (13):
-- `GET` `/zones/{zone_id}/security-center/insights`
-- `GET` `/zones/{zone_id}/security-center/insights/audit-log`
-- `GET` `/zones/{zone_id}/security-center/insights/class`
-- `GET` `/zones/{zone_id}/security-center/insights/scans`
-- `POST` `/zones/{zone_id}/security-center/insights/scans`
-- `GET` `/zones/{zone_id}/security-center/insights/severity`
-- `GET` `/zones/{zone_id}/security-center/insights/type`
-- `GET` `/zones/{zone_id}/security-center/insights/{issue_id}/audit-log`
-- `PATCH` `/zones/{zone_id}/security-center/insights/{issue_id}/classification`
-- `PUT` `/zones/{zone_id}/security-center/insights/{issue_id}/dismiss`
-- `GET` `/zones/{zone_id}/security-center/securitytxt`
-- `PUT` `/zones/{zone_id}/security-center/securitytxt`
-- `DELETE` `/zones/{zone_id}/security-center/securitytxt`
+- `cloudflare_security_center_insights_list` - `GET` `/zones/{zone_id}/security-center/insights`
+- `cloudflare_security_center_insights_audit_log_list` - `GET` `/zones/{zone_id}/security-center/insights/audit-log`
+- `cloudflare_security_center_insights_class_list` - `GET` `/zones/{zone_id}/security-center/insights/class`
+- `cloudflare_security_center_insights_scans_list` - `GET` `/zones/{zone_id}/security-center/insights/scans`
+- `cloudflare_security_center_insights_scans_create` - `POST` `/zones/{zone_id}/security-center/insights/scans`
+- `cloudflare_security_center_insights_severity_list` - `GET` `/zones/{zone_id}/security-center/insights/severity`
+- `cloudflare_security_center_insights_type_list` - `GET` `/zones/{zone_id}/security-center/insights/type`
+- `cloudflare_security_center_insights_issue_id_audit_log_list` - `GET` `/zones/{zone_id}/security-center/insights/{issue_id}/audit-log`
+- `cloudflare_security_center_insights_issue_id_classification_patch` - `PATCH` `/zones/{zone_id}/security-center/insights/{issue_id}/classification`
+- `cloudflare_security_center_insights_issue_id_dismiss_put` - `PUT` `/zones/{zone_id}/security-center/insights/{issue_id}/dismiss`
+- `cloudflare_security_center_securitytxt_list` - `GET` `/zones/{zone_id}/security-center/securitytxt`
+- `cloudflare_security_center_securitytxt_put` - `PUT` `/zones/{zone_id}/security-center/securitytxt`
+- `cloudflare_security_center_securitytxt_delete` - `DELETE` `/zones/{zone_id}/security-center/securitytxt`
 
 ### `zones/settings` - 3 of 26 reviewable shipped, 28 filtered out
 
@@ -3754,20 +4001,18 @@ Not shipped (8):
 ### `zones/spectrum` - 0 of 0 reviewable shipped, 9 filtered out
 
 
-### `zones/speed` - 0 of 10 reviewable shipped
+### `zones/speed` - 10 of 10 reviewable shipped
 
-
-Not shipped (10):
-- `GET` `/zones/{zone_id}/speed_api/availabilities`
-- `GET` `/zones/{zone_id}/speed_api/pages`
-- `GET` `/zones/{zone_id}/speed_api/pages/{url}/tests`
-- `POST` `/zones/{zone_id}/speed_api/pages/{url}/tests`
-- `DELETE` `/zones/{zone_id}/speed_api/pages/{url}/tests`
-- `GET` `/zones/{zone_id}/speed_api/pages/{url}/tests/{test_id}`
-- `GET` `/zones/{zone_id}/speed_api/pages/{url}/trend`
-- `GET` `/zones/{zone_id}/speed_api/schedule/{url}`
-- `POST` `/zones/{zone_id}/speed_api/schedule/{url}`
-- `DELETE` `/zones/{zone_id}/speed_api/schedule/{url}`
+- `cloudflare_speed_api_availabilities_list` - `GET` `/zones/{zone_id}/speed_api/availabilities`
+- `cloudflare_speed_api_pages_list` - `GET` `/zones/{zone_id}/speed_api/pages`
+- `cloudflare_speed_api_pages_url_tests_list` - `GET` `/zones/{zone_id}/speed_api/pages/{url}/tests`
+- `cloudflare_speed_api_pages_url_tests_create` - `POST` `/zones/{zone_id}/speed_api/pages/{url}/tests`
+- `cloudflare_speed_api_pages_url_tests_delete` - `DELETE` `/zones/{zone_id}/speed_api/pages/{url}/tests`
+- `cloudflare_speed_api_pages_url_tests_get` - `GET` `/zones/{zone_id}/speed_api/pages/{url}/tests/{test_id}`
+- `cloudflare_speed_api_pages_url_trend_list` - `GET` `/zones/{zone_id}/speed_api/pages/{url}/trend`
+- `cloudflare_speed_api_schedule_get` - `GET` `/zones/{zone_id}/speed_api/schedule/{url}`
+- `cloudflare_speed_api_schedule_create` - `POST` `/zones/{zone_id}/speed_api/schedule/{url}`
+- `cloudflare_speed_api_schedule_delete` - `DELETE` `/zones/{zone_id}/speed_api/schedule/{url}`
 
 ### `zones/ssl` - 0 of 0 reviewable shipped, 12 filtered out
 

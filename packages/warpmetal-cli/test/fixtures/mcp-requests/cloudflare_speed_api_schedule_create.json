@@ -1,0 +1,8 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/speed_api/schedule/sample_url?region=asia-east1&frequency=DAILY",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

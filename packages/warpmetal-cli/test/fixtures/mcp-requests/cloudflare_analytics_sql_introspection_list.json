@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/analytics/sql/introspection?account_tag=sample_account_tag&include_columns=true&include_custom_attributes=true&include_attributes=true&include_wae=true&include_lex=true&dataset_name=sample_dataset_name",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/speed_api/pages/sample_url/trend?region=asia-east1&deviceType=DESKTOP&start=sample_start&end=sample_end&tz=sample_tz&metrics=sample_metrics",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

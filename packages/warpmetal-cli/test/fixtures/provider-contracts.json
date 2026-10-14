@@ -264,6 +264,14 @@
     }
   },
   "tools": {
+    "cloudflare_alerting_v3_policies_policy_id_email_unsubscribe_list": {
+      "auth": null,
+      "note": "GET /accounts/{account_id}/alerting/v3/policies/{policy_id}/email/unsubscribe is public in the API spec (`security: null`): it is the link a recipient clicks from an alert email, so the tool sends no credential and the builder omits the Authorization header."
+    },
+    "cloudflare_alerting_v3_policies_policy_id_email_unsubscribe_create": {
+      "auth": null,
+      "note": "POST /accounts/{account_id}/alerting/v3/policies/{policy_id}/email/unsubscribe is public in the API spec (`security: null`), for the same reason as its GET sibling: an unsubscribe link cannot carry a token."
+    },
     "mixpanel_track_event": {
       "auth": null,
       "note": "POST /track is public (`security: []` in the ingestion OpenAPI): the project token travels inside each event's properties.token, and the body is a base64-JSON `data` form field, not a JSON body. Sending a JSON body answers HTTP 200 with status 0 (\"data, missing or empty\"), which is why the tool carries no auth header."

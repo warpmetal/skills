@@ -1,0 +1,12 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/logpush/ownership/validate",
+  "body": {
+    "destination_conf": "sample_destination_conf",
+    "ownership_challenge": "sample_ownership_challenge"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

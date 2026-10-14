@@ -1,0 +1,16 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/analytics/query/sample_dataset/timeseries",
+  "body": {
+    "filters": [],
+    "from": "sample_from",
+    "groupBy": [],
+    "stats": [],
+    "to": "sample_to",
+    "resolution": "sample_resolution"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

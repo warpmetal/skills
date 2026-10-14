@@ -504,6 +504,60 @@ is `multipart/form-data`, so neither can travel through a JSON argument.
 - `test/cloudflare-catalog.test.ts` holds the reviewed 53-tool destructive set
   across all three waves.
 
+## Batch 17 - Cloudflare observability, WAF and cache rules
+
+173 tools across ten reviewable groups and four the spec hides, reviewed as wave
+`w4`: Logpush (account and zone, including the edge jobs and the transformer
+library), the Log Explorer query surface, the analytics SQL API, Security Center,
+Observatory and tracing, plus the four hidden groups the wave deliberately keeps -
+Alerting (destinations, policies, silences), the rule-set engine at account and
+zone scope, and the Cache Rules. The Cloudflare surface goes from 653 tools to
+826; the full stdio profile from 828 to 1001.
+
+### How the wave decided
+
+- **`keepFiltered`, 80 tools.** The rule-set engine, the cache-rules surface and
+  the alerting API are all `x-fern-ignore` in the spec, which is why w1 shipped
+  zone firewall rules and not a WAF. Keeping them is the reviewed exception this
+  wave exists for: a WAF custom rule lives in a `zones/rulesets` phase entrypoint
+  and a Cache Rule lives in `zones/cache`, so without the exception there is no
+  WAF surface and no cache-rules surface at all. Every one of the 80 carries the
+  note that says so.
+- **`aliasTwins`, 42 renames.** The spec publishes the same endpoint for an
+  account and for a zone - Logpush, the Log Explorer datasets, the rule sets - and
+  the derived name drops the scope, so both sides derived one name. The plain name
+  goes to the account-scoped (or scope-less) operation and the other carries its
+  scope as a word: `cloudflare_zone_logpush_jobs_list`, `cloudflare_zone_rulesets_delete`,
+  `cloudflare_account_analytics_sql_list`.
+- **One path, four methods.** `PATCH`/`DELETE /zones/{id}/cache/origin_cloud_regions/batch`
+  and the four methods on `.../tiered_cache_smart_topology_enable` derive one name
+  each, because the derived verb comes from the path and not the method. The tiered
+  cache tools take the method into their name (`..._smart_topology_get`,
+  `_update`, `_delete`); the batch pair keeps the action and suffixes the delete.
+- **No destructive tools.** Everything this wave adds is configuration: a log-delivery
+  job, a saved dataset, a rule set, a cache rule, an alert policy, a tracing setting.
+  Deleting one removes something the caller can write again, which is the w1 firewall
+  precedent, so all 22 deletions carry `confirmGate` where Cloudflare asks for
+  confirmation and none carries the destructive hint. The wave is the first with a
+  zero-tool destructive set, which is the policy working rather than the policy
+  relaxing.
+- **Six raw bodies**, all JSON arrays or plain text: the two Log Explorer SQL
+  queries (`text/plain`) and the four alerting silence and origin-cloud-region
+  bulk writes.
+- **Two public endpoints.** Cloudflare marks both `.../policies/{id}/email/unsubscribe`
+  methods `security: null` - they are the link a recipient clicks from an alert
+  email - so those two tools send no credential, which the hand-authored provider
+  contract records with the reason.
+
+### What proves it
+
+- The provider-contract fixture now carries the first public Cloudflare tools, and
+  the CLI suite asserts that a tool with no auth sends no token: 4664 tests, all
+  passing.
+- The inventory records 36 review notes, 12 of them new here, mostly deprecated
+  Logpush and Log Explorer operations that still ship with the marker in their
+  description.
+
 ## Catalog layout - one file per provider
 
 The catalog used to be thirteen `batch-NN.json` files, each holding whatever
