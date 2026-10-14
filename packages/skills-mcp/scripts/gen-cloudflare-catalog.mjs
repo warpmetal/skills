@@ -103,6 +103,11 @@ function descriptionOf(entry) {
       "Cloudflare does not publish its body fields, so the declared arguments are removed and the rest of the arguments are sent as the body.",
     );
   }
+  if (entry.rawBody === true) {
+    parts.push(
+      `The body is a ${op.body.contentType} payload sent verbatim, so pass exactly the text the operation documents.`,
+    );
+  }
   if (op.confirm) parts.push("Cloudflare flags this operation as one that asks for confirmation.");
   if (op.deprecated) parts.push("Cloudflare marks this operation deprecated.");
   if (op.stability && op.stability !== "stable") {
@@ -122,10 +127,22 @@ function descriptionOf(entry) {
  * a body field and a query filter, say - and that would silently make one of
  * them unreachable, so it is reported rather than merged.
  */
-function inputSchemaOf(op) {
+function inputSchemaOf(entry) {
+  const op = entry.op;
   const properties = {};
   const required = new Set();
   const collisions = [];
+  // A reviewed `rawBody` tool takes the payload as a single string: the spec
+  // publishes no field list, so there is nothing to name. It is declared before
+  // the groups below so a path or query parameter that happened to be called
+  // `body` is reported as the collision it is instead of being swallowed.
+  if (entry.rawBody === true) {
+    properties.body = {
+      description: `The request body, sent verbatim with content type ${op.body.contentType}.`,
+      type: "string",
+    };
+    required.add("body");
+  }
   const groups = [
     { label: "Path parameter", items: op.pathParams },
     { label: "Query parameter", items: op.queryParams },
@@ -209,7 +226,7 @@ const CATALOG_VERSION = "v4";
 
 const problems = [];
 const tools = allowlist.entries.map((entry) => {
-  const { schema, collisions } = inputSchemaOf(entry.op);
+  const { schema, collisions } = inputSchemaOf(entry);
   for (const collision of collisions) {
     problems.push(`${entry.toolSlug}: two arguments collapse to "${collision}"`);
   }

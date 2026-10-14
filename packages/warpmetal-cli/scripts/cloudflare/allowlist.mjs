@@ -21,6 +21,25 @@ export const AUTH_NONE = "none";
 
 const SLUG = /^cloudflare_[a-z0-9]+(_[a-z0-9]+)*$/;
 
+/**
+ * Content types a reviewed `rawBody` tool may carry verbatim.
+ *
+ * Some operations publish no field list at all: the body is an array of records,
+ * a newline-delimited stream, or a plain-text query. The tool then exposes one
+ * `body` string argument and the builder sends it unchanged, with the content
+ * type the spec declares.
+ *
+ * A binary or multipart body is deliberately absent. A JSON argument cannot
+ * carry bytes, and giving the surface an encoding it does not have would be a
+ * second, unstated protocol; those operations stay out of the allowlist instead,
+ * which the validator enforces with the message below.
+ */
+const RAW_BODY_TYPES = new Set(["application/json", "application/x-ndjson", "text/plain"]);
+
+function rawBodyType(contentType) {
+  return RAW_BODY_TYPES.has(contentType) || String(contentType).endsWith("+json");
+}
+
 function reason(entry) {
   const text = entry.reason;
   return typeof text === "string" && text.trim().length >= 12;
@@ -42,6 +61,22 @@ export function loadAllowlist(path, spec, file) {
 
   if (document.version !== 1) {
     problems.push(`allowlist: version must be 1, found ${String(document.version)}`);
+  }
+  // The digest is the only tie between the reviewed decisions and the document
+  // they were made against. `spec.mjs` hashes the file it parsed, so a spec that
+  // moved under the allowlist - a renamed field, a new required parameter, an
+  // operation that now means something else - is caught here rather than by a
+  // caller of the shipped tool.
+  const expectedDigest = document.spec?.sha256;
+  if (
+    typeof expectedDigest === "string" &&
+    typeof spec.sha256 === "string" &&
+    expectedDigest !== spec.sha256
+  ) {
+    problems.push(
+      `allowlist: spec.sha256 is ${expectedDigest} but the loaded document hashes to ${spec.sha256}; ` +
+        "the reviewed decisions were made against a different Cloudflare document",
+    );
   }
   const waves = new Set(Object.keys(document.waves ?? {}));
   if (waves.size === 0) problems.push("allowlist: no waves declared");
@@ -83,8 +118,25 @@ export function loadAllowlist(path, spec, file) {
         `${where}: ${op.hidden ? "x-forge-hidden" : "x-fern-ignore"} operation; add keepFiltered: true to include it deliberately`,
       );
     }
+    if (entry.rawBody !== undefined && typeof entry.rawBody !== "boolean") {
+      problems.push(`${where}: rawBody must be true or false`);
+    }
     if (op.body?.kind === "unsupported") {
-      problems.push(`${where}: its request body is ${op.body.contentType}, which has no field list to expose`);
+      if (entry.rawBody !== true) {
+        problems.push(
+          `${where}: its request body is ${op.body.contentType}, which has no field list to expose; ` +
+            "add rawBody: true to send it verbatim as a string",
+        );
+      } else if (!rawBodyType(op.body.contentType)) {
+        problems.push(
+          `${where}: its request body is ${op.body.contentType}, which a JSON argument cannot carry; ` +
+            "leave the operation out of the allowlist",
+        );
+      }
+    } else if (entry.rawBody === true) {
+      problems.push(
+        `${where}: rawBody only applies to a body the spec does not publish as fields (this one is ${op.body?.kind ?? "none"})`,
+      );
     }
     if (op.body?.kind === "free-form" && entry.freeFormBody !== true) {
       problems.push(`${where}: the spec does not name its body fields; add freeFormBody: true to forward them`);

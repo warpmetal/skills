@@ -43,7 +43,9 @@ interface Operation {
   readonly destructive: boolean;
   readonly filtered: boolean;
   readonly keepFiltered: boolean;
+  readonly rawBody: boolean;
   readonly bodyKind: string;
+  readonly bodyContentType: string | null;
   readonly pathParams: readonly Parameter[];
   readonly queryParams: readonly Parameter[];
   readonly bodyFields: readonly Parameter[];
@@ -132,7 +134,24 @@ describe("cloudflare request shapes match the published API", () => {
         );
       }
       if (operation.bodyKind === "unsupported") {
-        assert.fail(`${operation.toolSlug}: an unsupported body must never ship`);
+        // A body the spec publishes no field list for ships only as a reviewed
+        // `rawBody`, and only when a JSON argument can carry it: the allowlist
+        // refuses the binary and multipart ones, so this asserts the same rule
+        // from the shipped side.
+        assert.equal(
+          operation.rawBody,
+          true,
+          `${operation.toolSlug}: an unsupported body must never ship unreviewed`,
+        );
+        assert.ok(
+          [
+            "application/json",
+            "application/x-ndjson",
+            "text/plain",
+          ].includes(String(operation.bodyContentType)) ||
+            String(operation.bodyContentType).endsWith("+json"),
+          `${operation.toolSlug}: ${String(operation.bodyContentType)} is not a body a JSON argument can carry`,
+        );
       }
     }
   });
@@ -202,6 +221,9 @@ describe("cloudflare request shapes match the published API", () => {
         ...operation.pathParams.map((parameter) => parameter.arg),
         ...operation.queryParams.map((parameter) => parameter.arg),
         ...operation.bodyFields.map((field) => field.arg),
+        // A raw body is the whole payload, so its single argument is consumed by
+        // the request even though the spec names no field for it.
+        ...(operation.rawBody === true ? ["body"] : []),
       ]);
       const orphans = Object.keys(sampleArgs[def.toolSlug] ?? {}).filter(
         (property) => !declared.has(property),
@@ -234,9 +256,28 @@ describe("cloudflare request shapes match the published API", () => {
       }
     });
 
-    it(`${def.toolSlug} sends the body fields the operation declares`, () => {
+    it(`${def.toolSlug} sends the body the operation declares`, () => {
       const operation = params.tools[def.toolSlug]!;
       const request = build(def.toolSlug, sampleArgs[def.toolSlug] ?? {});
+      if (operation.rawBody === true) {
+        // The reviewed raw body: the payload is the single `body` argument,
+        // unchanged, under the content type the operation declares. A JSON
+        // re-encoding or a default content type here would reach Cloudflare as a
+        // different request than the one the spec describes.
+        assert.equal(
+          typeof request.body,
+          "string",
+          `${def.toolSlug}: a raw body must travel as a string`,
+        );
+        const headers = Object.entries(request.headers ?? {}).map(
+          ([name, value]) => `${name.toLowerCase()}:${String(value).toLowerCase()}`,
+        );
+        assert.ok(
+          headers.includes(`content-type:${String(operation.bodyContentType).toLowerCase()}`),
+          `${def.toolSlug}: the declared content type must be sent`,
+        );
+        return;
+      }
       if (operation.bodyKind !== "object") {
         assert.equal(request.body, undefined, `${def.toolSlug}: an unexpected body was sent`);
         return;

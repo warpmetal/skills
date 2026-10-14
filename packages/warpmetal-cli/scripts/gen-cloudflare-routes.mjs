@@ -15,7 +15,9 @@
  *   - a JSON body is the fields the spec declares, each one sent only when the
  *     caller supplied it (`?? undefined`), so a PATCH never clears a field it was
  *     not told about. A body whose fields the spec does not publish is forwarded
- *     whole, with the declared arguments taken out of it first.
+ *     whole, with the declared arguments taken out of it first; a body the spec
+ *     publishes no field list for at all travels as the `body` argument, under
+ *     the content type the spec declares.
  *
  *   node packages/warpmetal-cli/scripts/gen-cloudflare-routes.mjs [ruta/openapi.json]
  *
@@ -95,8 +97,26 @@ function urlExpression(op) {
 function buildRoute(entry) {
   const op = entry.op;
   const url = urlExpression(op);
-  const body = bodySource(op);
+  const body = bodySource(entry);
   const headers = entry.auth === AUTH_NONE ? "" : ", headers: cfHeaders()";
+
+  if (body.raw !== null) {
+    // A reviewed `rawBody` tool: the spec publishes no field list, so the one
+    // `body` argument travels as it arrives. The content type is stated
+    // explicitly - the HTTP layer only invents `application/json` for a
+    // structured body, and guessing wrong here would mis-encode the payload -
+    // and when the operation needs no credential there is no `cfHeaders()` to
+    // spread, so the header is spelled out on its own.
+    const contentType = JSON.stringify(body.raw);
+    const rawHeaders =
+      entry.auth === AUTH_NONE
+        ? `, headers: { "Content-Type": ${contentType} }`
+        : `, headers: { ...cfHeaders(), "Content-Type": ${contentType} }`;
+    return (
+      `({args}) => ({ method: ${JSON.stringify(op.method)}, url: ${url}, ` +
+      `body: args.body${rawHeaders} })`
+    );
+  }
 
   if (body.freeForm) {
     // The declared arguments are removed from the copy that becomes the body,
@@ -176,17 +196,21 @@ function queryExpression(op) {
  * A declared object body sends exactly the fields the caller supplied. A body
  * whose fields the spec does not publish (`free-form`) forwards the rest of the
  * args object, with the declared path and query arguments destructured out of it
- * first so they cannot leak into the payload.
+ * first so they cannot leak into the payload. An `unsupported` body ships only
+ * when the allowlist reviewed it as `rawBody`, and then the `body` argument is
+ * the payload, sent verbatim under the content type the spec declares.
  */
-function bodySource(op) {
-  if (!op.body || op.body.kind === "none") return { inline: null, freeForm: false };
+function bodySource(entry) {
+  const op = entry.op;
+  if (!op.body) return { inline: null, freeForm: false, raw: null };
   if (op.body.kind === "object") {
     const fields = op.body.fields.map(
       (field) =>
         `${JSON.stringify(field.name)}: ${field.required ? arg(field.snake) : `${arg(field.snake)} ?? undefined`}`,
     );
-    return { inline: `{ ${fields.join(", ")} }`, freeForm: false };
+    return { inline: `{ ${fields.join(", ")} }`, freeForm: false, raw: null };
   }
-  return { inline: "body", freeForm: true };
+  if (op.body.kind === "free-form") return { inline: "body", freeForm: true, raw: null };
+  return { inline: null, freeForm: false, raw: op.body.contentType };
 }
 
