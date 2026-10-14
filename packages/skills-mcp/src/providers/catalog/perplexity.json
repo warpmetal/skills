@@ -1,0 +1,173 @@
+{
+  "version": 1,
+  "provider": "perplexity",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "perplexity_chat_completion",
+      "name": "chat_completion",
+      "title": "Answer a question with Perplexity Sonar",
+      "description": "Answer a conversation with a reply grounded in a live web search, returned with its citation URLs and search results. Use for a quick cited answer; pick create_async_chat_completion for a long deep-research report.",
+      "toolkitId": "perplexity",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "max_tokens": {
+            "description": "Maximum tokens to generate in the answer.",
+            "maximum": 128000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "messages": {
+            "description": "Conversation so far, oldest first. The final message is normally the user's question.",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "content": {
+                  "description": "Message text.",
+                  "maxLength": 100000,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "role": {
+                  "description": "Who authored the message.",
+                  "enum": [
+                    "system",
+                    "user",
+                    "assistant"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "role",
+                "content"
+              ],
+              "type": "object"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array"
+          },
+          "model": {
+            "description": "Sonar model to answer with, for example sonar or sonar-deep-research. Call list_models for the values this account may use.",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "return_related_questions": {
+            "description": "Also return follow-up questions related to the answer.",
+            "type": "boolean"
+          },
+          "search_mode": {
+            "description": "Corpus to ground the answer in, for example web or academic.",
+            "maxLength": 32,
+            "minLength": 1,
+            "type": "string"
+          },
+          "search_recency_filter": {
+            "description": "Restrict grounding sources by age, for example day, week, month, or year.",
+            "maxLength": 16,
+            "minLength": 1,
+            "type": "string"
+          },
+          "temperature": {
+            "description": "Sampling temperature between 0 and 2. Lower is more deterministic.",
+            "maximum": 2,
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "model",
+          "messages"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Answer a question with Perplexity Sonar",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "perplexity_search",
+      "name": "search",
+      "title": "Search the web with Perplexity",
+      "description": "Run a live web or people search and get ranked results with titles, URLs, snippets, and publication dates. Use when the user wants raw sources to read; pick chat_completion for a written answer with citations.",
+      "toolkitId": "perplexity",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "country": {
+            "description": "ISO 3166-1 alpha-2 country code to bias results toward, for example US or DE.",
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string"
+          },
+          "max_results": {
+            "description": "Maximum results to return. Up to 20 for web search, up to 50 when search_type is people. Defaults to 10.",
+            "maximum": 50,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_tokens_per_page": {
+            "description": "Maximum content tokens to extract from each result page.",
+            "maximum": 1000000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "query": {
+            "description": "The search query, in natural language or keywords.",
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "search_language_filter": {
+            "description": "ISO 639-1 two-letter language codes to restrict results to.",
+            "items": {
+              "description": "ISO 639-1 code.",
+              "maxLength": 2,
+              "minLength": 2,
+              "type": "string"
+            },
+            "maxItems": 20,
+            "type": "array"
+          },
+          "search_type": {
+            "description": "Search corpus: web for general pages, people for person profiles. Defaults to web.",
+            "enum": [
+              "web",
+              "people"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Search the web with Perplexity",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

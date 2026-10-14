@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "provider": "circleci",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "circleci_list_pipelines",
+      "name": "list_pipelines",
+      "title": "Get a list of pipelines in CircleCI",
+      "description": "Get a list of pipelines. Use when choosing a broad account-level view instead of pipelines from one project.",
+      "toolkitId": "circleci",
+      "version": "v11",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "mine": {
+            "description": "Only include entries created by your user.",
+            "type": "boolean"
+          },
+          "org_slug": {
+            "description": "Org slug in the form `vcs-slug/org-name`. For projects that use GitLab or GitHub App, use `circleci` as the `vcs-slug` and replace the `org-name` with the organization ID (found in Organization Settings).",
+            "maxLength": 512,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9._-]+(/[A-Za-z0-9._-]+){0,3}$",
+            "type": "string"
+          },
+          "page_token": {
+            "description": "A token to retrieve the next page of results.",
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get a list of pipelines in CircleCI",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "circleci_get_pipeline_by_id",
+      "name": "get_pipeline_by_id",
+      "title": "Get a pipeline by ID in CircleCI",
+      "description": "Get a pipeline by ID. Use when a global pipeline ID is available, not a project-specific pipeline number.",
+      "toolkitId": "circleci",
+      "version": "v11",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "pipeline_id": {
+            "description": "The unique ID of the pipeline.",
+            "maxLength": 36,
+            "minLength": 36,
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "pipeline_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get a pipeline by ID in CircleCI",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

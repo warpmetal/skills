@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "provider": "datadog",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "datadog_v1_get_ip_ranges",
+      "name": "v1_get_ip_ranges",
+      "title": "List Datadog IP ranges",
+      "description": "List the current public IP ranges used by Datadog services.",
+      "toolkitId": "datadog",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "response": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "response"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Datadog IP ranges",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

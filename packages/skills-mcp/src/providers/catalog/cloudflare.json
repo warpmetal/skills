@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "provider": "cloudflare",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "cloudflare_zones_get",
+      "name": "zones_get",
+      "title": "List Cloudflare Zones",
+      "description": "cloudflare_zones_get: list Cloudflare DNS zones/domains for the authenticated API token using GET /zones. Returns zone IDs and domain names. Use this when you need to list zones or discover zone IDs before calling zone-scoped Cloudflare APIs.",
+      "toolkitId": "cloudflare",
+      "version": "v3",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "account_id": {
+            "description": "Query parameter account.id.",
+            "type": "string"
+          },
+          "account_name": {
+            "description": "Query parameter account.name.",
+            "type": "string"
+          },
+          "direction": {
+            "description": "Query parameter direction.",
+            "type": "string"
+          },
+          "match": {
+            "description": "Query parameter match.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Query parameter name.",
+            "type": "string"
+          },
+          "order": {
+            "description": "Query parameter order.",
+            "type": "string"
+          },
+          "page": {
+            "description": "Query parameter page.",
+            "type": "string"
+          },
+          "per_page": {
+            "description": "Query parameter per_page.",
+            "type": "string"
+          },
+          "status": {
+            "description": "Query parameter status.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Query parameter type.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Cloudflare Zones",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_accounts_list_accounts",
+      "name": "accounts_list_accounts",
+      "title": "List Cloudflare Accounts",
+      "description": "cloudflare_accounts_list_accounts: list Cloudflare accounts for the authenticated API token using GET /accounts (top-level accounts collection, no account_id path). Returns account IDs and account names. Use this when you need to list accounts or discover account IDs before calling account-scoped Cloudflare APIs.",
+      "toolkitId": "cloudflare",
+      "version": "v3",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "direction": {
+            "description": "Query parameter direction.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Query parameter name.",
+            "type": "string"
+          },
+          "page": {
+            "description": "Query parameter page.",
+            "type": "string"
+          },
+          "per_page": {
+            "description": "Query parameter per_page.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Cloudflare Accounts",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

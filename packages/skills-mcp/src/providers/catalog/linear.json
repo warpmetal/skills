@@ -1,0 +1,318 @@
+{
+  "version": 1,
+  "provider": "linear",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "linear_create_issue",
+      "name": "create_issue",
+      "title": "Create Linear Issue",
+      "description": "Create a new issue in a Linear team.",
+      "toolkitId": "linear",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "linear_team_id": {
+            "description": "Linear team UUID (teamId).",
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": {
+            "description": "Issue title.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "linear_team_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Linear Issue",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "linear_list_issues",
+      "name": "list_issues",
+      "title": "List Linear Issues",
+      "description": "List recent Linear issues.",
+      "toolkitId": "linear",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "first": {
+            "default": 10,
+            "description": "Maximum number of issues to return.",
+            "maximum": 50,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "issues": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Linear Issues",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "linear_get_issue",
+      "name": "get_issue",
+      "title": "Get Linear Issue",
+      "description": "Fetch a Linear issue by id or identifier.",
+      "toolkitId": "linear",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "issue_id": {
+            "description": "Linear issue UUID or identifier (e.g. DIG-7).",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "issue": {
+            "properties": {
+              "assignee": {
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "description": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "identifier": {
+                "type": "string"
+              },
+              "priority": {
+                "type": "integer"
+              },
+              "state": {
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Linear Issue",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "linear_create_comment",
+      "name": "create_comment",
+      "title": "Create Linear Comment",
+      "description": "Create a comment on a Linear issue by id or identifier.",
+      "toolkitId": "linear",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "description": "Comment content in markdown. Maps to CommentCreateInput.body.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "body_data": {
+            "description": "[Internal] Comment content as a Prosemirror document. Maps to CommentCreateInput.bodyData."
+          },
+          "create_as_user": {
+            "description": "Create as a user with this name (OAuth actor=app only). Maps to CommentCreateInput.createAsUser.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "create_on_synced_slack_thread": {
+            "description": "Create on the issue's synced Slack thread (fails if none). Maps to CommentCreateInput.createOnSyncedSlackThread.",
+            "type": "boolean"
+          },
+          "created_at": {
+            "description": "Past creation timestamp for imports (ISO-8601). Maps to CommentCreateInput.createdAt.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "display_icon_url": {
+            "description": "External avatar URL; requires create_as_user (OAuth actor=app only). Maps to CommentCreateInput.displayIconUrl.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "do_not_subscribe_to_issue": {
+            "description": "If true, do not auto-subscribe to the issue. Maps to CommentCreateInput.doNotSubscribeToIssue.",
+            "type": "boolean"
+          },
+          "document_content_id": {
+            "description": "Document content to associate the comment with. Maps to CommentCreateInput.documentContentId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "id": {
+            "description": "Optional comment UUID v4. If omitted, Linear generates one. Maps to CommentCreateInput.id.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "initiative_id": {
+            "description": "Initiative to associate the comment with. Maps to CommentCreateInput.initiativeId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "initiative_update_id": {
+            "description": "Initiative update to associate the comment with. Maps to CommentCreateInput.initiativeUpdateId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "issue_id": {
+            "description": "Issue UUID or identifier (e.g. DIG-7) to associate the comment with. Maps to CommentCreateInput.issueId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "parent_id": {
+            "description": "Parent comment id to nest under. Maps to CommentCreateInput.parentId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "post_id": {
+            "description": "Post to associate the comment with. Maps to CommentCreateInput.postId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "project_id": {
+            "description": "Project to associate the comment with. Maps to CommentCreateInput.projectId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "project_update_id": {
+            "description": "Project update to associate the comment with. Maps to CommentCreateInput.projectUpdateId.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "quoted_text": {
+            "description": "Referenced text for inline comments. Maps to CommentCreateInput.quotedText.",
+            "type": "string"
+          },
+          "subscriber_ids": {
+            "description": "[Internal] User ids subscribing to this comment thread. Maps to CommentCreateInput.subscriberIds.",
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "body",
+          "issue_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "comment": {
+            "properties": {
+              "body": {
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Linear Comment",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

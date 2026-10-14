@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "provider": "anthropic-admin",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "anthropic-admin_list_workspaces",
+      "name": "list_workspaces",
+      "title": "List Workspaces",
+      "description": "List workspaces in the Anthropic organization, with cursor pagination. The Default Workspace is never included in results.",
+      "toolkitId": "anthropic-admin",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "after_id": {
+            "description": "Cursor. Return the page immediately after this object ID (the previous response's last_id).",
+            "type": "string"
+          },
+          "before_id": {
+            "description": "Cursor. Return the page immediately before this object ID (the previous response's first_id).",
+            "type": "string"
+          },
+          "include_archived": {
+            "description": "Include archived workspaces in the results. Defaults to false.",
+            "type": "boolean"
+          },
+          "limit": {
+            "description": "Number of items to return per page. Defaults to 20.",
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Workspaces",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "anthropic-admin_list_api_keys",
+      "name": "list_api_keys",
+      "title": "List API Keys",
+      "description": "List the organization's API keys with their status, workspace, creator and expiry. Key values are never returned. Supports cursor pagination and filtering by status, workspace or creator.",
+      "toolkitId": "anthropic-admin",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "after_id": {
+            "description": "Cursor. Return the page immediately after this object ID (the previous response's last_id).",
+            "type": "string"
+          },
+          "before_id": {
+            "description": "Cursor. Return the page immediately before this object ID (the previous response's first_id).",
+            "type": "string"
+          },
+          "created_by_user_id": {
+            "description": "ID of the organization member (prefixed `user_`). Filters to keys this member created.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Number of items to return per page. Defaults to 20.",
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "status": {
+            "description": "Filter to keys in this status.",
+            "enum": [
+              "active",
+              "inactive",
+              "archived"
+            ],
+            "type": "string"
+          },
+          "workspace_id": {
+            "description": "ID of the workspace (prefixed `wrkspc_`). Filters to keys scoped to this workspace.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List API Keys",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

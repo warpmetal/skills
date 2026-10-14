@@ -42,7 +42,8 @@ export interface ProviderCatalogTool {
 
 export interface ProviderCatalogFile {
   version: number;
-  batch: string;
+  /** Provider `toolkitId` this file holds; mirrors the file name (`jira.json` -> `"jira"`). */
+  provider: string;
   source: string;
   extractedAt: string;
   tools: ProviderCatalogTool[];

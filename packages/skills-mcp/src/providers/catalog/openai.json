@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "provider": "openai",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "openai_list_models",
+      "name": "list_models",
+      "title": "List models",
+      "description": "Lists the currently available models, and provides basic information about each one such as the owner and availability.",
+      "toolkitId": "openai",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "description": "Exact JSON response returned by OpenAI.",
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List models",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "version": 1,
+  "provider": "intercom",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "intercom_list_all_contacts",
+      "name": "list_all_contacts",
+      "title": "List All Contacts",
+      "description": "Page through every contact in the workspace in creation order. Use for a straightforward sweep; search_contacts narrows by attribute, tag, or activity.",
+      "toolkitId": "intercom",
+      "version": "v9",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "include_merge_history": {
+            "default": false,
+            "description": "Pass `true` to include a `merge_history` array on each contact in the response. Only returned for contacts with a `user` role.",
+            "type": "boolean"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List All Contacts",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "intercom_create_contact",
+      "name": "create_contact",
+      "title": "Create Contact",
+      "description": "Create a person in the workspace as a signed-up user or an anonymous lead. Use for someone not recorded yet; update_a_contact edits a person who already exists.",
+      "toolkitId": "intercom",
+      "version": "v9",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "avatar": {
+            "description": "An image URL containing the avatar of a contact",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "custom_attributes": {
+            "description": "The custom attributes which are set for the contact",
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "email": {
+            "description": "The contacts email",
+            "type": "string"
+          },
+          "email_verified": {
+            "description": "Whether the contact's email address has been verified. Set to true to indicate you have verified the contact owns this email address, or false to mark it as unverified. Must be supplied together with an email in the same request; sending it without an email returns a 400.",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "external_id": {
+            "description": "A unique identifier for the contact which is given to Intercom",
+            "type": "string"
+          },
+          "last_seen_at": {
+            "description": "(Unix timestamp in seconds) The time when the contact was last seen (either where the Intercom Messenger was installed or when specified manually).",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "name": {
+            "description": "The contacts name",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "owner_id": {
+            "description": "The id of an admin that has been assigned account ownership of the contact",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "phone": {
+            "description": "The contacts phone",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "role": {
+            "description": "The role of the contact.",
+            "type": "string"
+          },
+          "signed_up_at": {
+            "description": "(Unix timestamp in seconds) The time specified for when a contact signed up.",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "unsubscribed_from_emails": {
+            "description": "Whether the contact is unsubscribed from emails",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Contact",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "provider": "mixpanel",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "mixpanel_track_event",
+      "name": "track_event",
+      "title": "Track event",
+      "description": "Record current events in a Mixpanel project. Use when sending new behavioral activity rather than importing historical event data. Each event's properties.token is the project token; the /track endpoint takes no other credential.",
+      "toolkitId": "mixpanel",
+      "version": "v11",
+      "inputSchema": {
+        "properties": {
+          "events": {
+            "items": {
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "properties": {
+                  "additionalProperties": true,
+                  "required": [
+                    "token",
+                    "distinct_id"
+                  ],
+                  "type": "object"
+                }
+              },
+              "required": [
+                "event",
+                "properties"
+              ],
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "events"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Track event",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "mixpanel_raw_event_export",
+      "name": "raw_event_export",
+      "title": "Export raw events",
+      "description": "Export raw Mixpanel events as stored event records. Use when detailed event-level data is needed instead of aggregated analysis or profile queries.",
+      "toolkitId": "mixpanel",
+      "version": "v20",
+      "inputSchema": {
+        "properties": {
+          "from_date": {
+            "description": "Inclusive start date yyyy-mm-dd.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum events to return.",
+            "type": "integer"
+          },
+          "project_id": {
+            "description": "Mixpanel project id (for example 12345).",
+            "type": "integer"
+          },
+          "to_date": {
+            "description": "Inclusive end date yyyy-mm-dd.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id",
+          "from_date",
+          "to_date"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Export raw events",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

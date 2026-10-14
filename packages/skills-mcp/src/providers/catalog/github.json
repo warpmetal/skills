@@ -1,0 +1,267 @@
+{
+  "version": 1,
+  "provider": "github",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "github_create_issue",
+      "name": "create_issue",
+      "title": "Create GitHub Issue",
+      "description": "Create a new issue in a GitHub repository.",
+      "toolkitId": "github",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "body": {
+            "description": "Issue body (markdown).",
+            "type": "string"
+          },
+          "owner": {
+            "description": "Repository owner (user or org).",
+            "type": "string"
+          },
+          "repo": {
+            "description": "Repository name.",
+            "type": "string"
+          },
+          "title": {
+            "description": "Issue title.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "title"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create GitHub Issue",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "toolSlug": "github_list_issues",
+      "name": "list_issues",
+      "title": "List GitHub Issues",
+      "description": "List issues in a GitHub repository.",
+      "toolkitId": "github",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "max_results": {
+            "description": "Maximum number of issues to return.",
+            "type": "integer"
+          },
+          "owner": {
+            "description": "Repository owner (user or organization).",
+            "type": "string"
+          },
+          "repo": {
+            "description": "Repository name.",
+            "type": "string"
+          },
+          "state": {
+            "default": "open",
+            "description": "Filter by issue state.",
+            "enum": [
+              "open",
+              "closed",
+              "all"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List GitHub Issues",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "toolSlug": "github_get_issue",
+      "name": "get_issue",
+      "title": "Get GitHub Issue",
+      "description": "Get details of a specific issue in a GitHub repository.",
+      "toolkitId": "github",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "issue_number": {
+            "description": "Issue number.",
+            "type": "integer"
+          },
+          "owner": {
+            "description": "Repository owner (user or organization).",
+            "type": "string"
+          },
+          "repo": {
+            "description": "Repository name.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "issue_number"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get GitHub Issue",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "toolSlug": "github_create_pull_request",
+      "name": "create_pull_request",
+      "title": "Create GitHub Pull Request",
+      "description": "Create a new pull request in a GitHub repository.",
+      "toolkitId": "github",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "base": {
+            "description": "Branch to merge into.",
+            "type": "string"
+          },
+          "body": {
+            "description": "Pull request body/description.",
+            "type": "string"
+          },
+          "draft": {
+            "description": "Create as a draft pull request.",
+            "type": "boolean"
+          },
+          "head": {
+            "description": "Branch with changes (user:branch for cross-repo).",
+            "type": "string"
+          },
+          "owner": {
+            "description": "Repository owner (user or organization).",
+            "type": "string"
+          },
+          "repo": {
+            "description": "Repository name.",
+            "type": "string"
+          },
+          "title": {
+            "description": "Pull request title.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "title",
+          "head",
+          "base"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create GitHub Pull Request",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "toolSlug": "github_get_pull_request",
+      "name": "get_pull_request",
+      "title": "Get GitHub Pull Request",
+      "description": "Get details of a specific pull request in a GitHub repository.",
+      "toolkitId": "github",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "owner": {
+            "description": "Repository owner (user or organization).",
+            "type": "string"
+          },
+          "pull_number": {
+            "description": "Pull request number.",
+            "type": "integer"
+          },
+          "repo": {
+            "description": "Repository name.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "pull_number"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get GitHub Pull Request",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "toolSlug": "github_search_repositories",
+      "name": "search_repositories",
+      "title": "Search GitHub Repositories",
+      "description": "Search repositories.",
+      "toolkitId": "github",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "max_results": {
+            "description": "Max results.",
+            "type": "integer"
+          },
+          "order": {
+            "description": "Sort order.",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "type": "string"
+          },
+          "q": {
+            "description": "Search query.",
+            "type": "string"
+          },
+          "sort": {
+            "description": "Sort field.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "q"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Search GitHub Repositories",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    }
+  ]
+}

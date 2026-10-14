@@ -1,0 +1,325 @@
+{
+  "version": 1,
+  "provider": "supabase",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "supabase_list_projects",
+      "name": "list_projects",
+      "title": "List Supabase Organization Projects",
+      "description": "List projects for a Supabase organization by slug, with optional pagination, search, sort, and status filters.",
+      "toolkitId": "supabase",
+      "version": "v13",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "default": 100,
+            "description": "Number of projects to return per page (1-100).",
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "offset": {
+            "default": 0,
+            "description": "Number of projects to skip (offset-based pagination).",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "organization_slug": {
+            "description": "Organization slug (from list_organizations). Example: tsrqponmlkjihgfedcba.",
+            "minLength": 1,
+            "pattern": "^[\\w-]+$",
+            "type": "string"
+          },
+          "search": {
+            "description": "Case-insensitive substring match on project name.",
+            "type": "string"
+          },
+          "sort": {
+            "default": "name_asc",
+            "description": "Sort order for projects.",
+            "enum": [
+              "name_asc",
+              "name_desc",
+              "created_asc",
+              "created_desc"
+            ],
+            "type": "string"
+          },
+          "statuses": {
+            "description": "Comma-separated project statuses to filter by. Supported: ACTIVE_HEALTHY, INACTIVE.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "organization_slug"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "pagination": {
+            "description": "Pagination metadata from the Management API response.",
+            "type": "object"
+          },
+          "projects": {
+            "items": {
+              "properties": {
+                "cloud_provider": {
+                  "type": "string"
+                },
+                "inserted_at": {
+                  "type": "string"
+                },
+                "is_branch": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "ref": {
+                  "description": "Project ref.",
+                  "type": "string"
+                },
+                "region": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Supabase Organization Projects",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "supabase_create_a_project",
+      "name": "create_a_project",
+      "title": "Create a project",
+      "description": "Create a new Supabase project in an organization, choosing its region, size, and database password. Use to provision a new backend; use list_all_projects to see what already exists.",
+      "toolkitId": "supabase",
+      "version": "v5",
+      "inputSchema": {
+        "properties": {
+          "db_pass": {
+            "description": "Database password",
+            "type": "string"
+          },
+          "desired_instance_size": {
+            "description": "Desired instance size. Omit this field to always default to the smallest possible size.",
+            "enum": [
+              "nano",
+              "micro",
+              "small",
+              "medium",
+              "large",
+              "xlarge",
+              "2xlarge",
+              "4xlarge",
+              "8xlarge",
+              "12xlarge",
+              "16xlarge",
+              "24xlarge",
+              "24xlarge_optimized_memory",
+              "24xlarge_optimized_cpu",
+              "24xlarge_high_memory",
+              "48xlarge",
+              "48xlarge_optimized_memory",
+              "48xlarge_optimized_cpu",
+              "48xlarge_high_memory"
+            ],
+            "type": "string"
+          },
+          "high_availability": {
+            "description": "[Experimental] Whether to enable high availability for the project.",
+            "type": "boolean"
+          },
+          "kps_enabled": {
+            "description": "This field is deprecated and is ignored in this request",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Name of your project",
+            "type": "string"
+          },
+          "organization_slug": {
+            "description": "Organization slug",
+            "type": "string"
+          },
+          "plan": {
+            "description": "Subscription Plan is now set on organization level and is ignored in this request",
+            "enum": [
+              "free",
+              "pro"
+            ],
+            "type": "string"
+          },
+          "postgres_engine": {
+            "additionalProperties": true,
+            "properties": {},
+            "type": "object"
+          },
+          "region": {
+            "description": "Region you want your server to reside in. Use region_selection instead.",
+            "enum": [
+              "us-east-1",
+              "us-east-2",
+              "us-west-1",
+              "us-west-2",
+              "ap-east-1",
+              "ap-southeast-1",
+              "ap-northeast-1",
+              "ap-northeast-2",
+              "ap-southeast-2",
+              "eu-west-1",
+              "eu-west-2",
+              "eu-west-3",
+              "eu-north-1",
+              "eu-central-1",
+              "eu-central-2",
+              "ca-central-1",
+              "ap-south-1",
+              "sa-east-1"
+            ],
+            "type": "string"
+          },
+          "region_selection": {
+            "description": "Region selection. Only one of region or region_selection can be specified.",
+            "properties": {
+              "code": {
+                "description": "The Smart Region Group's code. The codes supported are not a stable API, and should be retrieved from the /available-regions endpoint.",
+                "enum": [
+                  "americas",
+                  "emea",
+                  "apac"
+                ],
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "smartGroup"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "code"
+            ],
+            "type": "object"
+          },
+          "release_channel": {
+            "additionalProperties": true,
+            "properties": {},
+            "type": "object"
+          },
+          "template_url": {
+            "description": "Template URL used to create the project from the CLI.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "db_pass",
+          "name",
+          "organization_slug"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "created_at": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "organization_id": {
+            "type": "string"
+          },
+          "organization_slug": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create a project",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "supabase_apply_a_migration",
+      "name": "apply_a_migration",
+      "title": "Apply a database migration",
+      "description": "Run a SQL migration against a Supabase project's database and record it in the migration history. Use to change the schema for real; use upsert_a_migration to record a migration without executing it.",
+      "toolkitId": "supabase",
+      "version": "v5",
+      "inputSchema": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "ref": {
+            "description": "Project ref",
+            "type": "string"
+          },
+          "rollback": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ref",
+          "query"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Apply a database migration",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "provider": "onesignal",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "onesignal_view_an_app",
+      "name": "view_an_app",
+      "title": "View an app",
+      "description": "View an app. Calls OneSignal `GET /apps/{app_id}`. Requires a customer API key.",
+      "toolkitId": "onesignal",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "app_id": {
+            "description": "Your OneSignal App ID in UUID v4 format. See [Keys & IDs](/docs/en/keys-and-ids).",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+            "type": "string"
+          },
+          "view": {
+            "description": "Set to `config` to return configuration-only data. This omits `players` and `messageable_players`, skipping the subscription-count lookup for a faster response.",
+            "enum": [
+              "config"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "app_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "View an app",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

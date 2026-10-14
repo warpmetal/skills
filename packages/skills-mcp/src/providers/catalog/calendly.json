@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "provider": "calendly",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "calendly_list_event_types",
+      "name": "list_event_types",
+      "title": "List user's event types",
+      "description": "List the event types a Calendly user or organization offers for booking, such as a 30-minute intro call. Use when you need the available meeting types or an event type URI for other tools.",
+      "toolkitId": "calendly",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "active": {
+            "description": "True for active event types only, false for inactive only; omit for all.",
+            "type": "boolean"
+          },
+          "admin_managed": {
+            "description": "True for admin-managed event types only, false to exclude them.",
+            "type": "boolean"
+          },
+          "count": {
+            "description": "Number of rows to return per page (maximum 100).",
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "organization": {
+            "description": "Organization URI whose event types to list. Provide user or organization.",
+            "format": "uri",
+            "pattern": "^https://api\\.calendly\\.com/",
+            "type": "string"
+          },
+          "page_token": {
+            "description": "Page token from a previous response's pagination.next_page_token.",
+            "type": "string"
+          },
+          "sort": {
+            "description": "Sort field and direction, for example start_time:asc.",
+            "type": "string"
+          },
+          "user": {
+            "description": "User URI whose event types to list. Provide user or organization.",
+            "format": "uri",
+            "pattern": "^https://api\\.calendly\\.com/",
+            "type": "string"
+          },
+          "user_availability_schedule": {
+            "description": "With user, only event types that use this availability schedule.",
+            "format": "uri",
+            "pattern": "^https://api\\.calendly\\.com/",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List user's event types",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "calendly_get_current_user",
+      "name": "get_current_user",
+      "title": "Get current user",
+      "description": "Get the Calendly user who owns the connected account, including their user and organization URIs. Use when you need the account owner's own URI to pass to other Calendly tools.",
+      "toolkitId": "calendly",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get current user",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

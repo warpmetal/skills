@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "provider": "dropbox",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "dropbox_list_folder",
+      "name": "list_folder",
+      "title": "List Dropbox Folder",
+      "description": "List the files and folders at a path in the user's Dropbox. Returns a cursor for paging through large folders.",
+      "toolkitId": "dropbox",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "limit": {
+            "description": "Maximum number of entries to return in one page.",
+            "type": "integer"
+          },
+          "path": {
+            "default": "",
+            "description": "Folder path to list, for example /qa_tree. An empty string means the app folder root.",
+            "type": "string"
+          },
+          "recursive": {
+            "description": "List the folder's contents recursively rather than one level.",
+            "type": "boolean"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "cursor": {
+            "type": "string"
+          },
+          "has_more": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Dropbox Folder",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "dropbox_search_files",
+      "name": "search_files",
+      "title": "Search Dropbox Files",
+      "description": "Search the user's Dropbox for files and folders matching a query string.",
+      "toolkitId": "dropbox",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "max_results": {
+            "description": "Maximum number of matches to return.",
+            "type": "integer"
+          },
+          "path": {
+            "description": "Restrict the search to this folder path.",
+            "type": "string"
+          },
+          "query": {
+            "description": "Search query, for example disposable_qa.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "cursor": {
+            "type": "string"
+          },
+          "has_more": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Search Dropbox Files",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "batch": "13",
+  "provider": "grafana-stack",
   "source": "warpmetal-providers",
   "extractedAt": "2026-10-13",
   "tools": [

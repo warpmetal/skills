@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "provider": "asana",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "asana_get_a_task",
+      "name": "get_a_task",
+      "title": "Get a task",
+      "description": "Get a task in Asana.",
+      "toolkitId": "asana",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "task_gid": {
+            "description": "The task to operate on.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_gid"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get a task",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "asana_create_a_project",
+      "name": "create_a_project",
+      "title": "Create a project",
+      "description": "Create a project in Asana.",
+      "toolkitId": "asana",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "archived": {
+            "description": "True if the project is archived, false if not. Archived projects do not show in the UI by default and may be treated differently for queries.",
+            "type": "boolean"
+          },
+          "color": {
+            "description": "Color of the project.",
+            "enum": [
+              "dark-pink",
+              "dark-green",
+              "dark-blue",
+              "dark-red",
+              "dark-teal",
+              "dark-brown",
+              "dark-orange",
+              "dark-purple",
+              "dark-warm-gray",
+              "light-pink",
+              "light-green",
+              "light-blue",
+              "light-red",
+              "light-teal",
+              "light-brown",
+              "light-orange",
+              "light-purple",
+              "light-warm-gray"
+            ],
+            "type": "string"
+          },
+          "current_status": {
+            "additionalProperties": true,
+            "description": "*Deprecated: new integrations should prefer the `current_status_update` resource.*",
+            "properties": {},
+            "type": "object"
+          },
+          "current_status_update": {
+            "additionalProperties": true,
+            "description": "The latest `status_update` posted to this project.",
+            "properties": {},
+            "type": "object"
+          },
+          "custom_fields": {
+            "additionalProperties": true,
+            "description": "An object where each key is a Custom Field GID and each value is an enum GID, string, number, or object.",
+            "type": "object"
+          },
+          "default_view": {
+            "description": "The default view (list, board, calendar, or timeline) of a project.",
+            "enum": [
+              "list",
+              "board",
+              "calendar",
+              "timeline"
+            ],
+            "type": "string"
+          },
+          "due_date": {
+            "description": "*Deprecated: new integrations should prefer the `due_on` field.*",
+            "type": "string"
+          },
+          "due_on": {
+            "description": "The day on which this project is due. This takes a date with format YYYY-MM-DD.",
+            "type": "string"
+          },
+          "followers": {
+            "description": "*Create-only*. Comma separated string of users. Followers are a subset of members who have opted in to receive \"tasks added\" notifications for a project.",
+            "type": "string"
+          },
+          "html_notes": {
+            "description": "[Opt In](/docs/input-output-options). The notes of the project with formatting as HTML.",
+            "type": "string"
+          },
+          "is_template": {
+            "description": "[Opt In](/docs/input-output-options). *Deprecated - please use a project template endpoint instead (more in [this forum post](https://forum.asana.com/t/a-new-api-for-project-templates/156432)).* Determines if the project is a template.",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Name of the project. This is generally a short sentence fragment that fits on a line in the UI for maximum readability. However, it can be longer.",
+            "type": "string"
+          },
+          "notes": {
+            "description": "Free-form textual information associated with the project (ie., its description).",
+            "type": "string"
+          },
+          "owner": {
+            "description": "The current owner of the project, may be null.",
+            "type": "string"
+          },
+          "public": {
+            "description": "True if the project is public to its team.",
+            "type": "boolean"
+          },
+          "start_on": {
+            "description": "The day on which work for this project begins, or null if the project has no start date. This takes a date with `YYYY-MM-DD` format. *Note: `due_on` or `due_at` must be present in the request when setting or unsetting the `start_on` parameter. Additionally, `start_on` and `due_on` cannot be the same date.*",
+            "type": "string"
+          },
+          "team": {
+            "description": "The team that this project is shared with.",
+            "type": "string"
+          },
+          "workspace": {
+            "description": "The workspace GID the project belongs to (Asana expects a plain GID string here, e.g. `1219343793000865`).",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create a project",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    }
+  ]
+}

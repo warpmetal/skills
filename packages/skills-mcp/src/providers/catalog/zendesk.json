@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "batch": "11",
+  "provider": "zendesk",
   "source": "warpmetal-providers",
   "extractedAt": "2026-10-12",
   "tools": [
@@ -524,6 +524,227 @@
         "idempotentHint": false,
         "openWorldHint": true,
         "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "zendesk_update_ticket",
+      "name": "update_ticket",
+      "title": "Update Zendesk Ticket",
+      "description": "Change an existing ticket: status, priority, assignee, group, subject, type or tags. Use it to triage a ticket that already exists; create_ticket opens a new one and add_ticket_comment replies. Set status \"solved\" to resolve and \"closed\" to close. Tags replace the ticket's whole tag set. A status or assignee change fires the account's triggers and can notify the requester.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "assignee_id": {
+            "description": "The id of the agent to assign the ticket to. Use list_users to find it. Pass null to unassign.",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "group_id": {
+            "description": "The id of the group to move the ticket to. Read the group ids from the ticket's own detail with get_ticket.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "priority": {
+            "description": "The ticket's priority.",
+            "enum": [
+              "urgent",
+              "high",
+              "normal",
+              "low"
+            ],
+            "type": "string"
+          },
+          "status": {
+            "description": "The ticket's status. \"solved\" resolves it and \"closed\" closes it permanently.",
+            "enum": [
+              "new",
+              "open",
+              "pending",
+              "hold",
+              "solved",
+              "closed"
+            ],
+            "type": "string"
+          },
+          "subject": {
+            "description": "The ticket's subject line.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "tags": {
+            "description": "The ticket's tags. This replaces the whole tag set; send the values to keep alongside the new ones.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "ticket_id": {
+            "description": "The id of the ticket to update.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "type": {
+            "description": "The ticket's type.",
+            "enum": [
+              "problem",
+              "incident",
+              "question",
+              "task"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Update Zendesk Ticket",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "zendesk_get_user",
+      "name": "get_user",
+      "title": "Get Zendesk User",
+      "description": "Show one user in full: role, email, organization and external id. Use it after list_users to read a requester or assignee, and to fetch the id create_ticket or update_ticket needs.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "description": "The id of the user.",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Zendesk User",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "zendesk_get_organization",
+      "name": "get_organization",
+      "title": "Get Zendesk Organization",
+      "description": "Show one organization in full: name, domains, tags and notes. Use it after list_organizations to read a client's organization, for grouping requesters or reporting.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "organization_id": {
+            "description": "The id of the organization.",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "organization_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Zendesk Organization",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "zendesk_count_view_tickets",
+      "name": "count_view_tickets",
+      "title": "Count Zendesk Tickets In A View",
+      "description": "Count the tickets in one view without fetching them. Use it to size a queue before reading it; list_view_tickets returns the tickets themselves. The count can be stale (`fresh: false`) while Zendesk refreshes it asynchronously.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "view_id": {
+            "description": "The id of the view whose ticket count should be read.",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "view_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Count Zendesk Tickets In A View",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "zendesk_get_ticket_metrics",
+      "name": "get_ticket_metrics",
+      "title": "Get Zendesk Ticket Metrics",
+      "description": "Read a ticket's metrics: first-reply and full-resolution times, reply counts and reassignment history. Use it for SLA reporting and to judge how a ticket was handled. Returns a single `ticket_metric` object.",
+      "toolkitId": "zendesk",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "ticket_id": {
+            "description": "The id of the ticket whose metrics should be read.",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Zendesk Ticket Metrics",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
       }
     }
   ]

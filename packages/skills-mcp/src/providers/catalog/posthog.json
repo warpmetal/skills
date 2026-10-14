@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "provider": "posthog",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "posthog_list_project_dashboards",
+      "name": "list_project_dashboards",
+      "title": "List project dashboards with pagination",
+      "description": "Get paginated dashboards for a project by ID, using 'limit' and 'offset'. Must authenticate with PersonalAPIKeyAuth. Includes count, pagination, and dashboard details.",
+      "toolkitId": "posthog",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "description": "Request schema for `ListProjectDashboards`",
+        "properties": {
+          "limit": {
+            "description": "Number of results to return per page.",
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "description": "The initial index from which to return the results.",
+            "title": "Offset",
+            "type": "integer"
+          },
+          "project_id": {
+            "description": "Project ID of the project you\"re trying to access. To find the ID of the project, make a call to /api/projects/. ",
+            "title": "Project Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id"
+        ],
+        "title": "ListProjectDashboardsRequest",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List project dashboards with pagination",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "posthog_get_feature_flags_matching_ids",
+      "name": "get_feature_flags_matching_ids",
+      "title": "Get feature flags matching IDs",
+      "description": "Tool to get IDs of all feature flags matching the current filters. Uses the same filtering logic as the list endpoint and returns only IDs that the user has permission to edit.",
+      "toolkitId": "posthog",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "description": "Request schema for `GetFeatureFlagsMatchingIds`",
+        "properties": {
+          "project_id": {
+            "description": "Project ID of the project you're trying to access. To find the ID of the project, make a call to /api/projects/.",
+            "title": "Project Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id"
+        ],
+        "title": "GetFeatureFlagsMatchingIdsRequest",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get feature flags matching IDs",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

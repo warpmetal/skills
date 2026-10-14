@@ -1,0 +1,219 @@
+{
+  "version": 1,
+  "provider": "resend",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "resend_list_emails",
+      "name": "list_emails",
+      "title": "List Emails",
+      "description": "Retrieve a list of emails",
+      "toolkitId": "resend",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "after": {
+            "description": "Return items after this cursor.",
+            "type": "string"
+          },
+          "before": {
+            "description": "Return items before this cursor.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Number of items to return.",
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "description": "Array containing email information.",
+            "items": {
+              "properties": {
+                "bcc": {
+                  "description": "The email addresses of the blind carbon copy recipients.",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "cc": {
+                  "description": "The email addresses of the carbon copy recipients.",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "created_at": {
+                  "description": "The date and time the email was created.",
+                  "format": "date-time",
+                  "type": "string"
+                },
+                "from": {
+                  "description": "The email address of the sender.",
+                  "type": "string"
+                },
+                "html": {
+                  "description": "The HTML body of the email.",
+                  "type": "string"
+                },
+                "id": {
+                  "description": "The ID of the email.",
+                  "type": "string"
+                },
+                "last_event": {
+                  "description": "The status of the email.",
+                  "type": "string"
+                },
+                "object": {
+                  "description": "The type of object.",
+                  "type": "string"
+                },
+                "reply_to": {
+                  "description": "The email addresses to which replies should be sent.",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "subject": {
+                  "description": "The subject line of the email.",
+                  "type": "string"
+                },
+                "text": {
+                  "description": "The plain text body of the email.",
+                  "type": "string"
+                },
+                "to": {
+                  "items": {
+                    "description": "The email addresses of the recipients.",
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "has_more": {
+            "description": "Indicates if there are more results available.",
+            "type": "boolean"
+          },
+          "object": {
+            "description": "Type of the response object.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Emails",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "resend_create_contact",
+      "name": "create_contact",
+      "title": "Create Contact",
+      "description": "Create a new contact",
+      "toolkitId": "resend",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "audience_id": {
+            "description": "Unique identifier of the audience to which the contact belongs.",
+            "type": "string"
+          },
+          "email": {
+            "description": "Email address of the contact.",
+            "type": "string"
+          },
+          "first_name": {
+            "description": "First name of the contact.",
+            "type": "string"
+          },
+          "last_name": {
+            "description": "Last name of the contact.",
+            "type": "string"
+          },
+          "properties": {
+            "additionalProperties": true,
+            "description": "A map of custom property keys and values to create.",
+            "type": "object"
+          },
+          "segments": {
+            "description": "Array of segment IDs to add the contact to.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "topics": {
+            "description": "Array of topic subscriptions for the contact.",
+            "items": {
+              "properties": {
+                "id": {
+                  "description": "The topic ID.",
+                  "type": "string"
+                },
+                "subscription": {
+                  "description": "The subscription status for this topic.",
+                  "enum": [
+                    "opt_in",
+                    "opt_out"
+                  ],
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "unsubscribed": {
+            "description": "The Contact's global subscription status. If set to true, the contact will be unsubscribed from all Broadcasts.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "description": "Unique identifier for the created contact.",
+            "type": "string"
+          },
+          "object": {
+            "description": "Type of the response object.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Contact",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    }
+  ]
+}

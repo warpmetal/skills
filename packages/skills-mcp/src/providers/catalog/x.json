@@ -1,0 +1,380 @@
+{
+  "version": 1,
+  "provider": "x",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "x_create_posts",
+      "name": "create_posts",
+      "title": "Create X Post",
+      "description": "Publish a Post (tweet) as the authenticated user. Provide `text`, and optionally reply to a Post (`reply.in_reply_to_tweet_id`), quote a Post (`quote_tweet_id`), attach uploaded media (`media.media_ids`), or add a poll. Returns the new Post's `id` and `text`. Posts are public unless the account is protected.",
+      "toolkitId": "x",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "card_uri": {
+            "description": "Card URI parameter.",
+            "type": "string"
+          },
+          "community_id": {
+            "description": "Community to post the tweet to.",
+            "pattern": "^[0-9]{1,19}$",
+            "type": "string"
+          },
+          "direct_message_deep_link": {
+            "description": "Direct message deep link.",
+            "type": "string"
+          },
+          "edit_options": {
+            "description": "Edit an existing tweet rather than creating a new one.",
+            "properties": {
+              "previous_post_id": {
+                "description": "The ID of the Post being edited.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "previous_post_id"
+            ],
+            "type": "object"
+          },
+          "for_super_followers_only": {
+            "description": "Restrict tweet to super followers.",
+            "type": "boolean"
+          },
+          "geo": {
+            "description": "Geo location for the tweet.",
+            "properties": {
+              "place_id": {
+                "description": "Place ID for geo tagging.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "place_id"
+            ],
+            "type": "object"
+          },
+          "made_with_ai": {
+            "description": "Disclose that the tweet contains AI-generated media.",
+            "type": "boolean"
+          },
+          "media": {
+            "description": "Media attachments.",
+            "properties": {
+              "call_to_actions": {
+                "description": "Call-to-action button rendered on the media entity.",
+                "properties": {
+                  "app_install": {
+                    "description": "App Install CTA. At least one store id should be provided.",
+                    "type": "string"
+                  },
+                  "visit_site": {
+                    "description": "Visit Site CTA.",
+                    "type": "string"
+                  },
+                  "watch_now": {
+                    "description": "Watch Now CTA.",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "description": {
+                "description": "Description for the media, rendered on the Post card for video and Amplify content.",
+                "type": "string"
+              },
+              "embeddable": {
+                "description": "When true, the media's asset URLs do not expire and external syndicated playback is allowed.",
+                "type": "boolean"
+              },
+              "media_ids": {
+                "description": "Media IDs to attach to the tweet.",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "preview_media_id": {
+                "description": "Media id whose asset is used as the preview image.",
+                "type": "string"
+              },
+              "tagged_user_ids": {
+                "description": "User IDs tagged in the media.",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "description": "Title for the media, rendered on the Post card for video and Amplify content.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "media_ids"
+            ],
+            "type": "object"
+          },
+          "nullcast": {
+            "description": "If true, the tweet is not shown in the public timeline.",
+            "type": "boolean"
+          },
+          "paid_partnership": {
+            "description": "Disclose that the tweet is a paid partnership.",
+            "type": "boolean"
+          },
+          "poll": {
+            "description": "Poll configuration.",
+            "properties": {
+              "duration_minutes": {
+                "description": "Duration of the poll in minutes.",
+                "type": "integer"
+              },
+              "options": {
+                "description": "Poll options (2-4 choices, 1-25 characters each).",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "reply_settings": {
+                "description": "Who can reply to the poll Tweet. Accepted for compatibility; it carries no backend argument and is dropped before the mutation is issued (see `translate_body`).",
+                "enum": [
+                  "following",
+                  "mentionedUsers",
+                  "subscribers",
+                  "verified"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "duration_minutes",
+              "options"
+            ],
+            "type": "object"
+          },
+          "quote_tweet_id": {
+            "description": "Tweet ID to quote.",
+            "pattern": "^[0-9]{1,19}$",
+            "type": "string"
+          },
+          "reply": {
+            "description": "Tweet reply configuration.",
+            "properties": {
+              "auto_populate_reply_metadata": {
+                "description": "If true, reply metadata is automatically populated. Accepted for compatibility; it carries no backend argument and is dropped before the mutation is issued (see `translate_body`).",
+                "type": "boolean"
+              },
+              "exclude_reply_user_ids": {
+                "description": "User IDs to exclude from the reply thread.",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "in_reply_to_tweet_id": {
+                "description": "The ID of the tweet being replied to.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "in_reply_to_tweet_id"
+            ],
+            "type": "object"
+          },
+          "reply_settings": {
+            "description": "Who can reply to this tweet.",
+            "enum": [
+              "following",
+              "mentionedUsers",
+              "subscribers",
+              "verified"
+            ],
+            "type": "string"
+          },
+          "share_with_followers": {
+            "description": "Share an exclusive (super-follower) tweet with all followers.",
+            "type": "boolean"
+          },
+          "text": {
+            "description": "Text of the Post, up to 280 characters for standard accounts.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "properties": {
+          "data": {
+            "additionalProperties": true,
+            "description": "Result returned by X for this action.",
+            "type": "object"
+          },
+          "errors": {
+            "description": "Partial errors reported by X, if any.",
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create X Post",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "x_get_users_me",
+      "name": "get_users_me",
+      "title": "Get Authenticated X User",
+      "description": "Get the authenticated user's profile, including the numeric `id` that other X tools require for user-scoped actions.",
+      "toolkitId": "x",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "expansions": {
+            "description": "A comma separated list of fields to expand. Comma-separated, no spaces; allowed values: affiliation, most_recent_post_id, pinned_post_id.",
+            "pattern": "^(affiliation|most_recent_post_id|pinned_post_id)(,(affiliation|most_recent_post_id|pinned_post_id))*$",
+            "type": "string"
+          },
+          "post_fields": {
+            "description": "A comma separated list of Post fields to display. Comma-separated, no spaces; allowed values: article, article_title, attachments, card_uri, community_id, context_annotations, conversation_id, created_at, display_text_range, edit_controls, entities, geo, id, lang, matched_media_notes, media_metadata, non_public_metrics, note_post, note_request_suggestions, organic_metrics, paid_partnership, possibly_sensitive, promoted_metrics, public_metrics, reply_settings, scopes, source, suggested_source_links, suggested_source_links_with_counts, text, withheld.",
+            "pattern": "^(article|article_title|attachments|card_uri|community_id|context_annotations|conversation_id|created_at|display_text_range|edit_controls|entities|geo|id|lang|matched_media_notes|media_metadata|non_public_metrics|note_post|note_request_suggestions|organic_metrics|paid_partnership|possibly_sensitive|promoted_metrics|public_metrics|reply_settings|scopes|source|suggested_source_links|suggested_source_links_with_counts|text|withheld)(,(article|article_title|attachments|card_uri|community_id|context_annotations|conversation_id|created_at|display_text_range|edit_controls|entities|geo|id|lang|matched_media_notes|media_metadata|non_public_metrics|note_post|note_request_suggestions|organic_metrics|paid_partnership|possibly_sensitive|promoted_metrics|public_metrics|reply_settings|scopes|source|suggested_source_links|suggested_source_links_with_counts|text|withheld))*$",
+            "type": "string"
+          },
+          "user_fields": {
+            "description": "A comma separated list of User fields to display. Comma-separated, no spaces; allowed values: confirmed_email, connection_status, created_at, description, entities, id, is_identity_verified, location, name, parody, profile_banner_url, profile_image_url, protected, public_metrics, receives_your_dm, subscriber_count, subscribes_to_you, subscription, subscription_type, url, username, verified, verified_followers_count, verified_type, withheld.",
+            "pattern": "^(confirmed_email|connection_status|created_at|description|entities|id|is_identity_verified|location|name|parody|profile_banner_url|profile_image_url|protected|public_metrics|receives_your_dm|subscriber_count|subscribes_to_you|subscription|subscription_type|url|username|verified|verified_followers_count|verified_type|withheld)(,(confirmed_email|connection_status|created_at|description|entities|id|is_identity_verified|location|name|parody|profile_banner_url|profile_image_url|protected|public_metrics|receives_your_dm|subscriber_count|subscribes_to_you|subscription|subscription_type|url|username|verified|verified_followers_count|verified_type|withheld))*$",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Authenticated X User",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "x_search_posts_recent",
+      "name": "search_posts_recent",
+      "title": "Search Recent X Posts",
+      "description": "Search public Posts (tweets) from the last seven days with X search `query` syntax (for example `from:handle`, `#tag`, `-is:retweet`), with pagination. For older Posts, use `search_posts_all`.",
+      "toolkitId": "x",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "end_time": {
+            "description": "Newest UTC timestamp to include, in ISO 8601 format.",
+            "type": "string"
+          },
+          "expansions": {
+            "description": "A comma separated list of fields to expand. Comma-separated, no spaces; allowed values: article.cover_media, article.media_entities, attachments.media_keys, attachments.media_source_tweet, attachments.poll_ids, author_id, edit_history_post_ids, entities.mentions.username, geo.place_id, in_reply_to_user_id, referenced_posts, username.",
+            "pattern": "^(article\\.cover_media|article\\.media_entities|attachments\\.media_keys|attachments\\.media_source_tweet|attachments\\.poll_ids|author_id|edit_history_post_ids|entities\\.mentions\\.username|geo\\.place_id|in_reply_to_user_id|referenced_posts|username)(,(article\\.cover_media|article\\.media_entities|attachments\\.media_keys|attachments\\.media_source_tweet|attachments\\.poll_ids|author_id|edit_history_post_ids|entities\\.mentions\\.username|geo\\.place_id|in_reply_to_user_id|referenced_posts|username))*$",
+            "type": "string"
+          },
+          "max_results": {
+            "description": "Maximum number of results to return per page. Between 10 and 100; Default 10.",
+            "type": "integer"
+          },
+          "media_fields": {
+            "description": "A comma separated list of Media fields to display. Comma-separated, no spaces; allowed values: alt_text, duration_ms, height, media_key, non_public_metrics, organic_metrics, preview_image_url, promoted_metrics, public_metrics, type, url, variants, width.",
+            "pattern": "^(alt_text|duration_ms|height|media_key|non_public_metrics|organic_metrics|preview_image_url|promoted_metrics|public_metrics|type|url|variants|width)(,(alt_text|duration_ms|height|media_key|non_public_metrics|organic_metrics|preview_image_url|promoted_metrics|public_metrics|type|url|variants|width))*$",
+            "type": "string"
+          },
+          "next_token": {
+            "description": "A base32hex-encoded pagination token.",
+            "type": "string"
+          },
+          "pagination_token": {
+            "description": "A base32hex-encoded pagination token.",
+            "type": "string"
+          },
+          "place_fields": {
+            "description": "A comma separated list of Place fields to display. Comma-separated, no spaces; allowed values: contained_within, country, country_code, full_name, geo, id, name, place_type.",
+            "pattern": "^(contained_within|country|country_code|full_name|geo|id|name|place_type)(,(contained_within|country|country_code|full_name|geo|id|name|place_type))*$",
+            "type": "string"
+          },
+          "poll_fields": {
+            "description": "A comma separated list of Poll fields to display. Comma-separated, no spaces; allowed values: duration_minutes, end_datetime, id, options, voting_status.",
+            "pattern": "^(duration_minutes|end_datetime|id|options|voting_status)(,(duration_minutes|end_datetime|id|options|voting_status))*$",
+            "type": "string"
+          },
+          "post_fields": {
+            "description": "A comma separated list of Post fields to display. Comma-separated, no spaces; allowed values: article, article_title, attachments, card_uri, community_id, context_annotations, conversation_id, created_at, display_text_range, edit_controls, entities, geo, id, lang, matched_media_notes, media_metadata, non_public_metrics, note_post, note_request_suggestions, organic_metrics, paid_partnership, possibly_sensitive, promoted_metrics, public_metrics, reply_settings, scopes, source, suggested_source_links, suggested_source_links_with_counts, text, withheld.",
+            "pattern": "^(article|article_title|attachments|card_uri|community_id|context_annotations|conversation_id|created_at|display_text_range|edit_controls|entities|geo|id|lang|matched_media_notes|media_metadata|non_public_metrics|note_post|note_request_suggestions|organic_metrics|paid_partnership|possibly_sensitive|promoted_metrics|public_metrics|reply_settings|scopes|source|suggested_source_links|suggested_source_links_with_counts|text|withheld)(,(article|article_title|attachments|card_uri|community_id|context_annotations|conversation_id|created_at|display_text_range|edit_controls|entities|geo|id|lang|matched_media_notes|media_metadata|non_public_metrics|note_post|note_request_suggestions|organic_metrics|paid_partnership|possibly_sensitive|promoted_metrics|public_metrics|reply_settings|scopes|source|suggested_source_links|suggested_source_links_with_counts|text|withheld))*$",
+            "type": "string"
+          },
+          "query": {
+            "description": "X search query, for example `from:XDevelopers -is:retweet` or `\"digital ocean\" lang:en`. Up to 512 characters.",
+            "type": "string"
+          },
+          "since_id": {
+            "description": "Return only results with an ID greater than this Post ID.",
+            "pattern": "^[0-9]{1,19}$",
+            "type": "string"
+          },
+          "sort_order": {
+            "description": "Order of results: `recency` or `relevancy`.",
+            "enum": [
+              "recency",
+              "relevancy"
+            ],
+            "type": "string"
+          },
+          "start_time": {
+            "description": "Must be within the last 7 days.",
+            "type": "string"
+          },
+          "until_id": {
+            "description": "Return only results with an ID less than this Post ID.",
+            "pattern": "^[0-9]{1,19}$",
+            "type": "string"
+          },
+          "user_fields": {
+            "description": "A comma separated list of User fields to display. Comma-separated, no spaces; allowed values: confirmed_email, connection_status, created_at, description, entities, id, is_identity_verified, location, name, parody, profile_banner_url, profile_image_url, protected, public_metrics, receives_your_dm, subscriber_count, subscribes_to_you, subscription, subscription_type, url, username, verified, verified_followers_count, verified_type, withheld.",
+            "pattern": "^(confirmed_email|connection_status|created_at|description|entities|id|is_identity_verified|location|name|parody|profile_banner_url|profile_image_url|protected|public_metrics|receives_your_dm|subscriber_count|subscribes_to_you|subscription|subscription_type|url|username|verified|verified_followers_count|verified_type|withheld)(,(confirmed_email|connection_status|created_at|description|entities|id|is_identity_verified|location|name|parody|profile_banner_url|profile_image_url|protected|public_metrics|receives_your_dm|subscriber_count|subscribes_to_you|subscription|subscription_type|url|username|verified|verified_followers_count|verified_type|withheld))*$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Search Recent X Posts",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

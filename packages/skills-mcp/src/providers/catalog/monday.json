@@ -1,0 +1,173 @@
+{
+  "version": 1,
+  "provider": "monday",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "monday_boards",
+      "name": "boards",
+      "title": "List Monday.com Boards",
+      "description": "Find and list active or archived Monday.com work-management boards with optional ID, workspace, state, kind, ordering, and pagination filters.",
+      "toolkitId": "monday",
+      "version": "v6",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "board_kind": {
+            "enum": [
+              "private",
+              "public",
+              "share"
+            ],
+            "type": "string"
+          },
+          "ids": {
+            "description": "Specific board IDs to return.",
+            "items": {
+              "pattern": "^[0-9]+$",
+              "type": "string"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array"
+          },
+          "limit": {
+            "description": "Maximum boards to return.",
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "order_by": {
+            "enum": [
+              "created_at",
+              "used_at"
+            ],
+            "type": "string"
+          },
+          "page": {
+            "description": "Page number, starting at 1.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "state": {
+            "enum": [
+              "active",
+              "all",
+              "archived",
+              "deleted"
+            ],
+            "type": "string"
+          },
+          "workspace_ids": {
+            "items": {
+              "pattern": "^[0-9]+$",
+              "type": "string"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Monday.com Boards",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "monday_get_workspaces",
+      "name": "get_workspaces",
+      "title": "List Monday.com Workspaces",
+      "description": "Find and list active or closed Monday.com work-management workspaces with optional ID, kind, state, ordering, and pagination filters.",
+      "toolkitId": "monday",
+      "version": "v5",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "items": {
+              "pattern": "^[0-9]+$",
+              "type": "string"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "closed",
+              "open",
+              "template"
+            ],
+            "type": "string"
+          },
+          "limit": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "order_by": {
+            "enum": [
+              "created_at"
+            ],
+            "type": "string"
+          },
+          "page": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "state": {
+            "enum": [
+              "active",
+              "all",
+              "archived",
+              "deleted"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Monday.com Workspaces",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

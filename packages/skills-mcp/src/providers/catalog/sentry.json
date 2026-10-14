@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "provider": "sentry",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "sentry_list_organization_projects",
+      "name": "list_organization_projects",
+      "title": "List Sentry Organization Projects",
+      "description": "List the projects belonging to an organization, with their platforms and slugs. Use it when you need to discover projects; get_project returns one project's settings once its slug is known instead.",
+      "toolkitId": "sentry",
+      "version": "v16",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
+            "type": "string"
+          },
+          "organization_id_or_slug": {
+            "description": "The ID or slug of the organization the resource belongs to.",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@+-]*$",
+            "type": "string"
+          },
+          "per_page": {
+            "description": "Limit the number of rows to return in the result. Default and maximum allowed is 100.",
+            "type": "integer"
+          },
+          "query": {
+            "description": "Filter projects by name or slug.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "organization_id_or_slug"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {},
+      "annotations": {
+        "title": "List Sentry Organization Projects",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "sentry_list_a_project_s_issues",
+      "name": "list_a_project_s_issues",
+      "title": "List A Project S Issues",
+      "description": "List a project's issues, the grouped view of errors with their counts, assignees, and status. Use for triage; use list_project_events when the individual raw events are needed rather than the groups they roll up into.",
+      "toolkitId": "sentry",
+      "version": "v10",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "description": "A pointer to the last object fetched and its sort order; used to retrieve the next or previous results.",
+            "type": "string"
+          },
+          "hashes": {
+            "description": "A list of hashes of groups to return. Is not compatible with 'query' parameter. The maximum number of hashes that can be sent is 100. If more are sent, only the first 100 will be used.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "The maximum number of issues to return. The maximum is 100.",
+            "type": "integer"
+          },
+          "organization_id_or_slug": {
+            "description": "The ID or slug of the organization the issues belong to.",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@+-]*$",
+            "type": "string"
+          },
+          "project_id_or_slug": {
+            "description": "The ID or slug of the project the issues belong to.",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@+-]*$",
+            "type": "string"
+          },
+          "query": {
+            "description": "An optional Sentry structured search query. If not provided an implied `\"is:unresolved\"` is assumed.",
+            "type": "string"
+          },
+          "short_id_lookup": {
+            "description": "If this is set to true then short IDs are looked up by this function as well. This can cause the return value of the function to return an event issue of a different project which is why this is an opt-in. Set to 1 to enable.",
+            "type": "boolean"
+          },
+          "sort": {
+            "description": "The sort order of the issues. Options include 'Last Seen' (`date`), 'First Seen' (`new`), 'Trends' (`trends`), 'Events' (`freq`), 'Users' (`user`), and 'Date Added' (`inbox`).",
+            "enum": [
+              "date",
+              "new",
+              "trends",
+              "freq",
+              "user",
+              "inbox"
+            ],
+            "type": "string"
+          },
+          "stats_period": {
+            "description": "An optional stat period (can be one of `\"24h\"`, `\"14d\"`, and `\"\"`), defaults to \"24h\" if not provided.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "organization_id_or_slug",
+          "project_id_or_slug"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {},
+      "annotations": {
+        "title": "List A Project S Issues",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}
