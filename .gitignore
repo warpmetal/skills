@@ -13,8 +13,4 @@ api-merged.json
 extract-tools.mjs
 extract-tools.ps1
 tools-list.txt
-
-# The Cloudflare equivalent: the 27 MB OpenAPI document the Cloudflare
-# generators read (scripts/cloudflare/). Not committed - the reviewed record of
-# what it contains is docs/cloudflare-api-inventory.md.
 openapi.json
