@@ -2139,6 +2139,2084 @@
     "version_id": "sample_version_id",
     "workflow_name": "sample_workflow_name"
   },
+  "cloudflare_access_ai_controls_mcp_analytics_portals_portal_id_tool_calls_timeseries_list": {
+    "account_id": "sample_account_id",
+    "aggregate": "true",
+    "days": 1,
+    "granularity": "daily",
+    "portal_id": "sample_portal_id",
+    "response_status": "success",
+    "tz": "sample_tz"
+  },
+  "cloudflare_access_ai_controls_mcp_analytics_servers_server_id_tool_calls_timeseries_list": {
+    "account_id": "sample_account_id",
+    "aggregate": "true",
+    "days": 1,
+    "granularity": "daily",
+    "response_status": "success",
+    "server_id": "sample_server_id",
+    "tz": "sample_tz"
+  },
+  "cloudflare_access_ai_controls_mcp_analytics_tool_calls_timeseries_list": {
+    "account_id": "sample_account_id",
+    "aggregate": "true",
+    "days": 1,
+    "granularity": "daily",
+    "response_status": "success",
+    "tz": "sample_tz"
+  },
+  "cloudflare_access_ai_controls_mcp_portals_list": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1,
+    "search": "sample_search"
+  },
+  "cloudflare_access_ai_controls_mcp_portals_create": {
+    "account_id": "sample_account_id",
+    "allow_code_mode": true,
+    "code_mode": "off",
+    "description": "sample_description",
+    "hostname": "sample_hostname",
+    "id": "sample_id",
+    "name": "sample_name",
+    "secure_web_gateway": true,
+    "servers": []
+  },
+  "cloudflare_access_ai_controls_mcp_portals_get": {
+    "account_id": "sample_account_id",
+    "id": "sample_id"
+  },
+  "cloudflare_access_ai_controls_mcp_portals_replace": {
+    "account_id": "sample_account_id",
+    "allow_code_mode": true,
+    "code_mode": "off",
+    "description": "sample_description",
+    "hostname": "sample_hostname",
+    "id": "sample_id",
+    "name": "sample_name",
+    "secure_web_gateway": true,
+    "servers": []
+  },
+  "cloudflare_access_ai_controls_mcp_portals_delete": {
+    "account_id": "sample_account_id",
+    "id": "sample_id"
+  },
+  "cloudflare_access_ai_controls_mcp_servers_list": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1,
+    "search": "sample_search"
+  },
+  "cloudflare_access_ai_controls_mcp_servers_create": {
+    "account_id": "sample_account_id",
+    "auth_credentials": "sample_auth_credentials",
+    "auth_type": "oauth",
+    "client_secret": "sample_client_secret",
+    "description": "sample_description",
+    "hostname": "sample_hostname",
+    "id": "sample_id",
+    "is_shared_oauth_callback_enabled": true,
+    "name": "sample_name",
+    "secure_web_gateway": true,
+    "updated_prompts": [],
+    "updated_tools": []
+  },
+  "cloudflare_access_ai_controls_mcp_servers_get": {
+    "account_id": "sample_account_id",
+    "id": "sample_id"
+  },
+  "cloudflare_access_ai_controls_mcp_servers_replace": {
+    "account_id": "sample_account_id",
+    "auth_credentials": "sample_auth_credentials",
+    "client_secret": "sample_client_secret",
+    "description": "sample_description",
+    "id": "sample_id",
+    "is_shared_oauth_callback_enabled": true,
+    "name": "sample_name",
+    "secure_web_gateway": true,
+    "updated_prompts": [],
+    "updated_tools": []
+  },
+  "cloudflare_access_ai_controls_mcp_servers_delete": {
+    "account_id": "sample_account_id",
+    "id": "sample_id"
+  },
+  "cloudflare_access_ai_controls_mcp_servers_id_sync_create": {
+    "account_id": "sample_account_id",
+    "id": "sample_id"
+  },
+  "cloudflare_access_apps_list": {
+    "account_id": "sample_account_id",
+    "aud": "sample_aud",
+    "domain": "sample_domain",
+    "exact": true,
+    "name": "sample_name",
+    "page": 1,
+    "per_page": 1,
+    "search": "sample_search",
+    "target_attributes": "sample_target_attributes"
+  },
+  "cloudflare_access_apps_create": {
+    "account_id": "sample_account_id",
+    "allow_authenticate_via_warp": true,
+    "allow_iframe": true,
+    "allowed_idps": [],
+    "app_launcher_logo_url": "sample_app_launcher_logo_url",
+    "app_launcher_visible": true,
+    "auto_redirect_to_identity": true,
+    "bg_color": "sample_bg_color",
+    "cors_headers": {},
+    "custom_deny_message": "sample_custom_deny_message",
+    "custom_deny_url": "sample_custom_deny_url",
+    "custom_non_identity_deny_url": "sample_custom_non_identity_deny_url",
+    "custom_pages": [],
+    "destinations": [],
+    "domain": "sample_domain",
+    "eager_redirect_cookie_setting": true,
+    "enable_binding_cookie": true,
+    "footer_links": [],
+    "header_bg_color": "sample_header_bg_color",
+    "http_only_cookie_attribute": true,
+    "landing_page_design": {},
+    "logo_url": "sample_logo_url",
+    "mfa_config": {},
+    "name": "sample_name",
+    "oauth_configuration": {},
+    "options_preflight_bypass": true,
+    "path_cookie_attribute": true,
+    "policies": [],
+    "read_service_tokens_from_header": "sample_read_service_tokens_from_header",
+    "saas_app": {},
+    "same_site_cookie_attribute": "sample_same_site_cookie_attribute",
+    "scim_config": {},
+    "self_hosted_domains": [],
+    "service_auth_401_redirect": true,
+    "session_duration": "sample_session_duration",
+    "skip_app_launcher_login_page": true,
+    "skip_interstitial": true,
+    "tags": [],
+    "target_criteria": [],
+    "type": "self_hosted",
+    "use_clientless_isolation_app_launcher_url": true,
+    "user_populations": []
+  },
+  "cloudflare_access_apps_ca_list": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1
+  },
+  "cloudflare_access_apps_get": {
+    "account_id": "sample_account_id",
+    "app_id": "sample_app_id"
+  },
+  "cloudflare_access_apps_replace": {
+    "account_id": "sample_account_id",
+    "allow_authenticate_via_warp": true,
+    "allow_iframe": true,
+    "allowed_idps": [],
+    "app_id": "sample_app_id",
+    "app_launcher_logo_url": "sample_app_launcher_logo_url",
+    "app_launcher_visible": true,
+    "auto_redirect_to_identity": true,
+    "bg_color": "sample_bg_color",
+    "cors_headers": {},
+    "custom_deny_message": "sample_custom_deny_message",
+    "custom_deny_url": "sample_custom_deny_url",
+    "custom_non_identity_deny_url": "sample_custom_non_identity_deny_url",
+    "custom_pages": [],
+    "destinations": [],
+    "domain": "sample_domain",
+    "eager_redirect_cookie_setting": true,
+    "enable_binding_cookie": true,
+    "footer_links": [],
+    "header_bg_color": "sample_header_bg_color",
+    "http_only_cookie_attribute": true,
+    "landing_page_design": {},
+    "logo_url": "sample_logo_url",
+    "mfa_config": {},
+    "name": "sample_name",
+    "oauth_configuration": {},
+    "options_preflight_bypass": true,
+    "path_cookie_attribute": true,
+    "policies": [],
+    "read_service_tokens_from_header": "sample_read_service_tokens_from_header",
+    "saas_app": {},
+    "same_site_cookie_attribute": "sample_same_site_cookie_attribute",
+    "scim_config": {},
+    "self_hosted_domains": [],
+    "service_auth_401_redirect": true,
+    "session_duration": "sample_session_duration",
+    "skip_app_launcher_login_page": true,
+    "skip_interstitial": true,
+    "tags": [],
+    "target_criteria": [],
+    "type": "self_hosted",
+    "use_clientless_isolation_app_launcher_url": true,
+    "user_populations": []
+  },
+  "cloudflare_access_apps_delete": {
+    "account_id": "sample_account_id",
+    "app_id": "sample_app_id"
+  },
+  "cloudflare_access_apps_app_id_ca_list": {
+    "account_id": "sample_account_id",
+    "app_id": "sample_app_id"
+  },
+  "cloudflare_access_apps_app_id_ca_create": {
+    "account_id": "sample_account_id",
+    "app_id": "sample_app_id"
+  },
+  "cloudflare_access_apps_app_id_ca_delete": {
+    "account_id": "sample_account_id",
+    "app_id": "sample_app_id"
+  },
+  "cloudflare_access_apps_app_id_policies_list": {
+    "account_id": "sample_account_id",
+    "app_id": "sample_app_id",
+    "page": 1,
+    "per_page": 1
+  },
+  "cloudflare_access_apps_app_id_policies_get": {
+    "account_id": "sample_account_id",
+    "app_id": "sample_app_id",
+    "policy_id": "sample_policy_id"
+  },
+  "cloudflare_access_apps_app_id_policies_policy_id_make_reusable_put": {
+    "account_id": "sample_account_id",
+    "app_id": "sample_app_id",
+    "policy_id": "sample_policy_id"
+  },
+  "cloudflare_access_apps_app_id_revoke_tokens": {
+    "account_id": "sample_account_id",
+    "app_id": "sample_app_id"
+  },
+  "cloudflare_access_apps_app_id_settings_put": {
+    "account_id": "sample_account_id",
+    "allow_iframe": true,
+    "app_id": "sample_app_id",
+    "skip_interstitial": true
+  },
+  "cloudflare_access_apps_app_id_user_policy_checks_list": {
+    "account_id": "sample_account_id",
+    "app_id": "sample_app_id"
+  },
+  "cloudflare_access_authenticator_device_aaguids_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_access_bookmarks_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_access_bookmarks_get": {
+    "account_id": "sample_account_id",
+    "bookmark_id": "sample_bookmark_id"
+  },
+  "cloudflare_access_bookmarks_create": {
+    "account_id": "sample_account_id",
+    "bookmark_id": "sample_bookmark_id"
+  },
+  "cloudflare_access_bookmarks_replace": {
+    "account_id": "sample_account_id",
+    "bookmark_id": "sample_bookmark_id"
+  },
+  "cloudflare_access_bookmarks_delete": {
+    "account_id": "sample_account_id",
+    "bookmark_id": "sample_bookmark_id"
+  },
+  "cloudflare_access_certificates_list": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1
+  },
+  "cloudflare_access_certificates_create": {
+    "account_id": "sample_account_id",
+    "associated_hostnames": [],
+    "certificate": "sample_certificate",
+    "name": "sample_name"
+  },
+  "cloudflare_access_certificates_settings_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_access_certificates_settings_put": {
+    "account_id": "sample_account_id",
+    "settings": []
+  },
+  "cloudflare_access_certificates_get": {
+    "account_id": "sample_account_id",
+    "certificate_id": "sample_certificate_id"
+  },
+  "cloudflare_access_certificates_replace": {
+    "account_id": "sample_account_id",
+    "associated_hostnames": [],
+    "certificate_id": "sample_certificate_id",
+    "name": "sample_name"
+  },
+  "cloudflare_access_certificates_delete": {
+    "account_id": "sample_account_id",
+    "certificate_id": "sample_certificate_id"
+  },
+  "cloudflare_access_custom_pages_list": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1
+  },
+  "cloudflare_access_custom_pages_create": {
+    "account_id": "sample_account_id",
+    "app_count": 1,
+    "contract_version": 1,
+    "created_at": "sample_created_at",
+    "custom_html": "sample_custom_html",
+    "name": "sample_name",
+    "type": "identity_denied",
+    "uid": "sample_uid",
+    "updated_at": "sample_updated_at"
+  },
+  "cloudflare_access_custom_pages_validate": {
+    "account_id": "sample_account_id",
+    "template": "sample_template",
+    "type": "identity_denied",
+    "version": 1
+  },
+  "cloudflare_access_custom_pages_get": {
+    "account_id": "sample_account_id",
+    "custom_page_id": "sample_custom_page_id"
+  },
+  "cloudflare_access_custom_pages_replace": {
+    "account_id": "sample_account_id",
+    "app_count": 1,
+    "contract_version": 1,
+    "created_at": "sample_created_at",
+    "custom_html": "sample_custom_html",
+    "custom_page_id": "sample_custom_page_id",
+    "name": "sample_name",
+    "type": "identity_denied",
+    "uid": "sample_uid",
+    "updated_at": "sample_updated_at"
+  },
+  "cloudflare_access_custom_pages_delete": {
+    "account_id": "sample_account_id",
+    "custom_page_id": "sample_custom_page_id"
+  },
+  "cloudflare_access_gateway_ca_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_access_gateway_ca_create": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_access_gateway_ca_delete": {
+    "account_id": "sample_account_id",
+    "certificate_id": "sample_certificate_id"
+  },
+  "cloudflare_access_groups_list": {
+    "account_id": "sample_account_id",
+    "name": "sample_name",
+    "page": 1,
+    "per_page": 1,
+    "search": "sample_search"
+  },
+  "cloudflare_access_groups_create": {
+    "account_id": "sample_account_id",
+    "exclude": [],
+    "include": [],
+    "is_default": true,
+    "name": "sample_name",
+    "require": []
+  },
+  "cloudflare_access_groups_get": {
+    "account_id": "sample_account_id",
+    "group_id": "sample_group_id"
+  },
+  "cloudflare_access_groups_replace": {
+    "account_id": "sample_account_id",
+    "exclude": [],
+    "group_id": "sample_group_id",
+    "include": [],
+    "is_default": true,
+    "name": "sample_name",
+    "require": []
+  },
+  "cloudflare_access_groups_delete": {
+    "account_id": "sample_account_id",
+    "group_id": "sample_group_id"
+  },
+  "cloudflare_access_identity_providers_list": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1,
+    "scim_enabled": "sample_scim_enabled"
+  },
+  "cloudflare_access_identity_providers_create": {
+    "account_id": "sample_account_id",
+    "config": {},
+    "id": "sample_id",
+    "name": "sample_name",
+    "read_only": true,
+    "saml_certificate_set": {},
+    "saml_certificate_set_id": "sample_saml_certificate_set_id",
+    "scim_config": {},
+    "type": "onetimepin"
+  },
+  "cloudflare_access_identity_providers_get": {
+    "account_id": "sample_account_id",
+    "identity_provider_id": "sample_identity_provider_id"
+  },
+  "cloudflare_access_identity_providers_replace": {
+    "account_id": "sample_account_id",
+    "config": {},
+    "id": "sample_id",
+    "identity_provider_id": "sample_identity_provider_id",
+    "name": "sample_name",
+    "read_only": true,
+    "saml_certificate_set": {},
+    "saml_certificate_set_id": "sample_saml_certificate_set_id",
+    "scim_config": {},
+    "type": "onetimepin"
+  },
+  "cloudflare_access_identity_providers_delete": {
+    "account_id": "sample_account_id",
+    "identity_provider_id": "sample_identity_provider_id"
+  },
+  "cloudflare_access_identity_providers_identity_provider_id_saml_certificate_create": {
+    "account_id": "sample_account_id",
+    "identity_provider_id": "sample_identity_provider_id"
+  },
+  "cloudflare_access_identity_providers_identity_provider_id_scim_groups_list": {
+    "account_id": "sample_account_id",
+    "cf_resource_id": [],
+    "identity_provider_id": "sample_identity_provider_id",
+    "idp_resource_id": [],
+    "name": "sample_name",
+    "page": 1,
+    "per_page": 1
+  },
+  "cloudflare_access_identity_providers_identity_provider_id_scim_groups_get": {
+    "account_id": "sample_account_id",
+    "group_id": "sample_group_id",
+    "identity_provider_id": "sample_identity_provider_id"
+  },
+  "cloudflare_access_identity_providers_identity_provider_id_scim_groups_delete": {
+    "account_id": "sample_account_id",
+    "group_id": "sample_group_id",
+    "identity_provider_id": "sample_identity_provider_id"
+  },
+  "cloudflare_access_identity_providers_identity_provider_id_scim_users_list": {
+    "account_id": "sample_account_id",
+    "cf_resource_id": [],
+    "email": "sample_email",
+    "identity_provider_id": "sample_identity_provider_id",
+    "idp_resource_id": [],
+    "name": "sample_name",
+    "page": 1,
+    "per_page": 1,
+    "username": "sample_username"
+  },
+  "cloudflare_access_identity_providers_identity_provider_id_scim_users_get": {
+    "account_id": "sample_account_id",
+    "identity_provider_id": "sample_identity_provider_id",
+    "user_id": "sample_user_id"
+  },
+  "cloudflare_access_identity_providers_identity_provider_id_scim_users_delete": {
+    "account_id": "sample_account_id",
+    "identity_provider_id": "sample_identity_provider_id",
+    "user_id": "sample_user_id"
+  },
+  "cloudflare_access_idp_federation_grants_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_access_idp_federation_grants_create": {
+    "account_id": "sample_account_id",
+    "idp_id": "sample_idp_id"
+  },
+  "cloudflare_access_idp_federation_grants_get": {
+    "account_id": "sample_account_id",
+    "grant_id": "sample_grant_id"
+  },
+  "cloudflare_access_idp_federation_grants_delete": {
+    "account_id": "sample_account_id",
+    "grant_id": "sample_grant_id"
+  },
+  "cloudflare_access_keys_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_access_keys_put": {
+    "account_id": "sample_account_id",
+    "key_rotation_interval_days": 1
+  },
+  "cloudflare_access_keys_rotate": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_access_logs_access_requests_list": {
+    "account_id": "sample_account_id",
+    "allowed_op": "eq",
+    "app_type_op": "eq",
+    "app_uid_op": "eq",
+    "country_code_op": "eq",
+    "direction": "desc",
+    "email": "sample_email",
+    "email_exact": true,
+    "email_op": "eq",
+    "fields": "sample_fields",
+    "idp_op": "eq",
+    "limit": 1,
+    "non_identity_op": "eq",
+    "page": 1,
+    "per_page": 1,
+    "ray_id_op": "eq",
+    "since": "sample_since",
+    "until": "sample_until",
+    "user_id": "sample_user_id",
+    "user_id_op": "eq"
+  },
+  "cloudflare_access_logs_jit_requests_list": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1,
+    "search": "sample_search",
+    "since": "sample_since",
+    "status": "PENDING",
+    "until": "sample_until"
+  },
+  "cloudflare_access_logs_jit_requests_get": {
+    "account_id": "sample_account_id",
+    "knock_request_id": "sample_knock_request_id"
+  },
+  "cloudflare_access_logs_scim_updates_list": {
+    "account_id": "sample_account_id",
+    "cf_resource_id": [],
+    "direction": "desc",
+    "idp_id": [],
+    "idp_resource_id": [],
+    "limit": 1,
+    "page": 1,
+    "per_page": 1,
+    "request_method": [],
+    "resource_group_name": [],
+    "resource_type": [],
+    "resource_user_email": [],
+    "since": "sample_since",
+    "status": [],
+    "until": "sample_until"
+  },
+  "cloudflare_access_organizations_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_access_organizations_create": {
+    "account_id": "sample_account_id",
+    "allow_authenticate_via_warp": true,
+    "auth_domain": "sample_auth_domain",
+    "auto_redirect_to_identity": true,
+    "deny_unmatched_requests": true,
+    "deny_unmatched_requests_exempted_zone_names": [],
+    "disable_end_user_app_creation": true,
+    "is_ui_read_only": true,
+    "login_design": {},
+    "mfa_config": {},
+    "mfa_piv_key_requirements": {},
+    "mfa_required_for_all_apps": true,
+    "name": "sample_name",
+    "service_token_inactivity": {},
+    "session_duration": "sample_session_duration",
+    "strict_service_token_auth": true,
+    "ui_read_only_toggle_reason": "sample_ui_read_only_toggle_reason",
+    "user_seat_expiration_inactive_time": "sample_user_seat_expiration_inactive_time",
+    "warp_auth_non_browser_401": true,
+    "warp_auth_session_duration": "sample_warp_auth_session_duration"
+  },
+  "cloudflare_access_organizations_put": {
+    "account_id": "sample_account_id",
+    "allow_authenticate_via_warp": true,
+    "auth_domain": "sample_auth_domain",
+    "auto_redirect_to_identity": true,
+    "custom_pages": {},
+    "deny_unmatched_requests": true,
+    "deny_unmatched_requests_exempted_zone_names": [],
+    "disable_end_user_app_creation": true,
+    "is_ui_read_only": true,
+    "login_design": {},
+    "mfa_config": {},
+    "mfa_piv_key_requirements": {},
+    "mfa_required_for_all_apps": true,
+    "name": "sample_name",
+    "service_token_inactivity": {},
+    "session_duration": "sample_session_duration",
+    "strict_service_token_auth": true,
+    "ui_read_only_toggle_reason": "sample_ui_read_only_toggle_reason",
+    "user_seat_expiration_inactive_time": "sample_user_seat_expiration_inactive_time",
+    "warp_auth_non_browser_401": true,
+    "warp_auth_session_duration": "sample_warp_auth_session_duration"
+  },
+  "cloudflare_access_organizations_doh_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_access_organizations_doh_put": {
+    "account_id": "sample_account_id",
+    "doh_jwt_duration": "sample_doh_jwt_duration",
+    "service_token_id": "sample_service_token_id"
+  },
+  "cloudflare_access_organizations_revoke_user": {
+    "account_id": "sample_account_id",
+    "devices": true,
+    "email": "sample_email",
+    "user_uid": "sample_user_uid",
+    "warp_session_reauth": true
+  },
+  "cloudflare_access_policies_list": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1
+  },
+  "cloudflare_access_policies_create": {
+    "account_id": "sample_account_id",
+    "approval_groups": [],
+    "approval_required": true,
+    "connection_rules": {},
+    "decision": "allow",
+    "exclude": [],
+    "include": [],
+    "isolation_required": true,
+    "mfa_config": {},
+    "name": "sample_name",
+    "purpose_justification_prompt": "sample_purpose_justification_prompt",
+    "purpose_justification_required": true,
+    "require": [],
+    "session_duration": "sample_session_duration"
+  },
+  "cloudflare_access_policies_get": {
+    "account_id": "sample_account_id",
+    "policy_id": "sample_policy_id"
+  },
+  "cloudflare_access_policies_replace": {
+    "account_id": "sample_account_id",
+    "approval_groups": [],
+    "approval_required": true,
+    "connection_rules": {},
+    "decision": "allow",
+    "exclude": [],
+    "include": [],
+    "isolation_required": true,
+    "mfa_config": {},
+    "name": "sample_name",
+    "policy_id": "sample_policy_id",
+    "purpose_justification_prompt": "sample_purpose_justification_prompt",
+    "purpose_justification_required": true,
+    "require": [],
+    "session_duration": "sample_session_duration"
+  },
+  "cloudflare_access_policies_delete": {
+    "account_id": "sample_account_id",
+    "policy_id": "sample_policy_id"
+  },
+  "cloudflare_access_policy_tests_create": {
+    "account_id": "sample_account_id",
+    "policies": []
+  },
+  "cloudflare_access_policy_tests_get": {
+    "account_id": "sample_account_id",
+    "policy_test_id": "sample_policy_test_id"
+  },
+  "cloudflare_access_policy_tests_policy_test_id_users_list": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1,
+    "policy_test_id": "sample_policy_test_id",
+    "status": "success"
+  },
+  "cloudflare_access_saml_certificates_list": {
+    "account_id": "sample_account_id",
+    "id": "sample_id",
+    "page": 1,
+    "per_page": 1
+  },
+  "cloudflare_access_saml_certificates_get": {
+    "account_id": "sample_account_id",
+    "saml_cert_set_id": "sample_saml_cert_set_id"
+  },
+  "cloudflare_access_saml_certificates_saml_cert_set_id_pem_list": {
+    "account_id": "sample_account_id",
+    "saml_cert_set_id": "sample_saml_cert_set_id"
+  },
+  "cloudflare_access_saml_certificates_saml_cert_set_id_rotate": {
+    "account_id": "sample_account_id",
+    "saml_cert_set_id": "sample_saml_cert_set_id"
+  },
+  "cloudflare_access_service_tokens_list": {
+    "account_id": "sample_account_id",
+    "name": "sample_name",
+    "page": 1,
+    "per_page": 1,
+    "search": "sample_search"
+  },
+  "cloudflare_access_service_tokens_create": {
+    "account_id": "sample_account_id",
+    "client_secret_version": 1,
+    "duration": "sample_duration",
+    "enabled": true,
+    "name": "sample_name",
+    "previous_client_secret_expires_at": "sample_previous_client_secret_expires_at"
+  },
+  "cloudflare_access_service_tokens_get": {
+    "account_id": "sample_account_id",
+    "service_token_id": "sample_service_token_id"
+  },
+  "cloudflare_access_service_tokens_replace": {
+    "account_id": "sample_account_id",
+    "client_secret_version": 1,
+    "duration": "sample_duration",
+    "enabled": true,
+    "name": "sample_name",
+    "previous_client_secret_expires_at": "sample_previous_client_secret_expires_at",
+    "service_token_id": "sample_service_token_id"
+  },
+  "cloudflare_access_service_tokens_delete": {
+    "account_id": "sample_account_id",
+    "service_token_id": "sample_service_token_id"
+  },
+  "cloudflare_access_service_tokens_service_token_id_refresh": {
+    "account_id": "sample_account_id",
+    "service_token_id": "sample_service_token_id"
+  },
+  "cloudflare_access_service_tokens_service_token_id_rotate": {
+    "account_id": "sample_account_id",
+    "previous_client_secret_expires_at": "sample_previous_client_secret_expires_at",
+    "service_token_id": "sample_service_token_id"
+  },
+  "cloudflare_access_tags_list": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1
+  },
+  "cloudflare_access_tags_create": {
+    "account_id": "sample_account_id",
+    "name": "sample_name"
+  },
+  "cloudflare_access_tags_get": {
+    "account_id": "sample_account_id",
+    "tag_name": "sample_tag_name"
+  },
+  "cloudflare_access_tags_replace": {
+    "account_id": "sample_account_id",
+    "created_at": "sample_created_at",
+    "name": "sample_name",
+    "tag_name": "sample_tag_name",
+    "updated_at": "sample_updated_at"
+  },
+  "cloudflare_access_tags_delete": {
+    "account_id": "sample_account_id",
+    "tag_name": "sample_tag_name"
+  },
+  "cloudflare_access_user_populations_list": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1
+  },
+  "cloudflare_access_user_populations_create": {
+    "account_id": "sample_account_id",
+    "name": "sample_name"
+  },
+  "cloudflare_access_user_populations_get": {
+    "account_id": "sample_account_id",
+    "user_population_id": "sample_user_population_id"
+  },
+  "cloudflare_access_user_populations_replace": {
+    "account_id": "sample_account_id",
+    "name": "sample_name",
+    "user_population_id": "sample_user_population_id"
+  },
+  "cloudflare_access_user_populations_delete": {
+    "account_id": "sample_account_id",
+    "user_population_id": "sample_user_population_id"
+  },
+  "cloudflare_access_user_populations_user_population_id_users_list": {
+    "account_id": "sample_account_id",
+    "attributes": "sample_attributes",
+    "count": 1,
+    "excluded_attributes": "sample_excluded_attributes",
+    "filter": "sample_filter",
+    "start_index": 1,
+    "user_population_id": "sample_user_population_id"
+  },
+  "cloudflare_access_user_populations_user_population_id_users_create": {
+    "account_id": "sample_account_id",
+    "active": true,
+    "display_name": "sample_display_name",
+    "emails": [],
+    "external_id": "sample_external_id",
+    "id": "sample_id",
+    "meta": {},
+    "name": {},
+    "schemas": [],
+    "user_name": "sample_user_name",
+    "user_population_id": "sample_user_population_id"
+  },
+  "cloudflare_access_user_populations_user_population_id_users_get": {
+    "account_id": "sample_account_id",
+    "attributes": "sample_attributes",
+    "excluded_attributes": "sample_excluded_attributes",
+    "user_id": "sample_user_id",
+    "user_population_id": "sample_user_population_id"
+  },
+  "cloudflare_access_user_populations_user_population_id_users_replace": {
+    "account_id": "sample_account_id",
+    "active": true,
+    "display_name": "sample_display_name",
+    "emails": [],
+    "external_id": "sample_external_id",
+    "id": "sample_id",
+    "meta": {},
+    "name": {},
+    "schemas": [],
+    "user_id": "sample_user_id",
+    "user_name": "sample_user_name",
+    "user_population_id": "sample_user_population_id"
+  },
+  "cloudflare_access_user_populations_user_population_id_users_update": {
+    "account_id": "sample_account_id",
+    "operations": [],
+    "schemas": [],
+    "user_id": "sample_user_id",
+    "user_population_id": "sample_user_population_id"
+  },
+  "cloudflare_access_user_populations_user_population_id_users_delete": {
+    "account_id": "sample_account_id",
+    "user_id": "sample_user_id",
+    "user_population_id": "sample_user_population_id"
+  },
+  "cloudflare_access_users_list": {
+    "account_id": "sample_account_id",
+    "email": "sample_email",
+    "name": "sample_name",
+    "page": 1,
+    "per_page": 1,
+    "search": "sample_search"
+  },
+  "cloudflare_access_users_create": {
+    "account_id": "sample_account_id",
+    "email": "sample_email",
+    "name": "sample_name"
+  },
+  "cloudflare_access_users_get": {
+    "account_id": "sample_account_id",
+    "user_id": "sample_user_id"
+  },
+  "cloudflare_access_users_replace": {
+    "account_id": "sample_account_id",
+    "email": "sample_email",
+    "name": "sample_name",
+    "user_id": "sample_user_id"
+  },
+  "cloudflare_access_users_delete": {
+    "account_id": "sample_account_id",
+    "user_id": "sample_user_id"
+  },
+  "cloudflare_access_users_user_id_active_sessions_list": {
+    "account_id": "sample_account_id",
+    "user_id": "sample_user_id"
+  },
+  "cloudflare_access_users_user_id_active_sessions_get": {
+    "account_id": "sample_account_id",
+    "nonce": "sample_nonce",
+    "user_id": "sample_user_id"
+  },
+  "cloudflare_access_users_user_id_failed_logins_list": {
+    "account_id": "sample_account_id",
+    "user_id": "sample_user_id"
+  },
+  "cloudflare_access_users_user_id_last_seen_identity_list": {
+    "account_id": "sample_account_id",
+    "user_id": "sample_user_id"
+  },
+  "cloudflare_access_users_user_id_mfa_authenticators_delete": {
+    "account_id": "sample_account_id",
+    "authenticator_id": "sample_authenticator_id",
+    "user_id": "sample_user_id"
+  },
+  "cloudflare_access_users_user_id_passkeys_delete": {
+    "account_id": "sample_account_id",
+    "authenticator_id": "sample_authenticator_id",
+    "user_id": "sample_user_id"
+  },
+  "cloudflare_devices_client_versions_list": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1,
+    "release_track": "ga",
+    "target_environment": "sample_target_environment"
+  },
+  "cloudflare_devices_client_versions_target_environments_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_devices_deployment_groups_list": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1
+  },
+  "cloudflare_devices_deployment_groups_create": {
+    "account_id": "sample_account_id",
+    "name": "sample_name",
+    "policy_ids": [],
+    "version_config": []
+  },
+  "cloudflare_devices_deployment_groups_get": {
+    "account_id": "sample_account_id",
+    "group_id": "sample_group_id"
+  },
+  "cloudflare_devices_deployment_groups_update": {
+    "account_id": "sample_account_id",
+    "group_id": "sample_group_id",
+    "name": "sample_name",
+    "policy_ids": [],
+    "version_config": []
+  },
+  "cloudflare_devices_deployment_groups_delete": {
+    "account_id": "sample_account_id",
+    "group_id": "sample_group_id"
+  },
+  "cloudflare_devices_ip_profiles_list": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1
+  },
+  "cloudflare_devices_ip_profiles_create": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "enabled": true,
+    "match": "sample_match",
+    "name": "sample_name",
+    "precedence": 1,
+    "subnet_id": "sample_subnet_id"
+  },
+  "cloudflare_devices_ip_profiles_get": {
+    "account_id": "sample_account_id",
+    "profile_id": "sample_profile_id"
+  },
+  "cloudflare_devices_ip_profiles_update": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "enabled": true,
+    "match": "sample_match",
+    "name": "sample_name",
+    "precedence": 1,
+    "profile_id": "sample_profile_id",
+    "subnet_id": "sample_subnet_id"
+  },
+  "cloudflare_devices_ip_profiles_delete": {
+    "account_id": "sample_account_id",
+    "profile_id": "sample_profile_id"
+  },
+  "cloudflare_devices_networks_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_devices_networks_create": {
+    "account_id": "sample_account_id",
+    "config": {},
+    "name": "sample_name",
+    "type": "tls"
+  },
+  "cloudflare_devices_networks_get": {
+    "account_id": "sample_account_id",
+    "network_id": "sample_network_id"
+  },
+  "cloudflare_devices_networks_replace": {
+    "account_id": "sample_account_id",
+    "config": {},
+    "name": "sample_name",
+    "network_id": "sample_network_id",
+    "type": "tls"
+  },
+  "cloudflare_devices_networks_delete": {
+    "account_id": "sample_account_id",
+    "network_id": "sample_network_id"
+  },
+  "cloudflare_devices_override_codes_create": {
+    "account_id": "sample_account_id",
+    "device_id": "sample_device_id",
+    "duration_hours": 1,
+    "scope": "account",
+    "type": "uninstall_protection"
+  },
+  "cloudflare_devices_physical_devices_list": {
+    "account_id": "sample_account_id",
+    "active_registrations": "include",
+    "cursor": "sample_cursor",
+    "has_registration_type": "warp",
+    "id": [],
+    "include": "sample_include",
+    "last_seen_registration_policy_id": "sample_last_seen_registration_policy_id",
+    "last_seen_user_email": "sample_last_seen_user_email",
+    "per_page": 1,
+    "search": "sample_search",
+    "seen_after": "sample_seen_after",
+    "seen_before": "sample_seen_before",
+    "sort_by": "name",
+    "sort_order": "asc",
+    "tag": []
+  },
+  "cloudflare_devices_physical_devices_get": {
+    "account_id": "sample_account_id",
+    "device_id": "sample_device_id",
+    "include": "sample_include"
+  },
+  "cloudflare_devices_physical_devices_update": {
+    "account_id": "sample_account_id",
+    "device_id": "sample_device_id",
+    "tags": {}
+  },
+  "cloudflare_devices_physical_devices_delete": {
+    "account_id": "sample_account_id",
+    "device_id": "sample_device_id"
+  },
+  "cloudflare_devices_policies_list": {
+    "account_id": "sample_account_id",
+    "profile_type": "warp"
+  },
+  "cloudflare_devices_policy_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_devices_policy_create": {
+    "account_id": "sample_account_id",
+    "allow_mode_switch": true,
+    "allow_updates": true,
+    "allowed_to_leave": true,
+    "auto_connect": 1,
+    "browser_extension_config": {},
+    "captive_portal": 1,
+    "default": true,
+    "description": "sample_description",
+    "disable_auto_fallback": true,
+    "dns_search_suffixes": [],
+    "enabled": true,
+    "exclude": [],
+    "exclude_office_ips": true,
+    "global_acceleration": {},
+    "include": [],
+    "lan_allow_minutes": 1,
+    "lan_allow_subnet_size": 1,
+    "match": "sample_match",
+    "name": "sample_name",
+    "precedence": 1,
+    "profile_type": "warp",
+    "register_interface_ip_with_dns": true,
+    "sccm_vpn_boundary_support": true,
+    "service_mode_v2": {},
+    "support_url": "sample_support_url",
+    "switch_locked": true,
+    "tunnel_protocol": "sample_tunnel_protocol",
+    "uninstall_protection": true,
+    "virtual_networks": {}
+  },
+  "cloudflare_devices_policy_patch": {
+    "account_id": "sample_account_id",
+    "allow_mode_switch": true,
+    "allow_updates": true,
+    "allowed_to_leave": true,
+    "auto_connect": 1,
+    "captive_portal": 1,
+    "disable_auto_fallback": true,
+    "dns_search_suffixes": [],
+    "exclude": [],
+    "exclude_office_ips": true,
+    "global_acceleration": {},
+    "include": [],
+    "lan_allow_minutes": 1,
+    "lan_allow_subnet_size": 1,
+    "register_interface_ip_with_dns": true,
+    "sccm_vpn_boundary_support": true,
+    "service_mode_v2": {},
+    "support_url": "sample_support_url",
+    "switch_locked": true,
+    "tunnel_protocol": "sample_tunnel_protocol",
+    "uninstall_protection": true,
+    "virtual_networks": {}
+  },
+  "cloudflare_devices_policy_get": {
+    "account_id": "sample_account_id",
+    "policy_id": "sample_policy_id"
+  },
+  "cloudflare_devices_policy_update": {
+    "account_id": "sample_account_id",
+    "allow_mode_switch": true,
+    "allow_updates": true,
+    "allowed_to_leave": true,
+    "auto_connect": 1,
+    "browser_extension_config": {},
+    "captive_portal": 1,
+    "default": true,
+    "description": "sample_description",
+    "disable_auto_fallback": true,
+    "dns_search_suffixes": [],
+    "enabled": true,
+    "exclude": [],
+    "exclude_office_ips": true,
+    "global_acceleration": {},
+    "include": [],
+    "lan_allow_minutes": 1,
+    "lan_allow_subnet_size": 1,
+    "match": "sample_match",
+    "name": "sample_name",
+    "policy_id": "sample_policy_id",
+    "precedence": 1,
+    "register_interface_ip_with_dns": true,
+    "sccm_vpn_boundary_support": true,
+    "service_mode_v2": {},
+    "support_url": "sample_support_url",
+    "switch_locked": true,
+    "tunnel_protocol": "sample_tunnel_protocol",
+    "uninstall_protection": true,
+    "virtual_networks": {}
+  },
+  "cloudflare_devices_policy_delete": {
+    "account_id": "sample_account_id",
+    "policy_id": "sample_policy_id"
+  },
+  "cloudflare_devices_posture_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_devices_posture_create": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "expiration": "sample_expiration",
+    "input": {},
+    "match": [],
+    "name": "sample_name",
+    "schedule": "sample_schedule",
+    "type": "file"
+  },
+  "cloudflare_devices_posture_integration_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_devices_posture_integration_create": {
+    "account_id": "sample_account_id",
+    "config": {},
+    "interval": "sample_interval",
+    "name": "sample_name",
+    "type": "workspace_one"
+  },
+  "cloudflare_devices_posture_integration_get": {
+    "account_id": "sample_account_id",
+    "integration_id": "sample_integration_id"
+  },
+  "cloudflare_devices_posture_integration_update": {
+    "account_id": "sample_account_id",
+    "config": {},
+    "integration_id": "sample_integration_id",
+    "interval": "sample_interval",
+    "name": "sample_name",
+    "type": "workspace_one"
+  },
+  "cloudflare_devices_posture_integration_delete": {
+    "account_id": "sample_account_id",
+    "integration_id": "sample_integration_id"
+  },
+  "cloudflare_devices_posture_get": {
+    "account_id": "sample_account_id",
+    "rule_id": "sample_rule_id"
+  },
+  "cloudflare_devices_posture_replace": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "expiration": "sample_expiration",
+    "input": {},
+    "match": [],
+    "name": "sample_name",
+    "rule_id": "sample_rule_id",
+    "schedule": "sample_schedule",
+    "type": "file"
+  },
+  "cloudflare_devices_posture_delete": {
+    "account_id": "sample_account_id",
+    "rule_id": "sample_rule_id"
+  },
+  "cloudflare_devices_registrations_list": {
+    "account_id": "sample_account_id",
+    "cursor": "sample_cursor",
+    "device_id": "sample_device_id",
+    "id": [],
+    "include": "sample_include",
+    "per_page": 1,
+    "policy_id": "sample_policy_id",
+    "registration_type": "warp",
+    "search": "sample_search",
+    "seen_after": "sample_seen_after",
+    "seen_before": "sample_seen_before",
+    "sort_by": "id",
+    "sort_order": "asc",
+    "status": "active",
+    "user_id": []
+  },
+  "cloudflare_devices_registrations_delete_all": {
+    "account_id": "sample_account_id",
+    "id": []
+  },
+  "cloudflare_devices_registrations_get": {
+    "account_id": "sample_account_id",
+    "include": "sample_include",
+    "registration_id": "sample_registration_id"
+  },
+  "cloudflare_devices_registrations_delete": {
+    "account_id": "sample_account_id",
+    "registration_id": "sample_registration_id"
+  },
+  "cloudflare_devices_registrations_registration_id_override_codes_list": {
+    "account_id": "sample_account_id",
+    "registration_id": "sample_registration_id"
+  },
+  "cloudflare_devices_resilience_disconnect_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_devices_resilience_disconnect_create": {
+    "account_id": "sample_account_id",
+    "disconnect": true,
+    "justification": "sample_justification"
+  },
+  "cloudflare_devices_settings_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_devices_settings_patch": {
+    "account_id": "sample_account_id",
+    "disable_for_time": 1,
+    "external_emergency_signal_enabled": true,
+    "external_emergency_signal_fingerprint": "sample_external_emergency_signal_fingerprint",
+    "external_emergency_signal_interval": "sample_external_emergency_signal_interval",
+    "external_emergency_signal_url": "sample_external_emergency_signal_url",
+    "gateway_proxy_enabled": true,
+    "gateway_udp_proxy_enabled": true,
+    "root_certificate_installation_enabled": true,
+    "use_zt_virtual_ip": true
+  },
+  "cloudflare_devices_settings_delete": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_devices_device_id_override_codes_list": {
+    "account_id": "sample_account_id",
+    "device_id": "sample_device_id"
+  },
+  "cloudflare_dlp_custom_prompt_topics_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_dlp_custom_prompt_topics_create": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "enabled": true,
+    "name": "sample_name",
+    "profile_id": "sample_profile_id",
+    "topic": "sample_topic"
+  },
+  "cloudflare_dlp_custom_prompt_topics_get": {
+    "account_id": "sample_account_id",
+    "entry_id": "sample_entry_id"
+  },
+  "cloudflare_dlp_custom_prompt_topics_replace": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "enabled": true,
+    "entry_id": "sample_entry_id",
+    "name": "sample_name",
+    "topic": "sample_topic"
+  },
+  "cloudflare_dlp_custom_prompt_topics_delete": {
+    "account_id": "sample_account_id",
+    "entry_id": "sample_entry_id"
+  },
+  "cloudflare_dlp_data_classes_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_dlp_data_classes_create": {
+    "account_id": "sample_account_id",
+    "data_tags": [],
+    "description": "sample_description",
+    "expression": "sample_expression",
+    "name": "sample_name",
+    "sensitivity_levels": []
+  },
+  "cloudflare_dlp_data_classes_get": {
+    "account_id": "sample_account_id",
+    "data_class_id": "sample_data_class_id"
+  },
+  "cloudflare_dlp_data_classes_replace": {
+    "account_id": "sample_account_id",
+    "data_class_id": "sample_data_class_id",
+    "data_tags": [],
+    "description": "sample_description",
+    "expression": "sample_expression",
+    "name": "sample_name",
+    "sensitivity_levels": []
+  },
+  "cloudflare_dlp_data_classes_delete": {
+    "account_id": "sample_account_id",
+    "data_class_id": "sample_data_class_id"
+  },
+  "cloudflare_dlp_data_tag_categories_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_dlp_data_tag_categories_create": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "name": "sample_name",
+    "tags": [],
+    "template_id": "sample_template_id"
+  },
+  "cloudflare_dlp_data_tag_categories_get": {
+    "account_id": "sample_account_id",
+    "category_id": "sample_category_id"
+  },
+  "cloudflare_dlp_data_tag_categories_replace": {
+    "account_id": "sample_account_id",
+    "category_id": "sample_category_id",
+    "description": "sample_description",
+    "name": "sample_name",
+    "tags": []
+  },
+  "cloudflare_dlp_data_tag_categories_delete": {
+    "account_id": "sample_account_id",
+    "category_id": "sample_category_id"
+  },
+  "cloudflare_dlp_data_tag_categories_category_id_data_tags_list": {
+    "account_id": "sample_account_id",
+    "category_id": "sample_category_id"
+  },
+  "cloudflare_dlp_data_tag_categories_category_id_data_tags_create": {
+    "account_id": "sample_account_id",
+    "category_id": "sample_category_id",
+    "description": "sample_description",
+    "name": "sample_name"
+  },
+  "cloudflare_dlp_data_tag_categories_category_id_data_tags_get": {
+    "account_id": "sample_account_id",
+    "category_id": "sample_category_id",
+    "tag_id": "sample_tag_id"
+  },
+  "cloudflare_dlp_data_tag_categories_category_id_data_tags_replace": {
+    "account_id": "sample_account_id",
+    "category_id": "sample_category_id",
+    "description": "sample_description",
+    "name": "sample_name",
+    "tag_id": "sample_tag_id"
+  },
+  "cloudflare_dlp_data_tag_categories_category_id_data_tags_delete": {
+    "account_id": "sample_account_id",
+    "category_id": "sample_category_id",
+    "tag_id": "sample_tag_id"
+  },
+  "cloudflare_dlp_data_tag_category_templates_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_dlp_data_tag_category_templates_get": {
+    "account_id": "sample_account_id",
+    "template_id": "sample_template_id"
+  },
+  "cloudflare_dlp_datasets_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_dlp_datasets_create": {
+    "account_id": "sample_account_id",
+    "case_sensitive": true,
+    "description": "sample_description",
+    "encoding_version": 1,
+    "name": "sample_name",
+    "secret": true
+  },
+  "cloudflare_dlp_datasets_get": {
+    "account_id": "sample_account_id",
+    "dataset_id": "sample_dataset_id"
+  },
+  "cloudflare_dlp_datasets_replace": {
+    "account_id": "sample_account_id",
+    "case_sensitive": true,
+    "dataset_id": "sample_dataset_id",
+    "description": "sample_description",
+    "name": "sample_name"
+  },
+  "cloudflare_dlp_datasets_delete": {
+    "account_id": "sample_account_id",
+    "dataset_id": "sample_dataset_id"
+  },
+  "cloudflare_dlp_datasets_dataset_id_upload": {
+    "account_id": "sample_account_id",
+    "dataset_id": "sample_dataset_id"
+  },
+  "cloudflare_dlp_document_fingerprints_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_dlp_document_fingerprints_create": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "match_percent": 1,
+    "name": "sample_name"
+  },
+  "cloudflare_dlp_document_fingerprints_get": {
+    "account_id": "sample_account_id",
+    "document_fingerprint_id": "sample_document_fingerprint_id"
+  },
+  "cloudflare_dlp_document_fingerprints_update": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "document_fingerprint_id": "sample_document_fingerprint_id",
+    "match_percent": 1,
+    "name": "sample_name"
+  },
+  "cloudflare_dlp_document_fingerprints_delete": {
+    "account_id": "sample_account_id",
+    "document_fingerprint_id": "sample_document_fingerprint_id"
+  },
+  "cloudflare_dlp_email_account_mapping_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_dlp_email_account_mapping_create": {
+    "account_id": "sample_account_id",
+    "auth_requirements": {}
+  },
+  "cloudflare_dlp_email_rules_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_dlp_email_rules_create": {
+    "account_id": "sample_account_id",
+    "action": {},
+    "conditions": [],
+    "description": "sample_description",
+    "enabled": true,
+    "name": "sample_name"
+  },
+  "cloudflare_dlp_email_rules_patch": {
+    "account_id": "sample_account_id",
+    "new_priorities": {}
+  },
+  "cloudflare_dlp_email_rules_get": {
+    "account_id": "sample_account_id",
+    "rule_id": "sample_rule_id"
+  },
+  "cloudflare_dlp_email_rules_replace": {
+    "account_id": "sample_account_id",
+    "action": {},
+    "conditions": [],
+    "description": "sample_description",
+    "enabled": true,
+    "name": "sample_name",
+    "rule_id": "sample_rule_id"
+  },
+  "cloudflare_dlp_email_rules_delete": {
+    "account_id": "sample_account_id",
+    "rule_id": "sample_rule_id"
+  },
+  "cloudflare_dlp_entries_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_dlp_entries_create": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "enabled": true,
+    "name": "sample_name",
+    "pattern": {},
+    "profile_id": "sample_profile_id"
+  },
+  "cloudflare_dlp_entries_get": {
+    "account_id": "sample_account_id",
+    "entry_id": "sample_entry_id"
+  },
+  "cloudflare_dlp_entries_replace": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "enabled": true,
+    "entry_id": "sample_entry_id",
+    "name": "sample_name",
+    "pattern": {},
+    "type": "custom"
+  },
+  "cloudflare_dlp_entries_delete": {
+    "account_id": "sample_account_id",
+    "entry_id": "sample_entry_id"
+  },
+  "cloudflare_dlp_limits_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_dlp_patterns_validate": {
+    "account_id": "sample_account_id",
+    "max_match_bytes": 1,
+    "regex": "sample_regex"
+  },
+  "cloudflare_dlp_profiles_list": {
+    "account_id": "sample_account_id",
+    "all": true
+  },
+  "cloudflare_dlp_profiles_custom_create": {
+    "account_id": "sample_account_id",
+    "ai_context_enabled": true,
+    "allowed_match_count": 1,
+    "confidence_threshold": "sample_confidence_threshold",
+    "context_awareness": {},
+    "data_classes": [],
+    "data_tags": [],
+    "description": "sample_description",
+    "entries": [],
+    "name": "sample_name",
+    "ocr_enabled": true,
+    "sensitivity_levels": [],
+    "shared_entries": []
+  },
+  "cloudflare_dlp_profiles_custom_replace": {
+    "account_id": "sample_account_id",
+    "ai_context_enabled": true,
+    "allowed_match_count": 1,
+    "confidence_threshold": "sample_confidence_threshold",
+    "context_awareness": {},
+    "data_classes": [],
+    "data_tags": [],
+    "description": "sample_description",
+    "entries": [],
+    "name": "sample_name",
+    "ocr_enabled": true,
+    "profile_id": "sample_profile_id",
+    "sensitivity_levels": [],
+    "shared_entries": []
+  },
+  "cloudflare_dlp_profiles_custom_delete": {
+    "account_id": "sample_account_id",
+    "profile_id": "sample_profile_id"
+  },
+  "cloudflare_dlp_profiles_predefined_replace": {
+    "account_id": "sample_account_id",
+    "ai_context_enabled": true,
+    "allowed_match_count": 1,
+    "confidence_threshold": "sample_confidence_threshold",
+    "context_awareness": {},
+    "entries": [],
+    "ocr_enabled": true,
+    "profile_id": "sample_profile_id"
+  },
+  "cloudflare_dlp_profiles_get": {
+    "account_id": "sample_account_id",
+    "profile_id": "sample_profile_id"
+  },
+  "cloudflare_dlp_sensitivity_groups_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_dlp_sensitivity_groups_create": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "levels": [],
+    "name": "sample_name",
+    "template_id": "sample_template_id"
+  },
+  "cloudflare_dlp_sensitivity_groups_templates_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_dlp_sensitivity_groups_templates_get": {
+    "account_id": "sample_account_id",
+    "template_id": "sample_template_id"
+  },
+  "cloudflare_dlp_sensitivity_groups_get": {
+    "account_id": "sample_account_id",
+    "sensitivity_group_id": "sample_sensitivity_group_id"
+  },
+  "cloudflare_dlp_sensitivity_groups_replace": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "levels": [],
+    "name": "sample_name",
+    "sensitivity_group_id": "sample_sensitivity_group_id"
+  },
+  "cloudflare_dlp_sensitivity_groups_delete": {
+    "account_id": "sample_account_id",
+    "sensitivity_group_id": "sample_sensitivity_group_id"
+  },
+  "cloudflare_dlp_sensitivity_groups_sensitivity_group_id_level_order_list": {
+    "account_id": "sample_account_id",
+    "sensitivity_group_id": "sample_sensitivity_group_id"
+  },
+  "cloudflare_dlp_sensitivity_groups_sensitivity_group_id_level_order_put": {
+    "account_id": "sample_account_id",
+    "level_ids": [],
+    "sensitivity_group_id": "sample_sensitivity_group_id"
+  },
+  "cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_list": {
+    "account_id": "sample_account_id",
+    "sensitivity_group_id": "sample_sensitivity_group_id"
+  },
+  "cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_create": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "name": "sample_name",
+    "sensitivity_group_id": "sample_sensitivity_group_id"
+  },
+  "cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_get": {
+    "account_id": "sample_account_id",
+    "sensitivity_group_id": "sample_sensitivity_group_id",
+    "sensitivity_level_id": "sample_sensitivity_level_id"
+  },
+  "cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_replace": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "name": "sample_name",
+    "sensitivity_group_id": "sample_sensitivity_group_id",
+    "sensitivity_level_id": "sample_sensitivity_level_id"
+  },
+  "cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_delete": {
+    "account_id": "sample_account_id",
+    "sensitivity_group_id": "sample_sensitivity_group_id",
+    "sensitivity_level_id": "sample_sensitivity_level_id"
+  },
+  "cloudflare_dlp_settings_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_dlp_settings_put": {
+    "account_id": "sample_account_id",
+    "ai_context_analysis": true,
+    "ocr": true,
+    "payload_logging": {}
+  },
+  "cloudflare_dlp_settings_patch": {
+    "account_id": "sample_account_id",
+    "ai_context_analysis": true,
+    "ocr": true,
+    "payload_logging": {}
+  },
+  "cloudflare_dlp_settings_delete": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_gateway_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_gateway_create": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_gateway_app_types_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_gateway_audit_ssh_settings_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_gateway_audit_ssh_settings_put": {
+    "account_id": "sample_account_id",
+    "public_key": "sample_public_key"
+  },
+  "cloudflare_gateway_audit_ssh_settings_rotate_seed": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_gateway_categories_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_gateway_certificates_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_gateway_certificates_create": {
+    "account_id": "sample_account_id",
+    "validity_period_days": 1
+  },
+  "cloudflare_gateway_certificates_get": {
+    "account_id": "sample_account_id",
+    "certificate_id": "sample_certificate_id"
+  },
+  "cloudflare_gateway_certificates_delete": {
+    "account_id": "sample_account_id",
+    "certificate_id": "sample_certificate_id"
+  },
+  "cloudflare_gateway_certificates_certificate_id_activate": {
+    "account_id": "sample_account_id",
+    "certificate_id": "sample_certificate_id"
+  },
+  "cloudflare_gateway_certificates_certificate_id_deactivate": {
+    "account_id": "sample_account_id",
+    "certificate_id": "sample_certificate_id"
+  },
+  "cloudflare_gateway_configuration_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_gateway_configuration_put": {
+    "account_id": "sample_account_id",
+    "settings": {}
+  },
+  "cloudflare_gateway_configuration_patch": {
+    "account_id": "sample_account_id",
+    "settings": {}
+  },
+  "cloudflare_gateway_configuration_custom_certificate_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_gateway_dns_destination_ips_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_gateway_lists_list": {
+    "account_id": "sample_account_id",
+    "direction": "asc",
+    "filter": [],
+    "order_by": "name",
+    "search": "sample_search",
+    "type": "SERIAL"
+  },
+  "cloudflare_gateway_lists_create": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "items": [],
+    "name": "sample_name",
+    "type": "SERIAL"
+  },
+  "cloudflare_gateway_lists_get": {
+    "account_id": "sample_account_id",
+    "list_id": "sample_list_id"
+  },
+  "cloudflare_gateway_lists_replace": {
+    "account_id": "sample_account_id",
+    "description": "sample_description",
+    "items": [],
+    "list_id": "sample_list_id",
+    "name": "sample_name"
+  },
+  "cloudflare_gateway_lists_update": {
+    "account_id": "sample_account_id",
+    "append": [],
+    "list_id": "sample_list_id",
+    "remove": []
+  },
+  "cloudflare_gateway_lists_delete": {
+    "account_id": "sample_account_id",
+    "list_id": "sample_list_id"
+  },
+  "cloudflare_gateway_lists_list_id_items_list": {
+    "account_id": "sample_account_id",
+    "list_id": "sample_list_id",
+    "page": 1,
+    "per_page": 1
+  },
+  "cloudflare_gateway_locations_list": {
+    "account_id": "sample_account_id",
+    "direction": "asc",
+    "filter": [],
+    "order_by": "name",
+    "search": "sample_search"
+  },
+  "cloudflare_gateway_locations_create": {
+    "account_id": "sample_account_id",
+    "client_default": true,
+    "dns64_enabled": true,
+    "dns_destination_ips_id": "sample_dns_destination_ips_id",
+    "ecs_support": true,
+    "endpoints": {},
+    "max_ttl": {},
+    "name": "sample_name",
+    "networks": []
+  },
+  "cloudflare_gateway_locations_get": {
+    "account_id": "sample_account_id",
+    "location_id": "sample_location_id"
+  },
+  "cloudflare_gateway_locations_replace": {
+    "account_id": "sample_account_id",
+    "client_default": true,
+    "dns64_enabled": true,
+    "dns_destination_ips_id": "sample_dns_destination_ips_id",
+    "ecs_support": true,
+    "endpoints": {},
+    "location_id": "sample_location_id",
+    "max_ttl": {},
+    "name": "sample_name",
+    "networks": []
+  },
+  "cloudflare_gateway_locations_delete": {
+    "account_id": "sample_account_id",
+    "location_id": "sample_location_id"
+  },
+  "cloudflare_gateway_logging_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_gateway_logging_put": {
+    "account_id": "sample_account_id",
+    "redact_pii": true,
+    "settings_by_rule_type": {}
+  },
+  "cloudflare_gateway_pacfiles_list": {
+    "account_id": "sample_account_id",
+    "page": 1,
+    "per_page": 1
+  },
+  "cloudflare_gateway_pacfiles_create": {
+    "account_id": "sample_account_id",
+    "contents": "sample_contents",
+    "description": "sample_description",
+    "name": "sample_name",
+    "slug": "sample_slug"
+  },
+  "cloudflare_gateway_pacfiles_get": {
+    "account_id": "sample_account_id",
+    "pacfile_id": "sample_pacfile_id"
+  },
+  "cloudflare_gateway_pacfiles_replace": {
+    "account_id": "sample_account_id",
+    "contents": "sample_contents",
+    "description": "sample_description",
+    "name": "sample_name",
+    "pacfile_id": "sample_pacfile_id"
+  },
+  "cloudflare_gateway_pacfiles_delete": {
+    "account_id": "sample_account_id",
+    "pacfile_id": "sample_pacfile_id"
+  },
+  "cloudflare_gateway_proxy_endpoints_list": {
+    "account_id": "sample_account_id",
+    "direction": "asc",
+    "filter": [],
+    "order_by": "name",
+    "search": "sample_search"
+  },
+  "cloudflare_gateway_proxy_endpoints_create": {
+    "account_id": "sample_account_id",
+    "kind": "ip",
+    "name": "sample_name"
+  },
+  "cloudflare_gateway_proxy_endpoints_get": {
+    "account_id": "sample_account_id",
+    "proxy_endpoint_id": "sample_proxy_endpoint_id"
+  },
+  "cloudflare_gateway_proxy_endpoints_update": {
+    "account_id": "sample_account_id",
+    "ips": [],
+    "name": "sample_name",
+    "proxy_endpoint_id": "sample_proxy_endpoint_id"
+  },
+  "cloudflare_gateway_proxy_endpoints_delete": {
+    "account_id": "sample_account_id",
+    "proxy_endpoint_id": "sample_proxy_endpoint_id"
+  },
+  "cloudflare_gateway_rules_list": {
+    "account_id": "sample_account_id",
+    "direction": "asc",
+    "filter": [],
+    "order_by": "name",
+    "search": "sample_search"
+  },
+  "cloudflare_gateway_rules_create": {
+    "account_id": "sample_account_id",
+    "action": "on",
+    "description": "sample_description",
+    "device_posture": "sample_device_posture",
+    "enabled": true,
+    "expiration": {},
+    "filters": [],
+    "identity": "sample_identity",
+    "name": "sample_name",
+    "precedence": 1,
+    "rule_settings": {},
+    "schedule": {},
+    "traffic": "sample_traffic"
+  },
+  "cloudflare_gateway_rules_tenant_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_gateway_rules_get": {
+    "account_id": "sample_account_id",
+    "rule_id": "sample_rule_id"
+  },
+  "cloudflare_gateway_rules_replace": {
+    "account_id": "sample_account_id",
+    "action": "on",
+    "description": "sample_description",
+    "device_posture": "sample_device_posture",
+    "enabled": true,
+    "expiration": {},
+    "filters": [],
+    "identity": "sample_identity",
+    "name": "sample_name",
+    "precedence": 1,
+    "rule_id": "sample_rule_id",
+    "rule_settings": {},
+    "schedule": {},
+    "traffic": "sample_traffic"
+  },
+  "cloudflare_gateway_rules_delete": {
+    "account_id": "sample_account_id",
+    "rule_id": "sample_rule_id"
+  },
+  "cloudflare_gateway_rules_rule_id_reset_expiration": {
+    "account_id": "sample_account_id",
+    "rule_id": "sample_rule_id"
+  },
+  "cloudflare_teamnet_routes_list": {
+    "account_id": "sample_account_id",
+    "comment": "sample_comment",
+    "existed_at": "sample_existed_at",
+    "is_deleted": true,
+    "network_subset": "sample_network_subset",
+    "network_superset": "sample_network_superset",
+    "page": 1,
+    "per_page": 1,
+    "route_id": "sample_route_id",
+    "tun_types": [],
+    "tunnel_id": "sample_tunnel_id",
+    "virtual_network_id": "sample_virtual_network_id"
+  },
+  "cloudflare_teamnet_routes_create": {
+    "account_id": "sample_account_id",
+    "comment": "sample_comment",
+    "network": "sample_network",
+    "tunnel_id": "sample_tunnel_id",
+    "virtual_network_id": "sample_virtual_network_id"
+  },
+  "cloudflare_teamnet_routes_ip_get": {
+    "account_id": "sample_account_id",
+    "default_virtual_network_fallback": true,
+    "ip": "sample_ip",
+    "virtual_network_id": "sample_virtual_network_id"
+  },
+  "cloudflare_teamnet_routes_get": {
+    "account_id": "sample_account_id",
+    "route_id": "sample_route_id"
+  },
+  "cloudflare_teamnet_routes_update": {
+    "account_id": "sample_account_id",
+    "comment": "sample_comment",
+    "network": "sample_network",
+    "route_id": "sample_route_id",
+    "tunnel_id": "sample_tunnel_id",
+    "virtual_network_id": "sample_virtual_network_id"
+  },
+  "cloudflare_teamnet_routes_delete": {
+    "account_id": "sample_account_id",
+    "route_id": "sample_route_id"
+  },
+  "cloudflare_teamnet_virtual_networks_list": {
+    "account_id": "sample_account_id",
+    "id": "sample_id",
+    "is_default": true,
+    "is_default_network": true,
+    "is_deleted": true,
+    "name": "sample_name"
+  },
+  "cloudflare_teamnet_virtual_networks_create": {
+    "account_id": "sample_account_id",
+    "comment": "sample_comment",
+    "is_default": true,
+    "is_default_network": true,
+    "name": "sample_name"
+  },
+  "cloudflare_teamnet_virtual_networks_get": {
+    "account_id": "sample_account_id",
+    "comment": "sample_comment",
+    "is_default_network": true,
+    "name": "sample_name",
+    "virtual_network_id": "sample_virtual_network_id"
+  },
+  "cloudflare_teamnet_virtual_networks_update": {
+    "account_id": "sample_account_id",
+    "comment": "sample_comment",
+    "is_default_network": true,
+    "name": "sample_name",
+    "virtual_network_id": "sample_virtual_network_id"
+  },
+  "cloudflare_teamnet_virtual_networks_delete": {
+    "account_id": "sample_account_id",
+    "virtual_network_id": "sample_virtual_network_id"
+  },
+  "cloudflare_tunnels_list": {
+    "account_id": "sample_account_id",
+    "exclude_prefix": "sample_exclude_prefix",
+    "existed_at": "sample_existed_at",
+    "include_prefix": "sample_include_prefix",
+    "is_deleted": true,
+    "name": "sample_name",
+    "page": 1,
+    "per_page": 1,
+    "status": "inactive",
+    "tun_types": [],
+    "uuid": "sample_uuid",
+    "was_active_at": "sample_was_active_at",
+    "was_inactive_at": "sample_was_inactive_at"
+  },
+  "cloudflare_zerotrust_connectivity_settings_list": {
+    "account_id": "sample_account_id"
+  },
+  "cloudflare_zerotrust_connectivity_settings_patch": {
+    "account_id": "sample_account_id",
+    "icmp_proxy_enabled": true,
+    "offramp_warp_enabled": true
+  },
+  "cloudflare_zerotrust_routes_hostname_list": {
+    "account_id": "sample_account_id",
+    "comment": "sample_comment",
+    "existed_at": "sample_existed_at",
+    "hostname": "sample_hostname",
+    "id": "sample_id",
+    "is_deleted": true,
+    "page": 1,
+    "per_page": 1,
+    "tunnel_id": "sample_tunnel_id"
+  },
+  "cloudflare_zerotrust_routes_hostname_create": {
+    "account_id": "sample_account_id",
+    "comment": "sample_comment",
+    "hostname": "sample_hostname",
+    "tunnel_id": "sample_tunnel_id"
+  },
+  "cloudflare_zerotrust_routes_hostname_get": {
+    "account_id": "sample_account_id",
+    "hostname_route_id": "sample_hostname_route_id"
+  },
+  "cloudflare_zerotrust_routes_hostname_update": {
+    "account_id": "sample_account_id",
+    "comment": "sample_comment",
+    "hostname": "sample_hostname",
+    "hostname_route_id": "sample_hostname_route_id",
+    "tunnel_id": "sample_tunnel_id"
+  },
+  "cloudflare_zerotrust_routes_hostname_delete": {
+    "account_id": "sample_account_id",
+    "hostname_route_id": "sample_hostname_route_id"
+  },
+  "cloudflare_zerotrust_subnets_list": {
+    "account_id": "sample_account_id",
+    "address_family": "v4",
+    "comment": "sample_comment",
+    "existed_at": "sample_existed_at",
+    "is_default_network": true,
+    "is_deleted": true,
+    "name": "sample_name",
+    "network": "sample_network",
+    "page": 1,
+    "per_page": 1,
+    "sort_order": "asc",
+    "subnet_types": "cloudflare_source"
+  },
+  "cloudflare_zerotrust_subnets_cloudflare_source_get": {
+    "account_id": "sample_account_id",
+    "address_family": "v4"
+  },
+  "cloudflare_zerotrust_subnets_cloudflare_source_update": {
+    "account_id": "sample_account_id",
+    "address_family": "v4",
+    "comment": "sample_comment",
+    "name": "sample_name",
+    "network": "sample_network"
+  },
+  "cloudflare_zerotrust_subnets_initial_resolved_ip_get": {
+    "account_id": "sample_account_id",
+    "address_family": "v4"
+  },
+  "cloudflare_zerotrust_subnets_initial_resolved_ip_replace": {
+    "account_id": "sample_account_id",
+    "address_family": "v4",
+    "comment": "sample_comment",
+    "name": "sample_name",
+    "network": "sample_network"
+  },
+  "cloudflare_zerotrust_subnets_warp_create": {
+    "account_id": "sample_account_id",
+    "comment": "sample_comment",
+    "is_default_network": true,
+    "name": "sample_name",
+    "network": "sample_network"
+  },
+  "cloudflare_zerotrust_subnets_warp_get": {
+    "account_id": "sample_account_id",
+    "subnet_id": "sample_subnet_id"
+  },
+  "cloudflare_zerotrust_subnets_warp_update": {
+    "account_id": "sample_account_id",
+    "comment": "sample_comment",
+    "is_default_network": true,
+    "name": "sample_name",
+    "network": "sample_network",
+    "subnet_id": "sample_subnet_id"
+  },
+  "cloudflare_zerotrust_subnets_warp_delete": {
+    "account_id": "sample_account_id",
+    "subnet_id": "sample_subnet_id"
+  },
   "confluence_get_page_by_id": {
     "draft": true,
     "id": 1,

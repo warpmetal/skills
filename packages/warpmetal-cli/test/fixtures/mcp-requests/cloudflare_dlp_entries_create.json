@@ -1,0 +1,15 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/dlp/entries",
+  "body": {
+    "description": "sample_description",
+    "enabled": true,
+    "name": "sample_name",
+    "pattern": {},
+    "profile_id": "sample_profile_id"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

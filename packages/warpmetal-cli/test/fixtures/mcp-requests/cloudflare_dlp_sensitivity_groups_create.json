@@ -1,0 +1,14 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/dlp/sensitivity_groups",
+  "body": {
+    "description": "sample_description",
+    "levels": [],
+    "name": "sample_name",
+    "template_id": "sample_template_id"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/devices/posture/integration/sample_integration_id",
+  "body": {
+    "config": {},
+    "interval": "sample_interval",
+    "name": "sample_name",
+    "type": "workspace_one"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

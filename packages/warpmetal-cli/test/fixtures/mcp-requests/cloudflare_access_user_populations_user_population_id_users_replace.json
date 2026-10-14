@@ -1,0 +1,19 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/access/user_populations/sample_user_population_id/users/sample_user_id",
+  "body": {
+    "active": true,
+    "displayName": "sample_display_name",
+    "emails": [],
+    "externalId": "sample_external_id",
+    "id": "sample_id",
+    "meta": {},
+    "name": {},
+    "schemas": [],
+    "userName": "sample_user_name"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

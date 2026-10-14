@@ -23,7 +23,7 @@
       "scope": "Almacenamiento y computo: R2, KV, D1, Workers, Queues, Pages"
     },
     "w3": {
-      "status": "planned",
+      "status": "reviewed",
       "scope": "Zero Trust y Access: apps, politicas, identity providers, gateway"
     },
     "w4": {
@@ -3010,6 +3010,2982 @@
       "wave": "w2",
       "reason": "Get Workflow version graph. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
       "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_ai_controls_mcp_analytics_portals_portal_id_tool_calls_timeseries_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/ai-controls/mcp/analytics/portals/{portal_id}/tool-calls/timeseries",
+      "wave": "w3",
+      "reason": "Per-portal MCP tool-call timeseries. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_ai_controls_mcp_analytics_servers_server_id_tool_calls_timeseries_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/ai-controls/mcp/analytics/servers/{server_id}/tool-calls/timeseries",
+      "wave": "w3",
+      "reason": "Per-server MCP tool-call timeseries. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_ai_controls_mcp_analytics_tool_calls_timeseries_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/ai-controls/mcp/analytics/tool-calls/timeseries",
+      "wave": "w3",
+      "reason": "Account-global MCP tool-call timeseries. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_ai_controls_mcp_portals_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/ai-controls/mcp/portals",
+      "wave": "w3",
+      "reason": "List MCP Portals. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_ai_controls_mcp_portals_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/ai-controls/mcp/portals",
+      "wave": "w3",
+      "reason": "Create a new MCP Portal. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_ai_controls_mcp_portals_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/ai-controls/mcp/portals/{id}",
+      "wave": "w3",
+      "reason": "Read details of an MCP Portal. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_ai_controls_mcp_portals_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/ai-controls/mcp/portals/{id}",
+      "wave": "w3",
+      "reason": "Update an MCP Portal. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_ai_controls_mcp_portals_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/ai-controls/mcp/portals/{id}",
+      "wave": "w3",
+      "reason": "Delete an MCP Portal. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_ai_controls_mcp_servers_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/ai-controls/mcp/servers",
+      "wave": "w3",
+      "reason": "List MCP Servers. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_ai_controls_mcp_servers_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/ai-controls/mcp/servers",
+      "wave": "w3",
+      "reason": "Create a new MCP Server. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_ai_controls_mcp_servers_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/ai-controls/mcp/servers/{id}",
+      "wave": "w3",
+      "reason": "Read the details of an MCP Server. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_ai_controls_mcp_servers_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/ai-controls/mcp/servers/{id}",
+      "wave": "w3",
+      "reason": "Update an MCP Server. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_ai_controls_mcp_servers_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/ai-controls/mcp/servers/{id}",
+      "wave": "w3",
+      "reason": "Delete an MCP Server. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_ai_controls_mcp_servers_id_sync_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/ai-controls/mcp/servers/{id}/sync",
+      "wave": "w3",
+      "reason": "Sync MCP Server Capabilities. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_apps_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/apps",
+      "wave": "w3",
+      "reason": "List Access applications. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_apps_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/apps",
+      "wave": "w3",
+      "reason": "Add an Access application. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_apps_ca_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/apps/ca",
+      "wave": "w3",
+      "reason": "List short-lived certificate CAs. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_apps_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/apps/{app_id}",
+      "wave": "w3",
+      "reason": "Get an Access application. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_apps_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/apps/{app_id}",
+      "wave": "w3",
+      "reason": "Update an Access application. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_apps_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/apps/{app_id}",
+      "wave": "w3",
+      "reason": "Delete an Access application. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_apps_app_id_ca_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/apps/{app_id}/ca",
+      "wave": "w3",
+      "reason": "Get a short-lived certificate CA. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_apps_app_id_ca_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/apps/{app_id}/ca",
+      "wave": "w3",
+      "reason": "Create a short-lived certificate CA. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_apps_app_id_ca_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/apps/{app_id}/ca",
+      "wave": "w3",
+      "reason": "Delete a short-lived certificate CA. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_apps_app_id_policies_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/apps/{app_id}/policies",
+      "wave": "w3",
+      "reason": "List Access application policies. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_apps_app_id_policies_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/apps/{app_id}/policies/{policy_id}",
+      "wave": "w3",
+      "reason": "Get an Access application policy. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_apps_app_id_policies_policy_id_make_reusable_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/apps/{app_id}/policies/{policy_id}/make_reusable",
+      "wave": "w3",
+      "reason": "Convert an Access application policy to a reusable policy. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_apps_app_id_revoke_tokens",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/apps/{app_id}/revoke_tokens",
+      "wave": "w3",
+      "reason": "Revoke application tokens. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what. It revokes the live Access tokens for the application; a revoked token cannot be restored, only re-issued to the caller.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_apps_app_id_settings_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/apps/{app_id}/settings",
+      "wave": "w3",
+      "reason": "Update Access application settings. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_apps_app_id_user_policy_checks_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/apps/{app_id}/user_policy_checks",
+      "wave": "w3",
+      "reason": "Test Access policies. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_authenticator_device_aaguids_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/authenticator_device_aaguids",
+      "wave": "w3",
+      "reason": "List authenticator device AAGUIDs. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_bookmarks_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/bookmarks",
+      "wave": "w3",
+      "reason": "List Bookmark applications. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_bookmarks_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/bookmarks/{bookmark_id}",
+      "wave": "w3",
+      "reason": "Get a Bookmark application. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_bookmarks_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/bookmarks/{bookmark_id}",
+      "wave": "w3",
+      "reason": "Create a Bookmark application. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_bookmarks_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/bookmarks/{bookmark_id}",
+      "wave": "w3",
+      "reason": "Update a Bookmark application. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_bookmarks_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/bookmarks/{bookmark_id}",
+      "wave": "w3",
+      "reason": "Delete a Bookmark application. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_certificates_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/certificates",
+      "wave": "w3",
+      "reason": "List mTLS certificates. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_certificates_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/certificates",
+      "wave": "w3",
+      "reason": "Add an mTLS certificate. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_certificates_settings_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/certificates/settings",
+      "wave": "w3",
+      "reason": "List all mTLS hostname settings. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_certificates_settings_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/certificates/settings",
+      "wave": "w3",
+      "reason": "Update an mTLS certificate's hostname settings. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_certificates_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/certificates/{certificate_id}",
+      "wave": "w3",
+      "reason": "Get an mTLS certificate. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_certificates_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/certificates/{certificate_id}",
+      "wave": "w3",
+      "reason": "Update an mTLS certificate. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_certificates_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/certificates/{certificate_id}",
+      "wave": "w3",
+      "reason": "Delete an mTLS certificate. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_custom_pages_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/custom_pages",
+      "wave": "w3",
+      "reason": "List custom pages. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_custom_pages_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/custom_pages",
+      "wave": "w3",
+      "reason": "Create a custom page. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_custom_pages_validate",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/custom_pages/validate",
+      "wave": "w3",
+      "reason": "Validate a custom page template. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_custom_pages_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/custom_pages/{custom_page_id}",
+      "wave": "w3",
+      "reason": "Get a custom page. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_custom_pages_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/custom_pages/{custom_page_id}",
+      "wave": "w3",
+      "reason": "Update a custom page. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_custom_pages_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/custom_pages/{custom_page_id}",
+      "wave": "w3",
+      "reason": "Delete a custom page. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_gateway_ca_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/gateway_ca",
+      "wave": "w3",
+      "reason": "List SSH Certificate Authorities (CA). Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_gateway_ca_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/gateway_ca",
+      "wave": "w3",
+      "reason": "Add a new SSH Certificate Authority (CA). Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_gateway_ca_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/gateway_ca/{certificate_id}",
+      "wave": "w3",
+      "reason": "Delete an SSH Certificate Authority (CA). Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_groups_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/groups",
+      "wave": "w3",
+      "reason": "List Access groups. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_groups_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/groups",
+      "wave": "w3",
+      "reason": "Create an Access group. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_groups_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/groups/{group_id}",
+      "wave": "w3",
+      "reason": "Get an Access group. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_groups_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/groups/{group_id}",
+      "wave": "w3",
+      "reason": "Update an Access group. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_groups_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/groups/{group_id}",
+      "wave": "w3",
+      "reason": "Delete an Access group. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_identity_providers_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/identity_providers",
+      "wave": "w3",
+      "reason": "List Access identity providers. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_identity_providers_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/identity_providers",
+      "wave": "w3",
+      "reason": "Add an Access identity provider. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_identity_providers_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/identity_providers/{identity_provider_id}",
+      "wave": "w3",
+      "reason": "Get an Access identity provider. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_identity_providers_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/identity_providers/{identity_provider_id}",
+      "wave": "w3",
+      "reason": "Update an Access identity provider. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_identity_providers_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/identity_providers/{identity_provider_id}",
+      "wave": "w3",
+      "reason": "Delete an Access identity provider. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_identity_providers_identity_provider_id_saml_certificate_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/identity_providers/{identity_provider_id}/saml_certificate",
+      "wave": "w3",
+      "reason": "Create SAML encryption certificate for Identity Provider. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_identity_providers_identity_provider_id_scim_groups_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/groups",
+      "wave": "w3",
+      "reason": "List SCIM Group resources. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_identity_providers_identity_provider_id_scim_groups_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/groups/{group_id}",
+      "wave": "w3",
+      "reason": "Get a SCIM Group resource. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_identity_providers_identity_provider_id_scim_groups_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/groups/{group_id}",
+      "wave": "w3",
+      "reason": "Delete a SCIM Group resource. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_identity_providers_identity_provider_id_scim_users_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/users",
+      "wave": "w3",
+      "reason": "List SCIM User resources. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_identity_providers_identity_provider_id_scim_users_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/users/{user_id}",
+      "wave": "w3",
+      "reason": "Get a SCIM User resource. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_identity_providers_identity_provider_id_scim_users_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/users/{user_id}",
+      "wave": "w3",
+      "reason": "Delete a SCIM User resource. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_idp_federation_grants_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/idp_federation_grants",
+      "wave": "w3",
+      "reason": "List IdP federation grants. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_idp_federation_grants_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/idp_federation_grants",
+      "wave": "w3",
+      "reason": "Create an IdP federation grant. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_idp_federation_grants_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/idp_federation_grants/{grant_id}",
+      "wave": "w3",
+      "reason": "Get an IdP federation grant. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_idp_federation_grants_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/idp_federation_grants/{grant_id}",
+      "wave": "w3",
+      "reason": "Delete an IdP federation grant. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_keys_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/keys",
+      "wave": "w3",
+      "reason": "Get the Access key configuration. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_keys_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/keys",
+      "wave": "w3",
+      "reason": "Update the Access key configuration. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_keys_rotate",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/keys/rotate",
+      "wave": "w3",
+      "reason": "Rotate Access keys. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_logs_access_requests_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/logs/access_requests",
+      "wave": "w3",
+      "reason": "Get Access authentication logs. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_logs_jit_requests_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/logs/jit_requests",
+      "wave": "w3",
+      "reason": "List Access JIT request logs. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_logs_jit_requests_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/logs/jit_requests/{knock_request_id}",
+      "wave": "w3",
+      "reason": "Get an Access JIT request log. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_logs_scim_updates_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/logs/scim/updates",
+      "wave": "w3",
+      "reason": "List Access SCIM update logs. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_organizations_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/organizations",
+      "wave": "w3",
+      "reason": "Get your Zero Trust organization. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_organizations_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/organizations",
+      "wave": "w3",
+      "reason": "Create your Zero Trust organization. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_organizations_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/organizations",
+      "wave": "w3",
+      "reason": "Update your Zero Trust organization. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_organizations_doh_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/organizations/doh",
+      "wave": "w3",
+      "reason": "Get your Zero Trust organization DoH settings. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_organizations_doh_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/organizations/doh",
+      "wave": "w3",
+      "reason": "Update your Zero Trust organization DoH settings. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_organizations_revoke_user",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/organizations/revoke_user",
+      "wave": "w3",
+      "reason": "Revoke all Access tokens for a user. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what. It revokes the user's access to the organization and the sessions they are holding cannot be brought back. One body field the operation declares is not exposed because the path already carries it.",
+      "destructive": true,
+      "auth": "api-token",
+      "dropBodyFields": [
+        "devices"
+      ],
+      "dropBodyFieldsNote": "The operation declares the same boolean both as a query parameter and as a body field; the query form is kept, because one argument name can only carry one of them, and the query declaration is the one the path already fits."
+    },
+    {
+      "toolSlug": "cloudflare_access_policies_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/policies",
+      "wave": "w3",
+      "reason": "List Access reusable policies. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_policies_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/policies",
+      "wave": "w3",
+      "reason": "Create an Access reusable policy. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_policies_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/policies/{policy_id}",
+      "wave": "w3",
+      "reason": "Get an Access reusable policy. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_policies_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/policies/{policy_id}",
+      "wave": "w3",
+      "reason": "Update an Access reusable policy. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_policies_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/policies/{policy_id}",
+      "wave": "w3",
+      "reason": "Delete an Access reusable policy. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_policy_tests_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/policy-tests",
+      "wave": "w3",
+      "reason": "Start Access policy test. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_policy_tests_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/policy-tests/{policy_test_id}",
+      "wave": "w3",
+      "reason": "Get the current status of a given Access policy test. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_policy_tests_policy_test_id_users_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/policy-tests/{policy_test_id}/users",
+      "wave": "w3",
+      "reason": "Get an Access policy test users page. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_saml_certificates_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/saml_certificates",
+      "wave": "w3",
+      "reason": "List SAML certificate sets. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_saml_certificates_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/saml_certificates/{saml_cert_set_id}",
+      "wave": "w3",
+      "reason": "Get SAML certificate set. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_saml_certificates_saml_cert_set_id_pem_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/saml_certificates/{saml_cert_set_id}/pem",
+      "wave": "w3",
+      "reason": "Download current certificate in PEM format. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_saml_certificates_saml_cert_set_id_rotate",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/saml_certificates/{saml_cert_set_id}/rotate",
+      "wave": "w3",
+      "reason": "Rotate SAML certificate. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_service_tokens_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/service_tokens",
+      "wave": "w3",
+      "reason": "List service tokens. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_service_tokens_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/service_tokens",
+      "wave": "w3",
+      "reason": "Create a service token. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_service_tokens_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/service_tokens/{service_token_id}",
+      "wave": "w3",
+      "reason": "Get a service token. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_service_tokens_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/service_tokens/{service_token_id}",
+      "wave": "w3",
+      "reason": "Update a service token. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_service_tokens_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/service_tokens/{service_token_id}",
+      "wave": "w3",
+      "reason": "Delete a service token. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_service_tokens_service_token_id_refresh",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/service_tokens/{service_token_id}/refresh",
+      "wave": "w3",
+      "reason": "Refresh a service token. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_service_tokens_service_token_id_rotate",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/service_tokens/{service_token_id}/rotate",
+      "wave": "w3",
+      "reason": "Rotate a service token. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_tags_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/tags",
+      "wave": "w3",
+      "reason": "List tags. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_tags_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/tags",
+      "wave": "w3",
+      "reason": "Create a tag. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_tags_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/tags/{tag_name}",
+      "wave": "w3",
+      "reason": "Get a tag. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_tags_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/tags/{tag_name}",
+      "wave": "w3",
+      "reason": "Update a tag. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_tags_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/tags/{tag_name}",
+      "wave": "w3",
+      "reason": "Delete a tag. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_user_populations_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/user_populations",
+      "wave": "w3",
+      "reason": "List user populations. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_user_populations_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/user_populations",
+      "wave": "w3",
+      "reason": "Create a user population. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_user_populations_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/user_populations/{user_population_id}",
+      "wave": "w3",
+      "reason": "Get a user population. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_user_populations_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/user_populations/{user_population_id}",
+      "wave": "w3",
+      "reason": "Update a user population. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_user_populations_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/user_populations/{user_population_id}",
+      "wave": "w3",
+      "reason": "Delete a user population. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_user_populations_user_population_id_users_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/user_populations/{user_population_id}/users",
+      "wave": "w3",
+      "reason": "List users in a user population. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_user_populations_user_population_id_users_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/user_populations/{user_population_id}/users",
+      "wave": "w3",
+      "reason": "Create a user population user. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_user_populations_user_population_id_users_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}",
+      "wave": "w3",
+      "reason": "Get a user population user. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_user_populations_user_population_id_users_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}",
+      "wave": "w3",
+      "reason": "Replace a user population user. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_user_populations_user_population_id_users_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}",
+      "wave": "w3",
+      "reason": "Update a user population user. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_user_populations_user_population_id_users_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}",
+      "wave": "w3",
+      "reason": "Delete a user population user. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_users_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/users",
+      "wave": "w3",
+      "reason": "Get users. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_users_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/access/users",
+      "wave": "w3",
+      "reason": "Create a user. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_users_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/users/{user_id}",
+      "wave": "w3",
+      "reason": "Get a user. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_users_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/access/users/{user_id}",
+      "wave": "w3",
+      "reason": "Update a user. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_users_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/users/{user_id}",
+      "wave": "w3",
+      "reason": "Delete a user. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_users_user_id_active_sessions_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/users/{user_id}/active_sessions",
+      "wave": "w3",
+      "reason": "Get active sessions. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_users_user_id_active_sessions_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/users/{user_id}/active_sessions/{nonce}",
+      "wave": "w3",
+      "reason": "Get single active session. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_users_user_id_failed_logins_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/users/{user_id}/failed_logins",
+      "wave": "w3",
+      "reason": "Get failed logins. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_users_user_id_last_seen_identity_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/access/users/{user_id}/last_seen_identity",
+      "wave": "w3",
+      "reason": "Get last seen identity. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_users_user_id_mfa_authenticators_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/users/{user_id}/mfa_authenticators/{authenticator_id}",
+      "wave": "w3",
+      "reason": "Delete a user's authenticator. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_access_users_user_id_passkeys_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/access/users/{user_id}/passkeys/{authenticator_id}",
+      "wave": "w3",
+      "reason": "Delete a user's passkey. Part of the Zero Trust Access family of wave w3: the applications, policies, groups, identity providers and service tokens that decide who reaches what.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_client_versions_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/client-versions",
+      "wave": "w3",
+      "reason": "List client versions. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_client_versions_target_environments_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/client-versions/target-environments",
+      "wave": "w3",
+      "reason": "List available target environments. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_deployment_groups_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/deployment-groups",
+      "wave": "w3",
+      "reason": "List deployment groups. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_deployment_groups_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/devices/deployment-groups",
+      "wave": "w3",
+      "reason": "Create deployment group. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_deployment_groups_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/deployment-groups/{group_id}",
+      "wave": "w3",
+      "reason": "Get deployment group. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_deployment_groups_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/devices/deployment-groups/{group_id}",
+      "wave": "w3",
+      "reason": "Update deployment group. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_deployment_groups_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/devices/deployment-groups/{group_id}",
+      "wave": "w3",
+      "reason": "Delete deployment group. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_ip_profiles_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/ip-profiles",
+      "wave": "w3",
+      "reason": "List IP profiles. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_ip_profiles_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/devices/ip-profiles",
+      "wave": "w3",
+      "reason": "Create IP profile. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_ip_profiles_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/ip-profiles/{profile_id}",
+      "wave": "w3",
+      "reason": "Get IP profile. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_ip_profiles_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/devices/ip-profiles/{profile_id}",
+      "wave": "w3",
+      "reason": "Update IP profile. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_ip_profiles_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/devices/ip-profiles/{profile_id}",
+      "wave": "w3",
+      "reason": "Delete IP profile. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_networks_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/networks",
+      "wave": "w3",
+      "reason": "List your device managed networks. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_networks_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/devices/networks",
+      "wave": "w3",
+      "reason": "Create a device managed network. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_networks_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/networks/{network_id}",
+      "wave": "w3",
+      "reason": "Get device managed network details. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_networks_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/devices/networks/{network_id}",
+      "wave": "w3",
+      "reason": "Update a device managed network. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_networks_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/devices/networks/{network_id}",
+      "wave": "w3",
+      "reason": "Delete a device managed network. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_override_codes_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/devices/override_codes",
+      "wave": "w3",
+      "reason": "Generate an uninstall protection override code. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_physical_devices_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/physical-devices",
+      "wave": "w3",
+      "reason": "List devices. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_physical_devices_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/physical-devices/{device_id}",
+      "wave": "w3",
+      "reason": "Get device. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_physical_devices_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/devices/physical-devices/{device_id}",
+      "wave": "w3",
+      "reason": "Update device. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_physical_devices_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/devices/physical-devices/{device_id}",
+      "wave": "w3",
+      "reason": "Delete device. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_policies_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/policies",
+      "wave": "w3",
+      "reason": "List device settings profiles. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_policy_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/policy",
+      "wave": "w3",
+      "reason": "Get the default device settings profile. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_policy_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/devices/policy",
+      "wave": "w3",
+      "reason": "Create a device settings profile. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_policy_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/devices/policy",
+      "wave": "w3",
+      "reason": "Update the default device settings profile. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_policy_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/policy/{policy_id}",
+      "wave": "w3",
+      "reason": "Get device settings profile by ID. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_policy_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/devices/policy/{policy_id}",
+      "wave": "w3",
+      "reason": "Update a device settings profile. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_policy_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/devices/policy/{policy_id}",
+      "wave": "w3",
+      "reason": "Delete a device settings profile. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_posture_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/posture",
+      "wave": "w3",
+      "reason": "List posture rules. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_posture_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/devices/posture",
+      "wave": "w3",
+      "reason": "Create posture rule. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_posture_integration_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/posture/integration",
+      "wave": "w3",
+      "reason": "List posture integrations. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_posture_integration_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/devices/posture/integration",
+      "wave": "w3",
+      "reason": "Create posture integration. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_posture_integration_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/posture/integration/{integration_id}",
+      "wave": "w3",
+      "reason": "Get posture integration. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_posture_integration_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/devices/posture/integration/{integration_id}",
+      "wave": "w3",
+      "reason": "Update posture integration. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_posture_integration_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/devices/posture/integration/{integration_id}",
+      "wave": "w3",
+      "reason": "Delete posture integration. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_posture_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/posture/{rule_id}",
+      "wave": "w3",
+      "reason": "Get posture rule. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_posture_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/devices/posture/{rule_id}",
+      "wave": "w3",
+      "reason": "Update posture rule. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_posture_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/devices/posture/{rule_id}",
+      "wave": "w3",
+      "reason": "Delete posture rule. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_registrations_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/registrations",
+      "wave": "w3",
+      "reason": "List registrations. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_registrations_delete_all",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/devices/registrations",
+      "wave": "w3",
+      "reason": "Delete registrations. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages. It removes the resource itself; recreating it does not bring back what it held. The path derives the same name as the single-registration delete, so the collection form takes an alias: this one deletes registrations in bulk.",
+      "destructive": true,
+      "auth": "api-token",
+      "override": true
+    },
+    {
+      "toolSlug": "cloudflare_devices_registrations_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/registrations/{registration_id}",
+      "wave": "w3",
+      "reason": "Get registration. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_registrations_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/devices/registrations/{registration_id}",
+      "wave": "w3",
+      "reason": "Delete registration. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_registrations_registration_id_override_codes_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/registrations/{registration_id}/override_codes",
+      "wave": "w3",
+      "reason": "Get override codes. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_resilience_disconnect_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/resilience/disconnect",
+      "wave": "w3",
+      "reason": "Get Global Disconnect. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_resilience_disconnect_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/devices/resilience/disconnect",
+      "wave": "w3",
+      "reason": "Set Global Disconnect. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_settings_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/settings",
+      "wave": "w3",
+      "reason": "Get device settings. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_settings_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/devices/settings",
+      "wave": "w3",
+      "reason": "Update device settings. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_settings_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/devices/settings",
+      "wave": "w3",
+      "reason": "Reset device settings. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_devices_device_id_override_codes_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/devices/{device_id}/override_codes",
+      "wave": "w3",
+      "reason": "Get override codes (deprecated)\n. Part of the Zero Trust device fleet of wave w3: the devices, registrations, posture checks and network settings an administrator manages.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_custom_prompt_topics_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/custom_prompt_topics",
+      "wave": "w3",
+      "reason": "List custom prompt topics. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_custom_prompt_topics_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/dlp/custom_prompt_topics",
+      "wave": "w3",
+      "reason": "Create custom prompt topic. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_custom_prompt_topics_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/custom_prompt_topics/{entry_id}",
+      "wave": "w3",
+      "reason": "Get custom prompt topic. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_custom_prompt_topics_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/dlp/custom_prompt_topics/{entry_id}",
+      "wave": "w3",
+      "reason": "Update custom prompt topic. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_custom_prompt_topics_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/dlp/custom_prompt_topics/{entry_id}",
+      "wave": "w3",
+      "reason": "Delete custom prompt topic. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_classes_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/data_classes",
+      "wave": "w3",
+      "reason": "Retrieve all data classes in an account. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_classes_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/dlp/data_classes",
+      "wave": "w3",
+      "reason": "Creates a new data class. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_classes_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/data_classes/{data_class_id}",
+      "wave": "w3",
+      "reason": "Retrieve a specific data class. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_classes_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/dlp/data_classes/{data_class_id}",
+      "wave": "w3",
+      "reason": "Update the attributes of a single data class. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_classes_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/dlp/data_classes/{data_class_id}",
+      "wave": "w3",
+      "reason": "Delete a single data class. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_tag_categories_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/data_tag_categories",
+      "wave": "w3",
+      "reason": "Retrieve all data tag categories in an account. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_tag_categories_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/dlp/data_tag_categories",
+      "wave": "w3",
+      "reason": "Creates a new data tag category.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_tag_categories_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/data_tag_categories/{category_id}",
+      "wave": "w3",
+      "reason": "Retrieve a specific data tag category.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_tag_categories_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/dlp/data_tag_categories/{category_id}",
+      "wave": "w3",
+      "reason": "Update the attributes of a single data tag category.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_tag_categories_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/dlp/data_tag_categories/{category_id}",
+      "wave": "w3",
+      "reason": "Delete a single data tag category.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_tag_categories_category_id_data_tags_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags",
+      "wave": "w3",
+      "reason": "Retrieve all data tags in a data tag category. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_tag_categories_category_id_data_tags_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags",
+      "wave": "w3",
+      "reason": "Creates a new data tag.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_tag_categories_category_id_data_tags_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags/{tag_id}",
+      "wave": "w3",
+      "reason": "Retrieve a specific data tag.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_tag_categories_category_id_data_tags_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags/{tag_id}",
+      "wave": "w3",
+      "reason": "Update the attributes of a single data tag.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_tag_categories_category_id_data_tags_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags/{tag_id}",
+      "wave": "w3",
+      "reason": "Delete a single data tag.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_tag_category_templates_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/data_tag_category_templates",
+      "wave": "w3",
+      "reason": "Retrieve all data tag category templates in an account. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_data_tag_category_templates_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/data_tag_category_templates/{template_id}",
+      "wave": "w3",
+      "reason": "Retrieve a specific data tag category template.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_datasets_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/datasets",
+      "wave": "w3",
+      "reason": "Fetch all datasets. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_datasets_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/dlp/datasets",
+      "wave": "w3",
+      "reason": "Create a new dataset. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_datasets_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/datasets/{dataset_id}",
+      "wave": "w3",
+      "reason": "Fetch a specific dataset. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_datasets_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/dlp/datasets/{dataset_id}",
+      "wave": "w3",
+      "reason": "Update details about a dataset. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_datasets_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/dlp/datasets/{dataset_id}",
+      "wave": "w3",
+      "reason": "Delete a dataset. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_datasets_dataset_id_upload",
+      "method": "POST",
+      "path": "/accounts/{account_id}/dlp/datasets/{dataset_id}/upload",
+      "wave": "w3",
+      "reason": "Prepare to upload a new version of a dataset. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_document_fingerprints_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/document_fingerprints",
+      "wave": "w3",
+      "reason": "Retrieve data about all document fingerprints.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_document_fingerprints_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/dlp/document_fingerprints",
+      "wave": "w3",
+      "reason": "Creates a new document fingerprint.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_document_fingerprints_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/document_fingerprints/{document_fingerprint_id}",
+      "wave": "w3",
+      "reason": "Retrieve data about a specific document fingerprint.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_document_fingerprints_update",
+      "method": "POST",
+      "path": "/accounts/{account_id}/dlp/document_fingerprints/{document_fingerprint_id}",
+      "wave": "w3",
+      "reason": "Update the attributes of a single document fingerprint.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave. The path derives the same name as the create, so the item form is renamed after what it does: this one updates the attributes of one fingerprint.",
+      "destructive": false,
+      "auth": "api-token",
+      "override": true
+    },
+    {
+      "toolSlug": "cloudflare_dlp_document_fingerprints_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/dlp/document_fingerprints/{document_fingerprint_id}",
+      "wave": "w3",
+      "reason": "Delete a single document fingerprint.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_email_account_mapping_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/email/account_mapping",
+      "wave": "w3",
+      "reason": "Get mapping. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_email_account_mapping_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/dlp/email/account_mapping",
+      "wave": "w3",
+      "reason": "Create mapping. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_email_rules_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/email/rules",
+      "wave": "w3",
+      "reason": "List all email scanner rules. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_email_rules_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/dlp/email/rules",
+      "wave": "w3",
+      "reason": "Create email scanner rule. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_email_rules_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/dlp/email/rules",
+      "wave": "w3",
+      "reason": "Update email scanner rule priorities. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_email_rules_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/email/rules/{rule_id}",
+      "wave": "w3",
+      "reason": "Get an email scanner rule. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_email_rules_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/dlp/email/rules/{rule_id}",
+      "wave": "w3",
+      "reason": "Update email scanner rule. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_email_rules_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/dlp/email/rules/{rule_id}",
+      "wave": "w3",
+      "reason": "Delete email scanner rule. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_entries_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/entries",
+      "wave": "w3",
+      "reason": "List all entries. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_entries_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/dlp/entries",
+      "wave": "w3",
+      "reason": "Create custom entry. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_entries_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/entries/{entry_id}",
+      "wave": "w3",
+      "reason": "Get DLP Entry. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_entries_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/dlp/entries/{entry_id}",
+      "wave": "w3",
+      "reason": "Update entry. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_entries_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/dlp/entries/{entry_id}",
+      "wave": "w3",
+      "reason": "Delete custom entry. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_limits_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/limits",
+      "wave": "w3",
+      "reason": "Fetch limits associated with DLP for account. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_patterns_validate",
+      "method": "POST",
+      "path": "/accounts/{account_id}/dlp/patterns/validate",
+      "wave": "w3",
+      "reason": "Validate a DLP regex pattern. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_profiles_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/profiles",
+      "wave": "w3",
+      "reason": "List all profiles. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_profiles_custom_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/dlp/profiles/custom",
+      "wave": "w3",
+      "reason": "Create custom profile. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_profiles_custom_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/dlp/profiles/custom/{profile_id}",
+      "wave": "w3",
+      "reason": "Update custom profile. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_profiles_custom_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/dlp/profiles/custom/{profile_id}",
+      "wave": "w3",
+      "reason": "Delete custom profile. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_profiles_predefined_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/dlp/profiles/predefined/{profile_id}",
+      "wave": "w3",
+      "reason": "Update predefined profile. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_profiles_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/profiles/{profile_id}",
+      "wave": "w3",
+      "reason": "Get DLP Profile. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_sensitivity_groups_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/sensitivity_groups",
+      "wave": "w3",
+      "reason": "Retrieve all sensitivity groups in an account. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_sensitivity_groups_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/dlp/sensitivity_groups",
+      "wave": "w3",
+      "reason": "Creates a new sensitivity group.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_sensitivity_groups_templates_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/sensitivity_groups/templates",
+      "wave": "w3",
+      "reason": "Retrieve all sensitivity group templates in an account. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_sensitivity_groups_templates_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/sensitivity_groups/templates/{template_id}",
+      "wave": "w3",
+      "reason": "Retrieve a specific sensitivity group template.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_sensitivity_groups_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}",
+      "wave": "w3",
+      "reason": "Retrieve a specific sensitivity group.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_sensitivity_groups_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}",
+      "wave": "w3",
+      "reason": "Update the attributes of a single sensitivity group.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_sensitivity_groups_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}",
+      "wave": "w3",
+      "reason": "Delete a single sensitivity group.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_sensitivity_groups_sensitivity_group_id_level_order_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/level_order",
+      "wave": "w3",
+      "reason": "Retrieve the ordered list of level IDs for a sensitivity group.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_sensitivity_groups_sensitivity_group_id_level_order_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/level_order",
+      "wave": "w3",
+      "reason": "Set the ordering of levels within a sensitivity group.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels",
+      "wave": "w3",
+      "reason": "Retrieve all sensitivity levels in a sensitivity group. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels",
+      "wave": "w3",
+      "reason": "Creates a new sensitivity level.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels/{sensitivity_level_id}",
+      "wave": "w3",
+      "reason": "Retrieve a specific sensitivity level.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels/{sensitivity_level_id}",
+      "wave": "w3",
+      "reason": "Update the attributes of a single sensitivity level.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels/{sensitivity_level_id}",
+      "wave": "w3",
+      "reason": "Delete a single sensitivity level.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_settings_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/dlp/settings",
+      "wave": "w3",
+      "reason": "Get DLP account-level settings.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_settings_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/dlp/settings",
+      "wave": "w3",
+      "reason": "Update DLP account-level settings (full replacement).. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_settings_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/dlp/settings",
+      "wave": "w3",
+      "reason": "Partially update DLP account-level settings.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dlp_settings_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/dlp/settings",
+      "wave": "w3",
+      "reason": "Delete (reset) DLP account-level settings to initial values.. Part of the Data Loss Prevention family of wave w3: the profiles, entries, datasets and fingerprints that describe what must not leave.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway",
+      "wave": "w3",
+      "reason": "Get Zero Trust account information. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/gateway",
+      "wave": "w3",
+      "reason": "Create Zero Trust account. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_app_types_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/app_types",
+      "wave": "w3",
+      "reason": "List application and application type mappings. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_audit_ssh_settings_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/audit_ssh_settings",
+      "wave": "w3",
+      "reason": "Get Zero Trust SSH settings. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_audit_ssh_settings_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/gateway/audit_ssh_settings",
+      "wave": "w3",
+      "reason": "Update Zero Trust SSH settings. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_audit_ssh_settings_rotate_seed",
+      "method": "POST",
+      "path": "/accounts/{account_id}/gateway/audit_ssh_settings/rotate_seed",
+      "wave": "w3",
+      "reason": "Rotate Zero Trust SSH account seed. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_categories_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/categories",
+      "wave": "w3",
+      "reason": "List categories. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_certificates_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/certificates",
+      "wave": "w3",
+      "reason": "List Zero Trust certificates. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_certificates_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/gateway/certificates",
+      "wave": "w3",
+      "reason": "Create Zero Trust certificate. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_certificates_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/certificates/{certificate_id}",
+      "wave": "w3",
+      "reason": "Get Zero Trust certificate details. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_certificates_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/gateway/certificates/{certificate_id}",
+      "wave": "w3",
+      "reason": "Delete Zero Trust certificate. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_certificates_certificate_id_activate",
+      "method": "POST",
+      "path": "/accounts/{account_id}/gateway/certificates/{certificate_id}/activate",
+      "wave": "w3",
+      "reason": "Activate a Zero Trust certificate. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_certificates_certificate_id_deactivate",
+      "method": "POST",
+      "path": "/accounts/{account_id}/gateway/certificates/{certificate_id}/deactivate",
+      "wave": "w3",
+      "reason": "Deactivate a Zero Trust certificate. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_configuration_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/configuration",
+      "wave": "w3",
+      "reason": "Get Zero Trust account configuration. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_configuration_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/gateway/configuration",
+      "wave": "w3",
+      "reason": "Update Zero Trust account configuration. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_configuration_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/gateway/configuration",
+      "wave": "w3",
+      "reason": "Patch Zero Trust account configuration. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_configuration_custom_certificate_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/configuration/custom_certificate",
+      "wave": "w3",
+      "reason": "Get Zero Trust certificate configuration. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_dns_destination_ips_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/dns_destination_ips",
+      "wave": "w3",
+      "reason": "List Zero Trust Gateway DNS destination IPv4 address pairs. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_lists_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/lists",
+      "wave": "w3",
+      "reason": "List Zero Trust lists. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_lists_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/gateway/lists",
+      "wave": "w3",
+      "reason": "Create Zero Trust list. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_lists_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/lists/{list_id}",
+      "wave": "w3",
+      "reason": "Get Zero Trust list details. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_lists_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/gateway/lists/{list_id}",
+      "wave": "w3",
+      "reason": "Update Zero Trust list. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_lists_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/gateway/lists/{list_id}",
+      "wave": "w3",
+      "reason": "Patch Zero Trust list.. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_lists_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/gateway/lists/{list_id}",
+      "wave": "w3",
+      "reason": "Delete Zero Trust list. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_lists_list_id_items_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/lists/{list_id}/items",
+      "wave": "w3",
+      "reason": "Get Zero Trust list items. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_locations_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/locations",
+      "wave": "w3",
+      "reason": "List Zero Trust Gateway locations. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_locations_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/gateway/locations",
+      "wave": "w3",
+      "reason": "Create a Zero Trust Gateway location. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_locations_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/locations/{location_id}",
+      "wave": "w3",
+      "reason": "Get Zero Trust Gateway location details. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_locations_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/gateway/locations/{location_id}",
+      "wave": "w3",
+      "reason": "Update a Zero Trust Gateway location. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_locations_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/gateway/locations/{location_id}",
+      "wave": "w3",
+      "reason": "Delete a Zero Trust Gateway location. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_logging_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/logging",
+      "wave": "w3",
+      "reason": "Get logging settings for the Zero Trust account. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_logging_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/gateway/logging",
+      "wave": "w3",
+      "reason": "Update Zero Trust account logging settings. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_pacfiles_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/pacfiles",
+      "wave": "w3",
+      "reason": "List PAC files. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_pacfiles_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/gateway/pacfiles",
+      "wave": "w3",
+      "reason": "Create a PAC file. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_pacfiles_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/pacfiles/{pacfile_id}",
+      "wave": "w3",
+      "reason": "Get a PAC file. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_pacfiles_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/gateway/pacfiles/{pacfile_id}",
+      "wave": "w3",
+      "reason": "Update a Zero Trust Gateway PAC file. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_pacfiles_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/gateway/pacfiles/{pacfile_id}",
+      "wave": "w3",
+      "reason": "Delete a PAC file. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_proxy_endpoints_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/proxy_endpoints",
+      "wave": "w3",
+      "reason": "List proxy endpoints. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_proxy_endpoints_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/gateway/proxy_endpoints",
+      "wave": "w3",
+      "reason": "Create a proxy endpoint. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_proxy_endpoints_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/proxy_endpoints/{proxy_endpoint_id}",
+      "wave": "w3",
+      "reason": "Get a proxy endpoint. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_proxy_endpoints_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/gateway/proxy_endpoints/{proxy_endpoint_id}",
+      "wave": "w3",
+      "reason": "Update a proxy endpoint. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_proxy_endpoints_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/gateway/proxy_endpoints/{proxy_endpoint_id}",
+      "wave": "w3",
+      "reason": "Delete a proxy endpoint. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_rules_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/rules",
+      "wave": "w3",
+      "reason": "List Zero Trust Gateway rules. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_rules_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/gateway/rules",
+      "wave": "w3",
+      "reason": "Create a Zero Trust Gateway rule. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_rules_tenant_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/rules/tenant",
+      "wave": "w3",
+      "reason": "List Zero Trust Gateway rules inherited from the parent account. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_rules_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/gateway/rules/{rule_id}",
+      "wave": "w3",
+      "reason": "Get Zero Trust Gateway rule details.. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_rules_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/gateway/rules/{rule_id}",
+      "wave": "w3",
+      "reason": "Update a Zero Trust Gateway rule. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_rules_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/gateway/rules/{rule_id}",
+      "wave": "w3",
+      "reason": "Delete a Zero Trust Gateway rule. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_gateway_rules_rule_id_reset_expiration",
+      "method": "POST",
+      "path": "/accounts/{account_id}/gateway/rules/{rule_id}/reset_expiration",
+      "wave": "w3",
+      "reason": "Reset the expiration of a Zero Trust Gateway Rule. Part of the Zero Trust Gateway family of wave w3: the DNS, network and HTTP policies, the lists they match, and the locations and PAC files they serve.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_teamnet_routes_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/teamnet/routes",
+      "wave": "w3",
+      "reason": "List tunnel routes. Part of the Zero Trust team network of wave w3: the virtual networks and the routes that reach private ranges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_teamnet_routes_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/teamnet/routes",
+      "wave": "w3",
+      "reason": "Create a tunnel route. Part of the Zero Trust team network of wave w3: the virtual networks and the routes that reach private ranges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_teamnet_routes_ip_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/teamnet/routes/ip/{ip}",
+      "wave": "w3",
+      "reason": "Get tunnel route by IP. Part of the Zero Trust team network of wave w3: the virtual networks and the routes that reach private ranges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_teamnet_routes_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/teamnet/routes/{route_id}",
+      "wave": "w3",
+      "reason": "Get tunnel route. Part of the Zero Trust team network of wave w3: the virtual networks and the routes that reach private ranges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_teamnet_routes_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/teamnet/routes/{route_id}",
+      "wave": "w3",
+      "reason": "Update a tunnel route. Part of the Zero Trust team network of wave w3: the virtual networks and the routes that reach private ranges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_teamnet_routes_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/teamnet/routes/{route_id}",
+      "wave": "w3",
+      "reason": "Delete a tunnel route. Part of the Zero Trust team network of wave w3: the virtual networks and the routes that reach private ranges. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_teamnet_virtual_networks_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/teamnet/virtual_networks",
+      "wave": "w3",
+      "reason": "List virtual networks. Part of the Zero Trust team network of wave w3: the virtual networks and the routes that reach private ranges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_teamnet_virtual_networks_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/teamnet/virtual_networks",
+      "wave": "w3",
+      "reason": "Create a virtual network. Part of the Zero Trust team network of wave w3: the virtual networks and the routes that reach private ranges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_teamnet_virtual_networks_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/teamnet/virtual_networks/{virtual_network_id}",
+      "wave": "w3",
+      "reason": "Get a virtual network. Part of the Zero Trust team network of wave w3: the virtual networks and the routes that reach private ranges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_teamnet_virtual_networks_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/teamnet/virtual_networks/{virtual_network_id}",
+      "wave": "w3",
+      "reason": "Update a virtual network. Part of the Zero Trust team network of wave w3: the virtual networks and the routes that reach private ranges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_teamnet_virtual_networks_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/teamnet/virtual_networks/{virtual_network_id}",
+      "wave": "w3",
+      "reason": "Delete a virtual network. Part of the Zero Trust team network of wave w3: the virtual networks and the routes that reach private ranges. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_tunnels_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/tunnels",
+      "wave": "w3",
+      "reason": "List All Tunnels. Part of the Zero Trust tunnel surface of wave w3.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_connectivity_settings_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/zerotrust/connectivity_settings",
+      "wave": "w3",
+      "reason": "Get Zero Trust Connectivity Settings. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_connectivity_settings_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/zerotrust/connectivity_settings",
+      "wave": "w3",
+      "reason": "Updates the Zero Trust Connectivity Settings. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_routes_hostname_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/zerotrust/routes/hostname",
+      "wave": "w3",
+      "reason": "List hostname routes. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_routes_hostname_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/zerotrust/routes/hostname",
+      "wave": "w3",
+      "reason": "Create hostname route. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_routes_hostname_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}",
+      "wave": "w3",
+      "reason": "Get hostname route. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_routes_hostname_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}",
+      "wave": "w3",
+      "reason": "Update hostname route. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_routes_hostname_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}",
+      "wave": "w3",
+      "reason": "Delete hostname route. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_subnets_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/zerotrust/subnets",
+      "wave": "w3",
+      "reason": "List Subnets. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_subnets_cloudflare_source_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/zerotrust/subnets/cloudflare_source/{address_family}",
+      "wave": "w3",
+      "reason": "Get Cloudflare Source Subnet. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_subnets_cloudflare_source_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/zerotrust/subnets/cloudflare_source/{address_family}",
+      "wave": "w3",
+      "reason": "Update Cloudflare Source Subnet. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_subnets_initial_resolved_ip_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/zerotrust/subnets/initial_resolved_ip/{address_family}",
+      "wave": "w3",
+      "reason": "Get Initial Resolved IP Subnet. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_subnets_initial_resolved_ip_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/zerotrust/subnets/initial_resolved_ip/{address_family}",
+      "wave": "w3",
+      "reason": "Update Initial Resolved IP Subnet. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_subnets_warp_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/zerotrust/subnets/warp",
+      "wave": "w3",
+      "reason": "Create WARP IP subnet. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_subnets_warp_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/zerotrust/subnets/warp/{subnet_id}",
+      "wave": "w3",
+      "reason": "Get WARP IP subnet. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_subnets_warp_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/zerotrust/subnets/warp/{subnet_id}",
+      "wave": "w3",
+      "reason": "Update WARP IP subnet. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zerotrust_subnets_warp_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/zerotrust/subnets/warp/{subnet_id}",
+      "wave": "w3",
+      "reason": "Delete WARP IP subnet. Part of the Zero Trust account surface of wave w3: the hostname routes and WARP subnets that put an account's traffic through Cloudflare. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
       "auth": "api-token"
     }
   ]

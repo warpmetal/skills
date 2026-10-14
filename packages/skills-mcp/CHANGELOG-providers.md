@@ -448,6 +448,62 @@ uploaded.
   which only a free-form tool could have found, and this wave is the first to have
   one.
 
+## Batch 16 - Cloudflare Zero Trust
+
+330 tools across seven families, reviewed as wave `w3`: Access (applications,
+policies, groups, identity providers, service tokens, users, certificates, MCP
+portals and servers), Data Loss Prevention (profiles, entries, datasets,
+fingerprints, sensitivity groups), the device fleet (devices, registrations,
+posture, network settings), Gateway (the DNS, network and HTTP policies, the
+lists they match, and the locations and PAC files they serve) and the team
+network and hostname routes. The Cloudflare surface goes from 323 tools to 653;
+the full stdio profile from 498 to 828.
+
+### How the wave decided
+
+- **`destructive` asks what the caller loses.** On a security surface the
+  interesting objects are the ones that stand for something: deleting an
+  application, an identity provider, a service token, a user, a device
+  registration, a DLP dataset or fingerprint, an MCP endpoint or a route means
+  the reachable service, the working sign-in, the enrolled device or the data
+  itself has to be built again, so those 15 deletions carry the hint. Revoking a
+  user's tokens does too - a revoked token cannot be restored. Deleting a policy,
+  a group, a rule, a list, a taxonomy entry or a settings object does not: it
+  removes a control the caller can write again, which is the w1 firewall
+  precedent, and Cloudflare's own confirmation flags those anyway. 17 tools carry
+  the hint.
+- **Two renames.** `DELETE /devices/registrations` derives the same name as the
+  single-registration delete, so the bulk form takes an alias; `POST
+  /dlp/document_fingerprints/{id}` derives the same name as the create, so it is
+  named after what it does (`..._update`).
+- **One dropped body field.** `POST /access/organizations/revoke_user` declares
+  the same boolean as a query parameter and as a body field, and one argument
+  name can only carry one of them: the query form is kept, the body field is
+  dropped with the note that says so.
+- **The zone-level Access surface stays out.** All 44 operations under
+  `/zones/{zone_id}/access` are `x-fern-ignore` in the spec, so they are not part
+  of the published surface and the wave does not reach for them.
+- **Review notes are now 24**, seven of them new here: three deprecated
+  operations (bookmarks, device override codes, a Gateway custom certificate
+  read) and four Cloudflare confirmation flags on entries whose writes are not
+  destructive.
+
+### What the spec forced out
+
+Two more operations, for the same reason as batch 15's ten: the DLP dataset
+upload is `application/octet-stream` and the document fingerprint version upload
+is `multipart/form-data`, so neither can travel through a JSON argument.
+
+### What proves it
+
+- The array-query test now asserts both OpenAPI collections instead of assuming
+  one: a `csv` parameter is sent once, comma-joined, and a `multi` parameter is
+  repeated, which is the first wave to have any - and an unhandled collection
+  fails rather than reaching Cloudflare in the wrong shape. 3799 tests in the CLI
+  suite, still all passing.
+- `test/cloudflare-catalog.test.ts` holds the reviewed 53-tool destructive set
+  across all three waves.
+
 ## Catalog layout - one file per provider
 
 The catalog used to be thirteen `batch-NN.json` files, each holding whatever

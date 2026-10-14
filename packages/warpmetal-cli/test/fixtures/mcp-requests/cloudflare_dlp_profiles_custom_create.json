@@ -1,0 +1,22 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/dlp/profiles/custom",
+  "body": {
+    "ai_context_enabled": true,
+    "allowed_match_count": 1,
+    "confidence_threshold": "sample_confidence_threshold",
+    "context_awareness": {},
+    "data_classes": [],
+    "data_tags": [],
+    "description": "sample_description",
+    "entries": [],
+    "name": "sample_name",
+    "ocr_enabled": true,
+    "sensitivity_levels": [],
+    "shared_entries": []
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

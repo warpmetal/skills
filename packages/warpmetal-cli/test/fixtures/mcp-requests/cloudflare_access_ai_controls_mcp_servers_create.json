@@ -1,0 +1,21 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/access/ai-controls/mcp/servers",
+  "body": {
+    "auth_credentials": "sample_auth_credentials",
+    "auth_type": "oauth",
+    "client_secret": "sample_client_secret",
+    "description": "sample_description",
+    "hostname": "sample_hostname",
+    "id": "sample_id",
+    "is_shared_oauth_callback_enabled": true,
+    "name": "sample_name",
+    "secure_web_gateway": true,
+    "updated_prompts": [],
+    "updated_tools": []
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

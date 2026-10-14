@@ -1,0 +1,14 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/teamnet/virtual_networks",
+  "body": {
+    "comment": "sample_comment",
+    "is_default": true,
+    "is_default_network": true,
+    "name": "sample_name"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -45,10 +45,23 @@ const operations = Object.values(fixture.tools);
 
 /** The reviewed destructive set for this wave, spelled out on purpose. */
 const REVIEWED_DESTRUCTIVE = [
+  "cloudflare_access_ai_controls_mcp_portals_delete",
+  "cloudflare_access_ai_controls_mcp_servers_delete",
+  "cloudflare_access_apps_app_id_revoke_tokens",
+  "cloudflare_access_apps_delete",
+  "cloudflare_access_identity_providers_delete",
+  "cloudflare_access_organizations_revoke_user",
+  "cloudflare_access_service_tokens_delete",
+  "cloudflare_access_users_delete",
   "cloudflare_d1_database_database_id_query",
   "cloudflare_d1_database_database_id_raw_create",
   "cloudflare_d1_database_database_id_time_travel_restore",
   "cloudflare_d1_database_delete",
+  "cloudflare_devices_physical_devices_delete",
+  "cloudflare_devices_registrations_delete",
+  "cloudflare_devices_registrations_delete_all",
+  "cloudflare_dlp_datasets_delete",
+  "cloudflare_dlp_document_fingerprints_delete",
   "cloudflare_dns_records_batch",
   "cloudflare_dns_records_delete",
   "cloudflare_dnssec_delete",
@@ -67,6 +80,8 @@ const REVIEWED_DESTRUCTIVE = [
   "cloudflare_storage_kv_namespaces_namespace_id_bulk_delete_create",
   "cloudflare_storage_kv_namespaces_namespace_id_bulk_put",
   "cloudflare_storage_kv_namespaces_namespace_id_values_delete",
+  "cloudflare_teamnet_routes_delete",
+  "cloudflare_teamnet_virtual_networks_delete",
   "cloudflare_vectorize_v2_indexes_delete",
   "cloudflare_vectorize_v2_indexes_index_name_delete_by_ids_create",
   "cloudflare_vectorize_v2_indexes_index_name_metadata_index_delete_create",
@@ -80,6 +95,8 @@ const REVIEWED_DESTRUCTIVE = [
   "cloudflare_workers_workers_worker_id_versions_delete",
   "cloudflare_workflows_delete",
   "cloudflare_workflows_workflow_name_instances_delete",
+  "cloudflare_zerotrust_routes_hostname_delete",
+  "cloudflare_zerotrust_subnets_warp_delete",
   "cloudflare_zones_delete",
 ] as const;
 

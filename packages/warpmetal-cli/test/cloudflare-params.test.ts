@@ -328,28 +328,42 @@ describe("cloudflare request shapes match the published API", () => {
     });
   }
 
-  it("joins a csv query collection with commas", () => {
-    let checked = 0;
+  it("sends an array query collection the way the spec declares", () => {
+    // OpenAPI's default for a query array is `explode: true`, which repeats the
+    // key; `explode: false` joins with commas. The builder has one helper for
+    // each, and a collection it does not know must fail here rather than reach
+    // Cloudflare in the wrong shape.
+    let csv = 0;
+    let multi = 0;
     for (const def of defs) {
       const operation = params.tools[def.toolSlug]!;
       for (const parameter of operation.queryParams) {
         if (parameter.type !== "array") continue;
-        assert.equal(
-          parameter.collection,
-          "csv",
-          `${def.toolSlug}: an array named ${parameter.name} has an unhandled collection`,
-        );
         const args = { ...(sampleArgs[def.toolSlug] ?? {}), [parameter.arg]: ["wm-a", "wm-b"] };
         const url = new URL(build(def.toolSlug, args).url);
-        assert.deepEqual(
-          url.searchParams.getAll(parameter.name),
-          ["wm-a,wm-b"],
-          `${def.toolSlug}: ${parameter.name} is a csv collection and must be sent once, comma-joined`,
-        );
-        checked += 1;
+        const sent = url.searchParams.getAll(parameter.name);
+        if (parameter.collection === "csv") {
+          assert.deepEqual(
+            sent,
+            ["wm-a,wm-b"],
+            `${def.toolSlug}: ${parameter.name} is a csv collection and must be sent once, comma-joined`,
+          );
+          csv += 1;
+        } else if (parameter.collection === "multi") {
+          assert.deepEqual(
+            sent,
+            ["wm-a", "wm-b"],
+            `${def.toolSlug}: ${parameter.name} is a multi collection and must be repeated`,
+          );
+          multi += 1;
+        } else {
+          assert.fail(
+            `${def.toolSlug}: ${parameter.name} has an unhandled collection ${String(parameter.collection)}`,
+          );
+        }
       }
     }
-    assert.ok(checked > 0, "expected at least one array query parameter in the wave");
+    assert.ok(csv + multi > 0, "expected at least one array query parameter in the wave");
   });
 
   it("gates every mutating tool and leaves the reads ungated", () => {

@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/teamnet/routes?comment=sample_comment&is_deleted=true&network_subset=sample_network_subset&network_superset=sample_network_superset&existed_at=sample_existed_at&tunnel_id=sample_tunnel_id&route_id=sample_route_id&virtual_network_id=sample_virtual_network_id&per_page=1&page=1&",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

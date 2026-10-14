@@ -115,5 +115,35 @@ export const DESTRUCTIVE_SLUGS: ReadonlySet<string> = new Set([
   "cloudflare_workflows_delete",
   "cloudflare_workflows_workflow_name_instances_delete",
   "cloudflare_zones_delete",
+  //
+  // Wave w3 (Zero Trust) applies the same line to a security surface, where the
+  // question is what the caller loses. Deleting an application, an identity
+  // provider, a service token, a user, a device registration, a DLP dataset or
+  // fingerprint, an MCP endpoint or a route is destructive: the object is gone,
+  // and what it stood for - a reachable service, a working sign-in, an
+  // enrolled device, the data itself - has to be built again. Revoking a user's
+  // tokens is in the same class: a revoked token cannot be restored.
+  //
+  // Deleting a policy, a group, a rule, a list, a taxonomy entry or a settings
+  // object is not: it removes a control or a classification, which the caller
+  // can write again, and it follows the w1 firewall precedent. Those entries
+  // carry `confirmGate` where Cloudflare asks for confirmation.
+  "cloudflare_access_ai_controls_mcp_portals_delete",
+  "cloudflare_access_ai_controls_mcp_servers_delete",
+  "cloudflare_access_apps_app_id_revoke_tokens",
+  "cloudflare_access_apps_delete",
+  "cloudflare_access_identity_providers_delete",
+  "cloudflare_access_organizations_revoke_user",
+  "cloudflare_access_service_tokens_delete",
+  "cloudflare_access_users_delete",
+  "cloudflare_devices_physical_devices_delete",
+  "cloudflare_devices_registrations_delete",
+  "cloudflare_devices_registrations_delete_all",
+  "cloudflare_dlp_datasets_delete",
+  "cloudflare_dlp_document_fingerprints_delete",
+  "cloudflare_teamnet_routes_delete",
+  "cloudflare_teamnet_virtual_networks_delete",
+  "cloudflare_zerotrust_routes_hostname_delete",
+  "cloudflare_zerotrust_subnets_warp_delete",
 ]);
 

@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/access/user_populations/sample_user_population_id/users?filter=sample_filter&startIndex=1&count=1&attributes=sample_attributes&excludedAttributes=sample_excluded_attributes",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

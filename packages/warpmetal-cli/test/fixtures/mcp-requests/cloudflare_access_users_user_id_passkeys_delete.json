@@ -1,0 +1,8 @@
+{
+  "method": "DELETE",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/access/users/sample_user_id/passkeys/sample_authenticator_id",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

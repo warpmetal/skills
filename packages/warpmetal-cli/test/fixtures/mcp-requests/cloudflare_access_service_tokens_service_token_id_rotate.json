@@ -1,0 +1,11 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/access/service_tokens/sample_service_token_id/rotate",
+  "body": {
+    "previous_client_secret_expires_at": "sample_previous_client_secret_expires_at"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

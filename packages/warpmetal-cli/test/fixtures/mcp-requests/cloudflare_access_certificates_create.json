@@ -1,0 +1,13 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/access/certificates",
+  "body": {
+    "associated_hostnames": [],
+    "certificate": "sample_certificate",
+    "name": "sample_name"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

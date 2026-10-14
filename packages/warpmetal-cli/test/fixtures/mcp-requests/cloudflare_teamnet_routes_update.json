@@ -1,0 +1,14 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/teamnet/routes/sample_route_id",
+  "body": {
+    "comment": "sample_comment",
+    "network": "sample_network",
+    "tunnel_id": "sample_tunnel_id",
+    "virtual_network_id": "sample_virtual_network_id"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

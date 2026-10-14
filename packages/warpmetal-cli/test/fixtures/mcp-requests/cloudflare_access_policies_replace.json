@@ -1,0 +1,23 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/access/policies/sample_policy_id",
+  "body": {
+    "decision": "allow",
+    "exclude": [],
+    "include": [],
+    "name": "sample_name",
+    "require": [],
+    "approval_groups": [],
+    "approval_required": true,
+    "connection_rules": {},
+    "isolation_required": true,
+    "mfa_config": {},
+    "purpose_justification_prompt": "sample_purpose_justification_prompt",
+    "purpose_justification_required": true,
+    "session_duration": "sample_session_duration"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

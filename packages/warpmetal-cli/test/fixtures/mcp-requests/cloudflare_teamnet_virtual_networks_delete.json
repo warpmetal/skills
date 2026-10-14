@@ -1,0 +1,8 @@
+{
+  "method": "DELETE",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/teamnet/virtual_networks/sample_virtual_network_id",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

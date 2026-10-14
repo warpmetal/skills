@@ -1,0 +1,12 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/gateway/logging",
+  "body": {
+    "redact_pii": true,
+    "settings_by_rule_type": {}
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/devices/policy/sample_policy_id",
+  "body": {
+    "allow_mode_switch": true,
+    "allow_updates": true,
+    "allowed_to_leave": true,
+    "auto_connect": 1,
+    "browser_extension_config": {},
+    "captive_portal": 1,
+    "default": true,
+    "description": "sample_description",
+    "disable_auto_fallback": true,
+    "dns_search_suffixes": [],
+    "enabled": true,
+    "exclude": [],
+    "exclude_office_ips": true,
+    "global_acceleration": {},
+    "include": [],
+    "lan_allow_minutes": 1,
+    "lan_allow_subnet_size": 1,
+    "match": "sample_match",
+    "name": "sample_name",
+    "precedence": 1,
+    "register_interface_ip_with_dns": true,
+    "sccm_vpn_boundary_support": true,
+    "service_mode_v2": {},
+    "support_url": "sample_support_url",
+    "switch_locked": true,
+    "tunnel_protocol": "sample_tunnel_protocol",
+    "uninstall_protection": true,
+    "virtual_networks": {}
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

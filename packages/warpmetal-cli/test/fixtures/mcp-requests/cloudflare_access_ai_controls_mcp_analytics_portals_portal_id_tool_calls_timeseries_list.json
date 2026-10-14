@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/access/ai-controls/mcp/analytics/portals/sample_portal_id/tool-calls/timeseries?granularity=daily&aggregate=true&tz=sample_tz&days=1&response_status=success",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

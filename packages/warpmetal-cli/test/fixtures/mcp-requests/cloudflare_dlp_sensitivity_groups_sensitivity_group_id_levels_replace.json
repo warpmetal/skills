@@ -1,0 +1,12 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/dlp/sensitivity_groups/sample_sensitivity_group_id/levels/sample_sensitivity_level_id",
+  "body": {
+    "description": "sample_description",
+    "name": "sample_name"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/devices/override_codes",
+  "body": {
+    "device_id": "sample_device_id",
+    "duration_hours": 1,
+    "scope": "account",
+    "type": "uninstall_protection"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

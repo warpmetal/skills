@@ -17,7 +17,7 @@ which is what keeps it true.
 | `x-forge-hidden` | 1093 | hidden from Cloudflare's own Forge docs: internal or unreleased |
 | `x-fern-ignore` | 489 | dropped from the published Fern docs before Forge replaced them |
 | Reviewable | 2227 | what remains, and the pool every wave is chosen from |
-| Shipped | 323 | pinned in `scripts/cloudflare/allowlist.json` |
+| Shipped | 653 | pinned in `scripts/cloudflare/allowlist.json` |
 
 234 reviewable operations carry `x-forge-require-confirmation`,
 30 carry `x-cfDeprecation` and 4 declare `security: []`.
@@ -31,7 +31,7 @@ fields the spec does not publish; either is shipped only where the allowlist say
 | --- | --- | --- | --- | --- |
 | `w1` | reviewed | 45 | Zonas, DNS, ajustes de zona, cache y tokens de identidad | `zones/zones`, `zones/activation`, `zones/hold`, `zones/dns`, `zones/dnssec`, `zones/settings`, `zones/purge`, `zones/firewall`, `accounts/accounts`, `user/user` |
 | `w2` | reviewed | 278 | Almacenamiento y computo: R2, KV, D1, Workers, Queues, Pages | `accounts/d1`, `accounts/hyperdrive`, `accounts/pages`, `accounts/queues`, `accounts/r2`, `accounts/storage`, `accounts/vectorize`, `accounts/workers`, `accounts/workflows` |
-| `w3` | planned | 0 | Zero Trust y Access: apps, politicas, identity providers, gateway | - |
+| `w3` | reviewed | 330 | Zero Trust y Access: apps, politicas, identity providers, gateway | `accounts/access`, `accounts/devices`, `accounts/dlp`, `accounts/gateway`, `accounts/teamnet`, `accounts/tunnels`, `accounts/zerotrust` |
 | `w4` | planned | 0 | Observabilidad y analitica: logs, analytics, alertas, WAF | - |
 | `w5` | planned | 0 | Radar y el resto de colecciones de cuenta con valor operativo | - |
 
@@ -362,6 +362,336 @@ fields the spec does not publish; either is shipped only where the allowlist say
 | 321 | `cloudflare_workflows_workflow_name_versions_list` | `GET` | `/accounts/{account_id}/workflows/{workflow_name}/versions` | w2 | - |
 | 322 | `cloudflare_workflows_workflow_name_versions_get` | `GET` | `/accounts/{account_id}/workflows/{workflow_name}/versions/{version_id}` | w2 | - |
 | 323 | `cloudflare_workflows_workflow_name_versions_version_id_graph_list` | `GET` | `/accounts/{account_id}/workflows/{workflow_name}/versions/{version_id}/graph` | w2 | - |
+| 324 | `cloudflare_access_ai_controls_mcp_analytics_portals_portal_id_tool_calls_timeseries_list` | `GET` | `/accounts/{account_id}/access/ai-controls/mcp/analytics/portals/{portal_id}/tool-calls/timeseries` | w3 | - |
+| 325 | `cloudflare_access_ai_controls_mcp_analytics_servers_server_id_tool_calls_timeseries_list` | `GET` | `/accounts/{account_id}/access/ai-controls/mcp/analytics/servers/{server_id}/tool-calls/timeseries` | w3 | - |
+| 326 | `cloudflare_access_ai_controls_mcp_analytics_tool_calls_timeseries_list` | `GET` | `/accounts/{account_id}/access/ai-controls/mcp/analytics/tool-calls/timeseries` | w3 | - |
+| 327 | `cloudflare_access_ai_controls_mcp_portals_list` | `GET` | `/accounts/{account_id}/access/ai-controls/mcp/portals` | w3 | - |
+| 328 | `cloudflare_access_ai_controls_mcp_portals_create` | `POST` | `/accounts/{account_id}/access/ai-controls/mcp/portals` | w3 | - |
+| 329 | `cloudflare_access_ai_controls_mcp_portals_get` | `GET` | `/accounts/{account_id}/access/ai-controls/mcp/portals/{id}` | w3 | - |
+| 330 | `cloudflare_access_ai_controls_mcp_portals_replace` | `PUT` | `/accounts/{account_id}/access/ai-controls/mcp/portals/{id}` | w3 | - |
+| 331 | `cloudflare_access_ai_controls_mcp_portals_delete` | `DELETE` | `/accounts/{account_id}/access/ai-controls/mcp/portals/{id}` | w3 | destructive, needs confirmation |
+| 332 | `cloudflare_access_ai_controls_mcp_servers_list` | `GET` | `/accounts/{account_id}/access/ai-controls/mcp/servers` | w3 | - |
+| 333 | `cloudflare_access_ai_controls_mcp_servers_create` | `POST` | `/accounts/{account_id}/access/ai-controls/mcp/servers` | w3 | - |
+| 334 | `cloudflare_access_ai_controls_mcp_servers_get` | `GET` | `/accounts/{account_id}/access/ai-controls/mcp/servers/{id}` | w3 | - |
+| 335 | `cloudflare_access_ai_controls_mcp_servers_replace` | `PUT` | `/accounts/{account_id}/access/ai-controls/mcp/servers/{id}` | w3 | - |
+| 336 | `cloudflare_access_ai_controls_mcp_servers_delete` | `DELETE` | `/accounts/{account_id}/access/ai-controls/mcp/servers/{id}` | w3 | destructive, needs confirmation |
+| 337 | `cloudflare_access_ai_controls_mcp_servers_id_sync_create` | `POST` | `/accounts/{account_id}/access/ai-controls/mcp/servers/{id}/sync` | w3 | - |
+| 338 | `cloudflare_access_apps_list` | `GET` | `/accounts/{account_id}/access/apps` | w3 | beta |
+| 339 | `cloudflare_access_apps_create` | `POST` | `/accounts/{account_id}/access/apps` | w3 | beta |
+| 340 | `cloudflare_access_apps_ca_list` | `GET` | `/accounts/{account_id}/access/apps/ca` | w3 | - |
+| 341 | `cloudflare_access_apps_get` | `GET` | `/accounts/{account_id}/access/apps/{app_id}` | w3 | beta |
+| 342 | `cloudflare_access_apps_replace` | `PUT` | `/accounts/{account_id}/access/apps/{app_id}` | w3 | beta |
+| 343 | `cloudflare_access_apps_delete` | `DELETE` | `/accounts/{account_id}/access/apps/{app_id}` | w3 | destructive |
+| 344 | `cloudflare_access_apps_app_id_ca_list` | `GET` | `/accounts/{account_id}/access/apps/{app_id}/ca` | w3 | - |
+| 345 | `cloudflare_access_apps_app_id_ca_create` | `POST` | `/accounts/{account_id}/access/apps/{app_id}/ca` | w3 | - |
+| 346 | `cloudflare_access_apps_app_id_ca_delete` | `DELETE` | `/accounts/{account_id}/access/apps/{app_id}/ca` | w3 | - |
+| 347 | `cloudflare_access_apps_app_id_policies_list` | `GET` | `/accounts/{account_id}/access/apps/{app_id}/policies` | w3 | - |
+| 348 | `cloudflare_access_apps_app_id_policies_get` | `GET` | `/accounts/{account_id}/access/apps/{app_id}/policies/{policy_id}` | w3 | - |
+| 349 | `cloudflare_access_apps_app_id_policies_policy_id_make_reusable_put` | `PUT` | `/accounts/{account_id}/access/apps/{app_id}/policies/{policy_id}/make_reusable` | w3 | - |
+| 350 | `cloudflare_access_apps_app_id_revoke_tokens` | `POST` | `/accounts/{account_id}/access/apps/{app_id}/revoke_tokens` | w3 | destructive, needs confirmation |
+| 351 | `cloudflare_access_apps_app_id_settings_put` | `PUT` | `/accounts/{account_id}/access/apps/{app_id}/settings` | w3 | - |
+| 352 | `cloudflare_access_apps_app_id_user_policy_checks_list` | `GET` | `/accounts/{account_id}/access/apps/{app_id}/user_policy_checks` | w3 | - |
+| 353 | `cloudflare_access_authenticator_device_aaguids_list` | `GET` | `/accounts/{account_id}/access/authenticator_device_aaguids` | w3 | - |
+| 354 | `cloudflare_access_bookmarks_list` | `GET` | `/accounts/{account_id}/access/bookmarks` | w3 | deprecated |
+| 355 | `cloudflare_access_bookmarks_get` | `GET` | `/accounts/{account_id}/access/bookmarks/{bookmark_id}` | w3 | deprecated |
+| 356 | `cloudflare_access_bookmarks_create` | `POST` | `/accounts/{account_id}/access/bookmarks/{bookmark_id}` | w3 | deprecated |
+| 357 | `cloudflare_access_bookmarks_replace` | `PUT` | `/accounts/{account_id}/access/bookmarks/{bookmark_id}` | w3 | deprecated |
+| 358 | `cloudflare_access_bookmarks_delete` | `DELETE` | `/accounts/{account_id}/access/bookmarks/{bookmark_id}` | w3 | deprecated |
+| 359 | `cloudflare_access_certificates_list` | `GET` | `/accounts/{account_id}/access/certificates` | w3 | - |
+| 360 | `cloudflare_access_certificates_create` | `POST` | `/accounts/{account_id}/access/certificates` | w3 | - |
+| 361 | `cloudflare_access_certificates_settings_list` | `GET` | `/accounts/{account_id}/access/certificates/settings` | w3 | - |
+| 362 | `cloudflare_access_certificates_settings_put` | `PUT` | `/accounts/{account_id}/access/certificates/settings` | w3 | - |
+| 363 | `cloudflare_access_certificates_get` | `GET` | `/accounts/{account_id}/access/certificates/{certificate_id}` | w3 | - |
+| 364 | `cloudflare_access_certificates_replace` | `PUT` | `/accounts/{account_id}/access/certificates/{certificate_id}` | w3 | - |
+| 365 | `cloudflare_access_certificates_delete` | `DELETE` | `/accounts/{account_id}/access/certificates/{certificate_id}` | w3 | - |
+| 366 | `cloudflare_access_custom_pages_list` | `GET` | `/accounts/{account_id}/access/custom_pages` | w3 | - |
+| 367 | `cloudflare_access_custom_pages_create` | `POST` | `/accounts/{account_id}/access/custom_pages` | w3 | - |
+| 368 | `cloudflare_access_custom_pages_validate` | `POST` | `/accounts/{account_id}/access/custom_pages/validate` | w3 | - |
+| 369 | `cloudflare_access_custom_pages_get` | `GET` | `/accounts/{account_id}/access/custom_pages/{custom_page_id}` | w3 | - |
+| 370 | `cloudflare_access_custom_pages_replace` | `PUT` | `/accounts/{account_id}/access/custom_pages/{custom_page_id}` | w3 | - |
+| 371 | `cloudflare_access_custom_pages_delete` | `DELETE` | `/accounts/{account_id}/access/custom_pages/{custom_page_id}` | w3 | - |
+| 372 | `cloudflare_access_gateway_ca_list` | `GET` | `/accounts/{account_id}/access/gateway_ca` | w3 | - |
+| 373 | `cloudflare_access_gateway_ca_create` | `POST` | `/accounts/{account_id}/access/gateway_ca` | w3 | - |
+| 374 | `cloudflare_access_gateway_ca_delete` | `DELETE` | `/accounts/{account_id}/access/gateway_ca/{certificate_id}` | w3 | - |
+| 375 | `cloudflare_access_groups_list` | `GET` | `/accounts/{account_id}/access/groups` | w3 | - |
+| 376 | `cloudflare_access_groups_create` | `POST` | `/accounts/{account_id}/access/groups` | w3 | - |
+| 377 | `cloudflare_access_groups_get` | `GET` | `/accounts/{account_id}/access/groups/{group_id}` | w3 | - |
+| 378 | `cloudflare_access_groups_replace` | `PUT` | `/accounts/{account_id}/access/groups/{group_id}` | w3 | - |
+| 379 | `cloudflare_access_groups_delete` | `DELETE` | `/accounts/{account_id}/access/groups/{group_id}` | w3 | - |
+| 380 | `cloudflare_access_identity_providers_list` | `GET` | `/accounts/{account_id}/access/identity_providers` | w3 | - |
+| 381 | `cloudflare_access_identity_providers_create` | `POST` | `/accounts/{account_id}/access/identity_providers` | w3 | - |
+| 382 | `cloudflare_access_identity_providers_get` | `GET` | `/accounts/{account_id}/access/identity_providers/{identity_provider_id}` | w3 | - |
+| 383 | `cloudflare_access_identity_providers_replace` | `PUT` | `/accounts/{account_id}/access/identity_providers/{identity_provider_id}` | w3 | - |
+| 384 | `cloudflare_access_identity_providers_delete` | `DELETE` | `/accounts/{account_id}/access/identity_providers/{identity_provider_id}` | w3 | destructive |
+| 385 | `cloudflare_access_identity_providers_identity_provider_id_saml_certificate_create` | `POST` | `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/saml_certificate` | w3 | - |
+| 386 | `cloudflare_access_identity_providers_identity_provider_id_scim_groups_list` | `GET` | `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/groups` | w3 | - |
+| 387 | `cloudflare_access_identity_providers_identity_provider_id_scim_groups_get` | `GET` | `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/groups/{group_id}` | w3 | - |
+| 388 | `cloudflare_access_identity_providers_identity_provider_id_scim_groups_delete` | `DELETE` | `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/groups/{group_id}` | w3 | - |
+| 389 | `cloudflare_access_identity_providers_identity_provider_id_scim_users_list` | `GET` | `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/users` | w3 | - |
+| 390 | `cloudflare_access_identity_providers_identity_provider_id_scim_users_get` | `GET` | `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/users/{user_id}` | w3 | - |
+| 391 | `cloudflare_access_identity_providers_identity_provider_id_scim_users_delete` | `DELETE` | `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/users/{user_id}` | w3 | - |
+| 392 | `cloudflare_access_idp_federation_grants_list` | `GET` | `/accounts/{account_id}/access/idp_federation_grants` | w3 | beta |
+| 393 | `cloudflare_access_idp_federation_grants_create` | `POST` | `/accounts/{account_id}/access/idp_federation_grants` | w3 | beta |
+| 394 | `cloudflare_access_idp_federation_grants_get` | `GET` | `/accounts/{account_id}/access/idp_federation_grants/{grant_id}` | w3 | beta |
+| 395 | `cloudflare_access_idp_federation_grants_delete` | `DELETE` | `/accounts/{account_id}/access/idp_federation_grants/{grant_id}` | w3 | - |
+| 396 | `cloudflare_access_keys_list` | `GET` | `/accounts/{account_id}/access/keys` | w3 | - |
+| 397 | `cloudflare_access_keys_put` | `PUT` | `/accounts/{account_id}/access/keys` | w3 | - |
+| 398 | `cloudflare_access_keys_rotate` | `POST` | `/accounts/{account_id}/access/keys/rotate` | w3 | - |
+| 399 | `cloudflare_access_logs_access_requests_list` | `GET` | `/accounts/{account_id}/access/logs/access_requests` | w3 | - |
+| 400 | `cloudflare_access_logs_jit_requests_list` | `GET` | `/accounts/{account_id}/access/logs/jit_requests` | w3 | - |
+| 401 | `cloudflare_access_logs_jit_requests_get` | `GET` | `/accounts/{account_id}/access/logs/jit_requests/{knock_request_id}` | w3 | - |
+| 402 | `cloudflare_access_logs_scim_updates_list` | `GET` | `/accounts/{account_id}/access/logs/scim/updates` | w3 | - |
+| 403 | `cloudflare_access_organizations_list` | `GET` | `/accounts/{account_id}/access/organizations` | w3 | - |
+| 404 | `cloudflare_access_organizations_create` | `POST` | `/accounts/{account_id}/access/organizations` | w3 | - |
+| 405 | `cloudflare_access_organizations_put` | `PUT` | `/accounts/{account_id}/access/organizations` | w3 | - |
+| 406 | `cloudflare_access_organizations_doh_list` | `GET` | `/accounts/{account_id}/access/organizations/doh` | w3 | - |
+| 407 | `cloudflare_access_organizations_doh_put` | `PUT` | `/accounts/{account_id}/access/organizations/doh` | w3 | - |
+| 408 | `cloudflare_access_organizations_revoke_user` | `POST` | `/accounts/{account_id}/access/organizations/revoke_user` | w3 | dropped body fields, destructive, needs confirmation |
+| 409 | `cloudflare_access_policies_list` | `GET` | `/accounts/{account_id}/access/policies` | w3 | - |
+| 410 | `cloudflare_access_policies_create` | `POST` | `/accounts/{account_id}/access/policies` | w3 | - |
+| 411 | `cloudflare_access_policies_get` | `GET` | `/accounts/{account_id}/access/policies/{policy_id}` | w3 | - |
+| 412 | `cloudflare_access_policies_replace` | `PUT` | `/accounts/{account_id}/access/policies/{policy_id}` | w3 | - |
+| 413 | `cloudflare_access_policies_delete` | `DELETE` | `/accounts/{account_id}/access/policies/{policy_id}` | w3 | - |
+| 414 | `cloudflare_access_policy_tests_create` | `POST` | `/accounts/{account_id}/access/policy-tests` | w3 | - |
+| 415 | `cloudflare_access_policy_tests_get` | `GET` | `/accounts/{account_id}/access/policy-tests/{policy_test_id}` | w3 | - |
+| 416 | `cloudflare_access_policy_tests_policy_test_id_users_list` | `GET` | `/accounts/{account_id}/access/policy-tests/{policy_test_id}/users` | w3 | - |
+| 417 | `cloudflare_access_saml_certificates_list` | `GET` | `/accounts/{account_id}/access/saml_certificates` | w3 | - |
+| 418 | `cloudflare_access_saml_certificates_get` | `GET` | `/accounts/{account_id}/access/saml_certificates/{saml_cert_set_id}` | w3 | - |
+| 419 | `cloudflare_access_saml_certificates_saml_cert_set_id_pem_list` | `GET` | `/accounts/{account_id}/access/saml_certificates/{saml_cert_set_id}/pem` | w3 | - |
+| 420 | `cloudflare_access_saml_certificates_saml_cert_set_id_rotate` | `POST` | `/accounts/{account_id}/access/saml_certificates/{saml_cert_set_id}/rotate` | w3 | - |
+| 421 | `cloudflare_access_service_tokens_list` | `GET` | `/accounts/{account_id}/access/service_tokens` | w3 | - |
+| 422 | `cloudflare_access_service_tokens_create` | `POST` | `/accounts/{account_id}/access/service_tokens` | w3 | - |
+| 423 | `cloudflare_access_service_tokens_get` | `GET` | `/accounts/{account_id}/access/service_tokens/{service_token_id}` | w3 | - |
+| 424 | `cloudflare_access_service_tokens_replace` | `PUT` | `/accounts/{account_id}/access/service_tokens/{service_token_id}` | w3 | - |
+| 425 | `cloudflare_access_service_tokens_delete` | `DELETE` | `/accounts/{account_id}/access/service_tokens/{service_token_id}` | w3 | destructive |
+| 426 | `cloudflare_access_service_tokens_service_token_id_refresh` | `POST` | `/accounts/{account_id}/access/service_tokens/{service_token_id}/refresh` | w3 | - |
+| 427 | `cloudflare_access_service_tokens_service_token_id_rotate` | `POST` | `/accounts/{account_id}/access/service_tokens/{service_token_id}/rotate` | w3 | - |
+| 428 | `cloudflare_access_tags_list` | `GET` | `/accounts/{account_id}/access/tags` | w3 | - |
+| 429 | `cloudflare_access_tags_create` | `POST` | `/accounts/{account_id}/access/tags` | w3 | - |
+| 430 | `cloudflare_access_tags_get` | `GET` | `/accounts/{account_id}/access/tags/{tag_name}` | w3 | - |
+| 431 | `cloudflare_access_tags_replace` | `PUT` | `/accounts/{account_id}/access/tags/{tag_name}` | w3 | - |
+| 432 | `cloudflare_access_tags_delete` | `DELETE` | `/accounts/{account_id}/access/tags/{tag_name}` | w3 | - |
+| 433 | `cloudflare_access_user_populations_list` | `GET` | `/accounts/{account_id}/access/user_populations` | w3 | - |
+| 434 | `cloudflare_access_user_populations_create` | `POST` | `/accounts/{account_id}/access/user_populations` | w3 | - |
+| 435 | `cloudflare_access_user_populations_get` | `GET` | `/accounts/{account_id}/access/user_populations/{user_population_id}` | w3 | - |
+| 436 | `cloudflare_access_user_populations_replace` | `PUT` | `/accounts/{account_id}/access/user_populations/{user_population_id}` | w3 | - |
+| 437 | `cloudflare_access_user_populations_delete` | `DELETE` | `/accounts/{account_id}/access/user_populations/{user_population_id}` | w3 | - |
+| 438 | `cloudflare_access_user_populations_user_population_id_users_list` | `GET` | `/accounts/{account_id}/access/user_populations/{user_population_id}/users` | w3 | - |
+| 439 | `cloudflare_access_user_populations_user_population_id_users_create` | `POST` | `/accounts/{account_id}/access/user_populations/{user_population_id}/users` | w3 | - |
+| 440 | `cloudflare_access_user_populations_user_population_id_users_get` | `GET` | `/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}` | w3 | - |
+| 441 | `cloudflare_access_user_populations_user_population_id_users_replace` | `PUT` | `/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}` | w3 | - |
+| 442 | `cloudflare_access_user_populations_user_population_id_users_update` | `PATCH` | `/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}` | w3 | - |
+| 443 | `cloudflare_access_user_populations_user_population_id_users_delete` | `DELETE` | `/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}` | w3 | - |
+| 444 | `cloudflare_access_users_list` | `GET` | `/accounts/{account_id}/access/users` | w3 | - |
+| 445 | `cloudflare_access_users_create` | `POST` | `/accounts/{account_id}/access/users` | w3 | - |
+| 446 | `cloudflare_access_users_get` | `GET` | `/accounts/{account_id}/access/users/{user_id}` | w3 | - |
+| 447 | `cloudflare_access_users_replace` | `PUT` | `/accounts/{account_id}/access/users/{user_id}` | w3 | - |
+| 448 | `cloudflare_access_users_delete` | `DELETE` | `/accounts/{account_id}/access/users/{user_id}` | w3 | destructive |
+| 449 | `cloudflare_access_users_user_id_active_sessions_list` | `GET` | `/accounts/{account_id}/access/users/{user_id}/active_sessions` | w3 | - |
+| 450 | `cloudflare_access_users_user_id_active_sessions_get` | `GET` | `/accounts/{account_id}/access/users/{user_id}/active_sessions/{nonce}` | w3 | - |
+| 451 | `cloudflare_access_users_user_id_failed_logins_list` | `GET` | `/accounts/{account_id}/access/users/{user_id}/failed_logins` | w3 | - |
+| 452 | `cloudflare_access_users_user_id_last_seen_identity_list` | `GET` | `/accounts/{account_id}/access/users/{user_id}/last_seen_identity` | w3 | - |
+| 453 | `cloudflare_access_users_user_id_mfa_authenticators_delete` | `DELETE` | `/accounts/{account_id}/access/users/{user_id}/mfa_authenticators/{authenticator_id}` | w3 | - |
+| 454 | `cloudflare_access_users_user_id_passkeys_delete` | `DELETE` | `/accounts/{account_id}/access/users/{user_id}/passkeys/{authenticator_id}` | w3 | - |
+| 455 | `cloudflare_devices_client_versions_list` | `GET` | `/accounts/{account_id}/devices/client-versions` | w3 | - |
+| 456 | `cloudflare_devices_client_versions_target_environments_list` | `GET` | `/accounts/{account_id}/devices/client-versions/target-environments` | w3 | - |
+| 457 | `cloudflare_devices_deployment_groups_list` | `GET` | `/accounts/{account_id}/devices/deployment-groups` | w3 | - |
+| 458 | `cloudflare_devices_deployment_groups_create` | `POST` | `/accounts/{account_id}/devices/deployment-groups` | w3 | - |
+| 459 | `cloudflare_devices_deployment_groups_get` | `GET` | `/accounts/{account_id}/devices/deployment-groups/{group_id}` | w3 | - |
+| 460 | `cloudflare_devices_deployment_groups_update` | `PATCH` | `/accounts/{account_id}/devices/deployment-groups/{group_id}` | w3 | - |
+| 461 | `cloudflare_devices_deployment_groups_delete` | `DELETE` | `/accounts/{account_id}/devices/deployment-groups/{group_id}` | w3 | - |
+| 462 | `cloudflare_devices_ip_profiles_list` | `GET` | `/accounts/{account_id}/devices/ip-profiles` | w3 | - |
+| 463 | `cloudflare_devices_ip_profiles_create` | `POST` | `/accounts/{account_id}/devices/ip-profiles` | w3 | - |
+| 464 | `cloudflare_devices_ip_profiles_get` | `GET` | `/accounts/{account_id}/devices/ip-profiles/{profile_id}` | w3 | - |
+| 465 | `cloudflare_devices_ip_profiles_update` | `PATCH` | `/accounts/{account_id}/devices/ip-profiles/{profile_id}` | w3 | - |
+| 466 | `cloudflare_devices_ip_profiles_delete` | `DELETE` | `/accounts/{account_id}/devices/ip-profiles/{profile_id}` | w3 | - |
+| 467 | `cloudflare_devices_networks_list` | `GET` | `/accounts/{account_id}/devices/networks` | w3 | - |
+| 468 | `cloudflare_devices_networks_create` | `POST` | `/accounts/{account_id}/devices/networks` | w3 | - |
+| 469 | `cloudflare_devices_networks_get` | `GET` | `/accounts/{account_id}/devices/networks/{network_id}` | w3 | - |
+| 470 | `cloudflare_devices_networks_replace` | `PUT` | `/accounts/{account_id}/devices/networks/{network_id}` | w3 | - |
+| 471 | `cloudflare_devices_networks_delete` | `DELETE` | `/accounts/{account_id}/devices/networks/{network_id}` | w3 | - |
+| 472 | `cloudflare_devices_override_codes_create` | `POST` | `/accounts/{account_id}/devices/override_codes` | w3 | - |
+| 473 | `cloudflare_devices_physical_devices_list` | `GET` | `/accounts/{account_id}/devices/physical-devices` | w3 | - |
+| 474 | `cloudflare_devices_physical_devices_get` | `GET` | `/accounts/{account_id}/devices/physical-devices/{device_id}` | w3 | - |
+| 475 | `cloudflare_devices_physical_devices_update` | `PATCH` | `/accounts/{account_id}/devices/physical-devices/{device_id}` | w3 | - |
+| 476 | `cloudflare_devices_physical_devices_delete` | `DELETE` | `/accounts/{account_id}/devices/physical-devices/{device_id}` | w3 | destructive |
+| 477 | `cloudflare_devices_policies_list` | `GET` | `/accounts/{account_id}/devices/policies` | w3 | - |
+| 478 | `cloudflare_devices_policy_list` | `GET` | `/accounts/{account_id}/devices/policy` | w3 | - |
+| 479 | `cloudflare_devices_policy_create` | `POST` | `/accounts/{account_id}/devices/policy` | w3 | - |
+| 480 | `cloudflare_devices_policy_patch` | `PATCH` | `/accounts/{account_id}/devices/policy` | w3 | - |
+| 481 | `cloudflare_devices_policy_get` | `GET` | `/accounts/{account_id}/devices/policy/{policy_id}` | w3 | - |
+| 482 | `cloudflare_devices_policy_update` | `PATCH` | `/accounts/{account_id}/devices/policy/{policy_id}` | w3 | - |
+| 483 | `cloudflare_devices_policy_delete` | `DELETE` | `/accounts/{account_id}/devices/policy/{policy_id}` | w3 | - |
+| 484 | `cloudflare_devices_posture_list` | `GET` | `/accounts/{account_id}/devices/posture` | w3 | - |
+| 485 | `cloudflare_devices_posture_create` | `POST` | `/accounts/{account_id}/devices/posture` | w3 | - |
+| 486 | `cloudflare_devices_posture_integration_list` | `GET` | `/accounts/{account_id}/devices/posture/integration` | w3 | - |
+| 487 | `cloudflare_devices_posture_integration_create` | `POST` | `/accounts/{account_id}/devices/posture/integration` | w3 | - |
+| 488 | `cloudflare_devices_posture_integration_get` | `GET` | `/accounts/{account_id}/devices/posture/integration/{integration_id}` | w3 | - |
+| 489 | `cloudflare_devices_posture_integration_update` | `PATCH` | `/accounts/{account_id}/devices/posture/integration/{integration_id}` | w3 | - |
+| 490 | `cloudflare_devices_posture_integration_delete` | `DELETE` | `/accounts/{account_id}/devices/posture/integration/{integration_id}` | w3 | - |
+| 491 | `cloudflare_devices_posture_get` | `GET` | `/accounts/{account_id}/devices/posture/{rule_id}` | w3 | - |
+| 492 | `cloudflare_devices_posture_replace` | `PUT` | `/accounts/{account_id}/devices/posture/{rule_id}` | w3 | - |
+| 493 | `cloudflare_devices_posture_delete` | `DELETE` | `/accounts/{account_id}/devices/posture/{rule_id}` | w3 | - |
+| 494 | `cloudflare_devices_registrations_list` | `GET` | `/accounts/{account_id}/devices/registrations` | w3 | - |
+| 495 | `cloudflare_devices_registrations_delete_all` | `DELETE` | `/accounts/{account_id}/devices/registrations` | w3 | renamed, destructive |
+| 496 | `cloudflare_devices_registrations_get` | `GET` | `/accounts/{account_id}/devices/registrations/{registration_id}` | w3 | - |
+| 497 | `cloudflare_devices_registrations_delete` | `DELETE` | `/accounts/{account_id}/devices/registrations/{registration_id}` | w3 | destructive |
+| 498 | `cloudflare_devices_registrations_registration_id_override_codes_list` | `GET` | `/accounts/{account_id}/devices/registrations/{registration_id}/override_codes` | w3 | - |
+| 499 | `cloudflare_devices_resilience_disconnect_list` | `GET` | `/accounts/{account_id}/devices/resilience/disconnect` | w3 | - |
+| 500 | `cloudflare_devices_resilience_disconnect_create` | `POST` | `/accounts/{account_id}/devices/resilience/disconnect` | w3 | - |
+| 501 | `cloudflare_devices_settings_list` | `GET` | `/accounts/{account_id}/devices/settings` | w3 | - |
+| 502 | `cloudflare_devices_settings_patch` | `PATCH` | `/accounts/{account_id}/devices/settings` | w3 | - |
+| 503 | `cloudflare_devices_settings_delete` | `DELETE` | `/accounts/{account_id}/devices/settings` | w3 | - |
+| 504 | `cloudflare_devices_device_id_override_codes_list` | `GET` | `/accounts/{account_id}/devices/{device_id}/override_codes` | w3 | deprecated |
+| 505 | `cloudflare_dlp_custom_prompt_topics_list` | `GET` | `/accounts/{account_id}/dlp/custom_prompt_topics` | w3 | - |
+| 506 | `cloudflare_dlp_custom_prompt_topics_create` | `POST` | `/accounts/{account_id}/dlp/custom_prompt_topics` | w3 | - |
+| 507 | `cloudflare_dlp_custom_prompt_topics_get` | `GET` | `/accounts/{account_id}/dlp/custom_prompt_topics/{entry_id}` | w3 | - |
+| 508 | `cloudflare_dlp_custom_prompt_topics_replace` | `PUT` | `/accounts/{account_id}/dlp/custom_prompt_topics/{entry_id}` | w3 | - |
+| 509 | `cloudflare_dlp_custom_prompt_topics_delete` | `DELETE` | `/accounts/{account_id}/dlp/custom_prompt_topics/{entry_id}` | w3 | - |
+| 510 | `cloudflare_dlp_data_classes_list` | `GET` | `/accounts/{account_id}/dlp/data_classes` | w3 | - |
+| 511 | `cloudflare_dlp_data_classes_create` | `POST` | `/accounts/{account_id}/dlp/data_classes` | w3 | - |
+| 512 | `cloudflare_dlp_data_classes_get` | `GET` | `/accounts/{account_id}/dlp/data_classes/{data_class_id}` | w3 | - |
+| 513 | `cloudflare_dlp_data_classes_replace` | `PUT` | `/accounts/{account_id}/dlp/data_classes/{data_class_id}` | w3 | - |
+| 514 | `cloudflare_dlp_data_classes_delete` | `DELETE` | `/accounts/{account_id}/dlp/data_classes/{data_class_id}` | w3 | - |
+| 515 | `cloudflare_dlp_data_tag_categories_list` | `GET` | `/accounts/{account_id}/dlp/data_tag_categories` | w3 | - |
+| 516 | `cloudflare_dlp_data_tag_categories_create` | `POST` | `/accounts/{account_id}/dlp/data_tag_categories` | w3 | - |
+| 517 | `cloudflare_dlp_data_tag_categories_get` | `GET` | `/accounts/{account_id}/dlp/data_tag_categories/{category_id}` | w3 | - |
+| 518 | `cloudflare_dlp_data_tag_categories_replace` | `PUT` | `/accounts/{account_id}/dlp/data_tag_categories/{category_id}` | w3 | - |
+| 519 | `cloudflare_dlp_data_tag_categories_delete` | `DELETE` | `/accounts/{account_id}/dlp/data_tag_categories/{category_id}` | w3 | - |
+| 520 | `cloudflare_dlp_data_tag_categories_category_id_data_tags_list` | `GET` | `/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags` | w3 | - |
+| 521 | `cloudflare_dlp_data_tag_categories_category_id_data_tags_create` | `POST` | `/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags` | w3 | - |
+| 522 | `cloudflare_dlp_data_tag_categories_category_id_data_tags_get` | `GET` | `/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags/{tag_id}` | w3 | - |
+| 523 | `cloudflare_dlp_data_tag_categories_category_id_data_tags_replace` | `PUT` | `/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags/{tag_id}` | w3 | - |
+| 524 | `cloudflare_dlp_data_tag_categories_category_id_data_tags_delete` | `DELETE` | `/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags/{tag_id}` | w3 | - |
+| 525 | `cloudflare_dlp_data_tag_category_templates_list` | `GET` | `/accounts/{account_id}/dlp/data_tag_category_templates` | w3 | - |
+| 526 | `cloudflare_dlp_data_tag_category_templates_get` | `GET` | `/accounts/{account_id}/dlp/data_tag_category_templates/{template_id}` | w3 | - |
+| 527 | `cloudflare_dlp_datasets_list` | `GET` | `/accounts/{account_id}/dlp/datasets` | w3 | - |
+| 528 | `cloudflare_dlp_datasets_create` | `POST` | `/accounts/{account_id}/dlp/datasets` | w3 | - |
+| 529 | `cloudflare_dlp_datasets_get` | `GET` | `/accounts/{account_id}/dlp/datasets/{dataset_id}` | w3 | - |
+| 530 | `cloudflare_dlp_datasets_replace` | `PUT` | `/accounts/{account_id}/dlp/datasets/{dataset_id}` | w3 | - |
+| 531 | `cloudflare_dlp_datasets_delete` | `DELETE` | `/accounts/{account_id}/dlp/datasets/{dataset_id}` | w3 | destructive |
+| 532 | `cloudflare_dlp_datasets_dataset_id_upload` | `POST` | `/accounts/{account_id}/dlp/datasets/{dataset_id}/upload` | w3 | - |
+| 533 | `cloudflare_dlp_document_fingerprints_list` | `GET` | `/accounts/{account_id}/dlp/document_fingerprints` | w3 | - |
+| 534 | `cloudflare_dlp_document_fingerprints_create` | `POST` | `/accounts/{account_id}/dlp/document_fingerprints` | w3 | - |
+| 535 | `cloudflare_dlp_document_fingerprints_get` | `GET` | `/accounts/{account_id}/dlp/document_fingerprints/{document_fingerprint_id}` | w3 | - |
+| 536 | `cloudflare_dlp_document_fingerprints_update` | `POST` | `/accounts/{account_id}/dlp/document_fingerprints/{document_fingerprint_id}` | w3 | renamed |
+| 537 | `cloudflare_dlp_document_fingerprints_delete` | `DELETE` | `/accounts/{account_id}/dlp/document_fingerprints/{document_fingerprint_id}` | w3 | destructive |
+| 538 | `cloudflare_dlp_email_account_mapping_list` | `GET` | `/accounts/{account_id}/dlp/email/account_mapping` | w3 | - |
+| 539 | `cloudflare_dlp_email_account_mapping_create` | `POST` | `/accounts/{account_id}/dlp/email/account_mapping` | w3 | - |
+| 540 | `cloudflare_dlp_email_rules_list` | `GET` | `/accounts/{account_id}/dlp/email/rules` | w3 | - |
+| 541 | `cloudflare_dlp_email_rules_create` | `POST` | `/accounts/{account_id}/dlp/email/rules` | w3 | - |
+| 542 | `cloudflare_dlp_email_rules_patch` | `PATCH` | `/accounts/{account_id}/dlp/email/rules` | w3 | - |
+| 543 | `cloudflare_dlp_email_rules_get` | `GET` | `/accounts/{account_id}/dlp/email/rules/{rule_id}` | w3 | - |
+| 544 | `cloudflare_dlp_email_rules_replace` | `PUT` | `/accounts/{account_id}/dlp/email/rules/{rule_id}` | w3 | - |
+| 545 | `cloudflare_dlp_email_rules_delete` | `DELETE` | `/accounts/{account_id}/dlp/email/rules/{rule_id}` | w3 | - |
+| 546 | `cloudflare_dlp_entries_list` | `GET` | `/accounts/{account_id}/dlp/entries` | w3 | - |
+| 547 | `cloudflare_dlp_entries_create` | `POST` | `/accounts/{account_id}/dlp/entries` | w3 | - |
+| 548 | `cloudflare_dlp_entries_get` | `GET` | `/accounts/{account_id}/dlp/entries/{entry_id}` | w3 | - |
+| 549 | `cloudflare_dlp_entries_replace` | `PUT` | `/accounts/{account_id}/dlp/entries/{entry_id}` | w3 | - |
+| 550 | `cloudflare_dlp_entries_delete` | `DELETE` | `/accounts/{account_id}/dlp/entries/{entry_id}` | w3 | - |
+| 551 | `cloudflare_dlp_limits_list` | `GET` | `/accounts/{account_id}/dlp/limits` | w3 | - |
+| 552 | `cloudflare_dlp_patterns_validate` | `POST` | `/accounts/{account_id}/dlp/patterns/validate` | w3 | - |
+| 553 | `cloudflare_dlp_profiles_list` | `GET` | `/accounts/{account_id}/dlp/profiles` | w3 | - |
+| 554 | `cloudflare_dlp_profiles_custom_create` | `POST` | `/accounts/{account_id}/dlp/profiles/custom` | w3 | - |
+| 555 | `cloudflare_dlp_profiles_custom_replace` | `PUT` | `/accounts/{account_id}/dlp/profiles/custom/{profile_id}` | w3 | - |
+| 556 | `cloudflare_dlp_profiles_custom_delete` | `DELETE` | `/accounts/{account_id}/dlp/profiles/custom/{profile_id}` | w3 | - |
+| 557 | `cloudflare_dlp_profiles_predefined_replace` | `PUT` | `/accounts/{account_id}/dlp/profiles/predefined/{profile_id}` | w3 | - |
+| 558 | `cloudflare_dlp_profiles_get` | `GET` | `/accounts/{account_id}/dlp/profiles/{profile_id}` | w3 | - |
+| 559 | `cloudflare_dlp_sensitivity_groups_list` | `GET` | `/accounts/{account_id}/dlp/sensitivity_groups` | w3 | - |
+| 560 | `cloudflare_dlp_sensitivity_groups_create` | `POST` | `/accounts/{account_id}/dlp/sensitivity_groups` | w3 | - |
+| 561 | `cloudflare_dlp_sensitivity_groups_templates_list` | `GET` | `/accounts/{account_id}/dlp/sensitivity_groups/templates` | w3 | - |
+| 562 | `cloudflare_dlp_sensitivity_groups_templates_get` | `GET` | `/accounts/{account_id}/dlp/sensitivity_groups/templates/{template_id}` | w3 | - |
+| 563 | `cloudflare_dlp_sensitivity_groups_get` | `GET` | `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}` | w3 | - |
+| 564 | `cloudflare_dlp_sensitivity_groups_replace` | `PUT` | `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}` | w3 | - |
+| 565 | `cloudflare_dlp_sensitivity_groups_delete` | `DELETE` | `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}` | w3 | - |
+| 566 | `cloudflare_dlp_sensitivity_groups_sensitivity_group_id_level_order_list` | `GET` | `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/level_order` | w3 | - |
+| 567 | `cloudflare_dlp_sensitivity_groups_sensitivity_group_id_level_order_put` | `PUT` | `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/level_order` | w3 | - |
+| 568 | `cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_list` | `GET` | `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels` | w3 | - |
+| 569 | `cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_create` | `POST` | `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels` | w3 | - |
+| 570 | `cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_get` | `GET` | `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels/{sensitivity_level_id}` | w3 | - |
+| 571 | `cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_replace` | `PUT` | `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels/{sensitivity_level_id}` | w3 | - |
+| 572 | `cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_delete` | `DELETE` | `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels/{sensitivity_level_id}` | w3 | - |
+| 573 | `cloudflare_dlp_settings_list` | `GET` | `/accounts/{account_id}/dlp/settings` | w3 | - |
+| 574 | `cloudflare_dlp_settings_put` | `PUT` | `/accounts/{account_id}/dlp/settings` | w3 | - |
+| 575 | `cloudflare_dlp_settings_patch` | `PATCH` | `/accounts/{account_id}/dlp/settings` | w3 | - |
+| 576 | `cloudflare_dlp_settings_delete` | `DELETE` | `/accounts/{account_id}/dlp/settings` | w3 | - |
+| 577 | `cloudflare_gateway_list` | `GET` | `/accounts/{account_id}/gateway` | w3 | - |
+| 578 | `cloudflare_gateway_create` | `POST` | `/accounts/{account_id}/gateway` | w3 | - |
+| 579 | `cloudflare_gateway_app_types_list` | `GET` | `/accounts/{account_id}/gateway/app_types` | w3 | - |
+| 580 | `cloudflare_gateway_audit_ssh_settings_list` | `GET` | `/accounts/{account_id}/gateway/audit_ssh_settings` | w3 | - |
+| 581 | `cloudflare_gateway_audit_ssh_settings_put` | `PUT` | `/accounts/{account_id}/gateway/audit_ssh_settings` | w3 | - |
+| 582 | `cloudflare_gateway_audit_ssh_settings_rotate_seed` | `POST` | `/accounts/{account_id}/gateway/audit_ssh_settings/rotate_seed` | w3 | - |
+| 583 | `cloudflare_gateway_categories_list` | `GET` | `/accounts/{account_id}/gateway/categories` | w3 | - |
+| 584 | `cloudflare_gateway_certificates_list` | `GET` | `/accounts/{account_id}/gateway/certificates` | w3 | - |
+| 585 | `cloudflare_gateway_certificates_create` | `POST` | `/accounts/{account_id}/gateway/certificates` | w3 | - |
+| 586 | `cloudflare_gateway_certificates_get` | `GET` | `/accounts/{account_id}/gateway/certificates/{certificate_id}` | w3 | - |
+| 587 | `cloudflare_gateway_certificates_delete` | `DELETE` | `/accounts/{account_id}/gateway/certificates/{certificate_id}` | w3 | - |
+| 588 | `cloudflare_gateway_certificates_certificate_id_activate` | `POST` | `/accounts/{account_id}/gateway/certificates/{certificate_id}/activate` | w3 | - |
+| 589 | `cloudflare_gateway_certificates_certificate_id_deactivate` | `POST` | `/accounts/{account_id}/gateway/certificates/{certificate_id}/deactivate` | w3 | - |
+| 590 | `cloudflare_gateway_configuration_list` | `GET` | `/accounts/{account_id}/gateway/configuration` | w3 | - |
+| 591 | `cloudflare_gateway_configuration_put` | `PUT` | `/accounts/{account_id}/gateway/configuration` | w3 | - |
+| 592 | `cloudflare_gateway_configuration_patch` | `PATCH` | `/accounts/{account_id}/gateway/configuration` | w3 | - |
+| 593 | `cloudflare_gateway_configuration_custom_certificate_list` | `GET` | `/accounts/{account_id}/gateway/configuration/custom_certificate` | w3 | deprecated |
+| 594 | `cloudflare_gateway_dns_destination_ips_list` | `GET` | `/accounts/{account_id}/gateway/dns_destination_ips` | w3 | - |
+| 595 | `cloudflare_gateway_lists_list` | `GET` | `/accounts/{account_id}/gateway/lists` | w3 | - |
+| 596 | `cloudflare_gateway_lists_create` | `POST` | `/accounts/{account_id}/gateway/lists` | w3 | - |
+| 597 | `cloudflare_gateway_lists_get` | `GET` | `/accounts/{account_id}/gateway/lists/{list_id}` | w3 | - |
+| 598 | `cloudflare_gateway_lists_replace` | `PUT` | `/accounts/{account_id}/gateway/lists/{list_id}` | w3 | - |
+| 599 | `cloudflare_gateway_lists_update` | `PATCH` | `/accounts/{account_id}/gateway/lists/{list_id}` | w3 | - |
+| 600 | `cloudflare_gateway_lists_delete` | `DELETE` | `/accounts/{account_id}/gateway/lists/{list_id}` | w3 | - |
+| 601 | `cloudflare_gateway_lists_list_id_items_list` | `GET` | `/accounts/{account_id}/gateway/lists/{list_id}/items` | w3 | - |
+| 602 | `cloudflare_gateway_locations_list` | `GET` | `/accounts/{account_id}/gateway/locations` | w3 | - |
+| 603 | `cloudflare_gateway_locations_create` | `POST` | `/accounts/{account_id}/gateway/locations` | w3 | - |
+| 604 | `cloudflare_gateway_locations_get` | `GET` | `/accounts/{account_id}/gateway/locations/{location_id}` | w3 | - |
+| 605 | `cloudflare_gateway_locations_replace` | `PUT` | `/accounts/{account_id}/gateway/locations/{location_id}` | w3 | - |
+| 606 | `cloudflare_gateway_locations_delete` | `DELETE` | `/accounts/{account_id}/gateway/locations/{location_id}` | w3 | - |
+| 607 | `cloudflare_gateway_logging_list` | `GET` | `/accounts/{account_id}/gateway/logging` | w3 | - |
+| 608 | `cloudflare_gateway_logging_put` | `PUT` | `/accounts/{account_id}/gateway/logging` | w3 | - |
+| 609 | `cloudflare_gateway_pacfiles_list` | `GET` | `/accounts/{account_id}/gateway/pacfiles` | w3 | - |
+| 610 | `cloudflare_gateway_pacfiles_create` | `POST` | `/accounts/{account_id}/gateway/pacfiles` | w3 | - |
+| 611 | `cloudflare_gateway_pacfiles_get` | `GET` | `/accounts/{account_id}/gateway/pacfiles/{pacfile_id}` | w3 | - |
+| 612 | `cloudflare_gateway_pacfiles_replace` | `PUT` | `/accounts/{account_id}/gateway/pacfiles/{pacfile_id}` | w3 | - |
+| 613 | `cloudflare_gateway_pacfiles_delete` | `DELETE` | `/accounts/{account_id}/gateway/pacfiles/{pacfile_id}` | w3 | - |
+| 614 | `cloudflare_gateway_proxy_endpoints_list` | `GET` | `/accounts/{account_id}/gateway/proxy_endpoints` | w3 | - |
+| 615 | `cloudflare_gateway_proxy_endpoints_create` | `POST` | `/accounts/{account_id}/gateway/proxy_endpoints` | w3 | - |
+| 616 | `cloudflare_gateway_proxy_endpoints_get` | `GET` | `/accounts/{account_id}/gateway/proxy_endpoints/{proxy_endpoint_id}` | w3 | - |
+| 617 | `cloudflare_gateway_proxy_endpoints_update` | `PATCH` | `/accounts/{account_id}/gateway/proxy_endpoints/{proxy_endpoint_id}` | w3 | - |
+| 618 | `cloudflare_gateway_proxy_endpoints_delete` | `DELETE` | `/accounts/{account_id}/gateway/proxy_endpoints/{proxy_endpoint_id}` | w3 | - |
+| 619 | `cloudflare_gateway_rules_list` | `GET` | `/accounts/{account_id}/gateway/rules` | w3 | - |
+| 620 | `cloudflare_gateway_rules_create` | `POST` | `/accounts/{account_id}/gateway/rules` | w3 | - |
+| 621 | `cloudflare_gateway_rules_tenant_list` | `GET` | `/accounts/{account_id}/gateway/rules/tenant` | w3 | - |
+| 622 | `cloudflare_gateway_rules_get` | `GET` | `/accounts/{account_id}/gateway/rules/{rule_id}` | w3 | - |
+| 623 | `cloudflare_gateway_rules_replace` | `PUT` | `/accounts/{account_id}/gateway/rules/{rule_id}` | w3 | - |
+| 624 | `cloudflare_gateway_rules_delete` | `DELETE` | `/accounts/{account_id}/gateway/rules/{rule_id}` | w3 | - |
+| 625 | `cloudflare_gateway_rules_rule_id_reset_expiration` | `POST` | `/accounts/{account_id}/gateway/rules/{rule_id}/reset_expiration` | w3 | - |
+| 626 | `cloudflare_teamnet_routes_list` | `GET` | `/accounts/{account_id}/teamnet/routes` | w3 | - |
+| 627 | `cloudflare_teamnet_routes_create` | `POST` | `/accounts/{account_id}/teamnet/routes` | w3 | - |
+| 628 | `cloudflare_teamnet_routes_ip_get` | `GET` | `/accounts/{account_id}/teamnet/routes/ip/{ip}` | w3 | - |
+| 629 | `cloudflare_teamnet_routes_get` | `GET` | `/accounts/{account_id}/teamnet/routes/{route_id}` | w3 | - |
+| 630 | `cloudflare_teamnet_routes_update` | `PATCH` | `/accounts/{account_id}/teamnet/routes/{route_id}` | w3 | - |
+| 631 | `cloudflare_teamnet_routes_delete` | `DELETE` | `/accounts/{account_id}/teamnet/routes/{route_id}` | w3 | destructive, needs confirmation |
+| 632 | `cloudflare_teamnet_virtual_networks_list` | `GET` | `/accounts/{account_id}/teamnet/virtual_networks` | w3 | - |
+| 633 | `cloudflare_teamnet_virtual_networks_create` | `POST` | `/accounts/{account_id}/teamnet/virtual_networks` | w3 | - |
+| 634 | `cloudflare_teamnet_virtual_networks_get` | `GET` | `/accounts/{account_id}/teamnet/virtual_networks/{virtual_network_id}` | w3 | - |
+| 635 | `cloudflare_teamnet_virtual_networks_update` | `PATCH` | `/accounts/{account_id}/teamnet/virtual_networks/{virtual_network_id}` | w3 | - |
+| 636 | `cloudflare_teamnet_virtual_networks_delete` | `DELETE` | `/accounts/{account_id}/teamnet/virtual_networks/{virtual_network_id}` | w3 | destructive, needs confirmation |
+| 637 | `cloudflare_tunnels_list` | `GET` | `/accounts/{account_id}/tunnels` | w3 | - |
+| 638 | `cloudflare_zerotrust_connectivity_settings_list` | `GET` | `/accounts/{account_id}/zerotrust/connectivity_settings` | w3 | - |
+| 639 | `cloudflare_zerotrust_connectivity_settings_patch` | `PATCH` | `/accounts/{account_id}/zerotrust/connectivity_settings` | w3 | - |
+| 640 | `cloudflare_zerotrust_routes_hostname_list` | `GET` | `/accounts/{account_id}/zerotrust/routes/hostname` | w3 | - |
+| 641 | `cloudflare_zerotrust_routes_hostname_create` | `POST` | `/accounts/{account_id}/zerotrust/routes/hostname` | w3 | - |
+| 642 | `cloudflare_zerotrust_routes_hostname_get` | `GET` | `/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}` | w3 | - |
+| 643 | `cloudflare_zerotrust_routes_hostname_update` | `PATCH` | `/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}` | w3 | - |
+| 644 | `cloudflare_zerotrust_routes_hostname_delete` | `DELETE` | `/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}` | w3 | destructive, needs confirmation |
+| 645 | `cloudflare_zerotrust_subnets_list` | `GET` | `/accounts/{account_id}/zerotrust/subnets` | w3 | - |
+| 646 | `cloudflare_zerotrust_subnets_cloudflare_source_get` | `GET` | `/accounts/{account_id}/zerotrust/subnets/cloudflare_source/{address_family}` | w3 | - |
+| 647 | `cloudflare_zerotrust_subnets_cloudflare_source_update` | `PATCH` | `/accounts/{account_id}/zerotrust/subnets/cloudflare_source/{address_family}` | w3 | - |
+| 648 | `cloudflare_zerotrust_subnets_initial_resolved_ip_get` | `GET` | `/accounts/{account_id}/zerotrust/subnets/initial_resolved_ip/{address_family}` | w3 | - |
+| 649 | `cloudflare_zerotrust_subnets_initial_resolved_ip_replace` | `PUT` | `/accounts/{account_id}/zerotrust/subnets/initial_resolved_ip/{address_family}` | w3 | - |
+| 650 | `cloudflare_zerotrust_subnets_warp_create` | `POST` | `/accounts/{account_id}/zerotrust/subnets/warp` | w3 | - |
+| 651 | `cloudflare_zerotrust_subnets_warp_get` | `GET` | `/accounts/{account_id}/zerotrust/subnets/warp/{subnet_id}` | w3 | - |
+| 652 | `cloudflare_zerotrust_subnets_warp_update` | `PATCH` | `/accounts/{account_id}/zerotrust/subnets/warp/{subnet_id}` | w3 | - |
+| 653 | `cloudflare_zerotrust_subnets_warp_delete` | `DELETE` | `/accounts/{account_id}/zerotrust/subnets/warp/{subnet_id}` | w3 | destructive, needs confirmation |
 
 ## Review notes
 
@@ -382,6 +712,13 @@ fields the spec does not publish; either is shipped only where the allowlist say
 - cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_configs_create: the spec marks this operation deprecated
 - cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_configs_configuration_type_queue_create: the spec marks this operation deprecated
 - cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_runs_list: the spec marks this operation deprecated
+- cloudflare_access_bookmarks_list: the spec marks this operation deprecated
+- cloudflare_access_bookmarks_get: the spec marks this operation deprecated
+- cloudflare_access_bookmarks_create: the spec marks this operation deprecated
+- cloudflare_access_bookmarks_replace: the spec marks this operation deprecated
+- cloudflare_access_bookmarks_delete: the spec marks this operation deprecated
+- cloudflare_devices_device_id_override_codes_list: the spec marks this operation deprecated
+- cloudflare_gateway_configuration_custom_certificate_list: the spec marks this operation deprecated
 
 ## Renames and retirements
 
@@ -415,141 +752,139 @@ Not shipped (10):
 - `GET` `/accounts/{account_id}/abuse-reports/{report_param}`
 - `POST` `/accounts/{account_id}/abuse-reports/{report_param}`
 
-### `accounts/access` - 0 of 131 reviewable shipped, 6 filtered out
+### `accounts/access` - 131 of 131 reviewable shipped, 6 filtered out
 
-
-Not shipped (131):
-- `GET` `/accounts/{account_id}/access/ai-controls/mcp/analytics/portals/{portal_id}/tool-calls/timeseries`
-- `GET` `/accounts/{account_id}/access/ai-controls/mcp/analytics/servers/{server_id}/tool-calls/timeseries`
-- `GET` `/accounts/{account_id}/access/ai-controls/mcp/analytics/tool-calls/timeseries`
-- `GET` `/accounts/{account_id}/access/ai-controls/mcp/portals`
-- `POST` `/accounts/{account_id}/access/ai-controls/mcp/portals`
-- `GET` `/accounts/{account_id}/access/ai-controls/mcp/portals/{id}`
-- `PUT` `/accounts/{account_id}/access/ai-controls/mcp/portals/{id}`
-- `DELETE` `/accounts/{account_id}/access/ai-controls/mcp/portals/{id}`
-- `GET` `/accounts/{account_id}/access/ai-controls/mcp/servers`
-- `POST` `/accounts/{account_id}/access/ai-controls/mcp/servers`
-- `GET` `/accounts/{account_id}/access/ai-controls/mcp/servers/{id}`
-- `PUT` `/accounts/{account_id}/access/ai-controls/mcp/servers/{id}`
-- `DELETE` `/accounts/{account_id}/access/ai-controls/mcp/servers/{id}`
-- `POST` `/accounts/{account_id}/access/ai-controls/mcp/servers/{id}/sync`
-- `GET` `/accounts/{account_id}/access/apps`
-- `POST` `/accounts/{account_id}/access/apps`
-- `GET` `/accounts/{account_id}/access/apps/ca`
-- `GET` `/accounts/{account_id}/access/apps/{app_id}`
-- `PUT` `/accounts/{account_id}/access/apps/{app_id}`
-- `DELETE` `/accounts/{account_id}/access/apps/{app_id}`
-- `GET` `/accounts/{account_id}/access/apps/{app_id}/ca`
-- `POST` `/accounts/{account_id}/access/apps/{app_id}/ca`
-- `DELETE` `/accounts/{account_id}/access/apps/{app_id}/ca`
-- `GET` `/accounts/{account_id}/access/apps/{app_id}/policies`
-- `GET` `/accounts/{account_id}/access/apps/{app_id}/policies/{policy_id}`
-- `PUT` `/accounts/{account_id}/access/apps/{app_id}/policies/{policy_id}/make_reusable`
-- `POST` `/accounts/{account_id}/access/apps/{app_id}/revoke_tokens`
-- `PUT` `/accounts/{account_id}/access/apps/{app_id}/settings`
-- `GET` `/accounts/{account_id}/access/apps/{app_id}/user_policy_checks`
-- `GET` `/accounts/{account_id}/access/authenticator_device_aaguids`
-- `GET` `/accounts/{account_id}/access/bookmarks`
-- `GET` `/accounts/{account_id}/access/bookmarks/{bookmark_id}`
-- `POST` `/accounts/{account_id}/access/bookmarks/{bookmark_id}`
-- `PUT` `/accounts/{account_id}/access/bookmarks/{bookmark_id}`
-- `DELETE` `/accounts/{account_id}/access/bookmarks/{bookmark_id}`
-- `GET` `/accounts/{account_id}/access/certificates`
-- `POST` `/accounts/{account_id}/access/certificates`
-- `GET` `/accounts/{account_id}/access/certificates/settings`
-- `PUT` `/accounts/{account_id}/access/certificates/settings`
-- `GET` `/accounts/{account_id}/access/certificates/{certificate_id}`
-- `PUT` `/accounts/{account_id}/access/certificates/{certificate_id}`
-- `DELETE` `/accounts/{account_id}/access/certificates/{certificate_id}`
-- `GET` `/accounts/{account_id}/access/custom_pages`
-- `POST` `/accounts/{account_id}/access/custom_pages`
-- `POST` `/accounts/{account_id}/access/custom_pages/validate`
-- `GET` `/accounts/{account_id}/access/custom_pages/{custom_page_id}`
-- `PUT` `/accounts/{account_id}/access/custom_pages/{custom_page_id}`
-- `DELETE` `/accounts/{account_id}/access/custom_pages/{custom_page_id}`
-- `GET` `/accounts/{account_id}/access/gateway_ca`
-- `POST` `/accounts/{account_id}/access/gateway_ca`
-- `DELETE` `/accounts/{account_id}/access/gateway_ca/{certificate_id}`
-- `GET` `/accounts/{account_id}/access/groups`
-- `POST` `/accounts/{account_id}/access/groups`
-- `GET` `/accounts/{account_id}/access/groups/{group_id}`
-- `PUT` `/accounts/{account_id}/access/groups/{group_id}`
-- `DELETE` `/accounts/{account_id}/access/groups/{group_id}`
-- `GET` `/accounts/{account_id}/access/identity_providers`
-- `POST` `/accounts/{account_id}/access/identity_providers`
-- `GET` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}`
-- `PUT` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}`
-- `DELETE` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}`
-- `POST` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/saml_certificate`
-- `GET` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/groups`
-- `GET` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/groups/{group_id}`
-- `DELETE` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/groups/{group_id}`
-- `GET` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/users`
-- `GET` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/users/{user_id}`
-- `DELETE` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/users/{user_id}`
-- `GET` `/accounts/{account_id}/access/idp_federation_grants`
-- `POST` `/accounts/{account_id}/access/idp_federation_grants`
-- `GET` `/accounts/{account_id}/access/idp_federation_grants/{grant_id}`
-- `DELETE` `/accounts/{account_id}/access/idp_federation_grants/{grant_id}`
-- `GET` `/accounts/{account_id}/access/keys`
-- `PUT` `/accounts/{account_id}/access/keys`
-- `POST` `/accounts/{account_id}/access/keys/rotate`
-- `GET` `/accounts/{account_id}/access/logs/access_requests`
-- `GET` `/accounts/{account_id}/access/logs/jit_requests`
-- `GET` `/accounts/{account_id}/access/logs/jit_requests/{knock_request_id}`
-- `GET` `/accounts/{account_id}/access/logs/scim/updates`
-- `GET` `/accounts/{account_id}/access/organizations`
-- `POST` `/accounts/{account_id}/access/organizations`
-- `PUT` `/accounts/{account_id}/access/organizations`
-- `GET` `/accounts/{account_id}/access/organizations/doh`
-- `PUT` `/accounts/{account_id}/access/organizations/doh`
-- `POST` `/accounts/{account_id}/access/organizations/revoke_user`
-- `GET` `/accounts/{account_id}/access/policies`
-- `POST` `/accounts/{account_id}/access/policies`
-- `GET` `/accounts/{account_id}/access/policies/{policy_id}`
-- `PUT` `/accounts/{account_id}/access/policies/{policy_id}`
-- `DELETE` `/accounts/{account_id}/access/policies/{policy_id}`
-- `POST` `/accounts/{account_id}/access/policy-tests`
-- `GET` `/accounts/{account_id}/access/policy-tests/{policy_test_id}`
-- `GET` `/accounts/{account_id}/access/policy-tests/{policy_test_id}/users`
-- `GET` `/accounts/{account_id}/access/saml_certificates`
-- `GET` `/accounts/{account_id}/access/saml_certificates/{saml_cert_set_id}`
-- `GET` `/accounts/{account_id}/access/saml_certificates/{saml_cert_set_id}/pem`
-- `POST` `/accounts/{account_id}/access/saml_certificates/{saml_cert_set_id}/rotate`
-- `GET` `/accounts/{account_id}/access/service_tokens`
-- `POST` `/accounts/{account_id}/access/service_tokens`
-- `GET` `/accounts/{account_id}/access/service_tokens/{service_token_id}`
-- `PUT` `/accounts/{account_id}/access/service_tokens/{service_token_id}`
-- `DELETE` `/accounts/{account_id}/access/service_tokens/{service_token_id}`
-- `POST` `/accounts/{account_id}/access/service_tokens/{service_token_id}/refresh`
-- `POST` `/accounts/{account_id}/access/service_tokens/{service_token_id}/rotate`
-- `GET` `/accounts/{account_id}/access/tags`
-- `POST` `/accounts/{account_id}/access/tags`
-- `GET` `/accounts/{account_id}/access/tags/{tag_name}`
-- `PUT` `/accounts/{account_id}/access/tags/{tag_name}`
-- `DELETE` `/accounts/{account_id}/access/tags/{tag_name}`
-- `GET` `/accounts/{account_id}/access/user_populations`
-- `POST` `/accounts/{account_id}/access/user_populations`
-- `GET` `/accounts/{account_id}/access/user_populations/{user_population_id}`
-- `PUT` `/accounts/{account_id}/access/user_populations/{user_population_id}`
-- `DELETE` `/accounts/{account_id}/access/user_populations/{user_population_id}`
-- `GET` `/accounts/{account_id}/access/user_populations/{user_population_id}/users`
-- `POST` `/accounts/{account_id}/access/user_populations/{user_population_id}/users`
-- `GET` `/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}`
-- `PUT` `/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}`
-- `PATCH` `/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}`
-- `DELETE` `/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}`
-- `GET` `/accounts/{account_id}/access/users`
-- `POST` `/accounts/{account_id}/access/users`
-- `GET` `/accounts/{account_id}/access/users/{user_id}`
-- `PUT` `/accounts/{account_id}/access/users/{user_id}`
-- `DELETE` `/accounts/{account_id}/access/users/{user_id}`
-- `GET` `/accounts/{account_id}/access/users/{user_id}/active_sessions`
-- `GET` `/accounts/{account_id}/access/users/{user_id}/active_sessions/{nonce}`
-- `GET` `/accounts/{account_id}/access/users/{user_id}/failed_logins`
-- `GET` `/accounts/{account_id}/access/users/{user_id}/last_seen_identity`
-- `DELETE` `/accounts/{account_id}/access/users/{user_id}/mfa_authenticators/{authenticator_id}`
-- `DELETE` `/accounts/{account_id}/access/users/{user_id}/passkeys/{authenticator_id}`
+- `cloudflare_access_ai_controls_mcp_analytics_portals_portal_id_tool_calls_timeseries_list` - `GET` `/accounts/{account_id}/access/ai-controls/mcp/analytics/portals/{portal_id}/tool-calls/timeseries`
+- `cloudflare_access_ai_controls_mcp_analytics_servers_server_id_tool_calls_timeseries_list` - `GET` `/accounts/{account_id}/access/ai-controls/mcp/analytics/servers/{server_id}/tool-calls/timeseries`
+- `cloudflare_access_ai_controls_mcp_analytics_tool_calls_timeseries_list` - `GET` `/accounts/{account_id}/access/ai-controls/mcp/analytics/tool-calls/timeseries`
+- `cloudflare_access_ai_controls_mcp_portals_list` - `GET` `/accounts/{account_id}/access/ai-controls/mcp/portals`
+- `cloudflare_access_ai_controls_mcp_portals_create` - `POST` `/accounts/{account_id}/access/ai-controls/mcp/portals`
+- `cloudflare_access_ai_controls_mcp_portals_get` - `GET` `/accounts/{account_id}/access/ai-controls/mcp/portals/{id}`
+- `cloudflare_access_ai_controls_mcp_portals_replace` - `PUT` `/accounts/{account_id}/access/ai-controls/mcp/portals/{id}`
+- `cloudflare_access_ai_controls_mcp_portals_delete` - `DELETE` `/accounts/{account_id}/access/ai-controls/mcp/portals/{id}`
+- `cloudflare_access_ai_controls_mcp_servers_list` - `GET` `/accounts/{account_id}/access/ai-controls/mcp/servers`
+- `cloudflare_access_ai_controls_mcp_servers_create` - `POST` `/accounts/{account_id}/access/ai-controls/mcp/servers`
+- `cloudflare_access_ai_controls_mcp_servers_get` - `GET` `/accounts/{account_id}/access/ai-controls/mcp/servers/{id}`
+- `cloudflare_access_ai_controls_mcp_servers_replace` - `PUT` `/accounts/{account_id}/access/ai-controls/mcp/servers/{id}`
+- `cloudflare_access_ai_controls_mcp_servers_delete` - `DELETE` `/accounts/{account_id}/access/ai-controls/mcp/servers/{id}`
+- `cloudflare_access_ai_controls_mcp_servers_id_sync_create` - `POST` `/accounts/{account_id}/access/ai-controls/mcp/servers/{id}/sync`
+- `cloudflare_access_apps_list` - `GET` `/accounts/{account_id}/access/apps`
+- `cloudflare_access_apps_create` - `POST` `/accounts/{account_id}/access/apps`
+- `cloudflare_access_apps_ca_list` - `GET` `/accounts/{account_id}/access/apps/ca`
+- `cloudflare_access_apps_get` - `GET` `/accounts/{account_id}/access/apps/{app_id}`
+- `cloudflare_access_apps_replace` - `PUT` `/accounts/{account_id}/access/apps/{app_id}`
+- `cloudflare_access_apps_delete` - `DELETE` `/accounts/{account_id}/access/apps/{app_id}`
+- `cloudflare_access_apps_app_id_ca_list` - `GET` `/accounts/{account_id}/access/apps/{app_id}/ca`
+- `cloudflare_access_apps_app_id_ca_create` - `POST` `/accounts/{account_id}/access/apps/{app_id}/ca`
+- `cloudflare_access_apps_app_id_ca_delete` - `DELETE` `/accounts/{account_id}/access/apps/{app_id}/ca`
+- `cloudflare_access_apps_app_id_policies_list` - `GET` `/accounts/{account_id}/access/apps/{app_id}/policies`
+- `cloudflare_access_apps_app_id_policies_get` - `GET` `/accounts/{account_id}/access/apps/{app_id}/policies/{policy_id}`
+- `cloudflare_access_apps_app_id_policies_policy_id_make_reusable_put` - `PUT` `/accounts/{account_id}/access/apps/{app_id}/policies/{policy_id}/make_reusable`
+- `cloudflare_access_apps_app_id_revoke_tokens` - `POST` `/accounts/{account_id}/access/apps/{app_id}/revoke_tokens`
+- `cloudflare_access_apps_app_id_settings_put` - `PUT` `/accounts/{account_id}/access/apps/{app_id}/settings`
+- `cloudflare_access_apps_app_id_user_policy_checks_list` - `GET` `/accounts/{account_id}/access/apps/{app_id}/user_policy_checks`
+- `cloudflare_access_authenticator_device_aaguids_list` - `GET` `/accounts/{account_id}/access/authenticator_device_aaguids`
+- `cloudflare_access_bookmarks_list` - `GET` `/accounts/{account_id}/access/bookmarks`
+- `cloudflare_access_bookmarks_get` - `GET` `/accounts/{account_id}/access/bookmarks/{bookmark_id}`
+- `cloudflare_access_bookmarks_create` - `POST` `/accounts/{account_id}/access/bookmarks/{bookmark_id}`
+- `cloudflare_access_bookmarks_replace` - `PUT` `/accounts/{account_id}/access/bookmarks/{bookmark_id}`
+- `cloudflare_access_bookmarks_delete` - `DELETE` `/accounts/{account_id}/access/bookmarks/{bookmark_id}`
+- `cloudflare_access_certificates_list` - `GET` `/accounts/{account_id}/access/certificates`
+- `cloudflare_access_certificates_create` - `POST` `/accounts/{account_id}/access/certificates`
+- `cloudflare_access_certificates_settings_list` - `GET` `/accounts/{account_id}/access/certificates/settings`
+- `cloudflare_access_certificates_settings_put` - `PUT` `/accounts/{account_id}/access/certificates/settings`
+- `cloudflare_access_certificates_get` - `GET` `/accounts/{account_id}/access/certificates/{certificate_id}`
+- `cloudflare_access_certificates_replace` - `PUT` `/accounts/{account_id}/access/certificates/{certificate_id}`
+- `cloudflare_access_certificates_delete` - `DELETE` `/accounts/{account_id}/access/certificates/{certificate_id}`
+- `cloudflare_access_custom_pages_list` - `GET` `/accounts/{account_id}/access/custom_pages`
+- `cloudflare_access_custom_pages_create` - `POST` `/accounts/{account_id}/access/custom_pages`
+- `cloudflare_access_custom_pages_validate` - `POST` `/accounts/{account_id}/access/custom_pages/validate`
+- `cloudflare_access_custom_pages_get` - `GET` `/accounts/{account_id}/access/custom_pages/{custom_page_id}`
+- `cloudflare_access_custom_pages_replace` - `PUT` `/accounts/{account_id}/access/custom_pages/{custom_page_id}`
+- `cloudflare_access_custom_pages_delete` - `DELETE` `/accounts/{account_id}/access/custom_pages/{custom_page_id}`
+- `cloudflare_access_gateway_ca_list` - `GET` `/accounts/{account_id}/access/gateway_ca`
+- `cloudflare_access_gateway_ca_create` - `POST` `/accounts/{account_id}/access/gateway_ca`
+- `cloudflare_access_gateway_ca_delete` - `DELETE` `/accounts/{account_id}/access/gateway_ca/{certificate_id}`
+- `cloudflare_access_groups_list` - `GET` `/accounts/{account_id}/access/groups`
+- `cloudflare_access_groups_create` - `POST` `/accounts/{account_id}/access/groups`
+- `cloudflare_access_groups_get` - `GET` `/accounts/{account_id}/access/groups/{group_id}`
+- `cloudflare_access_groups_replace` - `PUT` `/accounts/{account_id}/access/groups/{group_id}`
+- `cloudflare_access_groups_delete` - `DELETE` `/accounts/{account_id}/access/groups/{group_id}`
+- `cloudflare_access_identity_providers_list` - `GET` `/accounts/{account_id}/access/identity_providers`
+- `cloudflare_access_identity_providers_create` - `POST` `/accounts/{account_id}/access/identity_providers`
+- `cloudflare_access_identity_providers_get` - `GET` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}`
+- `cloudflare_access_identity_providers_replace` - `PUT` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}`
+- `cloudflare_access_identity_providers_delete` - `DELETE` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}`
+- `cloudflare_access_identity_providers_identity_provider_id_saml_certificate_create` - `POST` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/saml_certificate`
+- `cloudflare_access_identity_providers_identity_provider_id_scim_groups_list` - `GET` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/groups`
+- `cloudflare_access_identity_providers_identity_provider_id_scim_groups_get` - `GET` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/groups/{group_id}`
+- `cloudflare_access_identity_providers_identity_provider_id_scim_groups_delete` - `DELETE` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/groups/{group_id}`
+- `cloudflare_access_identity_providers_identity_provider_id_scim_users_list` - `GET` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/users`
+- `cloudflare_access_identity_providers_identity_provider_id_scim_users_get` - `GET` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/users/{user_id}`
+- `cloudflare_access_identity_providers_identity_provider_id_scim_users_delete` - `DELETE` `/accounts/{account_id}/access/identity_providers/{identity_provider_id}/scim/users/{user_id}`
+- `cloudflare_access_idp_federation_grants_list` - `GET` `/accounts/{account_id}/access/idp_federation_grants`
+- `cloudflare_access_idp_federation_grants_create` - `POST` `/accounts/{account_id}/access/idp_federation_grants`
+- `cloudflare_access_idp_federation_grants_get` - `GET` `/accounts/{account_id}/access/idp_federation_grants/{grant_id}`
+- `cloudflare_access_idp_federation_grants_delete` - `DELETE` `/accounts/{account_id}/access/idp_federation_grants/{grant_id}`
+- `cloudflare_access_keys_list` - `GET` `/accounts/{account_id}/access/keys`
+- `cloudflare_access_keys_put` - `PUT` `/accounts/{account_id}/access/keys`
+- `cloudflare_access_keys_rotate` - `POST` `/accounts/{account_id}/access/keys/rotate`
+- `cloudflare_access_logs_access_requests_list` - `GET` `/accounts/{account_id}/access/logs/access_requests`
+- `cloudflare_access_logs_jit_requests_list` - `GET` `/accounts/{account_id}/access/logs/jit_requests`
+- `cloudflare_access_logs_jit_requests_get` - `GET` `/accounts/{account_id}/access/logs/jit_requests/{knock_request_id}`
+- `cloudflare_access_logs_scim_updates_list` - `GET` `/accounts/{account_id}/access/logs/scim/updates`
+- `cloudflare_access_organizations_list` - `GET` `/accounts/{account_id}/access/organizations`
+- `cloudflare_access_organizations_create` - `POST` `/accounts/{account_id}/access/organizations`
+- `cloudflare_access_organizations_put` - `PUT` `/accounts/{account_id}/access/organizations`
+- `cloudflare_access_organizations_doh_list` - `GET` `/accounts/{account_id}/access/organizations/doh`
+- `cloudflare_access_organizations_doh_put` - `PUT` `/accounts/{account_id}/access/organizations/doh`
+- `cloudflare_access_organizations_revoke_user` - `POST` `/accounts/{account_id}/access/organizations/revoke_user`
+- `cloudflare_access_policies_list` - `GET` `/accounts/{account_id}/access/policies`
+- `cloudflare_access_policies_create` - `POST` `/accounts/{account_id}/access/policies`
+- `cloudflare_access_policies_get` - `GET` `/accounts/{account_id}/access/policies/{policy_id}`
+- `cloudflare_access_policies_replace` - `PUT` `/accounts/{account_id}/access/policies/{policy_id}`
+- `cloudflare_access_policies_delete` - `DELETE` `/accounts/{account_id}/access/policies/{policy_id}`
+- `cloudflare_access_policy_tests_create` - `POST` `/accounts/{account_id}/access/policy-tests`
+- `cloudflare_access_policy_tests_get` - `GET` `/accounts/{account_id}/access/policy-tests/{policy_test_id}`
+- `cloudflare_access_policy_tests_policy_test_id_users_list` - `GET` `/accounts/{account_id}/access/policy-tests/{policy_test_id}/users`
+- `cloudflare_access_saml_certificates_list` - `GET` `/accounts/{account_id}/access/saml_certificates`
+- `cloudflare_access_saml_certificates_get` - `GET` `/accounts/{account_id}/access/saml_certificates/{saml_cert_set_id}`
+- `cloudflare_access_saml_certificates_saml_cert_set_id_pem_list` - `GET` `/accounts/{account_id}/access/saml_certificates/{saml_cert_set_id}/pem`
+- `cloudflare_access_saml_certificates_saml_cert_set_id_rotate` - `POST` `/accounts/{account_id}/access/saml_certificates/{saml_cert_set_id}/rotate`
+- `cloudflare_access_service_tokens_list` - `GET` `/accounts/{account_id}/access/service_tokens`
+- `cloudflare_access_service_tokens_create` - `POST` `/accounts/{account_id}/access/service_tokens`
+- `cloudflare_access_service_tokens_get` - `GET` `/accounts/{account_id}/access/service_tokens/{service_token_id}`
+- `cloudflare_access_service_tokens_replace` - `PUT` `/accounts/{account_id}/access/service_tokens/{service_token_id}`
+- `cloudflare_access_service_tokens_delete` - `DELETE` `/accounts/{account_id}/access/service_tokens/{service_token_id}`
+- `cloudflare_access_service_tokens_service_token_id_refresh` - `POST` `/accounts/{account_id}/access/service_tokens/{service_token_id}/refresh`
+- `cloudflare_access_service_tokens_service_token_id_rotate` - `POST` `/accounts/{account_id}/access/service_tokens/{service_token_id}/rotate`
+- `cloudflare_access_tags_list` - `GET` `/accounts/{account_id}/access/tags`
+- `cloudflare_access_tags_create` - `POST` `/accounts/{account_id}/access/tags`
+- `cloudflare_access_tags_get` - `GET` `/accounts/{account_id}/access/tags/{tag_name}`
+- `cloudflare_access_tags_replace` - `PUT` `/accounts/{account_id}/access/tags/{tag_name}`
+- `cloudflare_access_tags_delete` - `DELETE` `/accounts/{account_id}/access/tags/{tag_name}`
+- `cloudflare_access_user_populations_list` - `GET` `/accounts/{account_id}/access/user_populations`
+- `cloudflare_access_user_populations_create` - `POST` `/accounts/{account_id}/access/user_populations`
+- `cloudflare_access_user_populations_get` - `GET` `/accounts/{account_id}/access/user_populations/{user_population_id}`
+- `cloudflare_access_user_populations_replace` - `PUT` `/accounts/{account_id}/access/user_populations/{user_population_id}`
+- `cloudflare_access_user_populations_delete` - `DELETE` `/accounts/{account_id}/access/user_populations/{user_population_id}`
+- `cloudflare_access_user_populations_user_population_id_users_list` - `GET` `/accounts/{account_id}/access/user_populations/{user_population_id}/users`
+- `cloudflare_access_user_populations_user_population_id_users_create` - `POST` `/accounts/{account_id}/access/user_populations/{user_population_id}/users`
+- `cloudflare_access_user_populations_user_population_id_users_get` - `GET` `/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}`
+- `cloudflare_access_user_populations_user_population_id_users_replace` - `PUT` `/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}`
+- `cloudflare_access_user_populations_user_population_id_users_update` - `PATCH` `/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}`
+- `cloudflare_access_user_populations_user_population_id_users_delete` - `DELETE` `/accounts/{account_id}/access/user_populations/{user_population_id}/users/{user_id}`
+- `cloudflare_access_users_list` - `GET` `/accounts/{account_id}/access/users`
+- `cloudflare_access_users_create` - `POST` `/accounts/{account_id}/access/users`
+- `cloudflare_access_users_get` - `GET` `/accounts/{account_id}/access/users/{user_id}`
+- `cloudflare_access_users_replace` - `PUT` `/accounts/{account_id}/access/users/{user_id}`
+- `cloudflare_access_users_delete` - `DELETE` `/accounts/{account_id}/access/users/{user_id}`
+- `cloudflare_access_users_user_id_active_sessions_list` - `GET` `/accounts/{account_id}/access/users/{user_id}/active_sessions`
+- `cloudflare_access_users_user_id_active_sessions_get` - `GET` `/accounts/{account_id}/access/users/{user_id}/active_sessions/{nonce}`
+- `cloudflare_access_users_user_id_failed_logins_list` - `GET` `/accounts/{account_id}/access/users/{user_id}/failed_logins`
+- `cloudflare_access_users_user_id_last_seen_identity_list` - `GET` `/accounts/{account_id}/access/users/{user_id}/last_seen_identity`
+- `cloudflare_access_users_user_id_mfa_authenticators_delete` - `DELETE` `/accounts/{account_id}/access/users/{user_id}/mfa_authenticators/{authenticator_id}`
+- `cloudflare_access_users_user_id_passkeys_delete` - `DELETE` `/accounts/{account_id}/access/users/{user_id}/passkeys/{authenticator_id}`
 
 ### `accounts/accounts` - 1 of 0 reviewable shipped, 6 filtered out
 
@@ -1100,60 +1435,58 @@ Not shipped (35):
 - `DELETE` `/accounts/{account_id}/data-security/posture/webhooks/{webhook_id}`
 - `POST` `/accounts/{account_id}/data-security/posture/webhooks/{webhook_id}/evaluate`
 
-### `accounts/devices` - 0 of 50 reviewable shipped, 24 filtered out
+### `accounts/devices` - 50 of 50 reviewable shipped, 24 filtered out
 
-
-Not shipped (50):
-- `GET` `/accounts/{account_id}/devices/client-versions`
-- `GET` `/accounts/{account_id}/devices/client-versions/target-environments`
-- `GET` `/accounts/{account_id}/devices/deployment-groups`
-- `POST` `/accounts/{account_id}/devices/deployment-groups`
-- `GET` `/accounts/{account_id}/devices/deployment-groups/{group_id}`
-- `PATCH` `/accounts/{account_id}/devices/deployment-groups/{group_id}`
-- `DELETE` `/accounts/{account_id}/devices/deployment-groups/{group_id}`
-- `GET` `/accounts/{account_id}/devices/ip-profiles`
-- `POST` `/accounts/{account_id}/devices/ip-profiles`
-- `GET` `/accounts/{account_id}/devices/ip-profiles/{profile_id}`
-- `PATCH` `/accounts/{account_id}/devices/ip-profiles/{profile_id}`
-- `DELETE` `/accounts/{account_id}/devices/ip-profiles/{profile_id}`
-- `GET` `/accounts/{account_id}/devices/networks`
-- `POST` `/accounts/{account_id}/devices/networks`
-- `GET` `/accounts/{account_id}/devices/networks/{network_id}`
-- `PUT` `/accounts/{account_id}/devices/networks/{network_id}`
-- `DELETE` `/accounts/{account_id}/devices/networks/{network_id}`
-- `POST` `/accounts/{account_id}/devices/override_codes`
-- `GET` `/accounts/{account_id}/devices/physical-devices`
-- `GET` `/accounts/{account_id}/devices/physical-devices/{device_id}`
-- `PATCH` `/accounts/{account_id}/devices/physical-devices/{device_id}`
-- `DELETE` `/accounts/{account_id}/devices/physical-devices/{device_id}`
-- `GET` `/accounts/{account_id}/devices/policies`
-- `GET` `/accounts/{account_id}/devices/policy`
-- `POST` `/accounts/{account_id}/devices/policy`
-- `PATCH` `/accounts/{account_id}/devices/policy`
-- `GET` `/accounts/{account_id}/devices/policy/{policy_id}`
-- `PATCH` `/accounts/{account_id}/devices/policy/{policy_id}`
-- `DELETE` `/accounts/{account_id}/devices/policy/{policy_id}`
-- `GET` `/accounts/{account_id}/devices/posture`
-- `POST` `/accounts/{account_id}/devices/posture`
-- `GET` `/accounts/{account_id}/devices/posture/integration`
-- `POST` `/accounts/{account_id}/devices/posture/integration`
-- `GET` `/accounts/{account_id}/devices/posture/integration/{integration_id}`
-- `PATCH` `/accounts/{account_id}/devices/posture/integration/{integration_id}`
-- `DELETE` `/accounts/{account_id}/devices/posture/integration/{integration_id}`
-- `GET` `/accounts/{account_id}/devices/posture/{rule_id}`
-- `PUT` `/accounts/{account_id}/devices/posture/{rule_id}`
-- `DELETE` `/accounts/{account_id}/devices/posture/{rule_id}`
-- `GET` `/accounts/{account_id}/devices/registrations`
-- `DELETE` `/accounts/{account_id}/devices/registrations`
-- `GET` `/accounts/{account_id}/devices/registrations/{registration_id}`
-- `DELETE` `/accounts/{account_id}/devices/registrations/{registration_id}`
-- `GET` `/accounts/{account_id}/devices/registrations/{registration_id}/override_codes`
-- `GET` `/accounts/{account_id}/devices/resilience/disconnect`
-- `POST` `/accounts/{account_id}/devices/resilience/disconnect`
-- `GET` `/accounts/{account_id}/devices/settings`
-- `PATCH` `/accounts/{account_id}/devices/settings`
-- `DELETE` `/accounts/{account_id}/devices/settings`
-- `GET` `/accounts/{account_id}/devices/{device_id}/override_codes`
+- `cloudflare_devices_client_versions_list` - `GET` `/accounts/{account_id}/devices/client-versions`
+- `cloudflare_devices_client_versions_target_environments_list` - `GET` `/accounts/{account_id}/devices/client-versions/target-environments`
+- `cloudflare_devices_deployment_groups_list` - `GET` `/accounts/{account_id}/devices/deployment-groups`
+- `cloudflare_devices_deployment_groups_create` - `POST` `/accounts/{account_id}/devices/deployment-groups`
+- `cloudflare_devices_deployment_groups_get` - `GET` `/accounts/{account_id}/devices/deployment-groups/{group_id}`
+- `cloudflare_devices_deployment_groups_update` - `PATCH` `/accounts/{account_id}/devices/deployment-groups/{group_id}`
+- `cloudflare_devices_deployment_groups_delete` - `DELETE` `/accounts/{account_id}/devices/deployment-groups/{group_id}`
+- `cloudflare_devices_ip_profiles_list` - `GET` `/accounts/{account_id}/devices/ip-profiles`
+- `cloudflare_devices_ip_profiles_create` - `POST` `/accounts/{account_id}/devices/ip-profiles`
+- `cloudflare_devices_ip_profiles_get` - `GET` `/accounts/{account_id}/devices/ip-profiles/{profile_id}`
+- `cloudflare_devices_ip_profiles_update` - `PATCH` `/accounts/{account_id}/devices/ip-profiles/{profile_id}`
+- `cloudflare_devices_ip_profiles_delete` - `DELETE` `/accounts/{account_id}/devices/ip-profiles/{profile_id}`
+- `cloudflare_devices_networks_list` - `GET` `/accounts/{account_id}/devices/networks`
+- `cloudflare_devices_networks_create` - `POST` `/accounts/{account_id}/devices/networks`
+- `cloudflare_devices_networks_get` - `GET` `/accounts/{account_id}/devices/networks/{network_id}`
+- `cloudflare_devices_networks_replace` - `PUT` `/accounts/{account_id}/devices/networks/{network_id}`
+- `cloudflare_devices_networks_delete` - `DELETE` `/accounts/{account_id}/devices/networks/{network_id}`
+- `cloudflare_devices_override_codes_create` - `POST` `/accounts/{account_id}/devices/override_codes`
+- `cloudflare_devices_physical_devices_list` - `GET` `/accounts/{account_id}/devices/physical-devices`
+- `cloudflare_devices_physical_devices_get` - `GET` `/accounts/{account_id}/devices/physical-devices/{device_id}`
+- `cloudflare_devices_physical_devices_update` - `PATCH` `/accounts/{account_id}/devices/physical-devices/{device_id}`
+- `cloudflare_devices_physical_devices_delete` - `DELETE` `/accounts/{account_id}/devices/physical-devices/{device_id}`
+- `cloudflare_devices_policies_list` - `GET` `/accounts/{account_id}/devices/policies`
+- `cloudflare_devices_policy_list` - `GET` `/accounts/{account_id}/devices/policy`
+- `cloudflare_devices_policy_create` - `POST` `/accounts/{account_id}/devices/policy`
+- `cloudflare_devices_policy_patch` - `PATCH` `/accounts/{account_id}/devices/policy`
+- `cloudflare_devices_policy_get` - `GET` `/accounts/{account_id}/devices/policy/{policy_id}`
+- `cloudflare_devices_policy_update` - `PATCH` `/accounts/{account_id}/devices/policy/{policy_id}`
+- `cloudflare_devices_policy_delete` - `DELETE` `/accounts/{account_id}/devices/policy/{policy_id}`
+- `cloudflare_devices_posture_list` - `GET` `/accounts/{account_id}/devices/posture`
+- `cloudflare_devices_posture_create` - `POST` `/accounts/{account_id}/devices/posture`
+- `cloudflare_devices_posture_integration_list` - `GET` `/accounts/{account_id}/devices/posture/integration`
+- `cloudflare_devices_posture_integration_create` - `POST` `/accounts/{account_id}/devices/posture/integration`
+- `cloudflare_devices_posture_integration_get` - `GET` `/accounts/{account_id}/devices/posture/integration/{integration_id}`
+- `cloudflare_devices_posture_integration_update` - `PATCH` `/accounts/{account_id}/devices/posture/integration/{integration_id}`
+- `cloudflare_devices_posture_integration_delete` - `DELETE` `/accounts/{account_id}/devices/posture/integration/{integration_id}`
+- `cloudflare_devices_posture_get` - `GET` `/accounts/{account_id}/devices/posture/{rule_id}`
+- `cloudflare_devices_posture_replace` - `PUT` `/accounts/{account_id}/devices/posture/{rule_id}`
+- `cloudflare_devices_posture_delete` - `DELETE` `/accounts/{account_id}/devices/posture/{rule_id}`
+- `cloudflare_devices_registrations_list` - `GET` `/accounts/{account_id}/devices/registrations`
+- `cloudflare_devices_registrations_delete_all` - `DELETE` `/accounts/{account_id}/devices/registrations`
+- `cloudflare_devices_registrations_get` - `GET` `/accounts/{account_id}/devices/registrations/{registration_id}`
+- `cloudflare_devices_registrations_delete` - `DELETE` `/accounts/{account_id}/devices/registrations/{registration_id}`
+- `cloudflare_devices_registrations_registration_id_override_codes_list` - `GET` `/accounts/{account_id}/devices/registrations/{registration_id}/override_codes`
+- `cloudflare_devices_resilience_disconnect_list` - `GET` `/accounts/{account_id}/devices/resilience/disconnect`
+- `cloudflare_devices_resilience_disconnect_create` - `POST` `/accounts/{account_id}/devices/resilience/disconnect`
+- `cloudflare_devices_settings_list` - `GET` `/accounts/{account_id}/devices/settings`
+- `cloudflare_devices_settings_patch` - `PATCH` `/accounts/{account_id}/devices/settings`
+- `cloudflare_devices_settings_delete` - `DELETE` `/accounts/{account_id}/devices/settings`
+- `cloudflare_devices_device_id_override_codes_list` - `GET` `/accounts/{account_id}/devices/{device_id}/override_codes`
 
 ### `accounts/dex` - 0 of 31 reviewable shipped
 
@@ -1194,84 +1527,84 @@ Not shipped (31):
 ### `accounts/diagnostics` - 0 of 0 reviewable shipped, 6 filtered out
 
 
-### `accounts/dlp` - 0 of 74 reviewable shipped, 21 filtered out
+### `accounts/dlp` - 72 of 74 reviewable shipped, 21 filtered out
 
+- `cloudflare_dlp_custom_prompt_topics_list` - `GET` `/accounts/{account_id}/dlp/custom_prompt_topics`
+- `cloudflare_dlp_custom_prompt_topics_create` - `POST` `/accounts/{account_id}/dlp/custom_prompt_topics`
+- `cloudflare_dlp_custom_prompt_topics_get` - `GET` `/accounts/{account_id}/dlp/custom_prompt_topics/{entry_id}`
+- `cloudflare_dlp_custom_prompt_topics_replace` - `PUT` `/accounts/{account_id}/dlp/custom_prompt_topics/{entry_id}`
+- `cloudflare_dlp_custom_prompt_topics_delete` - `DELETE` `/accounts/{account_id}/dlp/custom_prompt_topics/{entry_id}`
+- `cloudflare_dlp_data_classes_list` - `GET` `/accounts/{account_id}/dlp/data_classes`
+- `cloudflare_dlp_data_classes_create` - `POST` `/accounts/{account_id}/dlp/data_classes`
+- `cloudflare_dlp_data_classes_get` - `GET` `/accounts/{account_id}/dlp/data_classes/{data_class_id}`
+- `cloudflare_dlp_data_classes_replace` - `PUT` `/accounts/{account_id}/dlp/data_classes/{data_class_id}`
+- `cloudflare_dlp_data_classes_delete` - `DELETE` `/accounts/{account_id}/dlp/data_classes/{data_class_id}`
+- `cloudflare_dlp_data_tag_categories_list` - `GET` `/accounts/{account_id}/dlp/data_tag_categories`
+- `cloudflare_dlp_data_tag_categories_create` - `POST` `/accounts/{account_id}/dlp/data_tag_categories`
+- `cloudflare_dlp_data_tag_categories_get` - `GET` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}`
+- `cloudflare_dlp_data_tag_categories_replace` - `PUT` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}`
+- `cloudflare_dlp_data_tag_categories_delete` - `DELETE` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}`
+- `cloudflare_dlp_data_tag_categories_category_id_data_tags_list` - `GET` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags`
+- `cloudflare_dlp_data_tag_categories_category_id_data_tags_create` - `POST` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags`
+- `cloudflare_dlp_data_tag_categories_category_id_data_tags_get` - `GET` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags/{tag_id}`
+- `cloudflare_dlp_data_tag_categories_category_id_data_tags_replace` - `PUT` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags/{tag_id}`
+- `cloudflare_dlp_data_tag_categories_category_id_data_tags_delete` - `DELETE` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags/{tag_id}`
+- `cloudflare_dlp_data_tag_category_templates_list` - `GET` `/accounts/{account_id}/dlp/data_tag_category_templates`
+- `cloudflare_dlp_data_tag_category_templates_get` - `GET` `/accounts/{account_id}/dlp/data_tag_category_templates/{template_id}`
+- `cloudflare_dlp_datasets_list` - `GET` `/accounts/{account_id}/dlp/datasets`
+- `cloudflare_dlp_datasets_create` - `POST` `/accounts/{account_id}/dlp/datasets`
+- `cloudflare_dlp_datasets_get` - `GET` `/accounts/{account_id}/dlp/datasets/{dataset_id}`
+- `cloudflare_dlp_datasets_replace` - `PUT` `/accounts/{account_id}/dlp/datasets/{dataset_id}`
+- `cloudflare_dlp_datasets_delete` - `DELETE` `/accounts/{account_id}/dlp/datasets/{dataset_id}`
+- `cloudflare_dlp_datasets_dataset_id_upload` - `POST` `/accounts/{account_id}/dlp/datasets/{dataset_id}/upload`
+- `cloudflare_dlp_document_fingerprints_list` - `GET` `/accounts/{account_id}/dlp/document_fingerprints`
+- `cloudflare_dlp_document_fingerprints_create` - `POST` `/accounts/{account_id}/dlp/document_fingerprints`
+- `cloudflare_dlp_document_fingerprints_get` - `GET` `/accounts/{account_id}/dlp/document_fingerprints/{document_fingerprint_id}`
+- `cloudflare_dlp_document_fingerprints_update` - `POST` `/accounts/{account_id}/dlp/document_fingerprints/{document_fingerprint_id}`
+- `cloudflare_dlp_document_fingerprints_delete` - `DELETE` `/accounts/{account_id}/dlp/document_fingerprints/{document_fingerprint_id}`
+- `cloudflare_dlp_email_account_mapping_list` - `GET` `/accounts/{account_id}/dlp/email/account_mapping`
+- `cloudflare_dlp_email_account_mapping_create` - `POST` `/accounts/{account_id}/dlp/email/account_mapping`
+- `cloudflare_dlp_email_rules_list` - `GET` `/accounts/{account_id}/dlp/email/rules`
+- `cloudflare_dlp_email_rules_create` - `POST` `/accounts/{account_id}/dlp/email/rules`
+- `cloudflare_dlp_email_rules_patch` - `PATCH` `/accounts/{account_id}/dlp/email/rules`
+- `cloudflare_dlp_email_rules_get` - `GET` `/accounts/{account_id}/dlp/email/rules/{rule_id}`
+- `cloudflare_dlp_email_rules_replace` - `PUT` `/accounts/{account_id}/dlp/email/rules/{rule_id}`
+- `cloudflare_dlp_email_rules_delete` - `DELETE` `/accounts/{account_id}/dlp/email/rules/{rule_id}`
+- `cloudflare_dlp_entries_list` - `GET` `/accounts/{account_id}/dlp/entries`
+- `cloudflare_dlp_entries_create` - `POST` `/accounts/{account_id}/dlp/entries`
+- `cloudflare_dlp_entries_get` - `GET` `/accounts/{account_id}/dlp/entries/{entry_id}`
+- `cloudflare_dlp_entries_replace` - `PUT` `/accounts/{account_id}/dlp/entries/{entry_id}`
+- `cloudflare_dlp_entries_delete` - `DELETE` `/accounts/{account_id}/dlp/entries/{entry_id}`
+- `cloudflare_dlp_limits_list` - `GET` `/accounts/{account_id}/dlp/limits`
+- `cloudflare_dlp_patterns_validate` - `POST` `/accounts/{account_id}/dlp/patterns/validate`
+- `cloudflare_dlp_profiles_list` - `GET` `/accounts/{account_id}/dlp/profiles`
+- `cloudflare_dlp_profiles_custom_create` - `POST` `/accounts/{account_id}/dlp/profiles/custom`
+- `cloudflare_dlp_profiles_custom_replace` - `PUT` `/accounts/{account_id}/dlp/profiles/custom/{profile_id}`
+- `cloudflare_dlp_profiles_custom_delete` - `DELETE` `/accounts/{account_id}/dlp/profiles/custom/{profile_id}`
+- `cloudflare_dlp_profiles_predefined_replace` - `PUT` `/accounts/{account_id}/dlp/profiles/predefined/{profile_id}`
+- `cloudflare_dlp_profiles_get` - `GET` `/accounts/{account_id}/dlp/profiles/{profile_id}`
+- `cloudflare_dlp_sensitivity_groups_list` - `GET` `/accounts/{account_id}/dlp/sensitivity_groups`
+- `cloudflare_dlp_sensitivity_groups_create` - `POST` `/accounts/{account_id}/dlp/sensitivity_groups`
+- `cloudflare_dlp_sensitivity_groups_templates_list` - `GET` `/accounts/{account_id}/dlp/sensitivity_groups/templates`
+- `cloudflare_dlp_sensitivity_groups_templates_get` - `GET` `/accounts/{account_id}/dlp/sensitivity_groups/templates/{template_id}`
+- `cloudflare_dlp_sensitivity_groups_get` - `GET` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}`
+- `cloudflare_dlp_sensitivity_groups_replace` - `PUT` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}`
+- `cloudflare_dlp_sensitivity_groups_delete` - `DELETE` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}`
+- `cloudflare_dlp_sensitivity_groups_sensitivity_group_id_level_order_list` - `GET` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/level_order`
+- `cloudflare_dlp_sensitivity_groups_sensitivity_group_id_level_order_put` - `PUT` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/level_order`
+- `cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_list` - `GET` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels`
+- `cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_create` - `POST` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels`
+- `cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_get` - `GET` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels/{sensitivity_level_id}`
+- `cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_replace` - `PUT` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels/{sensitivity_level_id}`
+- `cloudflare_dlp_sensitivity_groups_sensitivity_group_id_levels_delete` - `DELETE` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels/{sensitivity_level_id}`
+- `cloudflare_dlp_settings_list` - `GET` `/accounts/{account_id}/dlp/settings`
+- `cloudflare_dlp_settings_put` - `PUT` `/accounts/{account_id}/dlp/settings`
+- `cloudflare_dlp_settings_patch` - `PATCH` `/accounts/{account_id}/dlp/settings`
+- `cloudflare_dlp_settings_delete` - `DELETE` `/accounts/{account_id}/dlp/settings`
 
-Not shipped (74):
-- `GET` `/accounts/{account_id}/dlp/custom_prompt_topics`
-- `POST` `/accounts/{account_id}/dlp/custom_prompt_topics`
-- `GET` `/accounts/{account_id}/dlp/custom_prompt_topics/{entry_id}`
-- `PUT` `/accounts/{account_id}/dlp/custom_prompt_topics/{entry_id}`
-- `DELETE` `/accounts/{account_id}/dlp/custom_prompt_topics/{entry_id}`
-- `GET` `/accounts/{account_id}/dlp/data_classes`
-- `POST` `/accounts/{account_id}/dlp/data_classes`
-- `GET` `/accounts/{account_id}/dlp/data_classes/{data_class_id}`
-- `PUT` `/accounts/{account_id}/dlp/data_classes/{data_class_id}`
-- `DELETE` `/accounts/{account_id}/dlp/data_classes/{data_class_id}`
-- `GET` `/accounts/{account_id}/dlp/data_tag_categories`
-- `POST` `/accounts/{account_id}/dlp/data_tag_categories`
-- `GET` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}`
-- `PUT` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}`
-- `DELETE` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}`
-- `GET` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags`
-- `POST` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags`
-- `GET` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags/{tag_id}`
-- `PUT` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags/{tag_id}`
-- `DELETE` `/accounts/{account_id}/dlp/data_tag_categories/{category_id}/data_tags/{tag_id}`
-- `GET` `/accounts/{account_id}/dlp/data_tag_category_templates`
-- `GET` `/accounts/{account_id}/dlp/data_tag_category_templates/{template_id}`
-- `GET` `/accounts/{account_id}/dlp/datasets`
-- `POST` `/accounts/{account_id}/dlp/datasets`
-- `GET` `/accounts/{account_id}/dlp/datasets/{dataset_id}`
-- `PUT` `/accounts/{account_id}/dlp/datasets/{dataset_id}`
-- `DELETE` `/accounts/{account_id}/dlp/datasets/{dataset_id}`
-- `POST` `/accounts/{account_id}/dlp/datasets/{dataset_id}/upload`
+Not shipped (2):
 - `POST` `/accounts/{account_id}/dlp/datasets/{dataset_id}/upload/{version}`
-- `GET` `/accounts/{account_id}/dlp/document_fingerprints`
-- `POST` `/accounts/{account_id}/dlp/document_fingerprints`
-- `GET` `/accounts/{account_id}/dlp/document_fingerprints/{document_fingerprint_id}`
-- `POST` `/accounts/{account_id}/dlp/document_fingerprints/{document_fingerprint_id}`
 - `PUT` `/accounts/{account_id}/dlp/document_fingerprints/{document_fingerprint_id}`
-- `DELETE` `/accounts/{account_id}/dlp/document_fingerprints/{document_fingerprint_id}`
-- `GET` `/accounts/{account_id}/dlp/email/account_mapping`
-- `POST` `/accounts/{account_id}/dlp/email/account_mapping`
-- `GET` `/accounts/{account_id}/dlp/email/rules`
-- `POST` `/accounts/{account_id}/dlp/email/rules`
-- `PATCH` `/accounts/{account_id}/dlp/email/rules`
-- `GET` `/accounts/{account_id}/dlp/email/rules/{rule_id}`
-- `PUT` `/accounts/{account_id}/dlp/email/rules/{rule_id}`
-- `DELETE` `/accounts/{account_id}/dlp/email/rules/{rule_id}`
-- `GET` `/accounts/{account_id}/dlp/entries`
-- `POST` `/accounts/{account_id}/dlp/entries`
-- `GET` `/accounts/{account_id}/dlp/entries/{entry_id}`
-- `PUT` `/accounts/{account_id}/dlp/entries/{entry_id}`
-- `DELETE` `/accounts/{account_id}/dlp/entries/{entry_id}`
-- `GET` `/accounts/{account_id}/dlp/limits`
-- `POST` `/accounts/{account_id}/dlp/patterns/validate`
-- `GET` `/accounts/{account_id}/dlp/profiles`
-- `POST` `/accounts/{account_id}/dlp/profiles/custom`
-- `PUT` `/accounts/{account_id}/dlp/profiles/custom/{profile_id}`
-- `DELETE` `/accounts/{account_id}/dlp/profiles/custom/{profile_id}`
-- `PUT` `/accounts/{account_id}/dlp/profiles/predefined/{profile_id}`
-- `GET` `/accounts/{account_id}/dlp/profiles/{profile_id}`
-- `GET` `/accounts/{account_id}/dlp/sensitivity_groups`
-- `POST` `/accounts/{account_id}/dlp/sensitivity_groups`
-- `GET` `/accounts/{account_id}/dlp/sensitivity_groups/templates`
-- `GET` `/accounts/{account_id}/dlp/sensitivity_groups/templates/{template_id}`
-- `GET` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}`
-- `PUT` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}`
-- `DELETE` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}`
-- `GET` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/level_order`
-- `PUT` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/level_order`
-- `GET` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels`
-- `POST` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels`
-- `GET` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels/{sensitivity_level_id}`
-- `PUT` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels/{sensitivity_level_id}`
-- `DELETE` `/accounts/{account_id}/dlp/sensitivity_groups/{sensitivity_group_id}/levels/{sensitivity_level_id}`
-- `GET` `/accounts/{account_id}/dlp/settings`
-- `PUT` `/accounts/{account_id}/dlp/settings`
-- `PATCH` `/accounts/{account_id}/dlp/settings`
-- `DELETE` `/accounts/{account_id}/dlp/settings`
 
 ### `accounts/dls` - 0 of 0 reviewable shipped, 7 filtered out
 
@@ -1438,59 +1771,57 @@ Not shipped (14):
 - `DELETE` `/accounts/{account_id}/flagship/apps/{app_id}/flags/{flag_key}`
 - `GET` `/accounts/{account_id}/flagship/apps/{app_id}/flags/{flag_key}/changelog`
 
-### `accounts/gateway` - 0 of 49 reviewable shipped, 8 filtered out
+### `accounts/gateway` - 49 of 49 reviewable shipped, 8 filtered out
 
-
-Not shipped (49):
-- `GET` `/accounts/{account_id}/gateway`
-- `POST` `/accounts/{account_id}/gateway`
-- `GET` `/accounts/{account_id}/gateway/app_types`
-- `GET` `/accounts/{account_id}/gateway/audit_ssh_settings`
-- `PUT` `/accounts/{account_id}/gateway/audit_ssh_settings`
-- `POST` `/accounts/{account_id}/gateway/audit_ssh_settings/rotate_seed`
-- `GET` `/accounts/{account_id}/gateway/categories`
-- `GET` `/accounts/{account_id}/gateway/certificates`
-- `POST` `/accounts/{account_id}/gateway/certificates`
-- `GET` `/accounts/{account_id}/gateway/certificates/{certificate_id}`
-- `DELETE` `/accounts/{account_id}/gateway/certificates/{certificate_id}`
-- `POST` `/accounts/{account_id}/gateway/certificates/{certificate_id}/activate`
-- `POST` `/accounts/{account_id}/gateway/certificates/{certificate_id}/deactivate`
-- `GET` `/accounts/{account_id}/gateway/configuration`
-- `PUT` `/accounts/{account_id}/gateway/configuration`
-- `PATCH` `/accounts/{account_id}/gateway/configuration`
-- `GET` `/accounts/{account_id}/gateway/configuration/custom_certificate`
-- `GET` `/accounts/{account_id}/gateway/dns_destination_ips`
-- `GET` `/accounts/{account_id}/gateway/lists`
-- `POST` `/accounts/{account_id}/gateway/lists`
-- `GET` `/accounts/{account_id}/gateway/lists/{list_id}`
-- `PUT` `/accounts/{account_id}/gateway/lists/{list_id}`
-- `PATCH` `/accounts/{account_id}/gateway/lists/{list_id}`
-- `DELETE` `/accounts/{account_id}/gateway/lists/{list_id}`
-- `GET` `/accounts/{account_id}/gateway/lists/{list_id}/items`
-- `GET` `/accounts/{account_id}/gateway/locations`
-- `POST` `/accounts/{account_id}/gateway/locations`
-- `GET` `/accounts/{account_id}/gateway/locations/{location_id}`
-- `PUT` `/accounts/{account_id}/gateway/locations/{location_id}`
-- `DELETE` `/accounts/{account_id}/gateway/locations/{location_id}`
-- `GET` `/accounts/{account_id}/gateway/logging`
-- `PUT` `/accounts/{account_id}/gateway/logging`
-- `GET` `/accounts/{account_id}/gateway/pacfiles`
-- `POST` `/accounts/{account_id}/gateway/pacfiles`
-- `GET` `/accounts/{account_id}/gateway/pacfiles/{pacfile_id}`
-- `PUT` `/accounts/{account_id}/gateway/pacfiles/{pacfile_id}`
-- `DELETE` `/accounts/{account_id}/gateway/pacfiles/{pacfile_id}`
-- `GET` `/accounts/{account_id}/gateway/proxy_endpoints`
-- `POST` `/accounts/{account_id}/gateway/proxy_endpoints`
-- `GET` `/accounts/{account_id}/gateway/proxy_endpoints/{proxy_endpoint_id}`
-- `PATCH` `/accounts/{account_id}/gateway/proxy_endpoints/{proxy_endpoint_id}`
-- `DELETE` `/accounts/{account_id}/gateway/proxy_endpoints/{proxy_endpoint_id}`
-- `GET` `/accounts/{account_id}/gateway/rules`
-- `POST` `/accounts/{account_id}/gateway/rules`
-- `GET` `/accounts/{account_id}/gateway/rules/tenant`
-- `GET` `/accounts/{account_id}/gateway/rules/{rule_id}`
-- `PUT` `/accounts/{account_id}/gateway/rules/{rule_id}`
-- `DELETE` `/accounts/{account_id}/gateway/rules/{rule_id}`
-- `POST` `/accounts/{account_id}/gateway/rules/{rule_id}/reset_expiration`
+- `cloudflare_gateway_list` - `GET` `/accounts/{account_id}/gateway`
+- `cloudflare_gateway_create` - `POST` `/accounts/{account_id}/gateway`
+- `cloudflare_gateway_app_types_list` - `GET` `/accounts/{account_id}/gateway/app_types`
+- `cloudflare_gateway_audit_ssh_settings_list` - `GET` `/accounts/{account_id}/gateway/audit_ssh_settings`
+- `cloudflare_gateway_audit_ssh_settings_put` - `PUT` `/accounts/{account_id}/gateway/audit_ssh_settings`
+- `cloudflare_gateway_audit_ssh_settings_rotate_seed` - `POST` `/accounts/{account_id}/gateway/audit_ssh_settings/rotate_seed`
+- `cloudflare_gateway_categories_list` - `GET` `/accounts/{account_id}/gateway/categories`
+- `cloudflare_gateway_certificates_list` - `GET` `/accounts/{account_id}/gateway/certificates`
+- `cloudflare_gateway_certificates_create` - `POST` `/accounts/{account_id}/gateway/certificates`
+- `cloudflare_gateway_certificates_get` - `GET` `/accounts/{account_id}/gateway/certificates/{certificate_id}`
+- `cloudflare_gateway_certificates_delete` - `DELETE` `/accounts/{account_id}/gateway/certificates/{certificate_id}`
+- `cloudflare_gateway_certificates_certificate_id_activate` - `POST` `/accounts/{account_id}/gateway/certificates/{certificate_id}/activate`
+- `cloudflare_gateway_certificates_certificate_id_deactivate` - `POST` `/accounts/{account_id}/gateway/certificates/{certificate_id}/deactivate`
+- `cloudflare_gateway_configuration_list` - `GET` `/accounts/{account_id}/gateway/configuration`
+- `cloudflare_gateway_configuration_put` - `PUT` `/accounts/{account_id}/gateway/configuration`
+- `cloudflare_gateway_configuration_patch` - `PATCH` `/accounts/{account_id}/gateway/configuration`
+- `cloudflare_gateway_configuration_custom_certificate_list` - `GET` `/accounts/{account_id}/gateway/configuration/custom_certificate`
+- `cloudflare_gateway_dns_destination_ips_list` - `GET` `/accounts/{account_id}/gateway/dns_destination_ips`
+- `cloudflare_gateway_lists_list` - `GET` `/accounts/{account_id}/gateway/lists`
+- `cloudflare_gateway_lists_create` - `POST` `/accounts/{account_id}/gateway/lists`
+- `cloudflare_gateway_lists_get` - `GET` `/accounts/{account_id}/gateway/lists/{list_id}`
+- `cloudflare_gateway_lists_replace` - `PUT` `/accounts/{account_id}/gateway/lists/{list_id}`
+- `cloudflare_gateway_lists_update` - `PATCH` `/accounts/{account_id}/gateway/lists/{list_id}`
+- `cloudflare_gateway_lists_delete` - `DELETE` `/accounts/{account_id}/gateway/lists/{list_id}`
+- `cloudflare_gateway_lists_list_id_items_list` - `GET` `/accounts/{account_id}/gateway/lists/{list_id}/items`
+- `cloudflare_gateway_locations_list` - `GET` `/accounts/{account_id}/gateway/locations`
+- `cloudflare_gateway_locations_create` - `POST` `/accounts/{account_id}/gateway/locations`
+- `cloudflare_gateway_locations_get` - `GET` `/accounts/{account_id}/gateway/locations/{location_id}`
+- `cloudflare_gateway_locations_replace` - `PUT` `/accounts/{account_id}/gateway/locations/{location_id}`
+- `cloudflare_gateway_locations_delete` - `DELETE` `/accounts/{account_id}/gateway/locations/{location_id}`
+- `cloudflare_gateway_logging_list` - `GET` `/accounts/{account_id}/gateway/logging`
+- `cloudflare_gateway_logging_put` - `PUT` `/accounts/{account_id}/gateway/logging`
+- `cloudflare_gateway_pacfiles_list` - `GET` `/accounts/{account_id}/gateway/pacfiles`
+- `cloudflare_gateway_pacfiles_create` - `POST` `/accounts/{account_id}/gateway/pacfiles`
+- `cloudflare_gateway_pacfiles_get` - `GET` `/accounts/{account_id}/gateway/pacfiles/{pacfile_id}`
+- `cloudflare_gateway_pacfiles_replace` - `PUT` `/accounts/{account_id}/gateway/pacfiles/{pacfile_id}`
+- `cloudflare_gateway_pacfiles_delete` - `DELETE` `/accounts/{account_id}/gateway/pacfiles/{pacfile_id}`
+- `cloudflare_gateway_proxy_endpoints_list` - `GET` `/accounts/{account_id}/gateway/proxy_endpoints`
+- `cloudflare_gateway_proxy_endpoints_create` - `POST` `/accounts/{account_id}/gateway/proxy_endpoints`
+- `cloudflare_gateway_proxy_endpoints_get` - `GET` `/accounts/{account_id}/gateway/proxy_endpoints/{proxy_endpoint_id}`
+- `cloudflare_gateway_proxy_endpoints_update` - `PATCH` `/accounts/{account_id}/gateway/proxy_endpoints/{proxy_endpoint_id}`
+- `cloudflare_gateway_proxy_endpoints_delete` - `DELETE` `/accounts/{account_id}/gateway/proxy_endpoints/{proxy_endpoint_id}`
+- `cloudflare_gateway_rules_list` - `GET` `/accounts/{account_id}/gateway/rules`
+- `cloudflare_gateway_rules_create` - `POST` `/accounts/{account_id}/gateway/rules`
+- `cloudflare_gateway_rules_tenant_list` - `GET` `/accounts/{account_id}/gateway/rules/tenant`
+- `cloudflare_gateway_rules_get` - `GET` `/accounts/{account_id}/gateway/rules/{rule_id}`
+- `cloudflare_gateway_rules_replace` - `PUT` `/accounts/{account_id}/gateway/rules/{rule_id}`
+- `cloudflare_gateway_rules_delete` - `DELETE` `/accounts/{account_id}/gateway/rules/{rule_id}`
+- `cloudflare_gateway_rules_rule_id_reset_expiration` - `POST` `/accounts/{account_id}/gateway/rules/{rule_id}/reset_expiration`
 
 ### `accounts/hyperdrive` - 8 of 8 reviewable shipped
 
@@ -2343,21 +2674,19 @@ Not shipped (7):
 - `GET` `/accounts/{account_id}/tags/summary`
 - `GET` `/accounts/{account_id}/tags/values/{tag_key}`
 
-### `accounts/teamnet` - 0 of 11 reviewable shipped, 3 filtered out
+### `accounts/teamnet` - 11 of 11 reviewable shipped, 3 filtered out
 
-
-Not shipped (11):
-- `GET` `/accounts/{account_id}/teamnet/routes`
-- `POST` `/accounts/{account_id}/teamnet/routes`
-- `GET` `/accounts/{account_id}/teamnet/routes/ip/{ip}`
-- `GET` `/accounts/{account_id}/teamnet/routes/{route_id}`
-- `PATCH` `/accounts/{account_id}/teamnet/routes/{route_id}`
-- `DELETE` `/accounts/{account_id}/teamnet/routes/{route_id}`
-- `GET` `/accounts/{account_id}/teamnet/virtual_networks`
-- `POST` `/accounts/{account_id}/teamnet/virtual_networks`
-- `GET` `/accounts/{account_id}/teamnet/virtual_networks/{virtual_network_id}`
-- `PATCH` `/accounts/{account_id}/teamnet/virtual_networks/{virtual_network_id}`
-- `DELETE` `/accounts/{account_id}/teamnet/virtual_networks/{virtual_network_id}`
+- `cloudflare_teamnet_routes_list` - `GET` `/accounts/{account_id}/teamnet/routes`
+- `cloudflare_teamnet_routes_create` - `POST` `/accounts/{account_id}/teamnet/routes`
+- `cloudflare_teamnet_routes_ip_get` - `GET` `/accounts/{account_id}/teamnet/routes/ip/{ip}`
+- `cloudflare_teamnet_routes_get` - `GET` `/accounts/{account_id}/teamnet/routes/{route_id}`
+- `cloudflare_teamnet_routes_update` - `PATCH` `/accounts/{account_id}/teamnet/routes/{route_id}`
+- `cloudflare_teamnet_routes_delete` - `DELETE` `/accounts/{account_id}/teamnet/routes/{route_id}`
+- `cloudflare_teamnet_virtual_networks_list` - `GET` `/accounts/{account_id}/teamnet/virtual_networks`
+- `cloudflare_teamnet_virtual_networks_create` - `POST` `/accounts/{account_id}/teamnet/virtual_networks`
+- `cloudflare_teamnet_virtual_networks_get` - `GET` `/accounts/{account_id}/teamnet/virtual_networks/{virtual_network_id}`
+- `cloudflare_teamnet_virtual_networks_update` - `PATCH` `/accounts/{account_id}/teamnet/virtual_networks/{virtual_network_id}`
+- `cloudflare_teamnet_virtual_networks_delete` - `DELETE` `/accounts/{account_id}/teamnet/virtual_networks/{virtual_network_id}`
 
 ### `accounts/tokens` - 0 of 0 reviewable shipped, 8 filtered out
 
@@ -2365,11 +2694,9 @@ Not shipped (11):
 ### `accounts/triggers` - 0 of 0 reviewable shipped, 4 filtered out
 
 
-### `accounts/tunnels` - 0 of 1 reviewable shipped
+### `accounts/tunnels` - 1 of 1 reviewable shipped
 
-
-Not shipped (1):
-- `GET` `/accounts/{account_id}/tunnels`
+- `cloudflare_tunnels_list` - `GET` `/accounts/{account_id}/tunnels`
 
 ### `accounts/urlscanner` - 0 of 0 reviewable shipped, 14 filtered out
 
@@ -2571,26 +2898,24 @@ Not shipped (8):
 - `cloudflare_workflows_workflow_name_versions_get` - `GET` `/accounts/{account_id}/workflows/{workflow_name}/versions/{version_id}`
 - `cloudflare_workflows_workflow_name_versions_version_id_graph_list` - `GET` `/accounts/{account_id}/workflows/{workflow_name}/versions/{version_id}/graph`
 
-### `accounts/zerotrust` - 0 of 16 reviewable shipped
+### `accounts/zerotrust` - 16 of 16 reviewable shipped
 
-
-Not shipped (16):
-- `GET` `/accounts/{account_id}/zerotrust/connectivity_settings`
-- `PATCH` `/accounts/{account_id}/zerotrust/connectivity_settings`
-- `GET` `/accounts/{account_id}/zerotrust/routes/hostname`
-- `POST` `/accounts/{account_id}/zerotrust/routes/hostname`
-- `GET` `/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}`
-- `PATCH` `/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}`
-- `DELETE` `/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}`
-- `GET` `/accounts/{account_id}/zerotrust/subnets`
-- `GET` `/accounts/{account_id}/zerotrust/subnets/cloudflare_source/{address_family}`
-- `PATCH` `/accounts/{account_id}/zerotrust/subnets/cloudflare_source/{address_family}`
-- `GET` `/accounts/{account_id}/zerotrust/subnets/initial_resolved_ip/{address_family}`
-- `PUT` `/accounts/{account_id}/zerotrust/subnets/initial_resolved_ip/{address_family}`
-- `POST` `/accounts/{account_id}/zerotrust/subnets/warp`
-- `GET` `/accounts/{account_id}/zerotrust/subnets/warp/{subnet_id}`
-- `PATCH` `/accounts/{account_id}/zerotrust/subnets/warp/{subnet_id}`
-- `DELETE` `/accounts/{account_id}/zerotrust/subnets/warp/{subnet_id}`
+- `cloudflare_zerotrust_connectivity_settings_list` - `GET` `/accounts/{account_id}/zerotrust/connectivity_settings`
+- `cloudflare_zerotrust_connectivity_settings_patch` - `PATCH` `/accounts/{account_id}/zerotrust/connectivity_settings`
+- `cloudflare_zerotrust_routes_hostname_list` - `GET` `/accounts/{account_id}/zerotrust/routes/hostname`
+- `cloudflare_zerotrust_routes_hostname_create` - `POST` `/accounts/{account_id}/zerotrust/routes/hostname`
+- `cloudflare_zerotrust_routes_hostname_get` - `GET` `/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}`
+- `cloudflare_zerotrust_routes_hostname_update` - `PATCH` `/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}`
+- `cloudflare_zerotrust_routes_hostname_delete` - `DELETE` `/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}`
+- `cloudflare_zerotrust_subnets_list` - `GET` `/accounts/{account_id}/zerotrust/subnets`
+- `cloudflare_zerotrust_subnets_cloudflare_source_get` - `GET` `/accounts/{account_id}/zerotrust/subnets/cloudflare_source/{address_family}`
+- `cloudflare_zerotrust_subnets_cloudflare_source_update` - `PATCH` `/accounts/{account_id}/zerotrust/subnets/cloudflare_source/{address_family}`
+- `cloudflare_zerotrust_subnets_initial_resolved_ip_get` - `GET` `/accounts/{account_id}/zerotrust/subnets/initial_resolved_ip/{address_family}`
+- `cloudflare_zerotrust_subnets_initial_resolved_ip_replace` - `PUT` `/accounts/{account_id}/zerotrust/subnets/initial_resolved_ip/{address_family}`
+- `cloudflare_zerotrust_subnets_warp_create` - `POST` `/accounts/{account_id}/zerotrust/subnets/warp`
+- `cloudflare_zerotrust_subnets_warp_get` - `GET` `/accounts/{account_id}/zerotrust/subnets/warp/{subnet_id}`
+- `cloudflare_zerotrust_subnets_warp_update` - `PATCH` `/accounts/{account_id}/zerotrust/subnets/warp/{subnet_id}`
+- `cloudflare_zerotrust_subnets_warp_delete` - `DELETE` `/accounts/{account_id}/zerotrust/subnets/warp/{subnet_id}`
 
 ### `accounts/zt` - 0 of 0 reviewable shipped, 11 filtered out
 
