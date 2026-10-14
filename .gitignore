@@ -14,3 +14,9 @@ extract-tools.mjs
 extract-tools.ps1
 tools-list.txt
 openapi.json
+
+# The pinned release of Plane's MCP server that scripts/plane/inventory.json was
+# derived from: 56 small Python files, re-downloaded by
+# scripts/plane/fetch-inventory.mjs. The sha256 recorded for each one in
+# inventory.json is what pins it, so the files themselves are not committed.
+packages/warpmetal-cli/scripts/plane/.cache/

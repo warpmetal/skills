@@ -1,0 +1,4935 @@
+{
+  "version": 1,
+  "note": "Generated from the pinned release of Plane's MCP server by fetch-inventory.mjs. Each request shape is a source heuristic (see python-lite.mjs) and each action carries the line it was declared on, so a reviewer can check it against the module.",
+  "source": {
+    "repository": "https://github.com/makeplane/plane-mcp-server",
+    "tag": "v0.3.4",
+    "license": "MIT",
+    "publishedAt": "2026-10-08T13:06:56Z"
+  },
+  "sources": [
+    {
+      "path": "plane_mcp/__init__.py",
+      "sha256": "16250ec500fa1ff17a02dcb91eb5c2bddfda64965c5632e4a8303195231f9eb0",
+      "bytes": 80
+    },
+    {
+      "path": "plane_mcp/__main__.py",
+      "sha256": "f4102a90fcb5490628fe3dcf9766ba4d9145a845e4d87533bb44efa9061b0211",
+      "bytes": 7337
+    },
+    {
+      "path": "plane_mcp/attachments.py",
+      "sha256": "a1cee404353100efa3e7464f1a649d25ea5e73d770715c0370b5a6a38da3bf0c",
+      "bytes": 13171
+    },
+    {
+      "path": "plane_mcp/auth/__init__.py",
+      "sha256": "2bbc34a17ee71e30f003926d2abfee96a135e7217dc4b89b6f54bc9f481d9be8",
+      "bytes": 217
+    },
+    {
+      "path": "plane_mcp/auth/plane_header_auth_provider.py",
+      "sha256": "8671f702b78265e3b033640425cffe4941fe5300648d2c019facfeec3fa5d459",
+      "bytes": 2829
+    },
+    {
+      "path": "plane_mcp/auth/plane_oauth_provider.py",
+      "sha256": "32578ada5d33149006e9620d0d7d04d64e572b14034e91712871b24620519fe0",
+      "bytes": 15641
+    },
+    {
+      "path": "plane_mcp/aws_secrets.py",
+      "sha256": "b34fdda1978e1b10047594c3614f2a365f15ced495b73b0722964152f75b90d3",
+      "bytes": 3098
+    },
+    {
+      "path": "plane_mcp/client.py",
+      "sha256": "ee8542fbc48b51cc159b4570a74fec6152fa568c338825920192a6f6bdf19dd3",
+      "bytes": 3312
+    },
+    {
+      "path": "plane_mcp/coercion.py",
+      "sha256": "620ca539b9cdf8eb3dae1cbc2562e2887294fff94c2a69d98237c460d57d9035",
+      "bytes": 5391
+    },
+    {
+      "path": "plane_mcp/instructions.py",
+      "sha256": "6eed73c8c935a93d4929be5a8b61ee0c65ba1e60c2114a8ec06777b3e796bdf3",
+      "bytes": 997
+    },
+    {
+      "path": "plane_mcp/middleware.py",
+      "sha256": "36e2427dd918a7f14e5e463c25945db502768c3247cd82b3cc26a6698164a055",
+      "bytes": 7129
+    },
+    {
+      "path": "plane_mcp/pql_reference.py",
+      "sha256": "39be18dc201f8a2570209731397d032c4c9b491e6a44cd9c9a441f120f144894",
+      "bytes": 17867
+    },
+    {
+      "path": "plane_mcp/server.py",
+      "sha256": "2798936477436697d3e65acca8a9d7a189aaafe0e0e0677c61d60b88d95829ad",
+      "bytes": 3968
+    },
+    {
+      "path": "plane_mcp/storage.py",
+      "sha256": "9f45820734f7567e148e186596495cae8b3844784832707ae61064642acd830c",
+      "bytes": 9076
+    },
+    {
+      "path": "plane_mcp/toolkit/README.md",
+      "sha256": "49a32a58b6ec20dd14004e8c77a2c9faa8ca426e759a791b399f6e8e3f0bb2b7",
+      "bytes": 3379
+    },
+    {
+      "path": "plane_mcp/toolkit/__init__.py",
+      "sha256": "d8a82ee4a9f5b9dcd1a6ffbd5b3d775346ba85adc1bbf3fcdc8f02f767a5b71f",
+      "bytes": 2735
+    },
+    {
+      "path": "plane_mcp/toolkit/governance.py",
+      "sha256": "bea6ecde9397fba2f74e41f9c07257f73ffe7762ee896e043b52c9c7c8ae0e85",
+      "bytes": 5026
+    },
+    {
+      "path": "plane_mcp/toolkit/mentions.py",
+      "sha256": "c53d9d3bc1db7bd48e1a709f4e96b28c2587d7990116897a96a0abb61ae683e2",
+      "bytes": 6597
+    },
+    {
+      "path": "plane_mcp/toolkit/paging.py",
+      "sha256": "86d8e9c2be68524121d7cd86547371982eb3ab7f326f4dbc7e629537e14b0fc9",
+      "bytes": 4756
+    },
+    {
+      "path": "plane_mcp/toolkit/runtime.py",
+      "sha256": "7d5480c5bca7f56edb8161afa966d64baa8ec7d1281a12380013c1f39fb66284",
+      "bytes": 5308
+    },
+    {
+      "path": "plane_mcp/toolkit/spec.py",
+      "sha256": "3a333f1137f2b02a660f5476d7d15abd9dfb889aced2ca767a427d8fb613f395",
+      "bytes": 2687
+    },
+    {
+      "path": "plane_mcp/toolkit/transforms.py",
+      "sha256": "65dfacabb0dd9d6879d81cd422bbd8a8fa12e1a57896b668f709522ee65dc8bd",
+      "bytes": 907
+    },
+    {
+      "path": "plane_mcp/tools/README.md",
+      "sha256": "acb2409854ec14c5dca9e6d87d7be6ce637bf73a379a8a73ced70ef14222b9f5",
+      "bytes": 11692
+    },
+    {
+      "path": "plane_mcp/tools/__init__.py",
+      "sha256": "222b3b8b4e8dcb5421b186dad93fc227ef3542f3e1cfaa88acfa99a94af5c89c",
+      "bytes": 1145
+    },
+    {
+      "path": "plane_mcp/tools/collection.py",
+      "sha256": "5be69c5cc30da8830ca6c351283630fde54d1e896b33243dbc37714363d9cc54",
+      "bytes": 8752
+    },
+    {
+      "path": "plane_mcp/tools/customer.py",
+      "sha256": "2a1c2ba6aacb9e386afc8a23063740a85069e08ec44ace12c60cd5c31f6badc4",
+      "bytes": 7725
+    },
+    {
+      "path": "plane_mcp/tools/customer_property.py",
+      "sha256": "78752c971741df1a07d0ed5f16120969ac008a47b5751a8ab111adb496ea184f",
+      "bytes": 8630
+    },
+    {
+      "path": "plane_mcp/tools/customer_request.py",
+      "sha256": "69202b797e578494b8b7d4b46105bff8dd4cf45a6d10a6b7f6662a680c536f63",
+      "bytes": 3760
+    },
+    {
+      "path": "plane_mcp/tools/cycle.py",
+      "sha256": "a47a52764c72c877399740acd287a8a458aab84cd0984abf8c502278c5a875fa",
+      "bytes": 10318
+    },
+    {
+      "path": "plane_mcp/tools/get_pql_reference.py",
+      "sha256": "3d6378cad2a20ca01af6de9950eda0983b76b325059cb3948b52362a2afba1de",
+      "bytes": 1641
+    },
+    {
+      "path": "plane_mcp/tools/initiative.py",
+      "sha256": "7b6ea5ef3a301cb66aa107e34498fed1ccb8bd70887a00cfb9fc8f6cda4c5bfe",
+      "bytes": 9136
+    },
+    {
+      "path": "plane_mcp/tools/intake.py",
+      "sha256": "b1312c3a5ec9d90cc18cf641ed64a641aac14ecd78aa266c6d71257366b4f69a",
+      "bytes": 5624
+    },
+    {
+      "path": "plane_mcp/tools/label.py",
+      "sha256": "2d1bba558f30e0af42366e897baa97d2d47228baf9c42c01908c7f28503cc55e",
+      "bytes": 3988
+    },
+    {
+      "path": "plane_mcp/tools/legacy.py",
+      "sha256": "f1acc4ba9e093a35827d76aae277921e9a032ee201529ba5fd25d12435e00782",
+      "bytes": 2632
+    },
+    {
+      "path": "plane_mcp/tools/member.py",
+      "sha256": "5b4a4a816a6676630842a1f4f114f6603dd97f678a460ebed2ccb583a0a08f30",
+      "bytes": 3775
+    },
+    {
+      "path": "plane_mcp/tools/milestone.py",
+      "sha256": "2d812812bb340d0cbb20d0f7d3c94ac807fa1f15cd51dc063ca287ce4a514461",
+      "bytes": 5511
+    },
+    {
+      "path": "plane_mcp/tools/module.py",
+      "sha256": "a61964f95464b598ec5ac45610c1801ec3c12caa7298cf1453bfc7695758657f",
+      "bytes": 7907
+    },
+    {
+      "path": "plane_mcp/tools/page.py",
+      "sha256": "f2a6c60ba82f68efb11175a90ee4e4e252fbf4dbf7105a8eedd22c07299bbe66",
+      "bytes": 11014
+    },
+    {
+      "path": "plane_mcp/tools/project.py",
+      "sha256": "c243d5eddaf7b9f4f2181f519ec94adefeeb6fc43ed98d14f7ac621b9d5a5a1f",
+      "bytes": 10064
+    },
+    {
+      "path": "plane_mcp/tools/project_estimate.py",
+      "sha256": "31b4d5a3ba0b866c0636848cbdab88fdc8acabe1042dc3ba04d44c1508be5644",
+      "bytes": 7106
+    },
+    {
+      "path": "plane_mcp/tools/registry.py",
+      "sha256": "3b16218eb6eb3072cbaa0c8fa2efe2c8b11ba61940e0b510d925afa778c9b113",
+      "bytes": 3523
+    },
+    {
+      "path": "plane_mcp/tools/release.py",
+      "sha256": "096d5d9242c6fb0309b2246966e11139ba896c67b6f735eaaf5be0ecdd60c0b1",
+      "bytes": 8345
+    },
+    {
+      "path": "plane_mcp/tools/release_label.py",
+      "sha256": "1ffb23f38bf4fab881e236c66a21b926977b19875831351342c2d01371d7ab77",
+      "bytes": 4474
+    },
+    {
+      "path": "plane_mcp/tools/release_tag.py",
+      "sha256": "9daec1e49adae13323c5abd1245ff697f0c8368e58d46df76fa9fa584cf67f7e",
+      "bytes": 3130
+    },
+    {
+      "path": "plane_mcp/tools/state.py",
+      "sha256": "a732151675dce7f6bfe3e6e8ef373281adb7e3bd98152d8b64915d8be98acefe",
+      "bytes": 6054
+    },
+    {
+      "path": "plane_mcp/tools/template.py",
+      "sha256": "7b1b00b369e3dd684222174eb65609248ed749d2218d1a8138ae479b9c908c84",
+      "bytes": 8206
+    },
+    {
+      "path": "plane_mcp/tools/work_log.py",
+      "sha256": "ce45f126e8e9191a389c048bcf5ad8c6332cf5a7bf7c222130eacefab42a09dc",
+      "bytes": 3117
+    },
+    {
+      "path": "plane_mcp/tools/workitem.py",
+      "sha256": "b8fee878b9ab81fdb534d00d32995633913e5f31a310e237f9eb8b21111aadad",
+      "bytes": 14819
+    },
+    {
+      "path": "plane_mcp/tools/workitem_activity.py",
+      "sha256": "6341c0bb62e66c2bf3bf4a6737e823071ddd543d4eed00db9810b9855de6aeae",
+      "bytes": 2039
+    },
+    {
+      "path": "plane_mcp/tools/workitem_attachment.py",
+      "sha256": "af161122338c00c0130b48f041102e8f29997b4be425bba6fbe1213999200679",
+      "bytes": 8747
+    },
+    {
+      "path": "plane_mcp/tools/workitem_comment.py",
+      "sha256": "272de585697bb3b4c32e72173d059912a8a4b7755735526d60616e2d0e6935fb",
+      "bytes": 5514
+    },
+    {
+      "path": "plane_mcp/tools/workitem_link.py",
+      "sha256": "38a248d5c08004c6d4e07488385842e1c27bc8a332710ad76fd79db903bbb69c",
+      "bytes": 3737
+    },
+    {
+      "path": "plane_mcp/tools/workitem_property.py",
+      "sha256": "fb20101b3492b773d53cdc11b94754c3391dc6a9f52d2b80fe95504f20546dd6",
+      "bytes": 24894
+    },
+    {
+      "path": "plane_mcp/tools/workitem_relation.py",
+      "sha256": "08286005e1a9142135699059838271a2c8580189b499254b5b2a334f5d0abaa1",
+      "bytes": 9301
+    },
+    {
+      "path": "plane_mcp/tools/workitem_type.py",
+      "sha256": "ce40504c5257a77a0d5bf6a205b970eac94da611bc9adbb31acfa573fae6e817",
+      "bytes": 8766
+    },
+    {
+      "path": "plane_mcp/tools/workspace.py",
+      "sha256": "c9534c97406b5432241671e08911dbc5d71a9d570710ab8aad28bf6d187cc1e8",
+      "bytes": 2475
+    }
+  ],
+  "counts": {
+    "tools": 30,
+    "actions": 207,
+    "read": 82,
+    "destructive": 35,
+    "openWorld": 1,
+    "shapes": {
+      "single": 161,
+      "multi": 44,
+      "none": 2,
+      "unknown": 0
+    },
+    "legacy": 169,
+    "legacyUnmapped": 7
+  },
+  "tools": [
+    {
+      "tool": "customer",
+      "title": "Customers",
+      "module": "plane_mcp/tools/customer.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [],
+          "optional": [
+            "query",
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 27,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "customer_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 28,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "name"
+          ],
+          "optional": [
+            "description_html",
+            "email",
+            "website_url",
+            "domain",
+            "employees",
+            "stage",
+            "contract_status",
+            "revenue",
+            "external_source",
+            "external_id"
+          ],
+          "note": "upsert: matches on external_source + external_id, else on name, so it never duplicates",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 29,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "customer_id"
+          ],
+          "optional": [
+            "name",
+            "description_html",
+            "email",
+            "website_url",
+            "domain",
+            "employees",
+            "stage",
+            "contract_status",
+            "revenue",
+            "external_source",
+            "external_id"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 46,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [],
+          "optional": [
+            "customer_id",
+            "external_source",
+            "external_id"
+          ],
+          "note": "address by customer_id, or by external_source plus external_id",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 64,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "list_workitems",
+          "requires": [
+            "customer_id"
+          ],
+          "optional": [
+            "customer_request_id",
+            "search"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 71,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "manage_workitems",
+          "requires": [
+            "customer_id"
+          ],
+          "optional": [
+            "link_ids",
+            "unlink_ids",
+            "customer_request_id"
+          ],
+          "note": "pass at least one of link_ids or unlink_ids; returns nothing, read back with list_workitems",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 72,
+          "requestLines": 2,
+          "loops": true,
+          "branch": "fall-through",
+          "requestShape": "multi"
+        }
+      ],
+      "legacy": {
+        "list_customers": "list",
+        "retrieve_customer": "retrieve",
+        "create_customer": "create",
+        "update_customer": "update",
+        "delete_customer": "delete",
+        "list_customer_work_items": "list_workitems"
+      },
+      "legacyUnmapped": {
+        "manage_customer_work_items": "took action='link'|'unlink', which collides with the dispatch key: use manage_workitems with link_ids or unlink_ids"
+      }
+    },
+    {
+      "tool": "customer_property",
+      "title": "Customer properties",
+      "module": "plane_mcp/tools/customer_property.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [],
+          "optional": [
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 42,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "property_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 43,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "display_name",
+            "property_type"
+          ],
+          "optional": [
+            "relation_type",
+            "description",
+            "is_required",
+            "is_multi",
+            "is_active",
+            "default_value",
+            "options",
+            "display_format",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 44,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single",
+          "requestHelpers": [
+            "_json",
+            "_settings"
+          ]
+        },
+        {
+          "name": "update",
+          "requires": [
+            "property_id"
+          ],
+          "optional": [
+            "display_name",
+            "relation_type",
+            "description",
+            "is_required",
+            "is_multi",
+            "is_active",
+            "default_value",
+            "options",
+            "external_source",
+            "external_id"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 60,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single",
+          "requestHelpers": [
+            "_json"
+          ]
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "property_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 77,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        },
+        {
+          "name": "get_values",
+          "requires": [
+            "customer_id"
+          ],
+          "optional": [
+            "property_id"
+          ],
+          "note": "omit property_id to read them all",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 78,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "set_values",
+          "requires": [
+            "customer_id",
+            "values"
+          ],
+          "optional": [],
+          "note": "replaces the values of the properties named; others keep theirs",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 79,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single",
+          "requestHelpers": [
+            "_json"
+          ]
+        }
+      ],
+      "legacy": {
+        "list_customer_properties": "list",
+        "retrieve_customer_property": "retrieve",
+        "create_customer_property": "create",
+        "update_customer_property": "update",
+        "delete_customer_property": "delete",
+        "get_customer_property_values": "get_values",
+        "set_customer_property_values": "set_values"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "customer_request",
+      "title": "Customer requests",
+      "module": "plane_mcp/tools/customer_request.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [
+            "customer_id"
+          ],
+          "optional": [
+            "query",
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 22,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "customer_id",
+            "request_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 23,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "customer_id",
+            "name"
+          ],
+          "optional": [
+            "description_html",
+            "link",
+            "workitem_ids"
+          ],
+          "note": "workitem_ids can only be set here; change links afterwards with customer manage_workitems",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 24,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "customer_id",
+            "request_id"
+          ],
+          "optional": [
+            "name",
+            "description_html",
+            "link"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 30,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "customer_id",
+            "request_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 36,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_customer_requests": "list",
+        "retrieve_customer_request": "retrieve",
+        "create_customer_request": "create",
+        "update_customer_request": "update",
+        "delete_customer_request": "delete"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "cycle",
+      "title": "Cycles",
+      "module": "plane_mcp/tools/cycle.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [
+            "archived",
+            "status",
+            "cursor",
+            "per_page",
+            "order_by"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 41,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "project_id",
+            "cycle_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 42,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "project_id",
+            "name",
+            "owned_by"
+          ],
+          "optional": [
+            "description",
+            "start_date",
+            "end_date",
+            "timezone",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 43,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "project_id",
+            "cycle_id"
+          ],
+          "optional": [
+            "name",
+            "description",
+            "start_date",
+            "end_date",
+            "owned_by",
+            "timezone",
+            "external_source",
+            "external_id"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 48,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "project_id",
+            "cycle_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 54,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "list_workitems",
+          "requires": [
+            "project_id",
+            "cycle_id"
+          ],
+          "optional": [
+            "pql",
+            "order_by",
+            "cursor",
+            "per_page",
+            "expand",
+            "fields"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 55,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "manage_workitems",
+          "requires": [
+            "project_id",
+            "cycle_id"
+          ],
+          "optional": [
+            "add_ids",
+            "remove_ids"
+          ],
+          "note": "pass at least one of add_ids or remove_ids; returns nothing, read back with list_workitems",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 61,
+          "requestLines": 2,
+          "loops": true,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "transfer_workitems",
+          "requires": [
+            "project_id",
+            "cycle_id",
+            "new_cycle_id"
+          ],
+          "optional": [],
+          "note": "moves only the unfinished work items to new_cycle_id; the source cycle must have ended first, so complete it before transferring or the call is rejected",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 67,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "complete",
+          "requires": [
+            "project_id",
+            "cycle_id"
+          ],
+          "optional": [],
+          "note": "sets end_date to today",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 75,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "archive",
+          "requires": [
+            "project_id",
+            "cycle_id"
+          ],
+          "optional": [],
+          "note": "ends the cycle first if it is still running",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 76,
+          "requestLines": 3,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi",
+          "requestHelpers": [
+            "_still_running"
+          ]
+        },
+        {
+          "name": "unarchive",
+          "requires": [
+            "project_id",
+            "cycle_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 77,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_cycles": "list",
+        "retrieve_cycle": "retrieve",
+        "create_cycle": "create",
+        "update_cycle": "update",
+        "delete_cycle": "delete",
+        "list_cycle_work_items": "list_workitems",
+        "manage_cycle_work_items": "manage_workitems",
+        "transfer_cycle_work_items": "transfer_workitems",
+        "complete_cycle": "complete"
+      },
+      "legacyUnmapped": {
+        "manage_cycle_archive": "took archive=bool, which spans two actions: use archive or unarchive"
+      }
+    },
+    {
+      "tool": "get_pql_reference",
+      "title": "PQL reference",
+      "module": "plane_mcp/tools/get_pql_reference.py",
+      "actions": [
+        {
+          "name": "read",
+          "requires": [],
+          "optional": [
+            "detail"
+          ],
+          "note": "this tool has no action parameter",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 20,
+          "requestLines": 0,
+          "loops": false,
+          "branch": "no-action-parameter",
+          "requestShape": "none"
+        }
+      ],
+      "legacy": {},
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "initiative",
+      "title": "Initiatives",
+      "module": "plane_mcp/tools/initiative.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [],
+          "optional": [],
+          "note": "returns every initiative; this endpoint does not paginate",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 59,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "initiative_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 60,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "name"
+          ],
+          "optional": [
+            "description_html",
+            "start_date",
+            "end_date",
+            "state",
+            "lead"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 61,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "initiative_id"
+          ],
+          "optional": [
+            "name",
+            "description_html",
+            "start_date",
+            "end_date",
+            "state",
+            "lead"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 62,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "initiative_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 68,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "list_projects",
+          "requires": [
+            "initiative_id"
+          ],
+          "optional": [
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 69,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi",
+          "requestHelpers": [
+            "_require_native"
+          ]
+        },
+        {
+          "name": "add_projects",
+          "requires": [
+            "initiative_id",
+            "project_ids"
+          ],
+          "optional": [],
+          "note": "returns nothing, read back with list_projects",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 70,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi",
+          "requestHelpers": [
+            "_require_native"
+          ]
+        },
+        {
+          "name": "remove_projects",
+          "requires": [
+            "initiative_id",
+            "project_ids"
+          ],
+          "optional": [],
+          "note": "returns nothing, read back with list_projects",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 71,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi",
+          "requestHelpers": [
+            "_require_native"
+          ]
+        },
+        {
+          "name": "list_workitems",
+          "requires": [
+            "initiative_id"
+          ],
+          "optional": [
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 77,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi",
+          "requestHelpers": [
+            "_require_native"
+          ]
+        },
+        {
+          "name": "manage_workitems",
+          "requires": [
+            "initiative_id"
+          ],
+          "optional": [
+            "add_ids",
+            "remove_ids"
+          ],
+          "note": "pass at least one of add_ids or remove_ids; each takes one id or several, and removals apply first; returns nothing, read back with list_workitems",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 78,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi",
+          "requestHelpers": [
+            "_require_native"
+          ]
+        }
+      ],
+      "legacy": {
+        "list_initiatives": "list",
+        "retrieve_initiative": "retrieve",
+        "create_initiative": "create",
+        "update_initiative": "update",
+        "delete_initiative": "delete",
+        "list_initiative_projects": "list_projects"
+      },
+      "legacyUnmapped": {
+        "manage_initiative_projects": "took action='add'|'remove', which collides with the dispatch key: use add_projects or remove_projects"
+      }
+    },
+    {
+      "tool": "intake",
+      "title": "Intake queue",
+      "module": "plane_mcp/tools/intake.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 25,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 26,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "project_id",
+            "name"
+          ],
+          "optional": [
+            "description_html",
+            "priority"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 27,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [
+            "status",
+            "snoozed_till",
+            "duplicate_to",
+            "source",
+            "source_email"
+          ],
+          "note": "pass status to make a triage decision",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 28,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 34,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_intake_work_items": "list",
+        "retrieve_intake_work_item": "retrieve",
+        "create_intake_work_item": "create",
+        "update_intake_work_item": "update",
+        "delete_intake_work_item": "delete"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "label",
+      "title": "Labels",
+      "module": "plane_mcp/tools/label.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 17,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "project_id",
+            "label_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 18,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "project_id",
+            "name"
+          ],
+          "optional": [
+            "color",
+            "description",
+            "parent",
+            "sort_order",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 19,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "project_id",
+            "label_id"
+          ],
+          "optional": [
+            "name",
+            "color",
+            "description",
+            "parent",
+            "sort_order",
+            "external_source",
+            "external_id"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 24,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "project_id",
+            "label_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 30,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_labels": "list",
+        "retrieve_label": "retrieve",
+        "create_label": "create",
+        "update_label": "update",
+        "delete_label": "delete"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "member",
+      "title": "Members and roles",
+      "module": "plane_mcp/tools/member.py",
+      "actions": [
+        {
+          "name": "me",
+          "requires": [],
+          "optional": [],
+          "note": "the authenticated user",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 17,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "list_workspace",
+          "requires": [],
+          "optional": [
+            "first_name",
+            "last_name",
+            "email",
+            "display_name",
+            "role_slug",
+            "is_active",
+            "is_bot",
+            "cursor",
+            "per_page",
+            "order_by"
+          ],
+          "note": "name filters match case-insensitively and combine with AND",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 18,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "list_project",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 35,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "list_roles",
+          "requires": [],
+          "optional": [
+            "namespace",
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 36,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve_role",
+          "requires": [
+            "role_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 37,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "get_me": "me",
+        "get_workspace_members": "list_workspace",
+        "get_project_members": "list_project",
+        "list_roles": "list_roles",
+        "retrieve_role": "retrieve_role"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "milestone",
+      "title": "Milestones",
+      "module": "plane_mcp/tools/milestone.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 32,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "project_id",
+            "milestone_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 33,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "project_id",
+            "title"
+          ],
+          "optional": [
+            "target_date",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 34,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "project_id",
+            "milestone_id"
+          ],
+          "optional": [
+            "title",
+            "target_date",
+            "external_source",
+            "external_id"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 35,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "project_id",
+            "milestone_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 41,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "list_workitems",
+          "requires": [
+            "project_id",
+            "milestone_id"
+          ],
+          "optional": [
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 42,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "manage_workitems",
+          "requires": [
+            "project_id",
+            "milestone_id"
+          ],
+          "optional": [
+            "add_ids",
+            "remove_ids"
+          ],
+          "note": "pass at least one of add_ids or remove_ids; returns nothing, read back with list_workitems",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 43,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "multi"
+        }
+      ],
+      "legacy": {
+        "list_milestones": "list",
+        "retrieve_milestone": "retrieve",
+        "create_milestone": "create",
+        "update_milestone": "update",
+        "delete_milestone": "delete",
+        "list_milestone_work_items": "list_workitems",
+        "manage_milestone_work_items": "manage_workitems"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "module",
+      "title": "Modules",
+      "module": "plane_mcp/tools/module.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [
+            "archived",
+            "cursor",
+            "per_page",
+            "order_by"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 37,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "project_id",
+            "module_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 38,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "project_id",
+            "name"
+          ],
+          "optional": [
+            "description",
+            "start_date",
+            "target_date",
+            "status",
+            "lead",
+            "members",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 39,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "project_id",
+            "module_id"
+          ],
+          "optional": [
+            "name",
+            "description",
+            "start_date",
+            "target_date",
+            "status",
+            "lead",
+            "members",
+            "external_source",
+            "external_id"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 44,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "project_id",
+            "module_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 60,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "list_workitems",
+          "requires": [
+            "project_id",
+            "module_id"
+          ],
+          "optional": [
+            "pql",
+            "order_by",
+            "cursor",
+            "per_page",
+            "expand",
+            "fields"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 61,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "manage_workitems",
+          "requires": [
+            "project_id",
+            "module_id"
+          ],
+          "optional": [
+            "add_ids",
+            "remove_ids"
+          ],
+          "note": "pass at least one of add_ids or remove_ids; returns nothing, read back with list_workitems",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 67,
+          "requestLines": 2,
+          "loops": true,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "archive",
+          "requires": [
+            "project_id",
+            "module_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 73,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "unarchive",
+          "requires": [
+            "project_id",
+            "module_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 74,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_modules": "list",
+        "retrieve_module": "retrieve",
+        "create_module": "create",
+        "update_module": "update",
+        "delete_module": "delete",
+        "list_module_work_items": "list_workitems",
+        "manage_module_work_items": "manage_workitems"
+      },
+      "legacyUnmapped": {
+        "manage_module_archive": "took archive=bool, which spans two actions: use archive or unarchive"
+      }
+    },
+    {
+      "tool": "page",
+      "title": "Pages",
+      "module": "plane_mcp/tools/page.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [],
+          "optional": [
+            "project_id",
+            "cursor",
+            "per_page"
+          ],
+          "note": "workspace pages unless project_id is given",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 25,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "page_id"
+          ],
+          "optional": [
+            "project_id"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 28,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "name",
+            "description_html"
+          ],
+          "optional": [
+            "project_id",
+            "parent_id",
+            "collection_id",
+            "access",
+            "color",
+            "is_locked",
+            "external_source",
+            "external_id"
+          ],
+          "note": "parent_id nests the new page under an existing one; collection_id files it. Pass one or the other, never both",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 29,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "page_id"
+          ],
+          "optional": [
+            "project_id",
+            "name",
+            "description_html"
+          ],
+          "note": "pass name, description_html, or both; description_html replaces the whole body, so retrieve the page first when editing part of it; a locked or archived page is refused",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 45,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "archive",
+          "requires": [
+            "page_id"
+          ],
+          "optional": [
+            "project_id",
+            "archive"
+          ],
+          "note": "archive defaults to true; pass archive=false to restore",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 52,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "page_id"
+          ],
+          "optional": [
+            "project_id"
+          ],
+          "note": "requires the page to be archived first",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 58,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "set_collection",
+          "requires": [
+            "page_id",
+            "collection_id"
+          ],
+          "optional": [],
+          "note": "files a page into a collection, or moves it out of the one it is in; workspace pages only, and collection_id comes from the collection tool",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 65,
+          "requestLines": 3,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "list_workitem_pages",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 71,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "attach_to_workitem",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "page_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 72,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "detach_from_workitem",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "workitem_page_id"
+          ],
+          "optional": [],
+          "note": "workitem_page_id is the link id from list_workitem_pages, not the page id",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 73,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_pages": "list",
+        "retrieve_page": "retrieve",
+        "create_page": "create",
+        "list_work_item_pages": "list_workitem_pages",
+        "attach_page_to_work_item": "attach_to_workitem",
+        "detach_page_from_work_item": "detach_from_workitem"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "project",
+      "title": "Projects",
+      "module": "plane_mcp/tools/project.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [],
+          "optional": [
+            "cursor",
+            "per_page",
+            "order_by"
+          ],
+          "note": "trimmed fields; use retrieve for full detail",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 31,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 34,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "name",
+            "identifier"
+          ],
+          "optional": [
+            "description",
+            "description_html",
+            "project_lead",
+            "default_assignee",
+            "emoji",
+            "cover_image",
+            "timezone",
+            "archive_in",
+            "close_in",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 35,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [
+            "name",
+            "description",
+            "description_html",
+            "identifier",
+            "project_lead",
+            "default_assignee",
+            "emoji",
+            "cover_image",
+            "network",
+            "timezone",
+            "archive_in",
+            "close_in",
+            "default_state",
+            "estimate",
+            "is_time_tracking_enabled",
+            "external_source",
+            "external_id"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 52,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 76,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "archive",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 77,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "unarchive",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 78,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "worklog_summary",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 79,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "get_features",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 80,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update_features",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [
+            "modules",
+            "cycles",
+            "views",
+            "pages",
+            "intakes",
+            "workitem_types",
+            "epics",
+            "parallel_cycles",
+            "project_updates",
+            "workflows"
+          ],
+          "note": "toggles project features on or off",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 81,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_projects": "list",
+        "retrieve_project": "retrieve",
+        "create_project": "create",
+        "update_project": "update",
+        "delete_project": "delete",
+        "get_project_worklog_summary": "worklog_summary",
+        "update_project_features": "update_features"
+      },
+      "legacyUnmapped": {
+        "manage_project_archive": "took archive=bool, which spans two actions: use archive or unarchive"
+      }
+    },
+    {
+      "tool": "project_estimate",
+      "title": "Project estimates",
+      "module": "plane_mcp/tools/project_estimate.py",
+      "actions": [
+        {
+          "name": "retrieve",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [],
+          "note": "a project has at most one estimate",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 33,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "project_id",
+            "name"
+          ],
+          "optional": [
+            "type",
+            "description",
+            "last_used",
+            "external_source",
+            "external_id"
+          ],
+          "note": "creates the estimate only; add its values afterwards with create_points",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 34,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [
+            "name",
+            "description",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 40,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 41,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "link",
+          "requires": [
+            "project_id",
+            "estimate_id"
+          ],
+          "optional": [],
+          "note": "makes that estimate the project's active one",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 42,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "list_points",
+          "requires": [
+            "project_id",
+            "estimate_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 43,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create_points",
+          "requires": [
+            "project_id",
+            "estimate_id",
+            "points"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 44,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update_point",
+          "requires": [
+            "project_id",
+            "estimate_id",
+            "estimate_point_id"
+          ],
+          "optional": [
+            "value",
+            "key",
+            "description",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 45,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete_point",
+          "requires": [
+            "project_id",
+            "estimate_id",
+            "estimate_point_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 50,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "get_project_estimate": "retrieve",
+        "create_project_estimate": "create",
+        "update_project_estimate": "update",
+        "delete_project_estimate": "delete",
+        "link_estimate_to_project": "link",
+        "list_project_estimate_points": "list_points",
+        "create_project_estimate_points": "create_points",
+        "update_project_estimate_point": "update_point",
+        "delete_project_estimate_point": "delete_point"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "release",
+      "title": "Releases",
+      "module": "plane_mcp/tools/release.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [],
+          "optional": [
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 39,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "release_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 40,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "name"
+          ],
+          "optional": [
+            "description_html",
+            "status",
+            "release_date",
+            "target_date",
+            "tag_id",
+            "lead_id",
+            "is_prerelease",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 41,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "release_id"
+          ],
+          "optional": [
+            "name",
+            "description_html",
+            "status",
+            "release_date",
+            "target_date",
+            "tag_id",
+            "lead_id",
+            "is_prerelease"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 56,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "release_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 71,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "get_changelog",
+          "requires": [
+            "release_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 72,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update_changelog",
+          "requires": [
+            "release_id"
+          ],
+          "optional": [
+            "description_html",
+            "description_stripped"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 73,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single",
+          "requestHelpers": [
+            "_prosemirror"
+          ]
+        },
+        {
+          "name": "list_workitems",
+          "requires": [
+            "release_id"
+          ],
+          "optional": [
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 74,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "manage_workitems",
+          "requires": [
+            "release_id"
+          ],
+          "optional": [
+            "add_ids",
+            "remove_ids"
+          ],
+          "note": "pass at least one of add_ids or remove_ids; returns nothing, read back with list_workitems",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 75,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "multi"
+        }
+      ],
+      "legacy": {
+        "list_releases": "list",
+        "retrieve_release": "retrieve",
+        "create_release": "create",
+        "update_release": "update",
+        "delete_release": "delete",
+        "get_release_changelog": "get_changelog",
+        "update_release_changelog": "update_changelog",
+        "list_release_work_items": "list_workitems"
+      },
+      "legacyUnmapped": {
+        "manage_release_work_items": "took action='add'|'remove', which collides with the dispatch key: use manage_workitems with add_ids or remove_ids"
+      }
+    },
+    {
+      "tool": "release_label",
+      "title": "Release labels",
+      "module": "plane_mcp/tools/release_label.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [],
+          "optional": [
+            "release_id",
+            "cursor",
+            "per_page"
+          ],
+          "note": "the workspace palette unless release_id is given",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 37,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "name"
+          ],
+          "optional": [
+            "color",
+            "sort_order"
+          ],
+          "note": "adds to the workspace palette",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 44,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "label_id"
+          ],
+          "optional": [
+            "name",
+            "color",
+            "sort_order"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 45,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "label_id"
+          ],
+          "optional": [],
+          "note": "removes it from the palette entirely",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 46,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "attach",
+          "requires": [
+            "release_id",
+            "label_ids"
+          ],
+          "optional": [],
+          "note": "returns nothing, read back with list",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 47,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "detach",
+          "requires": [
+            "release_id",
+            "label_ids"
+          ],
+          "optional": [],
+          "note": "returns nothing, read back with list",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 48,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_release_labels": "list",
+        "create_release_label": "create",
+        "update_release_label": "update",
+        "delete_release_label": "delete"
+      },
+      "legacyUnmapped": {
+        "manage_release_labels": "took action='attach'|'detach', which collides with the dispatch key: use attach or detach"
+      }
+    },
+    {
+      "tool": "release_tag",
+      "title": "Release tags",
+      "module": "plane_mcp/tools/release_tag.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [],
+          "optional": [
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 22,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "tag_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 23,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "version"
+          ],
+          "optional": [
+            "description",
+            "commit_hash",
+            "git_tag"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 24,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "tag_id"
+          ],
+          "optional": [
+            "version",
+            "description",
+            "commit_hash",
+            "git_tag"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 25,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "tag_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 31,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_release_tags": "list",
+        "retrieve_release_tag": "retrieve",
+        "create_release_tag": "create",
+        "update_release_tag": "update",
+        "delete_release_tag": "delete"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "state",
+      "title": "Workflow states",
+      "module": "plane_mcp/tools/state.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [],
+          "optional": [
+            "project_id",
+            "cursor",
+            "per_page"
+          ],
+          "note": "workspace scope when project_id is omitted",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 41,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "state_id"
+          ],
+          "optional": [
+            "project_id"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 44,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "name",
+            "color"
+          ],
+          "optional": [
+            "project_id",
+            "description",
+            "sequence",
+            "group",
+            "default",
+            "external_source",
+            "external_id"
+          ],
+          "note": "group is required at workspace scope",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 45,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "state_id"
+          ],
+          "optional": [
+            "project_id",
+            "name",
+            "color",
+            "description",
+            "sequence",
+            "group",
+            "default"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 51,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "state_id"
+          ],
+          "optional": [
+            "project_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 57,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_states": "list",
+        "retrieve_state": "retrieve",
+        "create_state": "create",
+        "update_state": "update",
+        "delete_state": "delete"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "work_log",
+      "title": "Work logs",
+      "module": "plane_mcp/tools/work_log.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 17,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "duration"
+          ],
+          "optional": [
+            "description"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 18,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "work_log_id"
+          ],
+          "optional": [
+            "duration",
+            "description"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 19,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "work_log_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 20,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_work_logs": "list",
+        "create_work_log": "create",
+        "update_work_log": "update",
+        "delete_work_log": "delete"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "workitem",
+      "title": "Work items",
+      "module": "plane_mcp/tools/workitem.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [],
+          "optional": [
+            "project_id",
+            "pql",
+            "order_by",
+            "per_page",
+            "cursor",
+            "expand",
+            "fields",
+            "external_id",
+            "external_source"
+          ],
+          "note": "omit project_id to search the whole workspace",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 76,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "list_archived",
+          "requires": [
+            "project_id"
+          ],
+          "optional": [
+            "pql",
+            "order_by",
+            "per_page",
+            "cursor",
+            "expand",
+            "fields",
+            "external_id",
+            "external_source"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 82,
+          "requestLines": 3,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [
+            "expand",
+            "fields",
+            "external_id",
+            "external_source",
+            "order_by"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 83,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve_by_identifier",
+          "requires": [
+            "workitem_identifier"
+          ],
+          "optional": [
+            "expand",
+            "fields",
+            "external_id",
+            "external_source",
+            "order_by"
+          ],
+          "note": "identifier is PROJECT-N, e.g. ENG-42",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 89,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "search",
+          "requires": [
+            "query"
+          ],
+          "optional": [
+            "expand",
+            "fields",
+            "external_id",
+            "external_source",
+            "order_by"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 96,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "count",
+          "requires": [],
+          "optional": [
+            "project_id",
+            "pql",
+            "group_by",
+            "sub_group_by"
+          ],
+          "note": "counts the whole workspace unless project_id narrows it",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 97,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi",
+          "requestHelpers": [
+            "_scoped_pql"
+          ]
+        },
+        {
+          "name": "create",
+          "requires": [
+            "project_id",
+            "name"
+          ],
+          "optional": [
+            "assignees",
+            "labels",
+            "type_id",
+            "point",
+            "description_html",
+            "description_stripped",
+            "priority",
+            "start_date",
+            "target_date",
+            "sort_order",
+            "is_draft",
+            "parent",
+            "state",
+            "estimate_point",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 103,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [
+            "name",
+            "assignees",
+            "labels",
+            "type_id",
+            "point",
+            "description_html",
+            "description_stripped",
+            "priority",
+            "start_date",
+            "target_date",
+            "sort_order",
+            "is_draft",
+            "parent",
+            "state",
+            "estimate_point",
+            "external_source",
+            "external_id"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 104,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 105,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "archive",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [
+            "archive"
+          ],
+          "note": "archive defaults to true; pass archive=false to unarchive. Only completed or cancelled items can be archived",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 106,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "manage_assignee",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [
+            "add_user_id",
+            "remove_user_id"
+          ],
+          "note": "each takes one id or several; the list is merged, not replaced, and removals apply first",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 113,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "multi"
+        },
+        {
+          "name": "manage_label",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [
+            "add_label_id",
+            "remove_label_id"
+          ],
+          "note": "each takes one id or several; the list is merged, not replaced, and removals apply first",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 119,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "multi"
+        }
+      ],
+      "legacy": {
+        "list_work_items": "list",
+        "list_archived_work_items": "list_archived",
+        "retrieve_work_item": "retrieve",
+        "retrieve_work_item_by_identifier": "retrieve_by_identifier",
+        "search_work_items": "search",
+        "count_work_items": "count",
+        "create_work_item": "create",
+        "update_work_item": "update",
+        "delete_work_item": "delete",
+        "manage_work_item_archive": "archive",
+        "manage_work_item_assignee": "manage_assignee",
+        "manage_work_item_label": "manage_label"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "workitem_activity",
+      "title": "Work item activity",
+      "module": "plane_mcp/tools/workitem_activity.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 17,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "activity_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 18,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_work_item_activities": "list",
+        "retrieve_work_item_activity": "retrieve"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "workitem_attachment",
+      "title": "Work item attachments",
+      "module": "plane_mcp/tools/workitem_attachment.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 37,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "read",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "attachment_id"
+          ],
+          "optional": [],
+          "note": "returns images and text inline; use download_url for anything else",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 38,
+          "requestLines": 5,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi",
+          "requestHelpers": [
+            "_read"
+          ]
+        },
+        {
+          "name": "download_url",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "attachment_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 44,
+          "requestLines": 3,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi",
+          "requestHelpers": [
+            "_download_url",
+            "_find"
+          ]
+        },
+        {
+          "name": "upload_from_url",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "url"
+          ],
+          "optional": [
+            "name"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": true,
+          "line": 45,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single",
+          "requestHelpers": [
+            "_upload"
+          ]
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "attachment_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 46,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_work_item_attachments": "list",
+        "read_work_item_attachment": "read",
+        "get_work_item_attachment_download_url": "download_url",
+        "upload_work_item_attachment_from_url": "upload_from_url",
+        "delete_work_item_attachment": "delete"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "workitem_comment",
+      "title": "Work item comments",
+      "module": "plane_mcp/tools/workitem_comment.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 29,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single",
+          "requestHelpers": [
+            "_legible"
+          ]
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "comment_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 30,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single",
+          "requestHelpers": [
+            "_legible"
+          ]
+        },
+        {
+          "name": "create",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "comment_html"
+          ],
+          "optional": [
+            "access",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 31,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single",
+          "requestHelpers": [
+            "_legible"
+          ]
+        },
+        {
+          "name": "update",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "comment_id"
+          ],
+          "optional": [
+            "comment_html",
+            "access",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 36,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single",
+          "requestHelpers": [
+            "_legible"
+          ]
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "comment_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 41,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_work_item_comments": "list",
+        "retrieve_work_item_comment": "retrieve",
+        "create_work_item_comment": "create",
+        "update_work_item_comment": "update",
+        "delete_work_item_comment": "delete"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "workitem_link",
+      "title": "Work item links",
+      "module": "plane_mcp/tools/workitem_link.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 17,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "link_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 18,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "url"
+          ],
+          "optional": [
+            "title"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 19,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "link_id"
+          ],
+          "optional": [
+            "url",
+            "title"
+          ],
+          "note": "pass at least one of url or title; only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 20,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "link_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 26,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_work_item_links": "list",
+        "retrieve_work_item_link": "retrieve",
+        "create_work_item_link": "create",
+        "update_work_item_link": "update",
+        "delete_work_item_link": "delete"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "workitem_property",
+      "title": "Work item properties",
+      "module": "plane_mcp/tools/workitem_property.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [],
+          "optional": [
+            "project_id",
+            "workitem_type_id",
+            "cursor",
+            "per_page"
+          ],
+          "note": "no ids lists every workspace property in one call -- the fast path for PQL",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 64,
+          "requestLines": 6,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi",
+          "requestHelpers": [
+            "_workspace_props_for_type"
+          ]
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "workitem_property_id"
+          ],
+          "optional": [
+            "project_id",
+            "workitem_type_id"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 71,
+          "requestLines": 3,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "display_name",
+            "property_type"
+          ],
+          "optional": [
+            "project_id",
+            "workitem_type_id",
+            "description",
+            "relation_type",
+            "is_required",
+            "is_multi",
+            "is_active",
+            "default_value",
+            "options",
+            "display_format",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 72,
+          "requestLines": 3,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi",
+          "requestHelpers": [
+            "_create_at_workspace",
+            "_options",
+            "_settings"
+          ]
+        },
+        {
+          "name": "update",
+          "requires": [
+            "workitem_property_id"
+          ],
+          "optional": [
+            "project_id",
+            "workitem_type_id",
+            "display_name",
+            "property_type",
+            "description",
+            "relation_type",
+            "is_required",
+            "is_multi",
+            "is_active",
+            "default_value",
+            "display_format",
+            "external_source",
+            "external_id"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 90,
+          "requestLines": 3,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi",
+          "requestHelpers": [
+            "_settings"
+          ]
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "workitem_property_id"
+          ],
+          "optional": [
+            "project_id",
+            "workitem_type_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 110,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "manage_type_properties",
+          "requires": [
+            "workitem_type_id"
+          ],
+          "optional": [
+            "project_id",
+            "attach_ids",
+            "detach_ids"
+          ],
+          "note": "omit project_id where the workspace owns types; detach removes the association only, it does not delete the property",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 111,
+          "requestLines": 4,
+          "loops": true,
+          "branch": "own",
+          "requestShape": "multi",
+          "requestHelpers": [
+            "_manage_project_links",
+            "_manage_workspace_links"
+          ]
+        },
+        {
+          "name": "list_options",
+          "requires": [
+            "property_id"
+          ],
+          "optional": [
+            "project_id"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 118,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "retrieve_option",
+          "requires": [
+            "property_id",
+            "option_id"
+          ],
+          "optional": [
+            "project_id"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 119,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create_option",
+          "requires": [
+            "property_id",
+            "name"
+          ],
+          "optional": [
+            "project_id",
+            "description",
+            "color",
+            "is_default",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 120,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update_option",
+          "requires": [
+            "property_id",
+            "option_id"
+          ],
+          "optional": [
+            "project_id",
+            "name",
+            "description",
+            "color",
+            "is_default",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 125,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete_option",
+          "requires": [
+            "property_id",
+            "option_id"
+          ],
+          "optional": [
+            "project_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 130,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "multi"
+        },
+        {
+          "name": "get_value",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "property_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 131,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "set_value",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "property_id"
+          ],
+          "optional": [
+            "value",
+            "description_html",
+            "external_source",
+            "external_id"
+          ],
+          "note": "upsert; pass value, or description_html for a rich text property; for a multi-value property this replaces every existing value",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 132,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single",
+          "requestHelpers": [
+            "_wants_rich_text"
+          ]
+        },
+        {
+          "name": "delete_value",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "property_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 139,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "multi"
+        }
+      ],
+      "legacy": {
+        "list_work_item_properties": "list",
+        "retrieve_work_item_property": "retrieve",
+        "create_work_item_property": "create",
+        "update_work_item_property": "update",
+        "delete_work_item_property": "delete",
+        "manage_work_item_type_properties": "manage_type_properties",
+        "list_work_item_property_options": "list_options",
+        "retrieve_work_item_property_option": "retrieve_option",
+        "create_work_item_property_option": "create_option",
+        "update_work_item_property_option": "update_option",
+        "delete_work_item_property_option": "delete_option",
+        "get_work_item_property_value": "get_value",
+        "set_work_item_property_value": "set_value",
+        "delete_work_item_property_value": "delete_value"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "workitem_relation",
+      "title": "Work item relations",
+      "module": "plane_mcp/tools/workitem_relation.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [
+            "project_id",
+            "workitem_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 48,
+          "requestLines": 4,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "workitem_ids"
+          ],
+          "optional": [
+            "relation_type",
+            "relation_definition_id",
+            "relation_definition_label"
+          ],
+          "note": "pass relation_type for a dependency, or definition id + label for a custom relation",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 49,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "project_id",
+            "workitem_id",
+            "related_workitem_id"
+          ],
+          "optional": [
+            "is_dependency"
+          ],
+          "note": "removes one relation; dependencies and custom relations are independent, so is_dependency must match the kind that was created (default false)",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 55,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        },
+        {
+          "name": "list_definitions",
+          "requires": [],
+          "optional": [
+            "is_default",
+            "is_active"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 63,
+          "requestLines": 1,
+          "loops": true,
+          "branch": "own",
+          "requestShape": "multi",
+          "requestHelpers": [
+            "_all_definitions"
+          ]
+        },
+        {
+          "name": "create_definition",
+          "requires": [
+            "name"
+          ],
+          "optional": [
+            "outward",
+            "inward",
+            "is_active",
+            "color"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 64,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update_definition",
+          "requires": [
+            "definition_id"
+          ],
+          "optional": [
+            "name",
+            "outward",
+            "inward",
+            "is_active",
+            "color"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 65,
+          "requestLines": 2,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi"
+        },
+        {
+          "name": "delete_definition",
+          "requires": [
+            "definition_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 66,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_work_item_relations": "list",
+        "create_work_item_relation": "create",
+        "remove_work_item_relation": "delete",
+        "list_work_item_relation_definitions": "list_definitions",
+        "create_work_item_relation_definition": "create_definition",
+        "update_work_item_relation_definition": "update_definition",
+        "delete_work_item_relation_definition": "delete_definition"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "workitem_type",
+      "title": "Work item types",
+      "module": "plane_mcp/tools/workitem_type.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [],
+          "optional": [
+            "project_id",
+            "cursor",
+            "per_page"
+          ],
+          "note": "workspace scope when project_id is omitted",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 38,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "workitem_type_id"
+          ],
+          "optional": [
+            "project_id"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 41,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "resolve",
+          "requires": [
+            "project_id",
+            "name"
+          ],
+          "optional": [],
+          "note": "finds or creates a named type usable in the project; never duplicates",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 42,
+          "requestLines": 8,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "multi",
+          "requestHelpers": [
+            "_resolve"
+          ]
+        },
+        {
+          "name": "create",
+          "requires": [
+            "name"
+          ],
+          "optional": [
+            "project_id",
+            "description",
+            "project_ids",
+            "is_active",
+            "external_source",
+            "external_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 47,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "workitem_type_id"
+          ],
+          "optional": [
+            "project_id",
+            "name",
+            "description",
+            "project_ids",
+            "is_active",
+            "external_source",
+            "external_id"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 52,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "workitem_type_id"
+          ],
+          "optional": [
+            "project_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 58,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        },
+        {
+          "name": "import_to_project",
+          "requires": [
+            "project_id",
+            "workitem_type_ids"
+          ],
+          "optional": [],
+          "note": "links workspace types to a project",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 59,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "list_work_item_types": "list",
+        "retrieve_work_item_type": "retrieve",
+        "resolve_work_item_type": "resolve",
+        "create_work_item_type": "create",
+        "update_work_item_type": "update",
+        "delete_work_item_type": "delete",
+        "import_work_item_types_to_project": "import_to_project"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "workspace",
+      "title": "Workspace settings",
+      "module": "plane_mcp/tools/workspace.py",
+      "actions": [
+        {
+          "name": "retrieve",
+          "requires": [],
+          "optional": [],
+          "note": "the workspace this connection is bound to: slug, id, name and how it connected. id and name are known only on an OAuth connection and are null otherwise",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 17,
+          "requestLines": 0,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "none"
+        },
+        {
+          "name": "get_features",
+          "requires": [],
+          "optional": [],
+          "note": "feature flags for the current workspace",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 23,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update_features",
+          "requires": [],
+          "optional": [
+            "project_grouping",
+            "initiatives",
+            "teams",
+            "customers",
+            "wiki",
+            "pi"
+          ],
+          "note": "only the flags you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 24,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {
+        "get_features": "get_features",
+        "update_workspace_features": "update_features"
+      },
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "template",
+      "title": "Templates",
+      "module": "plane_mcp/tools/template.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [
+            "kind"
+          ],
+          "optional": [
+            "project_id"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 43,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "kind",
+            "name",
+            "template_data"
+          ],
+          "optional": [
+            "project_id",
+            "description"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 44,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single",
+          "requestHelpers": [
+            "_payload"
+          ]
+        },
+        {
+          "name": "update",
+          "requires": [
+            "kind",
+            "template_id"
+          ],
+          "optional": [
+            "project_id",
+            "name",
+            "description",
+            "template_data"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 45,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single",
+          "requestHelpers": [
+            "_payload"
+          ]
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "kind",
+            "template_id"
+          ],
+          "optional": [
+            "project_id"
+          ],
+          "note": "",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 51,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single",
+          "requestHelpers": [
+            "_body"
+          ]
+        }
+      ],
+      "legacy": {},
+      "legacyUnmapped": {}
+    },
+    {
+      "tool": "collection",
+      "title": "Page collections",
+      "module": "plane_mcp/tools/collection.py",
+      "actions": [
+        {
+          "name": "list",
+          "requires": [],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 44,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "retrieve",
+          "requires": [
+            "collection_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 45,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "create",
+          "requires": [
+            "name"
+          ],
+          "optional": [
+            "access"
+          ],
+          "note": "access is fixed at creation and cannot be changed afterwards",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 46,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update",
+          "requires": [
+            "collection_id"
+          ],
+          "optional": [
+            "name",
+            "sort_order"
+          ],
+          "note": "only the fields you pass are changed",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 47,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "delete",
+          "requires": [
+            "collection_id"
+          ],
+          "optional": [
+            "archive_pages"
+          ],
+          "note": "the pages survive; archive_pages defaults to true, pass false to leave them unfiled instead",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 48,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "list_pages",
+          "requires": [
+            "collection_id"
+          ],
+          "optional": [
+            "search",
+            "parent_id",
+            "cursor",
+            "per_page"
+          ],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 55,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "search_pages",
+          "requires": [
+            "collection_id"
+          ],
+          "optional": [
+            "search"
+          ],
+          "note": "pages not yet in this collection, to pick ids for add_pages",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 56,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "add_pages",
+          "requires": [
+            "collection_id",
+            "page_ids"
+          ],
+          "optional": [],
+          "note": "files existing pages; use page create to make new ones",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 63,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "remove_page",
+          "requires": [
+            "collection_id",
+            "page_collection_id"
+          ],
+          "optional": [],
+          "note": "page_collection_id is the membership id from list_pages, not the page id; the page itself is kept",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 64,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "list_members",
+          "requires": [
+            "collection_id"
+          ],
+          "optional": [],
+          "note": "",
+          "read": true,
+          "destructive": false,
+          "openWorld": false,
+          "line": 70,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "add_member",
+          "requires": [
+            "collection_id",
+            "user_id",
+            "member_access"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 71,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "update_member",
+          "requires": [
+            "collection_id",
+            "collection_member_id",
+            "member_access"
+          ],
+          "optional": [],
+          "note": "",
+          "read": false,
+          "destructive": false,
+          "openWorld": false,
+          "line": 72,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "own",
+          "requestShape": "single"
+        },
+        {
+          "name": "remove_member",
+          "requires": [
+            "collection_id",
+            "collection_member_id"
+          ],
+          "optional": [],
+          "note": "collection_member_id is the membership id from list_members, not the user id",
+          "read": false,
+          "destructive": true,
+          "openWorld": false,
+          "line": 73,
+          "requestLines": 1,
+          "loops": false,
+          "branch": "fall-through",
+          "requestShape": "single"
+        }
+      ],
+      "legacy": {},
+      "legacyUnmapped": {}
+    }
+  ]
+}
