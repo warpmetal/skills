@@ -1,0 +1,12 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/scripts/sample_script_name/subdomain",
+  "body": {
+    "enabled": true,
+    "previews_enabled": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

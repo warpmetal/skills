@@ -1,0 +1,25 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/observability/shared/query",
+  "body": {
+    "chart": true,
+    "chartType": "timeseries_and_aggregate",
+    "compare": true,
+    "distributionScale": "log",
+    "dry": true,
+    "granularity": 1,
+    "ignoreSeries": true,
+    "limit": 1,
+    "offset": "sample_offset",
+    "offsetBy": 1,
+    "offsetDirection": "sample_offset_direction",
+    "parameters": {},
+    "queryId": "sample_query_id",
+    "timeframe": {},
+    "view": "traces"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

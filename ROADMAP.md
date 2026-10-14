@@ -98,8 +98,9 @@ Requires org access or later workstreams:
       `setup`/`plan`/`apply` and host-config writing remain in that workstream.
       See [`docs/coding-env-skill-plan.md`](docs/coding-env-skill-plan.md).
 - [ ] CLI registry client, lockfile, and explicit update semantics land with the `coding-env` workstream.
-- [ ] Cloudflare WAF/firewall adapters and automatic security updates (a later release; this release is
-      DNS only).
+- [ ] Cloudflare WAF/firewall adapters and automatic security updates. The adapter verbs are still DNS
+      only; the MCP provider wave now covers zones, DNS, zone settings, cache and tokens (batch 14) and
+      R2, Workers, Queues, Pages, Workers KV, Vectorize, D1, Workflows and Hyperdrive (batch 15).
 
 ## Decided
 

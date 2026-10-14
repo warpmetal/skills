@@ -30,6 +30,7 @@ interface Operation {
   readonly path: string;
   readonly auth: string;
   readonly destructive: boolean;
+  readonly bodyKind: string;
   readonly pathParams: readonly { readonly name: string; readonly arg: string }[];
   readonly tokenGroups: readonly string[];
 }
@@ -44,15 +45,46 @@ const operations = Object.values(fixture.tools);
 
 /** The reviewed destructive set for this wave, spelled out on purpose. */
 const REVIEWED_DESTRUCTIVE = [
+  "cloudflare_d1_database_database_id_query",
+  "cloudflare_d1_database_database_id_raw_create",
+  "cloudflare_d1_database_database_id_time_travel_restore",
+  "cloudflare_d1_database_delete",
   "cloudflare_dns_records_batch",
   "cloudflare_dns_records_delete",
   "cloudflare_dnssec_delete",
+  "cloudflare_hyperdrive_configs_delete",
+  "cloudflare_pages_projects_delete",
+  "cloudflare_pages_projects_project_name_purge_build_cache",
   "cloudflare_purge_cache",
+  "cloudflare_queues_delete",
+  "cloudflare_queues_queue_id_messages_purge",
+  "cloudflare_queues_queue_id_purge",
+  "cloudflare_r2_buckets_bucket_name_objects_delete",
+  "cloudflare_r2_buckets_bucket_name_objects_delete_bulk",
+  "cloudflare_r2_buckets_delete",
+  "cloudflare_r2_catalog_bucket_name_delete_create",
+  "cloudflare_storage_kv_namespaces_delete",
+  "cloudflare_storage_kv_namespaces_namespace_id_bulk_delete_create",
+  "cloudflare_storage_kv_namespaces_namespace_id_bulk_put",
+  "cloudflare_storage_kv_namespaces_namespace_id_values_delete",
+  "cloudflare_vectorize_v2_indexes_delete",
+  "cloudflare_vectorize_v2_indexes_index_name_delete_by_ids_create",
+  "cloudflare_vectorize_v2_indexes_index_name_metadata_index_delete_create",
+  "cloudflare_workers_dispatch_namespaces_delete",
+  "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_delete",
+  "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_delete_all",
+  "cloudflare_workers_scripts_delete",
+  "cloudflare_workers_workers_delete",
+  "cloudflare_workers_workers_worker_id_previews_delete",
+  "cloudflare_workers_workers_worker_id_previews_preview_id_deployments_delete",
+  "cloudflare_workers_workers_worker_id_versions_delete",
+  "cloudflare_workflows_delete",
+  "cloudflare_workflows_workflow_name_instances_delete",
   "cloudflare_zones_delete",
 ] as const;
 
 test("the cloudflare wave ships the operations it says it does", () => {
-  assert.ok(tools.length >= 40, `expected a substantial wave, found ${tools.length}`);
+  assert.ok(tools.length >= 300, `expected a substantial wave, found ${tools.length}`);
   assert.equal(tools.length, operations.length);
 
   const slugs = new Set(tools.map((tool) => tool.toolSlug));
@@ -181,8 +213,8 @@ test("the schema is strict, snake_case, and requires every path parameter", () =
     assert.equal(schema.type, "object", `${tool.toolSlug}: the root must be an object`);
     assert.equal(
       schema.additionalProperties,
-      false,
-      `${tool.toolSlug}: an undeclared argument must be refused`,
+      operation.bodyKind === "free-form",
+      `${tool.toolSlug}: only an operation whose body the spec does not publish may take an undeclared argument`,
     );
     const required = new Set(schema.required ?? []);
     for (const parameter of operation.pathParams) {

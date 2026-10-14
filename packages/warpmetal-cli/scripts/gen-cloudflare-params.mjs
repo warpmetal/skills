@@ -61,6 +61,7 @@ for (const entry of allowlist.entries) {
     filtered: op.filtered,
     keepFiltered: entry.keepFiltered === true,
     rawBody: entry.rawBody === true,
+    dropBodyFields: entry.dropBodyFields ?? [],
     bodyKind: op.body?.kind ?? "none",
     bodyContentType: op.body?.contentType ?? null,
     pathParams: parametersOf(op.pathParams),

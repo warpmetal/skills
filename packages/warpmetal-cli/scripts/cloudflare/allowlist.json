@@ -19,7 +19,7 @@
       "scope": "Zonas, DNS, ajustes de zona, cache y tokens de identidad"
     },
     "w2": {
-      "status": "planned",
+      "status": "reviewed",
       "scope": "Almacenamiento y computo: R2, KV, D1, Workers, Queues, Pages"
     },
     "w3": {
@@ -467,6 +467,2550 @@
       "auth": "api-token",
       "keepFiltered": true,
       "filterNote": "Same x-fern-ignore group; read-only and needed to interpret the token policies above."
+    },
+    {
+      "toolSlug": "cloudflare_d1_database_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/d1/database",
+      "wave": "w2",
+      "reason": "List D1 Databases. Part of the D1 family of wave w2: the SQLite databases and the SQL sent to them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_d1_database_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/d1/database",
+      "wave": "w2",
+      "reason": "Create D1 Database. Part of the D1 family of wave w2: the SQLite databases and the SQL sent to them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_d1_database_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/d1/database/{database_id}",
+      "wave": "w2",
+      "reason": "Get D1 Database. Part of the D1 family of wave w2: the SQLite databases and the SQL sent to them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_d1_database_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/d1/database/{database_id}",
+      "wave": "w2",
+      "reason": "Update D1 Database. Part of the D1 family of wave w2: the SQLite databases and the SQL sent to them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_d1_database_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/d1/database/{database_id}",
+      "wave": "w2",
+      "reason": "Update D1 Database partially. Part of the D1 family of wave w2: the SQLite databases and the SQL sent to them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_d1_database_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/d1/database/{database_id}",
+      "wave": "w2",
+      "reason": "Delete D1 Database. Part of the D1 family of wave w2: the SQLite databases and the SQL sent to them. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_d1_database_database_id_query",
+      "method": "POST",
+      "path": "/accounts/{account_id}/d1/database/{database_id}/query",
+      "wave": "w2",
+      "reason": "Query D1 Database. Part of the D1 family of wave w2: the SQLite databases and the SQL sent to them. The SQL is the caller's, so the call can drop a table as easily as it can read one.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_d1_database_database_id_raw_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/d1/database/{database_id}/raw",
+      "wave": "w2",
+      "reason": "Raw D1 Database query. Part of the D1 family of wave w2: the SQLite databases and the SQL sent to them. The SQL is the caller's, so the call can drop a table as easily as it can read one.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_d1_database_database_id_time_travel_bookmark_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/d1/database/{database_id}/time_travel/bookmark",
+      "wave": "w2",
+      "reason": "Get D1 database bookmark. Part of the D1 family of wave w2: the SQLite databases and the SQL sent to them.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_d1_database_database_id_time_travel_restore",
+      "method": "POST",
+      "path": "/accounts/{account_id}/d1/database/{database_id}/time_travel/restore",
+      "wave": "w2",
+      "reason": "Restore D1 Database to a bookmark or point in time. Part of the D1 family of wave w2: the SQLite databases and the SQL sent to them. It rewinds the database to a bookmark, discarding everything written since.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_d1_database_database_id_undelete_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/d1/database/{database_id}/undelete",
+      "wave": "w2",
+      "reason": "Undelete D1 Database. Part of the D1 family of wave w2: the SQLite databases and the SQL sent to them.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_hyperdrive_configs_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/hyperdrive/configs",
+      "wave": "w2",
+      "reason": "List Hyperdrives. Part of the Hyperdrive family of wave w2: the cached connection pools a Worker connects through.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_hyperdrive_configs_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/hyperdrive/configs",
+      "wave": "w2",
+      "reason": "Create Hyperdrive. Part of the Hyperdrive family of wave w2: the cached connection pools a Worker connects through.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_hyperdrive_configs_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}",
+      "wave": "w2",
+      "reason": "Get Hyperdrive. Part of the Hyperdrive family of wave w2: the cached connection pools a Worker connects through.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_hyperdrive_configs_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}",
+      "wave": "w2",
+      "reason": "Replace Hyperdrive. Part of the Hyperdrive family of wave w2: the cached connection pools a Worker connects through.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_hyperdrive_configs_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}",
+      "wave": "w2",
+      "reason": "Update Hyperdrive. Part of the Hyperdrive family of wave w2: the cached connection pools a Worker connects through.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_hyperdrive_configs_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}",
+      "wave": "w2",
+      "reason": "Delete Hyperdrive. Part of the Hyperdrive family of wave w2: the cached connection pools a Worker connects through. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_hyperdrive_configs_hyperdrive_id_restart",
+      "method": "POST",
+      "path": "/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}/restart",
+      "wave": "w2",
+      "reason": "Restart Hyperdrive. Part of the Hyperdrive family of wave w2: the cached connection pools a Worker connects through.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_hyperdrive_planetscale_create_database_signature",
+      "method": "POST",
+      "path": "/accounts/{account_id}/hyperdrive/integrationsOperations/planetScale/createDatabaseSignature",
+      "wave": "w2",
+      "reason": "Create Database Signature. Part of the Hyperdrive family of wave w2: the cached connection pools a Worker connects through. The path carries camelCase segments that the naming rule rejects, so the tool is renamed after the integration and the action it performs.",
+      "destructive": false,
+      "auth": "api-token",
+      "override": true
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/pages/projects",
+      "wave": "w2",
+      "reason": "List Cloudflare Pages projects. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/pages/projects",
+      "wave": "w2",
+      "reason": "Create a Cloudflare Pages project. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}",
+      "wave": "w2",
+      "reason": "Get a Cloudflare Pages project. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}",
+      "wave": "w2",
+      "reason": "Update a Cloudflare Pages project. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}",
+      "wave": "w2",
+      "reason": "Delete a Cloudflare Pages project. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_project_name_deployments_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}/deployments",
+      "wave": "w2",
+      "reason": "List Pages deployments. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_project_name_deployments_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}",
+      "wave": "w2",
+      "reason": "Get a Pages deployment. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_project_name_deployments_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}",
+      "wave": "w2",
+      "reason": "Delete a Pages deployment. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_project_name_deployments_deployment_id_history_logs_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}/history/logs",
+      "wave": "w2",
+      "reason": "Get Pages deployment logs. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_project_name_deployments_deployment_id_retry_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}/retry",
+      "wave": "w2",
+      "reason": "Retry a Pages deployment. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_project_name_deployments_deployment_id_rollback",
+      "method": "POST",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}/rollback",
+      "wave": "w2",
+      "reason": "Roll back a Pages deployment. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_project_name_domains_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}/domains",
+      "wave": "w2",
+      "reason": "List Pages custom domains. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_project_name_domains_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}/domains",
+      "wave": "w2",
+      "reason": "Add a Pages custom domain. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_project_name_domains_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}",
+      "wave": "w2",
+      "reason": "Get a Pages custom domain. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_project_name_domains_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}",
+      "wave": "w2",
+      "reason": "Retry custom domain validation. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_project_name_domains_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}",
+      "wave": "w2",
+      "reason": "Delete a Pages custom domain. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_project_name_purge_build_cache",
+      "method": "POST",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}/purge_build_cache",
+      "wave": "w2",
+      "reason": "Purge the Pages build cache. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it. The build cache cannot be called back; the next build starts from nothing.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_project_name_source_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}/source",
+      "wave": "w2",
+      "reason": "Connect a Git repository. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_pages_projects_project_name_source_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/pages/projects/{project_name}/source",
+      "wave": "w2",
+      "reason": "Disconnect a Git repository. Part of the Pages family of wave w2: the project, its deployments and the domains bound to it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/queues",
+      "wave": "w2",
+      "reason": "List Queues. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/queues",
+      "wave": "w2",
+      "reason": "Create Queue. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/queues/{queue_id}",
+      "wave": "w2",
+      "reason": "Get Queue. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/queues/{queue_id}",
+      "wave": "w2",
+      "reason": "Update Queue. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token",
+      "dropBodyFields": [
+        "queue_id"
+      ],
+      "dropBodyFieldsNote": "The PATCH body is the queue object, so its field list repeats the identifier the path already carries; exposing it would let a caller send two different ids in one request."
+    },
+    {
+      "toolSlug": "cloudflare_queues_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/queues/{queue_id}",
+      "wave": "w2",
+      "reason": "Delete Queue. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_queue_id_consumers_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/queues/{queue_id}/consumers",
+      "wave": "w2",
+      "reason": "List Queue Consumers. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_queue_id_consumers_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/queues/{queue_id}/consumers",
+      "wave": "w2",
+      "reason": "Create a Queue Consumer. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_queue_id_consumers_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}",
+      "wave": "w2",
+      "reason": "Get Queue Consumer. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_queue_id_consumers_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}",
+      "wave": "w2",
+      "reason": "Update Queue Consumer. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_queue_id_consumers_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}",
+      "wave": "w2",
+      "reason": "Delete Queue Consumer. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_queue_id_messages_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/queues/{queue_id}/messages",
+      "wave": "w2",
+      "reason": "Push Message. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_queue_id_messages_ack_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/queues/{queue_id}/messages/ack",
+      "wave": "w2",
+      "reason": "Acknowledge + Retry Queue Messages. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_queue_id_messages_batch",
+      "method": "POST",
+      "path": "/accounts/{account_id}/queues/{queue_id}/messages/batch",
+      "wave": "w2",
+      "reason": "Push Message Batch. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_queue_id_messages_extend_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/queues/{queue_id}/messages/extend",
+      "wave": "w2",
+      "reason": "Extend Message Leases. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_queue_id_messages_peek_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/queues/{queue_id}/messages/peek",
+      "wave": "w2",
+      "reason": "Peek Queue Messages. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_queue_id_messages_pull_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/queues/{queue_id}/messages/pull",
+      "wave": "w2",
+      "reason": "Pull Queue Messages. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_queue_id_messages_purge",
+      "method": "POST",
+      "path": "/accounts/{account_id}/queues/{queue_id}/messages/purge",
+      "wave": "w2",
+      "reason": "Purge Peeked Queue Messages. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges. It empties messages that were already handed to a consumer.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_queue_id_metrics_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/queues/{queue_id}/metrics",
+      "wave": "w2",
+      "reason": "Get Queue Metrics. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_queues_queue_id_purge_status_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/queues/{queue_id}/purge",
+      "wave": "w2",
+      "reason": "Get Queue Purge Status. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges. The path derives the same name as the purge itself, so the read is renamed: this one only reports how far a purge has got.",
+      "destructive": false,
+      "auth": "api-token",
+      "override": true
+    },
+    {
+      "toolSlug": "cloudflare_queues_queue_id_purge",
+      "method": "POST",
+      "path": "/accounts/{account_id}/queues/{queue_id}/purge",
+      "wave": "w2",
+      "reason": "Purge Queue. Part of the Queues family of wave w2: the queue, its consumers and the messages an operator pushes, peeks and purges. It discards every message the queue holds.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2-catalog",
+      "wave": "w2",
+      "reason": "List R2 catalogs. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2-catalog/{bucket_name}",
+      "wave": "w2",
+      "reason": "Get R2 catalog details. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_bucket_name_credential_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/r2-catalog/{bucket_name}/credential",
+      "wave": "w2",
+      "reason": "Store catalog credentials. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_bucket_name_credential_status_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2-catalog/{bucket_name}/credential/status",
+      "wave": "w2",
+      "reason": "Get catalog credential status. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_bucket_name_delete_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/r2-catalog/{bucket_name}/delete",
+      "wave": "w2",
+      "reason": "Delete R2 catalog metadata. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes. It deletes catalog metadata the bucket cannot regenerate.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_bucket_name_disable",
+      "method": "POST",
+      "path": "/accounts/{account_id}/r2-catalog/{bucket_name}/disable",
+      "wave": "w2",
+      "reason": "Disable R2 catalog. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_bucket_name_enable",
+      "method": "POST",
+      "path": "/accounts/{account_id}/r2-catalog/{bucket_name}/enable",
+      "wave": "w2",
+      "reason": "Enable R2 bucket as a catalog. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_bucket_name_maintenance_configs_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2-catalog/{bucket_name}/maintenance-configs",
+      "wave": "w2",
+      "reason": "Get catalog maintenance configuration. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_bucket_name_maintenance_configs_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/r2-catalog/{bucket_name}/maintenance-configs",
+      "wave": "w2",
+      "reason": "Update catalog maintenance configuration. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_bucket_name_namespaces_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces",
+      "wave": "w2",
+      "reason": "List namespaces in catalog. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables",
+      "wave": "w2",
+      "reason": "List tables in namespace. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}",
+      "wave": "w2",
+      "reason": "Get table details. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_configs_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-configs",
+      "wave": "w2",
+      "reason": "Get table maintenance configuration. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_configs_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-configs",
+      "wave": "w2",
+      "reason": "Update table maintenance configuration. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_configs_configuration_type_queue_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-configs/{configuration_type}/queue",
+      "wave": "w2",
+      "reason": "Queue table maintenance. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_runs_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-runs",
+      "wave": "w2",
+      "reason": "List table maintenance runs. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2/buckets",
+      "wave": "w2",
+      "reason": "List Buckets. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/r2/buckets",
+      "wave": "w2",
+      "reason": "Create Bucket. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}",
+      "wave": "w2",
+      "reason": "Get Bucket. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}",
+      "wave": "w2",
+      "reason": "Create Bucket (by name). Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}",
+      "wave": "w2",
+      "reason": "Patch Bucket. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}",
+      "wave": "w2",
+      "reason": "Delete Bucket. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_cors_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/cors",
+      "wave": "w2",
+      "reason": "Get Bucket CORS Policy. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_cors_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/cors",
+      "wave": "w2",
+      "reason": "Set Bucket CORS Policy. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_cors_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/cors",
+      "wave": "w2",
+      "reason": "Delete Bucket CORS Policy. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_domains_custom_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom",
+      "wave": "w2",
+      "reason": "List Custom Domains of Bucket. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_domains_custom_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom",
+      "wave": "w2",
+      "reason": "Attach Custom Domain To Bucket. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_domains_custom_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom/{domain}",
+      "wave": "w2",
+      "reason": "Get Custom Domain Settings. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_domains_custom_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom/{domain}",
+      "wave": "w2",
+      "reason": "Configure Custom Domain Settings. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_domains_custom_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom/{domain}",
+      "wave": "w2",
+      "reason": "Remove Custom Domain From Bucket. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_domains_managed_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/domains/managed",
+      "wave": "w2",
+      "reason": "Get r2.dev Domain of Bucket. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_domains_managed_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/domains/managed",
+      "wave": "w2",
+      "reason": "Update r2.dev Domain of Bucket. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_jobs_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/jobs",
+      "wave": "w2",
+      "reason": "List Bucket Jobs. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_jobs_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/jobs",
+      "wave": "w2",
+      "reason": "Create Bucket Job. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_jobs_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/jobs/{job_id}",
+      "wave": "w2",
+      "reason": "Get Bucket Job. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_lifecycle_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/lifecycle",
+      "wave": "w2",
+      "reason": "Get Object Lifecycle Rules. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_lifecycle_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/lifecycle",
+      "wave": "w2",
+      "reason": "Set Object Lifecycle Rules. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_local_uploads_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/local-uploads",
+      "wave": "w2",
+      "reason": "Get Local Uploads Configuration. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_local_uploads_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/local-uploads",
+      "wave": "w2",
+      "reason": "Set Local Uploads Configuration. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_lock_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/lock",
+      "wave": "w2",
+      "reason": "Get Bucket Lock Rules. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_lock_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/lock",
+      "wave": "w2",
+      "reason": "Set Bucket Lock Rules. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_lock_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/lock",
+      "wave": "w2",
+      "reason": "Delete Bucket Lock Rules. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_objects_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/objects",
+      "wave": "w2",
+      "reason": "List Objects. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_objects_delete_bulk",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/objects",
+      "wave": "w2",
+      "reason": "Delete Objects. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes. It removes the resource itself; recreating it does not bring back what it held. Cloudflare publishes no field list for its application/json body, so the tool takes one body argument and sends it verbatim. The path derives the same name as the single-object delete, so the bulk form takes an alias: this one deletes the objects named in its body.",
+      "destructive": true,
+      "auth": "api-token",
+      "override": true,
+      "rawBody": true
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_objects_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/objects/{object_key}",
+      "wave": "w2",
+      "reason": "Get Object. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_objects_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/objects/{object_key}",
+      "wave": "w2",
+      "reason": "Delete Object. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_sippy_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/sippy",
+      "wave": "w2",
+      "reason": "Get Sippy Configuration. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_sippy_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/sippy",
+      "wave": "w2",
+      "reason": "Enable Sippy. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_buckets_bucket_name_sippy_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/r2/buckets/{bucket_name}/sippy",
+      "wave": "w2",
+      "reason": "Disable Sippy. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_r2_metrics_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/r2/metrics",
+      "wave": "w2",
+      "reason": "Get Account-Level Metrics. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_r2_temp_access_credentials_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/r2/temp-access-credentials",
+      "wave": "w2",
+      "reason": "Create Temporary Access Credentials. Part of the R2 object-storage family of wave w2: the buckets, their policy and the objects a caller reads, lists and removes.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_storage_kv_namespaces_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/storage/kv/namespaces",
+      "wave": "w2",
+      "reason": "List namespaces. Part of the Workers KV family of wave w2: the namespaces and the pairs inside them, including the bulk endpoints.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_storage_kv_namespaces_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/storage/kv/namespaces",
+      "wave": "w2",
+      "reason": "Create a namespace. Part of the Workers KV family of wave w2: the namespaces and the pairs inside them, including the bulk endpoints.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_storage_kv_namespaces_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/storage/kv/namespaces/{namespace_id}",
+      "wave": "w2",
+      "reason": "Get a namespace. Part of the Workers KV family of wave w2: the namespaces and the pairs inside them, including the bulk endpoints.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_storage_kv_namespaces_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/storage/kv/namespaces/{namespace_id}",
+      "wave": "w2",
+      "reason": "Rename a namespace. Part of the Workers KV family of wave w2: the namespaces and the pairs inside them, including the bulk endpoints.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_storage_kv_namespaces_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/storage/kv/namespaces/{namespace_id}",
+      "wave": "w2",
+      "reason": "Delete a namespace. Part of the Workers KV family of wave w2: the namespaces and the pairs inside them, including the bulk endpoints. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_storage_kv_namespaces_namespace_id_bulk_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/bulk",
+      "wave": "w2",
+      "reason": "Write multiple key-value pairs. Part of the Workers KV family of wave w2: the namespaces and the pairs inside them, including the bulk endpoints. One call overwrites a list of keys in a single request; the values it replaces are gone. Cloudflare publishes no field list for its application/json body, so the tool takes one body argument and sends it verbatim.",
+      "destructive": true,
+      "auth": "api-token",
+      "rawBody": true
+    },
+    {
+      "toolSlug": "cloudflare_storage_kv_namespaces_namespace_id_bulk_delete_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/bulk/delete",
+      "wave": "w2",
+      "reason": "Delete multiple key-value pairs. Part of the Workers KV family of wave w2: the namespaces and the pairs inside them, including the bulk endpoints. One call deletes a list of keys in a single request. Cloudflare publishes no field list for its application/json body, so the tool takes one body argument and sends it verbatim.",
+      "destructive": true,
+      "auth": "api-token",
+      "rawBody": true
+    },
+    {
+      "toolSlug": "cloudflare_storage_kv_namespaces_namespace_id_bulk_get_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/bulk/get",
+      "wave": "w2",
+      "reason": "Get multiple key-value pairs. Part of the Workers KV family of wave w2: the namespaces and the pairs inside them, including the bulk endpoints.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_storage_kv_namespaces_namespace_id_keys_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/keys",
+      "wave": "w2",
+      "reason": "List keys in a namespace. Part of the Workers KV family of wave w2: the namespaces and the pairs inside them, including the bulk endpoints.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_storage_kv_namespaces_namespace_id_metadata_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/metadata/{key_name}",
+      "wave": "w2",
+      "reason": "Get a key's metadata. Part of the Workers KV family of wave w2: the namespaces and the pairs inside them, including the bulk endpoints.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_storage_kv_namespaces_namespace_id_values_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/values/{key_name}",
+      "wave": "w2",
+      "reason": "Get a key's value. Part of the Workers KV family of wave w2: the namespaces and the pairs inside them, including the bulk endpoints.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_storage_kv_namespaces_namespace_id_values_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/values/{key_name}",
+      "wave": "w2",
+      "reason": "Write a key-value pair with optional metadata. Part of the Workers KV family of wave w2: the namespaces and the pairs inside them, including the bulk endpoints.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_storage_kv_namespaces_namespace_id_values_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/values/{key_name}",
+      "wave": "w2",
+      "reason": "Delete a key-value pair. Part of the Workers KV family of wave w2: the namespaces and the pairs inside them, including the bulk endpoints. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_vectorize_v2_indexes_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/vectorize/v2/indexes",
+      "wave": "w2",
+      "reason": "List Vectorize Indexes. Part of the Vectorize family of wave w2: a v2 index, the vectors in it and the queries against it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_vectorize_v2_indexes_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/vectorize/v2/indexes",
+      "wave": "w2",
+      "reason": "Create Vectorize Index. Part of the Vectorize family of wave w2: a v2 index, the vectors in it and the queries against it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_vectorize_v2_indexes_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/vectorize/v2/indexes/{index_name}",
+      "wave": "w2",
+      "reason": "Get Vectorize Index. Part of the Vectorize family of wave w2: a v2 index, the vectors in it and the queries against it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_vectorize_v2_indexes_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/vectorize/v2/indexes/{index_name}",
+      "wave": "w2",
+      "reason": "Delete Vectorize Index. Part of the Vectorize family of wave w2: a v2 index, the vectors in it and the queries against it. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_vectorize_v2_indexes_index_name_delete_by_ids_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/vectorize/v2/indexes/{index_name}/delete_by_ids",
+      "wave": "w2",
+      "reason": "Delete Vectors By Identifier. Part of the Vectorize family of wave w2: a v2 index, the vectors in it and the queries against it. It deletes vectors by identifier, which is the data the index exists to hold.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_vectorize_v2_indexes_index_name_get_by_ids_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/vectorize/v2/indexes/{index_name}/get_by_ids",
+      "wave": "w2",
+      "reason": "Get Vectors By Identifier. Part of the Vectorize family of wave w2: a v2 index, the vectors in it and the queries against it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_vectorize_v2_indexes_index_name_info_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/vectorize/v2/indexes/{index_name}/info",
+      "wave": "w2",
+      "reason": "Get Vectorize Index Info. Part of the Vectorize family of wave w2: a v2 index, the vectors in it and the queries against it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_vectorize_v2_indexes_index_name_insert_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/vectorize/v2/indexes/{index_name}/insert",
+      "wave": "w2",
+      "reason": "Insert Vectors. Part of the Vectorize family of wave w2: a v2 index, the vectors in it and the queries against it. Cloudflare publishes no field list for its application/x-ndjson body, so the tool takes one body argument and sends it verbatim.",
+      "destructive": false,
+      "auth": "api-token",
+      "rawBody": true
+    },
+    {
+      "toolSlug": "cloudflare_vectorize_v2_indexes_index_name_list_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/vectorize/v2/indexes/{index_name}/list",
+      "wave": "w2",
+      "reason": "List Vectors. Part of the Vectorize family of wave w2: a v2 index, the vectors in it and the queries against it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_vectorize_v2_indexes_index_name_metadata_index_create_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/vectorize/v2/indexes/{index_name}/metadata_index/create",
+      "wave": "w2",
+      "reason": "Create Metadata Index. Part of the Vectorize family of wave w2: a v2 index, the vectors in it and the queries against it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_vectorize_v2_indexes_index_name_metadata_index_delete_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/vectorize/v2/indexes/{index_name}/metadata_index/delete",
+      "wave": "w2",
+      "reason": "Delete Metadata Index. Part of the Vectorize family of wave w2: a v2 index, the vectors in it and the queries against it. It deletes a metadata index, so filtered queries over those values stop working.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_vectorize_v2_indexes_index_name_metadata_index_list_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/vectorize/v2/indexes/{index_name}/metadata_index/list",
+      "wave": "w2",
+      "reason": "List Metadata Indexes. Part of the Vectorize family of wave w2: a v2 index, the vectors in it and the queries against it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_vectorize_v2_indexes_index_name_query",
+      "method": "POST",
+      "path": "/accounts/{account_id}/vectorize/v2/indexes/{index_name}/query",
+      "wave": "w2",
+      "reason": "Query Vectors. Part of the Vectorize family of wave w2: a v2 index, the vectors in it and the queries against it.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_vectorize_v2_indexes_index_name_upsert_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/vectorize/v2/indexes/{index_name}/upsert",
+      "wave": "w2",
+      "reason": "Upsert Vectors. Part of the Vectorize family of wave w2: a v2 index, the vectors in it and the queries against it. Cloudflare publishes no field list for its application/x-ndjson body, so the tool takes one body argument and sends it verbatim.",
+      "destructive": false,
+      "auth": "api-token",
+      "rawBody": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_account_settings_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/account-settings",
+      "wave": "w2",
+      "reason": "Fetch Workers Account Settings. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_account_settings_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/workers/account-settings",
+      "wave": "w2",
+      "reason": "Configure Workers Account Settings. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces",
+      "wave": "w2",
+      "reason": "List Workers for Platforms Dispatch Namespaces. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces",
+      "wave": "w2",
+      "reason": "Create Workers for Platforms Dispatch Namespace. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}",
+      "wave": "w2",
+      "reason": "Get Workers for Platforms Dispatch Namespace. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}",
+      "wave": "w2",
+      "reason": "Update Workers for Platforms Dispatch Namespace. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}",
+      "wave": "w2",
+      "reason": "Patch Workers for Platforms Dispatch Namespace. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}",
+      "wave": "w2",
+      "reason": "Delete Workers for Platforms Dispatch Namespace. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts",
+      "wave": "w2",
+      "reason": "List Workers for Platforms Scripts. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_delete_all",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts",
+      "wave": "w2",
+      "reason": "Delete Workers for Platforms Scripts. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker. It removes the resource itself; recreating it does not bring back what it held. The path derives the same name as the single-script delete, so the collection form takes an alias: this one deletes every script in the namespace.",
+      "destructive": true,
+      "auth": "api-token",
+      "override": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}",
+      "wave": "w2",
+      "reason": "Get Workers for Platforms Script details. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}",
+      "wave": "w2",
+      "reason": "Delete Workers for Platforms Script. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_assets_upload_session_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/assets-upload-session",
+      "wave": "w2",
+      "reason": "Create Workers for Platforms Assets Upload Session. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_bindings_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/bindings",
+      "wave": "w2",
+      "reason": "Get Workers for Platforms Script Bindings. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_content_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/content",
+      "wave": "w2",
+      "reason": "Get Workers for Platforms Script Content. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_secrets_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets",
+      "wave": "w2",
+      "reason": "List Workers for Platforms Script Secrets. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_secrets_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets",
+      "wave": "w2",
+      "reason": "Add a secret to a Workers for Platforms script. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_secrets_bulk_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets-bulk",
+      "wave": "w2",
+      "reason": "Patch multiple Workers for Platforms script secrets. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_secrets_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets/{secret_name}",
+      "wave": "w2",
+      "reason": "Get Workers for Platforms Script Secret. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_secrets_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets/{secret_name}",
+      "wave": "w2",
+      "reason": "Delete Workers for Platforms script secret. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_settings_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/settings",
+      "wave": "w2",
+      "reason": "Get Workers for Platforms Script Settings. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_tags_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags",
+      "wave": "w2",
+      "reason": "List Workers for Platforms Script Tags. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_tags_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags",
+      "wave": "w2",
+      "reason": "Replace Workers for Platforms Script Tags. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker. Cloudflare publishes no field list for its application/json body, so the tool takes one body argument and sends it verbatim.",
+      "destructive": false,
+      "auth": "api-token",
+      "rawBody": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_tags_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags/{tag}",
+      "wave": "w2",
+      "reason": "Create Workers for Platforms Script Tag. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_tags_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags/{tag}",
+      "wave": "w2",
+      "reason": "Update Workers for Platforms Script Tag. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_tags_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags/{tag}",
+      "wave": "w2",
+      "reason": "Delete Workers for Platforms Script Tag. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_domains_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/domains",
+      "wave": "w2",
+      "reason": "List Worker Domains. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_domains_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/workers/domains",
+      "wave": "w2",
+      "reason": "Attach Worker Domain. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_domains_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/domains/{domain_id}",
+      "wave": "w2",
+      "reason": "Get Worker Domain. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_domains_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/domains/{domain_id}",
+      "wave": "w2",
+      "reason": "Detach Worker Domain. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_durable_objects_namespaces_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/durable_objects/namespaces",
+      "wave": "w2",
+      "reason": "List Durable Object Namespaces. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_durable_objects_namespaces_id_objects_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/durable_objects/namespaces/{id}/objects",
+      "wave": "w2",
+      "reason": "List Objects in a Durable Object namespace. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_durable_objects_namespaces_id_query_v2_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/durable_objects/namespaces/{id}/query/v2",
+      "wave": "w2",
+      "reason": "Query a Durable Object. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_agents_sessions_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/observability/agents/sessions",
+      "wave": "w2",
+      "reason": "List Agent sessions. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_agents_sessions_conversation_id_runs_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/observability/agents/sessions/{conversationId}/runs",
+      "wave": "w2",
+      "reason": "List Agent session runs. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_destinations_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/observability/destinations",
+      "wave": "w2",
+      "reason": "Get Destinations. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_destinations_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/observability/destinations",
+      "wave": "w2",
+      "reason": "Create Destination. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_destinations_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/workers/observability/destinations/{slug}",
+      "wave": "w2",
+      "reason": "Update Destination. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_destinations_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/observability/destinations/{slug}",
+      "wave": "w2",
+      "reason": "Delete Destination. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_issues_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/observability/issues",
+      "wave": "w2",
+      "reason": "List detected issues. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_issues_automations_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/observability/issues/automations",
+      "wave": "w2",
+      "reason": "List issue automations. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_issues_automations_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/observability/issues/automations",
+      "wave": "w2",
+      "reason": "Create an issue automation. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_issues_automations_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/observability/issues/automations/{automationId}",
+      "wave": "w2",
+      "reason": "Get an issue automation. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_issues_automations_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/workers/observability/issues/automations/{automationId}",
+      "wave": "w2",
+      "reason": "Update an issue automation. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_issues_automations_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/observability/issues/automations/{automationId}",
+      "wave": "w2",
+      "reason": "Delete an issue automation. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_issues_groups_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/observability/issues/groups",
+      "wave": "w2",
+      "reason": "Create an issue group. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_issues_groups_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/observability/issues/groups/{groupId}",
+      "wave": "w2",
+      "reason": "Dissolve an issue group. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_issues_groups_group_id_members_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/observability/issues/groups/{groupId}/members",
+      "wave": "w2",
+      "reason": "Add issue group members. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_issues_groups_group_id_members_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/observability/issues/groups/{groupId}/members/{issueId}",
+      "wave": "w2",
+      "reason": "Remove an issue group member. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_issues_summary_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/observability/issues/summary",
+      "wave": "w2",
+      "reason": "Summarize detected issues. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_issues_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/observability/issues/{issueId}",
+      "wave": "w2",
+      "reason": "Get an issue. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_issues_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/workers/observability/issues/{issueId}",
+      "wave": "w2",
+      "reason": "Modify an issue. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_issues_issue_id_notification_runs_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/observability/issues/{issueId}/notification-runs",
+      "wave": "w2",
+      "reason": "Notify about an issue. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_issues_issue_id_occurrences_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/observability/issues/{issueId}/occurrences",
+      "wave": "w2",
+      "reason": "List issue occurrences. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_queries_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/observability/queries",
+      "wave": "w2",
+      "reason": "List queries. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_queries_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/observability/queries",
+      "wave": "w2",
+      "reason": "Save query. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_queries_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/observability/queries/{queryId}",
+      "wave": "w2",
+      "reason": "Get query. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_queries_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/workers/observability/queries/{queryId}",
+      "wave": "w2",
+      "reason": "Update query. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_queries_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/observability/queries/{queryId}",
+      "wave": "w2",
+      "reason": "Delete query. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_shared_query",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/observability/shared/query",
+      "wave": "w2",
+      "reason": "Create a sharable link to a query result. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_shared_query_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/observability/shared/query/{id}",
+      "wave": "w2",
+      "reason": "View a query that has been shared. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker. The path derives the same name as the shared-query write, so the read is renamed: this one fetches a shared query by id.",
+      "destructive": false,
+      "auth": "api-token",
+      "override": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_telemetry_keys_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/observability/telemetry/keys",
+      "wave": "w2",
+      "reason": "List keys. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_telemetry_query",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/observability/telemetry/query",
+      "wave": "w2",
+      "reason": "Run a query. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_observability_telemetry_values_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/observability/telemetry/values",
+      "wave": "w2",
+      "reason": "List values. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_placement_regions_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/placement/regions",
+      "wave": "w2",
+      "reason": "List Workers Smart Placement Regions. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts",
+      "wave": "w2",
+      "reason": "List Worker Scripts. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_search_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts-search",
+      "wave": "w2",
+      "reason": "Search Worker Scripts. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}",
+      "wave": "w2",
+      "reason": "Download Worker Script. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}",
+      "wave": "w2",
+      "reason": "Delete Worker. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_assets_upload_session_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/assets-upload-session",
+      "wave": "w2",
+      "reason": "Create Worker Assets Upload Session. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_content_v2_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/content/v2",
+      "wave": "w2",
+      "reason": "Get Worker Script Content. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_deployments_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/deployments",
+      "wave": "w2",
+      "reason": "List Worker Deployments. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_deployments_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/deployments",
+      "wave": "w2",
+      "reason": "Create Worker Deployment. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_deployments_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/deployments/{deployment_id}",
+      "wave": "w2",
+      "reason": "Get Worker Deployment. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_deployments_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/deployments/{deployment_id}",
+      "wave": "w2",
+      "reason": "Delete Worker Deployment. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_schedules_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/schedules",
+      "wave": "w2",
+      "reason": "Get Worker Script Schedules (Cron Triggers). Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_schedules_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/schedules",
+      "wave": "w2",
+      "reason": "Update Worker Script Schedules (Cron Triggers). Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker. Cloudflare publishes no field list for its application/json body, so the tool takes one body argument and sends it verbatim.",
+      "destructive": false,
+      "auth": "api-token",
+      "rawBody": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_script_settings_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/script-settings",
+      "wave": "w2",
+      "reason": "Get Worker Script Settings. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_script_settings_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/script-settings",
+      "wave": "w2",
+      "reason": "Patch Worker Script Settings. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_secrets_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/secrets",
+      "wave": "w2",
+      "reason": "List secrets bound to a Worker script. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_secrets_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/secrets",
+      "wave": "w2",
+      "reason": "Add a secret to a Worker script. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_secrets_bulk_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/secrets-bulk",
+      "wave": "w2",
+      "reason": "Patch multiple Worker script secrets. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_secrets_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/secrets/{secret_name}",
+      "wave": "w2",
+      "reason": "Get a secret binding. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_secrets_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/secrets/{secret_name}",
+      "wave": "w2",
+      "reason": "Delete Worker script secret. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_settings_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/settings",
+      "wave": "w2",
+      "reason": "Get Worker Script and Version Settings. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_subdomain_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/subdomain",
+      "wave": "w2",
+      "reason": "Get Worker Script Subdomain. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_subdomain_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/subdomain",
+      "wave": "w2",
+      "reason": "Update Worker Script Subdomain. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_subdomain_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/subdomain",
+      "wave": "w2",
+      "reason": "Delete Worker Script Subdomain. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_tails_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/tails",
+      "wave": "w2",
+      "reason": "List Worker Tails. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_tails_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/tails",
+      "wave": "w2",
+      "reason": "Start Worker Tail. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_tails_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/tails/{id}",
+      "wave": "w2",
+      "reason": "Delete Worker Tail. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_usage_model_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/usage-model",
+      "wave": "w2",
+      "reason": "Get Worker Script Usage Model. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_usage_model_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/usage-model",
+      "wave": "w2",
+      "reason": "Replace Worker Script Usage Model. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_versions_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/versions",
+      "wave": "w2",
+      "reason": "List Versions. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_scripts_script_name_versions_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/scripts/{script_name}/versions/{version_id}",
+      "wave": "w2",
+      "reason": "Get Worker Script Version. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_subdomain_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/subdomain",
+      "wave": "w2",
+      "reason": "Get a Workers Subdomain. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_subdomain_put",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/workers/subdomain",
+      "wave": "w2",
+      "reason": "Create a Workers Subdomain. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_subdomain_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/subdomain",
+      "wave": "w2",
+      "reason": "Delete Workers Subdomain. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/workers",
+      "wave": "w2",
+      "reason": "List Workers. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/workers",
+      "wave": "w2",
+      "reason": "Create Worker. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}",
+      "wave": "w2",
+      "reason": "Get Worker. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}",
+      "wave": "w2",
+      "reason": "Update Worker. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}",
+      "wave": "w2",
+      "reason": "Edit Worker. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}",
+      "wave": "w2",
+      "reason": "Delete Worker. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_previews_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/previews",
+      "wave": "w2",
+      "reason": "List Previews. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_previews_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/previews",
+      "wave": "w2",
+      "reason": "Create Preview. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_previews_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}",
+      "wave": "w2",
+      "reason": "Get Preview. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_previews_replace",
+      "method": "PUT",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}",
+      "wave": "w2",
+      "reason": "Update Preview. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_previews_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}",
+      "wave": "w2",
+      "reason": "Edit Preview. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_previews_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}",
+      "wave": "w2",
+      "reason": "Delete Preview. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_previews_preview_id_deployments_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments",
+      "wave": "w2",
+      "reason": "List Preview Deployments. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_previews_preview_id_deployments_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments",
+      "wave": "w2",
+      "reason": "Create Preview Deployment. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_previews_preview_id_deployments_latest_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments/latest",
+      "wave": "w2",
+      "reason": "Patch Latest Preview Deployment. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_previews_preview_id_deployments_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments/{deployment_id}",
+      "wave": "w2",
+      "reason": "Get Preview Deployment. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_previews_preview_id_deployments_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments/{deployment_id}",
+      "wave": "w2",
+      "reason": "Delete Preview Deployment. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_versions_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/versions",
+      "wave": "w2",
+      "reason": "List Worker Versions. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_versions_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/versions",
+      "wave": "w2",
+      "reason": "Create Worker Version. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_versions_latest_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/versions/latest",
+      "wave": "w2",
+      "reason": "Patch Latest Worker Version. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_versions_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/versions/{version_id}",
+      "wave": "w2",
+      "reason": "Get Worker Version. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_versions_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/versions/{version_id}",
+      "wave": "w2",
+      "reason": "Delete Worker Version. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workers_workers_worker_id_versions_version_id_profile_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workers/workers/{worker_id}/versions/{version_id}/profile",
+      "wave": "w2",
+      "reason": "Profile Worker Version. Part of the Workers compute family of wave w2: the scripts, versions, deployments, routes, schedules and bindings that make up a Worker.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workflows",
+      "wave": "w2",
+      "reason": "List all Workflows. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_concurrency_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workflows/concurrency",
+      "wave": "w2",
+      "reason": "List concurrency keys. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_concurrency_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workflows/concurrency",
+      "wave": "w2",
+      "reason": "Create a concurrency key. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_concurrency_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workflows/concurrency/{key_id}",
+      "wave": "w2",
+      "reason": "Get concurrency key details. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_concurrency_update",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/workflows/concurrency/{key_id}",
+      "wave": "w2",
+      "reason": "Update a concurrency key. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_concurrency_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workflows/concurrency/{key_id}",
+      "wave": "w2",
+      "reason": "Delete a concurrency key. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_settings_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workflows/settings",
+      "wave": "w2",
+      "reason": "Get account settings. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_settings_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/workflows/settings",
+      "wave": "w2",
+      "reason": "Update account settings. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workflows/{workflow_name}",
+      "wave": "w2",
+      "reason": "Get Workflow details. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workflows/{workflow_name}",
+      "wave": "w2",
+      "reason": "Deletes a Workflow. Part of the Workflows family of wave w2: the workflow and the instances it runs. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_workflow_name_instances_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workflows/{workflow_name}/instances",
+      "wave": "w2",
+      "reason": "List of workflow instances. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_workflow_name_instances_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workflows/{workflow_name}/instances",
+      "wave": "w2",
+      "reason": "Create a new workflow instance. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_workflow_name_instances_batch",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workflows/{workflow_name}/instances/batch",
+      "wave": "w2",
+      "reason": "Batch create new Workflow instances. Part of the Workflows family of wave w2: the workflow and the instances it runs. Cloudflare publishes no field list for its application/json body, so the tool takes one body argument and sends it verbatim.",
+      "destructive": false,
+      "auth": "api-token",
+      "rawBody": true
+    },
+    {
+      "toolSlug": "cloudflare_workflows_workflow_name_instances_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}",
+      "wave": "w2",
+      "reason": "Get logs and status from instance. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_workflow_name_instances_delete",
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}",
+      "wave": "w2",
+      "reason": "Delete a workflow instance. Part of the Workflows family of wave w2: the workflow and the instances it runs. It removes the resource itself; recreating it does not bring back what it held.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_workflow_name_instances_instance_id_events_create",
+      "method": "POST",
+      "path": "/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}/events/{event_type}",
+      "wave": "w2",
+      "reason": "Send event to instance. Part of the Workflows family of wave w2: the workflow and the instances it runs. Cloudflare does not publish the event body's fields, so the declared arguments are removed and the rest are forwarded as the payload.",
+      "destructive": false,
+      "auth": "api-token",
+      "freeFormBody": true
+    },
+    {
+      "toolSlug": "cloudflare_workflows_workflow_name_instances_instance_id_status_patch",
+      "method": "PATCH",
+      "path": "/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}/status",
+      "wave": "w2",
+      "reason": "Change status of instance. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_workflow_name_instances_instance_id_step_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}/step",
+      "wave": "w2",
+      "reason": "Get full step output from instance. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_workflow_name_versions_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workflows/{workflow_name}/versions",
+      "wave": "w2",
+      "reason": "List deployed Workflow versions. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_workflow_name_versions_get",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workflows/{workflow_name}/versions/{version_id}",
+      "wave": "w2",
+      "reason": "Get Workflow version details. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_workflows_workflow_name_versions_version_id_graph_list",
+      "method": "GET",
+      "path": "/accounts/{account_id}/workflows/{workflow_name}/versions/{version_id}/graph",
+      "wave": "w2",
+      "reason": "Get Workflow version graph. Part of the Workflows family of wave w2: the workflow and the instances it runs.",
+      "destructive": false,
+      "auth": "api-token"
     }
   ]
 }

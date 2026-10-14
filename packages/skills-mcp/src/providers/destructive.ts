@@ -64,10 +64,56 @@ export const DESTRUCTIVE_SLUGS: ReadonlySet<string> = new Set([
   // `cloudflare_dns_records_import` is absent too: the operation reads a
   // multipart form and the generated builders speak JSON, so the tool was
   // withdrawn rather than left as one that could never succeed.
-  "cloudflare_zones_delete",
-  "cloudflare_dns_records_delete",
+  //
+  // Wave w2 (storage and compute) is the same rule applied to the other half of
+  // the account. A DELETE that removes the resource itself is destructive: a
+  // bucket, an object, a script, a queue, a database, a KV namespace, a
+  // Vectorize index, a Pages project or a Hyperdrive pool. So are the writes
+  // that purge or overwrite in bulk - both queue purges, the two KV bulk
+  // endpoints, deleting a KV pair, Vectorize's delete-by-ids and metadata
+  // index, the Pages build cache, D1's point-in-time restore - and the two D1
+  // SQL tools, because the statement is the caller's and a DROP is as easy to
+  // send as a SELECT.
+  //
+  // A DELETE that only removes a policy, binding, session or secret stays out:
+  // the w1 firewall reasoning, since the resource survives and what was removed
+  // can be created again. Those entries carry `confirmGate` instead, so a write
+  // Cloudflare flags as confirmation-worthy still asks.
+  "cloudflare_d1_database_database_id_query",
+  "cloudflare_d1_database_database_id_raw_create",
+  "cloudflare_d1_database_database_id_time_travel_restore",
+  "cloudflare_d1_database_delete",
   "cloudflare_dns_records_batch",
+  "cloudflare_dns_records_delete",
   "cloudflare_dnssec_delete",
+  "cloudflare_hyperdrive_configs_delete",
+  "cloudflare_pages_projects_delete",
+  "cloudflare_pages_projects_project_name_purge_build_cache",
   "cloudflare_purge_cache",
+  "cloudflare_queues_delete",
+  "cloudflare_queues_queue_id_messages_purge",
+  "cloudflare_queues_queue_id_purge",
+  "cloudflare_r2_buckets_bucket_name_objects_delete",
+  "cloudflare_r2_buckets_bucket_name_objects_delete_bulk",
+  "cloudflare_r2_buckets_delete",
+  "cloudflare_r2_catalog_bucket_name_delete_create",
+  "cloudflare_storage_kv_namespaces_delete",
+  "cloudflare_storage_kv_namespaces_namespace_id_bulk_delete_create",
+  "cloudflare_storage_kv_namespaces_namespace_id_bulk_put",
+  "cloudflare_storage_kv_namespaces_namespace_id_values_delete",
+  "cloudflare_vectorize_v2_indexes_delete",
+  "cloudflare_vectorize_v2_indexes_index_name_delete_by_ids_create",
+  "cloudflare_vectorize_v2_indexes_index_name_metadata_index_delete_create",
+  "cloudflare_workers_dispatch_namespaces_delete",
+  "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_delete",
+  "cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_delete_all",
+  "cloudflare_workers_scripts_delete",
+  "cloudflare_workers_workers_delete",
+  "cloudflare_workers_workers_worker_id_previews_delete",
+  "cloudflare_workers_workers_worker_id_previews_preview_id_deployments_delete",
+  "cloudflare_workers_workers_worker_id_versions_delete",
+  "cloudflare_workflows_delete",
+  "cloudflare_workflows_workflow_name_instances_delete",
+  "cloudflare_zones_delete",
 ]);
 

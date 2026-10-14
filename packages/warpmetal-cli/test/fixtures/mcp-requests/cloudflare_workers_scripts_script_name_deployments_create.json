@@ -1,0 +1,17 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/scripts/sample_script_name/deployments?force=true",
+  "body": {
+    "annotations": {},
+    "author_email": "sample_author_email",
+    "created_on": "sample_created_on",
+    "id": "sample_id",
+    "source": "sample_source",
+    "strategy": "percentage",
+    "versions": []
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

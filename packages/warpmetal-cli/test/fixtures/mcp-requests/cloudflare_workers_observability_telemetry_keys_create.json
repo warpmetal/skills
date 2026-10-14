@@ -1,0 +1,17 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/observability/telemetry/keys",
+  "body": {
+    "datasets": [],
+    "filters": [],
+    "from": 1,
+    "keyNeedle": {},
+    "limit": 1,
+    "needle": {},
+    "to": 1
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

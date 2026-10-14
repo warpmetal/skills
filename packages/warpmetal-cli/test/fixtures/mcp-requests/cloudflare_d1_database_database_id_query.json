@@ -1,0 +1,13 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/d1/database/sample_database_id/query",
+  "body": {
+    "params": [],
+    "sql": "sample_sql",
+    "batch": []
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

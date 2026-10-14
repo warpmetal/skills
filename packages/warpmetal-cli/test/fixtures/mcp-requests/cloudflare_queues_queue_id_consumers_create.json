@@ -1,0 +1,14 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/queues/sample_queue_id/consumers",
+  "body": {
+    "dead_letter_queue": "sample_dead_letter_queue",
+    "script_name": "sample_script_name",
+    "settings": {},
+    "type": "worker"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

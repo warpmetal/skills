@@ -1,0 +1,19 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/domains",
+  "body": {
+    "cert_id": "sample_cert_id",
+    "enabled": true,
+    "environment": "sample_environment",
+    "hostname": "sample_hostname",
+    "id": "sample_id",
+    "previews_enabled": true,
+    "service": "sample_service",
+    "zone_id": "sample_zone_id",
+    "zone_name": "sample_zone_name"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

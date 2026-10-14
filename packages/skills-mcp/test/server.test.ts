@@ -33,14 +33,14 @@ test("stdio server exposes tools and serves skills end to end", async () => {
     await client.connect(transport);
 
     const tools = await client.listTools();
-    // stdio gets the `full` profile: 3 content + 43 CLI + 174 provider tools.
+    // stdio gets the `full` profile: 3 content + 43 CLI + 452 provider tools.
     // The unauthenticated HTTP transport is what narrows this down to the
     // `skill_*` surface, and `test/profiles.test.ts` holds that pair of counts.
     const names = tools.tools.map((tool) => tool.name).sort();
     assert.equal(
       names.length,
-      220,
-      "stdio must expose the full 220-tool surface",
+      498,
+      "stdio must expose the full 498-tool surface",
     );
     assert.deepEqual(
       names.filter((name) => name.startsWith("skill_")),

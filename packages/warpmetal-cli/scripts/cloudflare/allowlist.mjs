@@ -163,6 +163,39 @@ export function loadAllowlist(path, spec, file) {
         `${where}: rawBody only applies to a body the spec does not publish as fields (this one is ${op.body?.kind ?? "none"})`,
       );
     }
+    if (entry.dropBodyFields !== undefined) {
+      if (
+        !Array.isArray(entry.dropBodyFields) ||
+        entry.dropBodyFields.some((name) => typeof name !== "string")
+      ) {
+        problems.push(`${where}: dropBodyFields must be a list of body field names`);
+      } else {
+        const declaredFields = new Set((op.body?.fields ?? []).map((field) => field.name));
+        for (const name of entry.dropBodyFields) {
+          if (!declaredFields.has(name)) {
+            problems.push(`${where}: dropBodyFields names "${name}", which its body does not declare`);
+          }
+        }
+        if (entry.dropBodyFields.length > 0) {
+          if (!reason({ reason: entry.dropBodyFieldsNote })) {
+            problems.push(
+              `${where}: dropping a body field needs a dropBodyFieldsNote (at least 12 characters)`,
+            );
+          }
+          const collides = new Set([
+            ...op.pathParams.map((parameter) => parameter.name),
+            ...op.queryParams.map((parameter) => parameter.name),
+          ]);
+          for (const name of entry.dropBodyFields) {
+            if (!collides.has(name)) {
+              warnings.push(
+                `${where}: dropBodyFields removes "${name}", which collides with no path or query argument`,
+              );
+            }
+          }
+        }
+      }
+    }
     if (op.body?.kind === "free-form" && entry.freeFormBody !== true) {
       problems.push(`${where}: the spec does not name its body fields; add freeFormBody: true to forward them`);
     }

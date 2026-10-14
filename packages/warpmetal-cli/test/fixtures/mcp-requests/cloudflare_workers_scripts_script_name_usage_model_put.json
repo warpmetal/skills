@@ -1,0 +1,12 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/scripts/sample_script_name/usage-model",
+  "body": {
+    "usage_model": "standard",
+    "user_limits": {}
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

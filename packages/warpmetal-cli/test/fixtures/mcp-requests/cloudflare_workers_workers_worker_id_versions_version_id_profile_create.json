@@ -1,0 +1,14 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/workers/sample_worker_id/versions/sample_version_id/profile",
+  "body": {
+    "actor_id": "sample_actor_id",
+    "duration_ms": 1,
+    "namespace_id": "sample_namespace_id",
+    "profile_type": "cpu"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

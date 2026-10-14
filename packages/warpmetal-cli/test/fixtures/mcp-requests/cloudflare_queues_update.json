@@ -1,0 +1,19 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/queues/sample_queue_id",
+  "body": {
+    "consumers": [],
+    "consumers_total_count": 1,
+    "created_on": "sample_created_on",
+    "jurisdiction": "eu",
+    "modified_on": "sample_modified_on",
+    "producers": [],
+    "producers_total_count": 1,
+    "queue_name": "sample_queue_name",
+    "settings": {}
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

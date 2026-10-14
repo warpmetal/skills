@@ -132,6 +132,10 @@ function inputSchemaOf(entry) {
   const properties = {};
   const required = new Set();
   const collisions = [];
+  // A reviewed drop: the operation's body declares a field the caller cannot
+  // meaningfully send (a duplicate of the path's own identifier), so it is not
+  // exposed and the collision it would cause never happens.
+  const droppedBodyFields = new Set(entry.dropBodyFields ?? []);
   // A reviewed `rawBody` tool takes the payload as a single string: the spec
   // publishes no field list, so there is nothing to name. It is declared before
   // the groups below so a path or query parameter that happened to be called
@@ -146,7 +150,12 @@ function inputSchemaOf(entry) {
   const groups = [
     { label: "Path parameter", items: op.pathParams },
     { label: "Query parameter", items: op.queryParams },
-    { label: "Body field", items: op.body?.kind === "object" ? op.body.fields : [] },
+    {
+      label: "Body field",
+      items: (op.body?.kind === "object" ? op.body.fields : []).filter(
+        (field) => !droppedBodyFields.has(field.name),
+      ),
+    },
   ];
   for (const group of groups) {
     for (const item of group.items) {

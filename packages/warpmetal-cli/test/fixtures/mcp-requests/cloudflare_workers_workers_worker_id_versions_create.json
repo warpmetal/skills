@@ -1,0 +1,35 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/workers/sample_worker_id/versions?deploy=true",
+  "body": {
+    "annotations": {},
+    "assets": {},
+    "author_email": "sample_author_email",
+    "author_id": "sample_author_id",
+    "bindings": [],
+    "cache_options": {},
+    "compatibility_date": "sample_compatibility_date",
+    "compatibility_flags": [],
+    "containers": [],
+    "created_on": "sample_created_on",
+    "exports": {},
+    "exports_reconciliation": {},
+    "id": "sample_id",
+    "limits": {},
+    "main_module": "sample_main_module",
+    "migration_tag": "sample_migration_tag",
+    "migrations": {},
+    "modules": [],
+    "number": 1,
+    "package_dependencies": [],
+    "placement": {},
+    "source": "sample_source",
+    "startup_time_ms": 1,
+    "urls": [],
+    "usage_model": "standard"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

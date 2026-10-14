@@ -1,0 +1,11 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/observability/issues/sample_issue_id/notification-runs",
+  "body": {
+    "policyId": "sample_policy_id"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

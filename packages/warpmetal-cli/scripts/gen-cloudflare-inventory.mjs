@@ -409,6 +409,7 @@ function includedTable() {
       entry.keepFiltered ? "spec-hidden" : "",
       entry.freeFormBody ? "free-form body" : "",
       entry.rawBody ? "raw body" : "",
+      entry.dropBodyFields?.length ? "dropped body fields" : "",
       entry.auth === AUTH_NONE ? "no auth" : "",
       entry.destructive ? "destructive" : "",
       op.confirm ? "needs confirmation" : "",

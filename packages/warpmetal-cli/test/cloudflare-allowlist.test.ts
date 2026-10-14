@@ -28,6 +28,8 @@ interface StubOperation {
   readonly path: string;
   readonly toolSlug: string;
   readonly body?: { readonly kind: string; readonly contentType?: string };
+  readonly fields?: readonly string[];
+  readonly pathParams?: readonly string[];
 }
 
 function stubSpec(operations: readonly StubOperation[], sha256?: string) {
@@ -40,12 +42,16 @@ function stubSpec(operations: readonly StubOperation[], sha256?: string) {
           method: op.method,
           path: op.path,
           toolSlug: op.toolSlug,
-          body: op.body ?? null,
+          body: op.body
+            ? { ...op.body, fields: (op.fields ?? []).map((name) => ({ name })) }
+            : null,
           confirm: false,
           deprecated: false,
           filtered: false,
           hidden: false,
           publicHint: false,
+          pathParams: (op.pathParams ?? []).map((name) => ({ name })),
+          queryParams: [],
         },
       ]),
     ),
@@ -76,18 +82,26 @@ function documentOf(
   };
 }
 
+function validateFor(
+  entry: Record<string, unknown>,
+  operation: StubOperation,
+  specDocument: Record<string, unknown> = { sha256: REVIEWED_DIGEST },
+  specSha256: string | undefined = REVIEWED_DIGEST,
+) {
+  return loadAllowlist(
+    "",
+    stubSpec([operation], specSha256),
+    documentOf(entry, specDocument),
+  ) as { problems: string[]; warnings: string[] };
+}
+
 function problemsFor(
   entry: Record<string, unknown>,
   operation: StubOperation,
   specDocument: Record<string, unknown> = { sha256: REVIEWED_DIGEST },
   specSha256: string | undefined = REVIEWED_DIGEST,
 ) {
-  const result = loadAllowlist(
-    "",
-    stubSpec([operation], specSha256),
-    documentOf(entry, specDocument),
-  );
-  return result.problems as string[];
+  return validateFor(entry, operation, specDocument, specSha256).problems;
 }
 
 const RAW_OPERATION: StubOperation = {
@@ -202,4 +216,63 @@ describe("cloudflare allowlist raw bodies", () => {
       assert.match(problems[0] ?? "", /not text a JSON argument can carry/);
     });
   }
+});
+
+describe("cloudflare allowlist dropped body fields", () => {
+  // The queue PATCH is the shape this exists for: the spec reuses the queue
+  // object as its request body, so the field list repeats the identifier the
+  // path already carries and the schema would otherwise refuse the tool. The
+  // stub keeps the method generic - the rule is about the names, not the verb.
+  const OPERATION_WITH_DUPLICATE = {
+    method: "POST",
+    path: "/x",
+    toolSlug: "cloudflare_x_create",
+    body: { kind: "object", contentType: "application/json" },
+    fields: ["queue_id", "settings"],
+    pathParams: ["queue_id"],
+  };
+
+  it("accepts dropping a body field that duplicates the path argument", () => {
+    const problems = problemsFor(
+      { dropBodyFields: ["queue_id"], dropBodyFieldsNote: "The path already names the queue." },
+      OPERATION_WITH_DUPLICATE,
+    );
+    assert.deepEqual(problems, []);
+  });
+
+  it("warns when the dropped field collides with nothing", () => {
+    const { warnings } = validateFor(
+      { dropBodyFields: ["settings"], dropBodyFieldsNote: "Reviewed as a response-only value." },
+      OPERATION_WITH_DUPLICATE,
+    );
+    assert.ok(
+      warnings.some((warning) => warning.includes("collides with no path or query argument")),
+      "a drop that is not a collision is reported",
+    );
+  });
+
+  it("refuses to drop a field the body does not declare", () => {
+    const problems = problemsFor(
+      { dropBodyFields: ["nope"], dropBodyFieldsNote: "A note long enough to pass." },
+      OPERATION_WITH_DUPLICATE,
+    );
+    assert.equal(problems.length, 1);
+    assert.match(problems[0] ?? "", /which its body does not declare/);
+  });
+
+  it("requires a note for the drop", () => {
+    const problems = problemsFor({ dropBodyFields: ["queue_id"] }, OPERATION_WITH_DUPLICATE);
+    assert.ok(
+      problems.some((problem) => problem.includes("dropBodyFieldsNote")),
+      "the drop has to say why",
+    );
+  });
+
+  it("refuses a drop that is not a list of names", () => {
+    const problems = problemsFor(
+      { dropBodyFields: "queue_id", dropBodyFieldsNote: "A note long enough to pass." },
+      OPERATION_WITH_DUPLICATE,
+    );
+    assert.ok(problems.some((problem) => problem.includes("must be a list of body field names")));
+  });
 });

@@ -370,6 +370,84 @@ Four more waves are planned in the allowlist (`w2` storage and compute, `w3` Zer
 Trust, `w4` observability, `w5` Radar). Each is an additive change to the same
 three generators.
 
+## Batch 15 - Cloudflare storage and compute
+
+278 tools across nine families, reviewed as wave `w2` of the allowlist: R2, Workers
+(scripts, versions, deployments, routes, schedules and secrets, dispatch
+namespaces, observability), Queues, Pages, Workers KV, Vectorize v2, D1, Workflows
+and Hyperdrive. The Cloudflare surface goes from 46 tools to 323.
+
+### How the wave decided
+
+- **`destructive` is a policy, not a verb.** A DELETE that removes the resource
+  itself - a bucket, an object, a script, a queue, a database, a KV namespace, a
+  Vectorize index, a Pages project, a Hyperdrive pool - is destructive, and so are
+  the writes that purge or overwrite in bulk: both queue purges, the two KV bulk
+  endpoints, deleting a KV pair, Vectorize's delete-by-ids and metadata index, the
+  Pages build cache, D1's point-in-time restore. The two D1 SQL tools are
+  destructive for the same reason a database console is: the statement is the
+  caller's, so a DROP is as easy to send as a SELECT. A DELETE that only removes a
+  policy, binding, session or secret is **not** destructive - the w1 firewall
+  precedent - and those entries carry `confirmGate` instead, so a write Cloudflare
+  flags as confirmation-worthy still asks. 31 of the 278 tools carry the hint.
+- **`rawBody` for the bodies the spec does not describe.** Eight operations publish
+  no field list at all: the R2 bulk object delete, the two KV bulk endpoints and
+  the Workflows instance batch take a JSON array, Vectorize's insert and upsert
+  take newline-delimited vectors, and two Worker endpoints take a JSON array too.
+  Each one now exposes a single `body` string argument that is sent verbatim, with
+  the content type the spec declares, and the description says so.
+- **`freeFormBody` for the one body the spec leaves open.** Sending an event to a
+  workflow instance: the declared arguments are removed from the payload and the
+  rest travels as the body.
+- **`dropBodyFields` is new, and the queue PATCH is why.** `PATCH
+  /queues/{queue_id}` reuses the queue object as its request body, so its field list
+  repeats `queue_id` - the identifier the path already carries. The schema would
+  have refused the tool outright (two arguments collapsing to one name), so the
+  allowlist can now drop a declared field with a reviewed note, and the drop is
+  asserted from both sides: absent from the schema, absent from the request.
+- **Five renames.** Four operations derived the same name as their collection
+  sibling (`DELETE /objects` next to `DELETE /objects/{object_key}`, and three
+  others), so the collection form takes an alias and the item form keeps the derived
+  name. The fifth is the Hyperdrive PlanetScale signature endpoint, whose path
+  carries camelCase segments the naming rule rejects.
+- **Seventeen review notes** are recorded in the inventory: the whole R2 catalog
+  family (16 operations) and one zone-settings read are marked deprecated by
+  Cloudflare. They ship, because the API still serves them, and every description
+  carries the marker so a caller knows before calling.
+
+### What the spec forced out
+
+Ten operations cannot travel through a JSON argument surface, so they are absent
+rather than shipped as calls that could never succeed:
+
+- the two Worker script uploads (`PUT /workers/scripts/{script_name}` and its
+  dispatch twin) publish **no request body at all** in the spec, so the tool would
+  have sent an empty module;
+- Worker script content, versions and settings (four operations, `multipart/form-data`);
+- the Pages deployment create (`multipart/form-data`, 13 declared fields);
+- the R2 object upload (`application/octet-stream`);
+- the Workers asset upload (`multipart/form-data`).
+
+Getting these in means teaching the pipeline to carry multipart and binary bodies
+deliberately - a boundary, a content type per part, an encoding for bytes - which is
+a capability, not a wave. Until then the wave ships what manages what is already
+uploaded.
+
+### What proves it
+
+- `test/cloudflare-params.test.ts` now asserts the new body kinds from both sides:
+  a raw body travels as a string under the declared content type, a free-form body
+  forwards the caller's fields without leaking a declared argument into the payload,
+  and a dropped field never reaches the request. 2149 tests in the CLI suite, from
+  754, because every generated builder is asserted against the distilled spec.
+- `test/cloudflare-catalog.test.ts` holds the 36-tool destructive set, the endpoint
+  and permission in every description, and the one case where an undeclared argument
+  is legitimate: a body the spec does not publish.
+- The wave also fixed a latent generator bug the new tools exposed: the free-form
+  builder emitted `{ ...args.args }` - a spread over a member that does not exist -
+  which only a free-form tool could have found, and this wave is the first to have
+  one.
+
 ## Catalog layout - one file per provider
 
 The catalog used to be thirteen `batch-NN.json` files, each holding whatever

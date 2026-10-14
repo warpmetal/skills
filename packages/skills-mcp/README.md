@@ -6,7 +6,7 @@ Unified MCP (Model Context Protocol) server for WarpMetal. One package, one host
   (`registry.json`) with checksum verification and the `skill://` URI semantics the hosts already use.
 - **CLI** — exposes the `warpmetal` command-line tool as 43 typed tools: 16 read-only, 3 task tools,
   and 12 plan/apply pairs, six of which guard the verbs that cannot be taken back.
-- **Providers (42 providers, one catalog file each)** — 174 WarpMetal-backed provider tools (GitHub / GitLab / Notion / Stripe / Jira / Confluence / Linear / Supabase / Cloudflare / Vercel / Figma / Shopify / HubSpot / Asana / Dropbox / Discord / Airtable / Intercom / Snowflake / Sentry / Datadog / PagerDuty / Exa / Perplexity / Resend / Calendly / ClickUp / PostHog / Mixpanel / CircleCI / Mailchimp / X / Square / OpenAI / Gemini / Anthropic Admin / Grafana Cloud / Grafana Stack / Monday.com / OneSignal / Amplitude / Zendesk)
+- **Providers (42 providers, one catalog file each)** — 452 WarpMetal-backed provider tools (GitHub / GitLab / Notion / Stripe / Jira / Confluence / Linear / Supabase / Cloudflare / Vercel / Figma / Shopify / HubSpot / Asana / Dropbox / Discord / Airtable / Intercom / Snowflake / Sentry / Datadog / PagerDuty / Exa / Perplexity / Resend / Calendly / ClickUp / PostHog / Mixpanel / CircleCI / Mailchimp / X / Square / OpenAI / Gemini / Anthropic Admin / Grafana Cloud / Grafana Stack / Monday.com / OneSignal / Amplitude / Zendesk)
   registered only on the `full` (stdio) profile; calls run `warpmetal integration <provider> <verb>` with secrets from the WarpMetal vault. No DigitalOcean dependency.
 
 ## Two profiles, split by transport
@@ -16,7 +16,7 @@ boundary, not a configuration preference.
 
 | Profile   | Transport                  | Tools                                             | Why                                                                         |
 | --------- | -------------------------- | ------------------------------------------------- | --------------------------------------------------------------------------- |
-| `full`    | stdio (default)            | **220** — 3 `skill_*` + 43 `wm_*` + 174 providers | stdio is a local, operator-controlled channel                               |
+| `full`    | stdio (default)            | **498** — 3 `skill_*` + 43 `wm_*` + 452 providers | stdio is a local, operator-controlled channel                               |
 | `content` | Streamable HTTP (`--http`) | **3** — only `skill_*`                            | HTTP has no authentication; `wm_*` and provider tools must not be reachable |
 
 On the `content` profile the `wm_*` and provider tools are _not registered at all_, not
@@ -51,7 +51,7 @@ version refuses nothing, because an override or a bare PATH executable is _unkno
 
 <!-- provider-index:begin -->
 
-## Providers (42 providers, 174 tools)
+## Providers (42 providers, 452 tools)
 
 Every tool below is registered on the `full` (stdio) profile and calls `warpmetal integration
 <provider> <verb>` with secrets from the WarpMetal vault; the arguments, the endpoint and the
@@ -67,7 +67,7 @@ A provider with more tools than fit on one line points at its file instead of li
 | `calendly` | 2 | `list_event_types`, `get_current_user` |
 | `circleci` | 2 | `list_pipelines`, `get_pipeline_by_id` |
 | `clickup` | 3 | `create_task`, `get_task`, `create_task_comment` |
-| `cloudflare` | 45 | `catalog/cloudflare.json` |
+| `cloudflare` | 323 | `catalog/cloudflare.json` |
 | `confluence` | 2 | `get_page_by_id`, `get_pages` |
 | `datadog` | 1 | `v1_get_ip_ranges` |
 | `discord` | 2 | `get_my_user`, `list_my_guilds` |
@@ -102,7 +102,7 @@ A provider with more tools than fit on one line points at its file instead of li
 | `vercel` | 3 | `get_projects`, `create_project`, `get_deployments` |
 | `x` | 3 | `create_posts`, `get_users_me`, `search_posts_recent` |
 | `zendesk` | 16 | `catalog/zendesk.json` |
-| **42 providers** | **174** | `src/providers/catalog/` |
+| **42 providers** | **452** | `src/providers/catalog/` |
 
 Cloudflare's record is the reviewed one:
 [`docs/cloudflare-api-inventory.md`](../../docs/cloudflare-api-inventory.md) accounts for every
@@ -112,7 +112,7 @@ the wave it was reviewed in.
 | Wave | Tools | Status | Scope |
 | ---- | ----- | ------ | ----- |
 | `w1` | 45 | reviewed | Zonas, DNS, ajustes de zona, cache y tokens de identidad |
-| `w2` | 0 | planned | Almacenamiento y computo: R2, KV, D1, Workers, Queues, Pages |
+| `w2` | 278 | reviewed | Almacenamiento y computo: R2, KV, D1, Workers, Queues, Pages |
 | `w3` | 0 | planned | Zero Trust y Access: apps, politicas, identity providers, gateway |
 | `w4` | 0 | planned | Observabilidad y analitica: logs, analytics, alertas, WAF |
 | `w5` | 0 | planned | Radar y el resto de colecciones de cuenta con valor operativo |
@@ -139,7 +139,7 @@ Each provider `tools/call` maps to `warpmetal integration <provider> <verb> --ar
 (and `--confirm <gate>` for mutations). The arguments are written to the CLI's stdin rather than the
 command line, so payloads never appear in `ps` or shell history; `--args-json` remains available for
 manual use. Catalog contracts live in `src/providers/catalog/` - one `<toolkitId>.json` per
-provider (42 files, 174 tools), aggregated by `src/providers/catalog.ts`. `catalog/index.ts` is
+provider (42 files, 452 tools), aggregated by `src/providers/catalog.ts`. `catalog/index.ts` is
 generated by `node packages/skills-mcp/scripts/gen-catalog-barrel.mjs`. The MCP never holds
 provider OAuth tokens in process env; they stay in the WarpMetal vault.
 
@@ -206,7 +206,7 @@ Each tool is verified at one of three tiers, and the tier is visible in the repo
 Two credential-free checks back the docs-confirmed tier, so a builder that drifts is caught even
 without a token:
 
-1. `provider-contract.test.ts` builds all 174 requests from the reviewed sample args and asserts the
+1. `provider-contract.test.ts` builds all 452 requests from the reviewed sample args and asserts the
    URL host, method and auth header against the hand-authored manifest.
 2. `npm run probe` (in `packages/warpmetal-cli`, opt-in, needs network) sends every request with a
    sentinel token. A route the provider does not serve answers 404/405, while a real route answers
@@ -247,7 +247,7 @@ for what the gate does and does not prove.
 ## Run
 
 ```sh
-# stdio, full profile (220 tools: 3 skill_* + 43 wm_* + 174 providers)
+# stdio, full profile (498 tools: 3 skill_* + 43 wm_* + 452 providers)
 npx -y @warpmetal/skills-mcp
 
 # Pin a registry tag

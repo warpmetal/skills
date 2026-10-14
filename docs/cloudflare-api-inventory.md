@@ -17,7 +17,7 @@ which is what keeps it true.
 | `x-forge-hidden` | 1093 | hidden from Cloudflare's own Forge docs: internal or unreleased |
 | `x-fern-ignore` | 489 | dropped from the published Fern docs before Forge replaced them |
 | Reviewable | 2227 | what remains, and the pool every wave is chosen from |
-| Shipped | 45 | pinned in `scripts/cloudflare/allowlist.json` |
+| Shipped | 323 | pinned in `scripts/cloudflare/allowlist.json` |
 
 234 reviewable operations carry `x-forge-require-confirmation`,
 30 carry `x-cfDeprecation` and 4 declare `security: []`.
@@ -30,7 +30,7 @@ fields the spec does not publish; either is shipped only where the allowlist say
 | Wave | Status | Tools | Scope | Groups |
 | --- | --- | --- | --- | --- |
 | `w1` | reviewed | 45 | Zonas, DNS, ajustes de zona, cache y tokens de identidad | `zones/zones`, `zones/activation`, `zones/hold`, `zones/dns`, `zones/dnssec`, `zones/settings`, `zones/purge`, `zones/firewall`, `accounts/accounts`, `user/user` |
-| `w2` | planned | 0 | Almacenamiento y computo: R2, KV, D1, Workers, Queues, Pages | - |
+| `w2` | reviewed | 278 | Almacenamiento y computo: R2, KV, D1, Workers, Queues, Pages | `accounts/d1`, `accounts/hyperdrive`, `accounts/pages`, `accounts/queues`, `accounts/r2`, `accounts/storage`, `accounts/vectorize`, `accounts/workers`, `accounts/workflows` |
 | `w3` | planned | 0 | Zero Trust y Access: apps, politicas, identity providers, gateway | - |
 | `w4` | planned | 0 | Observabilidad y analitica: logs, analytics, alertas, WAF | - |
 | `w5` | planned | 0 | Radar y el resto de colecciones de cuenta con valor operativo | - |
@@ -84,10 +84,304 @@ fields the spec does not publish; either is shipped only where the allowlist say
 | 43 | `cloudflare_user_tokens_get` | `GET` | `/user/tokens/{token_id}` | w1 | spec-hidden |
 | 44 | `cloudflare_user_tokens_verify` | `GET` | `/user/tokens/verify` | w1 | spec-hidden |
 | 45 | `cloudflare_user_tokens_permission_groups_list` | `GET` | `/user/tokens/permission_groups` | w1 | spec-hidden |
+| 46 | `cloudflare_d1_database_list` | `GET` | `/accounts/{account_id}/d1/database` | w2 | - |
+| 47 | `cloudflare_d1_database_create` | `POST` | `/accounts/{account_id}/d1/database` | w2 | - |
+| 48 | `cloudflare_d1_database_get` | `GET` | `/accounts/{account_id}/d1/database/{database_id}` | w2 | - |
+| 49 | `cloudflare_d1_database_replace` | `PUT` | `/accounts/{account_id}/d1/database/{database_id}` | w2 | - |
+| 50 | `cloudflare_d1_database_update` | `PATCH` | `/accounts/{account_id}/d1/database/{database_id}` | w2 | - |
+| 51 | `cloudflare_d1_database_delete` | `DELETE` | `/accounts/{account_id}/d1/database/{database_id}` | w2 | destructive, needs confirmation |
+| 52 | `cloudflare_d1_database_database_id_query` | `POST` | `/accounts/{account_id}/d1/database/{database_id}/query` | w2 | destructive |
+| 53 | `cloudflare_d1_database_database_id_raw_create` | `POST` | `/accounts/{account_id}/d1/database/{database_id}/raw` | w2 | destructive |
+| 54 | `cloudflare_d1_database_database_id_time_travel_bookmark_list` | `GET` | `/accounts/{account_id}/d1/database/{database_id}/time_travel/bookmark` | w2 | - |
+| 55 | `cloudflare_d1_database_database_id_time_travel_restore` | `POST` | `/accounts/{account_id}/d1/database/{database_id}/time_travel/restore` | w2 | destructive, needs confirmation |
+| 56 | `cloudflare_d1_database_database_id_undelete_create` | `POST` | `/accounts/{account_id}/d1/database/{database_id}/undelete` | w2 | needs confirmation |
+| 57 | `cloudflare_hyperdrive_configs_list` | `GET` | `/accounts/{account_id}/hyperdrive/configs` | w2 | - |
+| 58 | `cloudflare_hyperdrive_configs_create` | `POST` | `/accounts/{account_id}/hyperdrive/configs` | w2 | - |
+| 59 | `cloudflare_hyperdrive_configs_get` | `GET` | `/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}` | w2 | - |
+| 60 | `cloudflare_hyperdrive_configs_replace` | `PUT` | `/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}` | w2 | - |
+| 61 | `cloudflare_hyperdrive_configs_update` | `PATCH` | `/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}` | w2 | - |
+| 62 | `cloudflare_hyperdrive_configs_delete` | `DELETE` | `/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}` | w2 | destructive, needs confirmation |
+| 63 | `cloudflare_hyperdrive_configs_hyperdrive_id_restart` | `POST` | `/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}/restart` | w2 | - |
+| 64 | `cloudflare_hyperdrive_planetscale_create_database_signature` | `POST` | `/accounts/{account_id}/hyperdrive/integrationsOperations/planetScale/createDatabaseSignature` | w2 | renamed |
+| 65 | `cloudflare_pages_projects_list` | `GET` | `/accounts/{account_id}/pages/projects` | w2 | - |
+| 66 | `cloudflare_pages_projects_create` | `POST` | `/accounts/{account_id}/pages/projects` | w2 | - |
+| 67 | `cloudflare_pages_projects_get` | `GET` | `/accounts/{account_id}/pages/projects/{project_name}` | w2 | - |
+| 68 | `cloudflare_pages_projects_update` | `PATCH` | `/accounts/{account_id}/pages/projects/{project_name}` | w2 | - |
+| 69 | `cloudflare_pages_projects_delete` | `DELETE` | `/accounts/{account_id}/pages/projects/{project_name}` | w2 | destructive |
+| 70 | `cloudflare_pages_projects_project_name_deployments_list` | `GET` | `/accounts/{account_id}/pages/projects/{project_name}/deployments` | w2 | - |
+| 71 | `cloudflare_pages_projects_project_name_deployments_get` | `GET` | `/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}` | w2 | - |
+| 72 | `cloudflare_pages_projects_project_name_deployments_delete` | `DELETE` | `/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}` | w2 | - |
+| 73 | `cloudflare_pages_projects_project_name_deployments_deployment_id_history_logs_list` | `GET` | `/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}/history/logs` | w2 | - |
+| 74 | `cloudflare_pages_projects_project_name_deployments_deployment_id_retry_create` | `POST` | `/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}/retry` | w2 | - |
+| 75 | `cloudflare_pages_projects_project_name_deployments_deployment_id_rollback` | `POST` | `/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}/rollback` | w2 | needs confirmation |
+| 76 | `cloudflare_pages_projects_project_name_domains_list` | `GET` | `/accounts/{account_id}/pages/projects/{project_name}/domains` | w2 | - |
+| 77 | `cloudflare_pages_projects_project_name_domains_create` | `POST` | `/accounts/{account_id}/pages/projects/{project_name}/domains` | w2 | - |
+| 78 | `cloudflare_pages_projects_project_name_domains_get` | `GET` | `/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}` | w2 | - |
+| 79 | `cloudflare_pages_projects_project_name_domains_update` | `PATCH` | `/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}` | w2 | - |
+| 80 | `cloudflare_pages_projects_project_name_domains_delete` | `DELETE` | `/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}` | w2 | - |
+| 81 | `cloudflare_pages_projects_project_name_purge_build_cache` | `POST` | `/accounts/{account_id}/pages/projects/{project_name}/purge_build_cache` | w2 | destructive, needs confirmation |
+| 82 | `cloudflare_pages_projects_project_name_source_create` | `POST` | `/accounts/{account_id}/pages/projects/{project_name}/source` | w2 | - |
+| 83 | `cloudflare_pages_projects_project_name_source_delete` | `DELETE` | `/accounts/{account_id}/pages/projects/{project_name}/source` | w2 | - |
+| 84 | `cloudflare_queues_list` | `GET` | `/accounts/{account_id}/queues` | w2 | - |
+| 85 | `cloudflare_queues_create` | `POST` | `/accounts/{account_id}/queues` | w2 | - |
+| 86 | `cloudflare_queues_get` | `GET` | `/accounts/{account_id}/queues/{queue_id}` | w2 | - |
+| 87 | `cloudflare_queues_update` | `PATCH` | `/accounts/{account_id}/queues/{queue_id}` | w2 | dropped body fields |
+| 88 | `cloudflare_queues_delete` | `DELETE` | `/accounts/{account_id}/queues/{queue_id}` | w2 | destructive |
+| 89 | `cloudflare_queues_queue_id_consumers_list` | `GET` | `/accounts/{account_id}/queues/{queue_id}/consumers` | w2 | - |
+| 90 | `cloudflare_queues_queue_id_consumers_create` | `POST` | `/accounts/{account_id}/queues/{queue_id}/consumers` | w2 | - |
+| 91 | `cloudflare_queues_queue_id_consumers_get` | `GET` | `/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}` | w2 | - |
+| 92 | `cloudflare_queues_queue_id_consumers_replace` | `PUT` | `/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}` | w2 | - |
+| 93 | `cloudflare_queues_queue_id_consumers_delete` | `DELETE` | `/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}` | w2 | - |
+| 94 | `cloudflare_queues_queue_id_messages_create` | `POST` | `/accounts/{account_id}/queues/{queue_id}/messages` | w2 | - |
+| 95 | `cloudflare_queues_queue_id_messages_ack_create` | `POST` | `/accounts/{account_id}/queues/{queue_id}/messages/ack` | w2 | - |
+| 96 | `cloudflare_queues_queue_id_messages_batch` | `POST` | `/accounts/{account_id}/queues/{queue_id}/messages/batch` | w2 | - |
+| 97 | `cloudflare_queues_queue_id_messages_extend_create` | `POST` | `/accounts/{account_id}/queues/{queue_id}/messages/extend` | w2 | - |
+| 98 | `cloudflare_queues_queue_id_messages_peek_create` | `POST` | `/accounts/{account_id}/queues/{queue_id}/messages/peek` | w2 | - |
+| 99 | `cloudflare_queues_queue_id_messages_pull_create` | `POST` | `/accounts/{account_id}/queues/{queue_id}/messages/pull` | w2 | - |
+| 100 | `cloudflare_queues_queue_id_messages_purge` | `POST` | `/accounts/{account_id}/queues/{queue_id}/messages/purge` | w2 | destructive, needs confirmation |
+| 101 | `cloudflare_queues_queue_id_metrics_list` | `GET` | `/accounts/{account_id}/queues/{queue_id}/metrics` | w2 | - |
+| 102 | `cloudflare_queues_queue_id_purge_status_get` | `GET` | `/accounts/{account_id}/queues/{queue_id}/purge` | w2 | renamed |
+| 103 | `cloudflare_queues_queue_id_purge` | `POST` | `/accounts/{account_id}/queues/{queue_id}/purge` | w2 | destructive, needs confirmation |
+| 104 | `cloudflare_r2_catalog_list` | `GET` | `/accounts/{account_id}/r2-catalog` | w2 | deprecated |
+| 105 | `cloudflare_r2_catalog_get` | `GET` | `/accounts/{account_id}/r2-catalog/{bucket_name}` | w2 | deprecated |
+| 106 | `cloudflare_r2_catalog_bucket_name_credential_create` | `POST` | `/accounts/{account_id}/r2-catalog/{bucket_name}/credential` | w2 | deprecated |
+| 107 | `cloudflare_r2_catalog_bucket_name_credential_status_list` | `GET` | `/accounts/{account_id}/r2-catalog/{bucket_name}/credential/status` | w2 | deprecated |
+| 108 | `cloudflare_r2_catalog_bucket_name_delete_create` | `POST` | `/accounts/{account_id}/r2-catalog/{bucket_name}/delete` | w2 | destructive, needs confirmation, deprecated |
+| 109 | `cloudflare_r2_catalog_bucket_name_disable` | `POST` | `/accounts/{account_id}/r2-catalog/{bucket_name}/disable` | w2 | needs confirmation, deprecated |
+| 110 | `cloudflare_r2_catalog_bucket_name_enable` | `POST` | `/accounts/{account_id}/r2-catalog/{bucket_name}/enable` | w2 | deprecated |
+| 111 | `cloudflare_r2_catalog_bucket_name_maintenance_configs_list` | `GET` | `/accounts/{account_id}/r2-catalog/{bucket_name}/maintenance-configs` | w2 | deprecated |
+| 112 | `cloudflare_r2_catalog_bucket_name_maintenance_configs_create` | `POST` | `/accounts/{account_id}/r2-catalog/{bucket_name}/maintenance-configs` | w2 | deprecated |
+| 113 | `cloudflare_r2_catalog_bucket_name_namespaces_list` | `GET` | `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces` | w2 | deprecated |
+| 114 | `cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_list` | `GET` | `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables` | w2 | deprecated |
+| 115 | `cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_get` | `GET` | `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}` | w2 | deprecated |
+| 116 | `cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_configs_list` | `GET` | `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-configs` | w2 | deprecated |
+| 117 | `cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_configs_create` | `POST` | `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-configs` | w2 | deprecated |
+| 118 | `cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_configs_configuration_type_queue_create` | `POST` | `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-configs/{configuration_type}/queue` | w2 | deprecated |
+| 119 | `cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_runs_list` | `GET` | `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-runs` | w2 | deprecated |
+| 120 | `cloudflare_r2_buckets_list` | `GET` | `/accounts/{account_id}/r2/buckets` | w2 | - |
+| 121 | `cloudflare_r2_buckets_create` | `POST` | `/accounts/{account_id}/r2/buckets` | w2 | - |
+| 122 | `cloudflare_r2_buckets_get` | `GET` | `/accounts/{account_id}/r2/buckets/{bucket_name}` | w2 | - |
+| 123 | `cloudflare_r2_buckets_replace` | `PUT` | `/accounts/{account_id}/r2/buckets/{bucket_name}` | w2 | - |
+| 124 | `cloudflare_r2_buckets_update` | `PATCH` | `/accounts/{account_id}/r2/buckets/{bucket_name}` | w2 | - |
+| 125 | `cloudflare_r2_buckets_delete` | `DELETE` | `/accounts/{account_id}/r2/buckets/{bucket_name}` | w2 | destructive, needs confirmation |
+| 126 | `cloudflare_r2_buckets_bucket_name_cors_list` | `GET` | `/accounts/{account_id}/r2/buckets/{bucket_name}/cors` | w2 | - |
+| 127 | `cloudflare_r2_buckets_bucket_name_cors_put` | `PUT` | `/accounts/{account_id}/r2/buckets/{bucket_name}/cors` | w2 | needs confirmation |
+| 128 | `cloudflare_r2_buckets_bucket_name_cors_delete` | `DELETE` | `/accounts/{account_id}/r2/buckets/{bucket_name}/cors` | w2 | needs confirmation |
+| 129 | `cloudflare_r2_buckets_bucket_name_domains_custom_list` | `GET` | `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom` | w2 | - |
+| 130 | `cloudflare_r2_buckets_bucket_name_domains_custom_create` | `POST` | `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom` | w2 | - |
+| 131 | `cloudflare_r2_buckets_bucket_name_domains_custom_get` | `GET` | `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom/{domain}` | w2 | - |
+| 132 | `cloudflare_r2_buckets_bucket_name_domains_custom_replace` | `PUT` | `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom/{domain}` | w2 | - |
+| 133 | `cloudflare_r2_buckets_bucket_name_domains_custom_delete` | `DELETE` | `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom/{domain}` | w2 | needs confirmation |
+| 134 | `cloudflare_r2_buckets_bucket_name_domains_managed_list` | `GET` | `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/managed` | w2 | - |
+| 135 | `cloudflare_r2_buckets_bucket_name_domains_managed_put` | `PUT` | `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/managed` | w2 | needs confirmation |
+| 136 | `cloudflare_r2_buckets_bucket_name_jobs_list` | `GET` | `/accounts/{account_id}/r2/buckets/{bucket_name}/jobs` | w2 | - |
+| 137 | `cloudflare_r2_buckets_bucket_name_jobs_create` | `POST` | `/accounts/{account_id}/r2/buckets/{bucket_name}/jobs` | w2 | needs confirmation |
+| 138 | `cloudflare_r2_buckets_bucket_name_jobs_get` | `GET` | `/accounts/{account_id}/r2/buckets/{bucket_name}/jobs/{job_id}` | w2 | - |
+| 139 | `cloudflare_r2_buckets_bucket_name_lifecycle_list` | `GET` | `/accounts/{account_id}/r2/buckets/{bucket_name}/lifecycle` | w2 | - |
+| 140 | `cloudflare_r2_buckets_bucket_name_lifecycle_put` | `PUT` | `/accounts/{account_id}/r2/buckets/{bucket_name}/lifecycle` | w2 | needs confirmation |
+| 141 | `cloudflare_r2_buckets_bucket_name_local_uploads_list` | `GET` | `/accounts/{account_id}/r2/buckets/{bucket_name}/local-uploads` | w2 | - |
+| 142 | `cloudflare_r2_buckets_bucket_name_local_uploads_put` | `PUT` | `/accounts/{account_id}/r2/buckets/{bucket_name}/local-uploads` | w2 | - |
+| 143 | `cloudflare_r2_buckets_bucket_name_lock_list` | `GET` | `/accounts/{account_id}/r2/buckets/{bucket_name}/lock` | w2 | - |
+| 144 | `cloudflare_r2_buckets_bucket_name_lock_put` | `PUT` | `/accounts/{account_id}/r2/buckets/{bucket_name}/lock` | w2 | needs confirmation |
+| 145 | `cloudflare_r2_buckets_bucket_name_lock_delete` | `DELETE` | `/accounts/{account_id}/r2/buckets/{bucket_name}/lock` | w2 | needs confirmation |
+| 146 | `cloudflare_r2_buckets_bucket_name_objects_list` | `GET` | `/accounts/{account_id}/r2/buckets/{bucket_name}/objects` | w2 | - |
+| 147 | `cloudflare_r2_buckets_bucket_name_objects_delete_bulk` | `DELETE` | `/accounts/{account_id}/r2/buckets/{bucket_name}/objects` | w2 | renamed, raw body, destructive, needs confirmation |
+| 148 | `cloudflare_r2_buckets_bucket_name_objects_get` | `GET` | `/accounts/{account_id}/r2/buckets/{bucket_name}/objects/{object_key}` | w2 | - |
+| 149 | `cloudflare_r2_buckets_bucket_name_objects_delete` | `DELETE` | `/accounts/{account_id}/r2/buckets/{bucket_name}/objects/{object_key}` | w2 | destructive, needs confirmation |
+| 150 | `cloudflare_r2_buckets_bucket_name_sippy_list` | `GET` | `/accounts/{account_id}/r2/buckets/{bucket_name}/sippy` | w2 | - |
+| 151 | `cloudflare_r2_buckets_bucket_name_sippy_put` | `PUT` | `/accounts/{account_id}/r2/buckets/{bucket_name}/sippy` | w2 | - |
+| 152 | `cloudflare_r2_buckets_bucket_name_sippy_delete` | `DELETE` | `/accounts/{account_id}/r2/buckets/{bucket_name}/sippy` | w2 | needs confirmation |
+| 153 | `cloudflare_r2_metrics_list` | `GET` | `/accounts/{account_id}/r2/metrics` | w2 | - |
+| 154 | `cloudflare_r2_temp_access_credentials_create` | `POST` | `/accounts/{account_id}/r2/temp-access-credentials` | w2 | - |
+| 155 | `cloudflare_storage_kv_namespaces_list` | `GET` | `/accounts/{account_id}/storage/kv/namespaces` | w2 | - |
+| 156 | `cloudflare_storage_kv_namespaces_create` | `POST` | `/accounts/{account_id}/storage/kv/namespaces` | w2 | - |
+| 157 | `cloudflare_storage_kv_namespaces_get` | `GET` | `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}` | w2 | - |
+| 158 | `cloudflare_storage_kv_namespaces_replace` | `PUT` | `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}` | w2 | - |
+| 159 | `cloudflare_storage_kv_namespaces_delete` | `DELETE` | `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}` | w2 | destructive, needs confirmation |
+| 160 | `cloudflare_storage_kv_namespaces_namespace_id_bulk_put` | `PUT` | `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/bulk` | w2 | raw body, destructive |
+| 161 | `cloudflare_storage_kv_namespaces_namespace_id_bulk_delete_create` | `POST` | `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/bulk/delete` | w2 | raw body, destructive, needs confirmation |
+| 162 | `cloudflare_storage_kv_namespaces_namespace_id_bulk_get_create` | `POST` | `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/bulk/get` | w2 | - |
+| 163 | `cloudflare_storage_kv_namespaces_namespace_id_keys_list` | `GET` | `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/keys` | w2 | - |
+| 164 | `cloudflare_storage_kv_namespaces_namespace_id_metadata_get` | `GET` | `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/metadata/{key_name}` | w2 | - |
+| 165 | `cloudflare_storage_kv_namespaces_namespace_id_values_get` | `GET` | `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/values/{key_name}` | w2 | - |
+| 166 | `cloudflare_storage_kv_namespaces_namespace_id_values_replace` | `PUT` | `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/values/{key_name}` | w2 | - |
+| 167 | `cloudflare_storage_kv_namespaces_namespace_id_values_delete` | `DELETE` | `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/values/{key_name}` | w2 | destructive, needs confirmation |
+| 168 | `cloudflare_vectorize_v2_indexes_list` | `GET` | `/accounts/{account_id}/vectorize/v2/indexes` | w2 | - |
+| 169 | `cloudflare_vectorize_v2_indexes_create` | `POST` | `/accounts/{account_id}/vectorize/v2/indexes` | w2 | - |
+| 170 | `cloudflare_vectorize_v2_indexes_get` | `GET` | `/accounts/{account_id}/vectorize/v2/indexes/{index_name}` | w2 | - |
+| 171 | `cloudflare_vectorize_v2_indexes_delete` | `DELETE` | `/accounts/{account_id}/vectorize/v2/indexes/{index_name}` | w2 | destructive |
+| 172 | `cloudflare_vectorize_v2_indexes_index_name_delete_by_ids_create` | `POST` | `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/delete_by_ids` | w2 | destructive |
+| 173 | `cloudflare_vectorize_v2_indexes_index_name_get_by_ids_create` | `POST` | `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/get_by_ids` | w2 | - |
+| 174 | `cloudflare_vectorize_v2_indexes_index_name_info_list` | `GET` | `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/info` | w2 | - |
+| 175 | `cloudflare_vectorize_v2_indexes_index_name_insert_create` | `POST` | `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/insert` | w2 | raw body |
+| 176 | `cloudflare_vectorize_v2_indexes_index_name_list_list` | `GET` | `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/list` | w2 | - |
+| 177 | `cloudflare_vectorize_v2_indexes_index_name_metadata_index_create_create` | `POST` | `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/metadata_index/create` | w2 | - |
+| 178 | `cloudflare_vectorize_v2_indexes_index_name_metadata_index_delete_create` | `POST` | `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/metadata_index/delete` | w2 | destructive, needs confirmation |
+| 179 | `cloudflare_vectorize_v2_indexes_index_name_metadata_index_list_list` | `GET` | `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/metadata_index/list` | w2 | - |
+| 180 | `cloudflare_vectorize_v2_indexes_index_name_query` | `POST` | `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/query` | w2 | - |
+| 181 | `cloudflare_vectorize_v2_indexes_index_name_upsert_create` | `POST` | `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/upsert` | w2 | raw body |
+| 182 | `cloudflare_workers_account_settings_list` | `GET` | `/accounts/{account_id}/workers/account-settings` | w2 | - |
+| 183 | `cloudflare_workers_account_settings_put` | `PUT` | `/accounts/{account_id}/workers/account-settings` | w2 | - |
+| 184 | `cloudflare_workers_dispatch_namespaces_list` | `GET` | `/accounts/{account_id}/workers/dispatch/namespaces` | w2 | - |
+| 185 | `cloudflare_workers_dispatch_namespaces_create` | `POST` | `/accounts/{account_id}/workers/dispatch/namespaces` | w2 | - |
+| 186 | `cloudflare_workers_dispatch_namespaces_get` | `GET` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}` | w2 | - |
+| 187 | `cloudflare_workers_dispatch_namespaces_replace` | `PUT` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}` | w2 | - |
+| 188 | `cloudflare_workers_dispatch_namespaces_update` | `PATCH` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}` | w2 | - |
+| 189 | `cloudflare_workers_dispatch_namespaces_delete` | `DELETE` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}` | w2 | destructive, needs confirmation |
+| 190 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_list` | `GET` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts` | w2 | - |
+| 191 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_delete_all` | `DELETE` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts` | w2 | renamed, destructive, needs confirmation |
+| 192 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_get` | `GET` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}` | w2 | - |
+| 193 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_delete` | `DELETE` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}` | w2 | destructive, needs confirmation |
+| 194 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_assets_upload_session_create` | `POST` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/assets-upload-session` | w2 | - |
+| 195 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_bindings_list` | `GET` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/bindings` | w2 | - |
+| 196 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_content_list` | `GET` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/content` | w2 | - |
+| 197 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_secrets_list` | `GET` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets` | w2 | - |
+| 198 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_secrets_put` | `PUT` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets` | w2 | - |
+| 199 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_secrets_bulk_patch` | `PATCH` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets-bulk` | w2 | - |
+| 200 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_secrets_get` | `GET` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets/{secret_name}` | w2 | - |
+| 201 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_secrets_delete` | `DELETE` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets/{secret_name}` | w2 | needs confirmation |
+| 202 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_settings_list` | `GET` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/settings` | w2 | - |
+| 203 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_tags_list` | `GET` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags` | w2 | - |
+| 204 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_tags_put` | `PUT` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags` | w2 | raw body |
+| 205 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_tags_replace` | `PUT` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags/{tag}` | w2 | - |
+| 206 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_tags_update` | `PATCH` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags/{tag}` | w2 | - |
+| 207 | `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_tags_delete` | `DELETE` | `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags/{tag}` | w2 | needs confirmation |
+| 208 | `cloudflare_workers_domains_list` | `GET` | `/accounts/{account_id}/workers/domains` | w2 | - |
+| 209 | `cloudflare_workers_domains_put` | `PUT` | `/accounts/{account_id}/workers/domains` | w2 | - |
+| 210 | `cloudflare_workers_domains_get` | `GET` | `/accounts/{account_id}/workers/domains/{domain_id}` | w2 | - |
+| 211 | `cloudflare_workers_domains_delete` | `DELETE` | `/accounts/{account_id}/workers/domains/{domain_id}` | w2 | needs confirmation |
+| 212 | `cloudflare_workers_durable_objects_namespaces_list` | `GET` | `/accounts/{account_id}/workers/durable_objects/namespaces` | w2 | - |
+| 213 | `cloudflare_workers_durable_objects_namespaces_id_objects_list` | `GET` | `/accounts/{account_id}/workers/durable_objects/namespaces/{id}/objects` | w2 | - |
+| 214 | `cloudflare_workers_durable_objects_namespaces_id_query_v2_create` | `POST` | `/accounts/{account_id}/workers/durable_objects/namespaces/{id}/query/v2` | w2 | - |
+| 215 | `cloudflare_workers_observability_agents_sessions_list` | `GET` | `/accounts/{account_id}/workers/observability/agents/sessions` | w2 | beta |
+| 216 | `cloudflare_workers_observability_agents_sessions_conversation_id_runs_list` | `GET` | `/accounts/{account_id}/workers/observability/agents/sessions/{conversationId}/runs` | w2 | beta |
+| 217 | `cloudflare_workers_observability_destinations_list` | `GET` | `/accounts/{account_id}/workers/observability/destinations` | w2 | - |
+| 218 | `cloudflare_workers_observability_destinations_create` | `POST` | `/accounts/{account_id}/workers/observability/destinations` | w2 | - |
+| 219 | `cloudflare_workers_observability_destinations_update` | `PATCH` | `/accounts/{account_id}/workers/observability/destinations/{slug}` | w2 | - |
+| 220 | `cloudflare_workers_observability_destinations_delete` | `DELETE` | `/accounts/{account_id}/workers/observability/destinations/{slug}` | w2 | needs confirmation |
+| 221 | `cloudflare_workers_observability_issues_list` | `GET` | `/accounts/{account_id}/workers/observability/issues` | w2 | - |
+| 222 | `cloudflare_workers_observability_issues_automations_list` | `GET` | `/accounts/{account_id}/workers/observability/issues/automations` | w2 | - |
+| 223 | `cloudflare_workers_observability_issues_automations_create` | `POST` | `/accounts/{account_id}/workers/observability/issues/automations` | w2 | - |
+| 224 | `cloudflare_workers_observability_issues_automations_get` | `GET` | `/accounts/{account_id}/workers/observability/issues/automations/{automationId}` | w2 | - |
+| 225 | `cloudflare_workers_observability_issues_automations_replace` | `PUT` | `/accounts/{account_id}/workers/observability/issues/automations/{automationId}` | w2 | - |
+| 226 | `cloudflare_workers_observability_issues_automations_delete` | `DELETE` | `/accounts/{account_id}/workers/observability/issues/automations/{automationId}` | w2 | needs confirmation |
+| 227 | `cloudflare_workers_observability_issues_groups_create` | `POST` | `/accounts/{account_id}/workers/observability/issues/groups` | w2 | - |
+| 228 | `cloudflare_workers_observability_issues_groups_delete` | `DELETE` | `/accounts/{account_id}/workers/observability/issues/groups/{groupId}` | w2 | - |
+| 229 | `cloudflare_workers_observability_issues_groups_group_id_members_create` | `POST` | `/accounts/{account_id}/workers/observability/issues/groups/{groupId}/members` | w2 | - |
+| 230 | `cloudflare_workers_observability_issues_groups_group_id_members_delete` | `DELETE` | `/accounts/{account_id}/workers/observability/issues/groups/{groupId}/members/{issueId}` | w2 | - |
+| 231 | `cloudflare_workers_observability_issues_summary_list` | `GET` | `/accounts/{account_id}/workers/observability/issues/summary` | w2 | - |
+| 232 | `cloudflare_workers_observability_issues_get` | `GET` | `/accounts/{account_id}/workers/observability/issues/{issueId}` | w2 | - |
+| 233 | `cloudflare_workers_observability_issues_update` | `PATCH` | `/accounts/{account_id}/workers/observability/issues/{issueId}` | w2 | - |
+| 234 | `cloudflare_workers_observability_issues_issue_id_notification_runs_create` | `POST` | `/accounts/{account_id}/workers/observability/issues/{issueId}/notification-runs` | w2 | needs confirmation |
+| 235 | `cloudflare_workers_observability_issues_issue_id_occurrences_list` | `GET` | `/accounts/{account_id}/workers/observability/issues/{issueId}/occurrences` | w2 | - |
+| 236 | `cloudflare_workers_observability_queries_list` | `GET` | `/accounts/{account_id}/workers/observability/queries` | w2 | - |
+| 237 | `cloudflare_workers_observability_queries_create` | `POST` | `/accounts/{account_id}/workers/observability/queries` | w2 | - |
+| 238 | `cloudflare_workers_observability_queries_get` | `GET` | `/accounts/{account_id}/workers/observability/queries/{queryId}` | w2 | - |
+| 239 | `cloudflare_workers_observability_queries_update` | `PATCH` | `/accounts/{account_id}/workers/observability/queries/{queryId}` | w2 | - |
+| 240 | `cloudflare_workers_observability_queries_delete` | `DELETE` | `/accounts/{account_id}/workers/observability/queries/{queryId}` | w2 | needs confirmation |
+| 241 | `cloudflare_workers_observability_shared_query` | `POST` | `/accounts/{account_id}/workers/observability/shared/query` | w2 | - |
+| 242 | `cloudflare_workers_observability_shared_query_get` | `GET` | `/accounts/{account_id}/workers/observability/shared/query/{id}` | w2 | renamed |
+| 243 | `cloudflare_workers_observability_telemetry_keys_create` | `POST` | `/accounts/{account_id}/workers/observability/telemetry/keys` | w2 | - |
+| 244 | `cloudflare_workers_observability_telemetry_query` | `POST` | `/accounts/{account_id}/workers/observability/telemetry/query` | w2 | - |
+| 245 | `cloudflare_workers_observability_telemetry_values_create` | `POST` | `/accounts/{account_id}/workers/observability/telemetry/values` | w2 | - |
+| 246 | `cloudflare_workers_placement_regions_list` | `GET` | `/accounts/{account_id}/workers/placement/regions` | w2 | - |
+| 247 | `cloudflare_workers_scripts_list` | `GET` | `/accounts/{account_id}/workers/scripts` | w2 | - |
+| 248 | `cloudflare_workers_scripts_search_list` | `GET` | `/accounts/{account_id}/workers/scripts-search` | w2 | - |
+| 249 | `cloudflare_workers_scripts_get` | `GET` | `/accounts/{account_id}/workers/scripts/{script_name}` | w2 | - |
+| 250 | `cloudflare_workers_scripts_delete` | `DELETE` | `/accounts/{account_id}/workers/scripts/{script_name}` | w2 | destructive, needs confirmation |
+| 251 | `cloudflare_workers_scripts_script_name_assets_upload_session_create` | `POST` | `/accounts/{account_id}/workers/scripts/{script_name}/assets-upload-session` | w2 | - |
+| 252 | `cloudflare_workers_scripts_script_name_content_v2_list` | `GET` | `/accounts/{account_id}/workers/scripts/{script_name}/content/v2` | w2 | - |
+| 253 | `cloudflare_workers_scripts_script_name_deployments_list` | `GET` | `/accounts/{account_id}/workers/scripts/{script_name}/deployments` | w2 | - |
+| 254 | `cloudflare_workers_scripts_script_name_deployments_create` | `POST` | `/accounts/{account_id}/workers/scripts/{script_name}/deployments` | w2 | - |
+| 255 | `cloudflare_workers_scripts_script_name_deployments_get` | `GET` | `/accounts/{account_id}/workers/scripts/{script_name}/deployments/{deployment_id}` | w2 | - |
+| 256 | `cloudflare_workers_scripts_script_name_deployments_delete` | `DELETE` | `/accounts/{account_id}/workers/scripts/{script_name}/deployments/{deployment_id}` | w2 | needs confirmation |
+| 257 | `cloudflare_workers_scripts_script_name_schedules_list` | `GET` | `/accounts/{account_id}/workers/scripts/{script_name}/schedules` | w2 | - |
+| 258 | `cloudflare_workers_scripts_script_name_schedules_put` | `PUT` | `/accounts/{account_id}/workers/scripts/{script_name}/schedules` | w2 | raw body |
+| 259 | `cloudflare_workers_scripts_script_name_script_settings_list` | `GET` | `/accounts/{account_id}/workers/scripts/{script_name}/script-settings` | w2 | - |
+| 260 | `cloudflare_workers_scripts_script_name_script_settings_patch` | `PATCH` | `/accounts/{account_id}/workers/scripts/{script_name}/script-settings` | w2 | - |
+| 261 | `cloudflare_workers_scripts_script_name_secrets_list` | `GET` | `/accounts/{account_id}/workers/scripts/{script_name}/secrets` | w2 | - |
+| 262 | `cloudflare_workers_scripts_script_name_secrets_put` | `PUT` | `/accounts/{account_id}/workers/scripts/{script_name}/secrets` | w2 | - |
+| 263 | `cloudflare_workers_scripts_script_name_secrets_bulk_patch` | `PATCH` | `/accounts/{account_id}/workers/scripts/{script_name}/secrets-bulk` | w2 | - |
+| 264 | `cloudflare_workers_scripts_script_name_secrets_get` | `GET` | `/accounts/{account_id}/workers/scripts/{script_name}/secrets/{secret_name}` | w2 | - |
+| 265 | `cloudflare_workers_scripts_script_name_secrets_delete` | `DELETE` | `/accounts/{account_id}/workers/scripts/{script_name}/secrets/{secret_name}` | w2 | needs confirmation |
+| 266 | `cloudflare_workers_scripts_script_name_settings_list` | `GET` | `/accounts/{account_id}/workers/scripts/{script_name}/settings` | w2 | - |
+| 267 | `cloudflare_workers_scripts_script_name_subdomain_list` | `GET` | `/accounts/{account_id}/workers/scripts/{script_name}/subdomain` | w2 | - |
+| 268 | `cloudflare_workers_scripts_script_name_subdomain_create` | `POST` | `/accounts/{account_id}/workers/scripts/{script_name}/subdomain` | w2 | - |
+| 269 | `cloudflare_workers_scripts_script_name_subdomain_delete` | `DELETE` | `/accounts/{account_id}/workers/scripts/{script_name}/subdomain` | w2 | needs confirmation |
+| 270 | `cloudflare_workers_scripts_script_name_tails_list` | `GET` | `/accounts/{account_id}/workers/scripts/{script_name}/tails` | w2 | - |
+| 271 | `cloudflare_workers_scripts_script_name_tails_create` | `POST` | `/accounts/{account_id}/workers/scripts/{script_name}/tails` | w2 | - |
+| 272 | `cloudflare_workers_scripts_script_name_tails_delete` | `DELETE` | `/accounts/{account_id}/workers/scripts/{script_name}/tails/{id}` | w2 | needs confirmation |
+| 273 | `cloudflare_workers_scripts_script_name_usage_model_list` | `GET` | `/accounts/{account_id}/workers/scripts/{script_name}/usage-model` | w2 | - |
+| 274 | `cloudflare_workers_scripts_script_name_usage_model_put` | `PUT` | `/accounts/{account_id}/workers/scripts/{script_name}/usage-model` | w2 | - |
+| 275 | `cloudflare_workers_scripts_script_name_versions_list` | `GET` | `/accounts/{account_id}/workers/scripts/{script_name}/versions` | w2 | - |
+| 276 | `cloudflare_workers_scripts_script_name_versions_get` | `GET` | `/accounts/{account_id}/workers/scripts/{script_name}/versions/{version_id}` | w2 | - |
+| 277 | `cloudflare_workers_subdomain_list` | `GET` | `/accounts/{account_id}/workers/subdomain` | w2 | - |
+| 278 | `cloudflare_workers_subdomain_put` | `PUT` | `/accounts/{account_id}/workers/subdomain` | w2 | - |
+| 279 | `cloudflare_workers_subdomain_delete` | `DELETE` | `/accounts/{account_id}/workers/subdomain` | w2 | needs confirmation |
+| 280 | `cloudflare_workers_workers_list` | `GET` | `/accounts/{account_id}/workers/workers` | w2 | - |
+| 281 | `cloudflare_workers_workers_create` | `POST` | `/accounts/{account_id}/workers/workers` | w2 | - |
+| 282 | `cloudflare_workers_workers_get` | `GET` | `/accounts/{account_id}/workers/workers/{worker_id}` | w2 | - |
+| 283 | `cloudflare_workers_workers_replace` | `PUT` | `/accounts/{account_id}/workers/workers/{worker_id}` | w2 | - |
+| 284 | `cloudflare_workers_workers_update` | `PATCH` | `/accounts/{account_id}/workers/workers/{worker_id}` | w2 | - |
+| 285 | `cloudflare_workers_workers_delete` | `DELETE` | `/accounts/{account_id}/workers/workers/{worker_id}` | w2 | destructive, needs confirmation |
+| 286 | `cloudflare_workers_workers_worker_id_previews_list` | `GET` | `/accounts/{account_id}/workers/workers/{worker_id}/previews` | w2 | - |
+| 287 | `cloudflare_workers_workers_worker_id_previews_create` | `POST` | `/accounts/{account_id}/workers/workers/{worker_id}/previews` | w2 | - |
+| 288 | `cloudflare_workers_workers_worker_id_previews_get` | `GET` | `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}` | w2 | - |
+| 289 | `cloudflare_workers_workers_worker_id_previews_replace` | `PUT` | `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}` | w2 | - |
+| 290 | `cloudflare_workers_workers_worker_id_previews_update` | `PATCH` | `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}` | w2 | - |
+| 291 | `cloudflare_workers_workers_worker_id_previews_delete` | `DELETE` | `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}` | w2 | destructive, needs confirmation |
+| 292 | `cloudflare_workers_workers_worker_id_previews_preview_id_deployments_list` | `GET` | `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments` | w2 | - |
+| 293 | `cloudflare_workers_workers_worker_id_previews_preview_id_deployments_create` | `POST` | `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments` | w2 | - |
+| 294 | `cloudflare_workers_workers_worker_id_previews_preview_id_deployments_latest_patch` | `PATCH` | `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments/latest` | w2 | - |
+| 295 | `cloudflare_workers_workers_worker_id_previews_preview_id_deployments_get` | `GET` | `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments/{deployment_id}` | w2 | - |
+| 296 | `cloudflare_workers_workers_worker_id_previews_preview_id_deployments_delete` | `DELETE` | `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments/{deployment_id}` | w2 | destructive, needs confirmation |
+| 297 | `cloudflare_workers_workers_worker_id_versions_list` | `GET` | `/accounts/{account_id}/workers/workers/{worker_id}/versions` | w2 | - |
+| 298 | `cloudflare_workers_workers_worker_id_versions_create` | `POST` | `/accounts/{account_id}/workers/workers/{worker_id}/versions` | w2 | - |
+| 299 | `cloudflare_workers_workers_worker_id_versions_latest_patch` | `PATCH` | `/accounts/{account_id}/workers/workers/{worker_id}/versions/latest` | w2 | - |
+| 300 | `cloudflare_workers_workers_worker_id_versions_get` | `GET` | `/accounts/{account_id}/workers/workers/{worker_id}/versions/{version_id}` | w2 | - |
+| 301 | `cloudflare_workers_workers_worker_id_versions_delete` | `DELETE` | `/accounts/{account_id}/workers/workers/{worker_id}/versions/{version_id}` | w2 | destructive, needs confirmation |
+| 302 | `cloudflare_workers_workers_worker_id_versions_version_id_profile_create` | `POST` | `/accounts/{account_id}/workers/workers/{worker_id}/versions/{version_id}/profile` | w2 | - |
+| 303 | `cloudflare_workflows_list` | `GET` | `/accounts/{account_id}/workflows` | w2 | - |
+| 304 | `cloudflare_workflows_concurrency_list` | `GET` | `/accounts/{account_id}/workflows/concurrency` | w2 | - |
+| 305 | `cloudflare_workflows_concurrency_create` | `POST` | `/accounts/{account_id}/workflows/concurrency` | w2 | - |
+| 306 | `cloudflare_workflows_concurrency_get` | `GET` | `/accounts/{account_id}/workflows/concurrency/{key_id}` | w2 | - |
+| 307 | `cloudflare_workflows_concurrency_update` | `PATCH` | `/accounts/{account_id}/workflows/concurrency/{key_id}` | w2 | - |
+| 308 | `cloudflare_workflows_concurrency_delete` | `DELETE` | `/accounts/{account_id}/workflows/concurrency/{key_id}` | w2 | - |
+| 309 | `cloudflare_workflows_settings_list` | `GET` | `/accounts/{account_id}/workflows/settings` | w2 | - |
+| 310 | `cloudflare_workflows_settings_patch` | `PATCH` | `/accounts/{account_id}/workflows/settings` | w2 | - |
+| 311 | `cloudflare_workflows_get` | `GET` | `/accounts/{account_id}/workflows/{workflow_name}` | w2 | - |
+| 312 | `cloudflare_workflows_delete` | `DELETE` | `/accounts/{account_id}/workflows/{workflow_name}` | w2 | destructive, needs confirmation |
+| 313 | `cloudflare_workflows_workflow_name_instances_list` | `GET` | `/accounts/{account_id}/workflows/{workflow_name}/instances` | w2 | - |
+| 314 | `cloudflare_workflows_workflow_name_instances_create` | `POST` | `/accounts/{account_id}/workflows/{workflow_name}/instances` | w2 | - |
+| 315 | `cloudflare_workflows_workflow_name_instances_batch` | `POST` | `/accounts/{account_id}/workflows/{workflow_name}/instances/batch` | w2 | raw body |
+| 316 | `cloudflare_workflows_workflow_name_instances_get` | `GET` | `/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}` | w2 | - |
+| 317 | `cloudflare_workflows_workflow_name_instances_delete` | `DELETE` | `/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}` | w2 | destructive |
+| 318 | `cloudflare_workflows_workflow_name_instances_instance_id_events_create` | `POST` | `/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}/events/{event_type}` | w2 | free-form body |
+| 319 | `cloudflare_workflows_workflow_name_instances_instance_id_status_patch` | `PATCH` | `/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}/status` | w2 | - |
+| 320 | `cloudflare_workflows_workflow_name_instances_instance_id_step_list` | `GET` | `/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}/step` | w2 | - |
+| 321 | `cloudflare_workflows_workflow_name_versions_list` | `GET` | `/accounts/{account_id}/workflows/{workflow_name}/versions` | w2 | - |
+| 322 | `cloudflare_workflows_workflow_name_versions_get` | `GET` | `/accounts/{account_id}/workflows/{workflow_name}/versions/{version_id}` | w2 | - |
+| 323 | `cloudflare_workflows_workflow_name_versions_version_id_graph_list` | `GET` | `/accounts/{account_id}/workflows/{workflow_name}/versions/{version_id}/graph` | w2 | - |
 
 ## Review notes
 
 - cloudflare_settings_list: the spec marks this operation deprecated
+- cloudflare_r2_catalog_list: the spec marks this operation deprecated
+- cloudflare_r2_catalog_get: the spec marks this operation deprecated
+- cloudflare_r2_catalog_bucket_name_credential_create: the spec marks this operation deprecated
+- cloudflare_r2_catalog_bucket_name_credential_status_list: the spec marks this operation deprecated
+- cloudflare_r2_catalog_bucket_name_delete_create: the spec marks this operation deprecated
+- cloudflare_r2_catalog_bucket_name_disable: the spec marks this operation deprecated
+- cloudflare_r2_catalog_bucket_name_enable: the spec marks this operation deprecated
+- cloudflare_r2_catalog_bucket_name_maintenance_configs_list: the spec marks this operation deprecated
+- cloudflare_r2_catalog_bucket_name_maintenance_configs_create: the spec marks this operation deprecated
+- cloudflare_r2_catalog_bucket_name_namespaces_list: the spec marks this operation deprecated
+- cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_list: the spec marks this operation deprecated
+- cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_get: the spec marks this operation deprecated
+- cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_configs_list: the spec marks this operation deprecated
+- cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_configs_create: the spec marks this operation deprecated
+- cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_configs_configuration_type_queue_create: the spec marks this operation deprecated
+- cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_runs_list: the spec marks this operation deprecated
 
 ## Renames and retirements
 
@@ -752,21 +1046,19 @@ Not shipped (54):
 - `PUT` `/accounts/{account_id}/cws/workloads/{workload_id}`
 - `DELETE` `/accounts/{account_id}/cws/workloads/{workload_id}`
 
-### `accounts/d1` - 0 of 11 reviewable shipped, 2 filtered out
+### `accounts/d1` - 11 of 11 reviewable shipped, 2 filtered out
 
-
-Not shipped (11):
-- `GET` `/accounts/{account_id}/d1/database`
-- `POST` `/accounts/{account_id}/d1/database`
-- `GET` `/accounts/{account_id}/d1/database/{database_id}`
-- `PUT` `/accounts/{account_id}/d1/database/{database_id}`
-- `PATCH` `/accounts/{account_id}/d1/database/{database_id}`
-- `DELETE` `/accounts/{account_id}/d1/database/{database_id}`
-- `POST` `/accounts/{account_id}/d1/database/{database_id}/query`
-- `POST` `/accounts/{account_id}/d1/database/{database_id}/raw`
-- `GET` `/accounts/{account_id}/d1/database/{database_id}/time_travel/bookmark`
-- `POST` `/accounts/{account_id}/d1/database/{database_id}/time_travel/restore`
-- `POST` `/accounts/{account_id}/d1/database/{database_id}/undelete`
+- `cloudflare_d1_database_list` - `GET` `/accounts/{account_id}/d1/database`
+- `cloudflare_d1_database_create` - `POST` `/accounts/{account_id}/d1/database`
+- `cloudflare_d1_database_get` - `GET` `/accounts/{account_id}/d1/database/{database_id}`
+- `cloudflare_d1_database_replace` - `PUT` `/accounts/{account_id}/d1/database/{database_id}`
+- `cloudflare_d1_database_update` - `PATCH` `/accounts/{account_id}/d1/database/{database_id}`
+- `cloudflare_d1_database_delete` - `DELETE` `/accounts/{account_id}/d1/database/{database_id}`
+- `cloudflare_d1_database_database_id_query` - `POST` `/accounts/{account_id}/d1/database/{database_id}/query`
+- `cloudflare_d1_database_database_id_raw_create` - `POST` `/accounts/{account_id}/d1/database/{database_id}/raw`
+- `cloudflare_d1_database_database_id_time_travel_bookmark_list` - `GET` `/accounts/{account_id}/d1/database/{database_id}/time_travel/bookmark`
+- `cloudflare_d1_database_database_id_time_travel_restore` - `POST` `/accounts/{account_id}/d1/database/{database_id}/time_travel/restore`
+- `cloudflare_d1_database_database_id_undelete_create` - `POST` `/accounts/{account_id}/d1/database/{database_id}/undelete`
 
 ### `accounts/data` - 0 of 35 reviewable shipped, 1 filtered out
 
@@ -1200,18 +1492,16 @@ Not shipped (49):
 - `DELETE` `/accounts/{account_id}/gateway/rules/{rule_id}`
 - `POST` `/accounts/{account_id}/gateway/rules/{rule_id}/reset_expiration`
 
-### `accounts/hyperdrive` - 0 of 8 reviewable shipped
+### `accounts/hyperdrive` - 8 of 8 reviewable shipped
 
-
-Not shipped (8):
-- `GET` `/accounts/{account_id}/hyperdrive/configs`
-- `POST` `/accounts/{account_id}/hyperdrive/configs`
-- `GET` `/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}`
-- `PUT` `/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}`
-- `PATCH` `/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}`
-- `DELETE` `/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}`
-- `POST` `/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}/restart`
-- `POST` `/accounts/{account_id}/hyperdrive/integrationsOperations/planetScale/createDatabaseSignature`
+- `cloudflare_hyperdrive_configs_list` - `GET` `/accounts/{account_id}/hyperdrive/configs`
+- `cloudflare_hyperdrive_configs_create` - `POST` `/accounts/{account_id}/hyperdrive/configs`
+- `cloudflare_hyperdrive_configs_get` - `GET` `/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}`
+- `cloudflare_hyperdrive_configs_replace` - `PUT` `/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}`
+- `cloudflare_hyperdrive_configs_update` - `PATCH` `/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}`
+- `cloudflare_hyperdrive_configs_delete` - `DELETE` `/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}`
+- `cloudflare_hyperdrive_configs_hyperdrive_id_restart` - `POST` `/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}/restart`
+- `cloudflare_hyperdrive_planetscale_create_database_signature` - `POST` `/accounts/{account_id}/hyperdrive/integrationsOperations/planetScale/createDatabaseSignature`
 
 ### `accounts/iam` - 0 of 0 reviewable shipped, 17 filtered out
 
@@ -1555,30 +1845,30 @@ Not shipped (10):
 Not shipped (1):
 - `GET` `/accounts/{account_id}/organizations`
 
-### `accounts/pages` - 0 of 20 reviewable shipped, 3 filtered out
+### `accounts/pages` - 19 of 20 reviewable shipped, 3 filtered out
 
+- `cloudflare_pages_projects_list` - `GET` `/accounts/{account_id}/pages/projects`
+- `cloudflare_pages_projects_create` - `POST` `/accounts/{account_id}/pages/projects`
+- `cloudflare_pages_projects_get` - `GET` `/accounts/{account_id}/pages/projects/{project_name}`
+- `cloudflare_pages_projects_update` - `PATCH` `/accounts/{account_id}/pages/projects/{project_name}`
+- `cloudflare_pages_projects_delete` - `DELETE` `/accounts/{account_id}/pages/projects/{project_name}`
+- `cloudflare_pages_projects_project_name_deployments_list` - `GET` `/accounts/{account_id}/pages/projects/{project_name}/deployments`
+- `cloudflare_pages_projects_project_name_deployments_get` - `GET` `/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}`
+- `cloudflare_pages_projects_project_name_deployments_delete` - `DELETE` `/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}`
+- `cloudflare_pages_projects_project_name_deployments_deployment_id_history_logs_list` - `GET` `/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}/history/logs`
+- `cloudflare_pages_projects_project_name_deployments_deployment_id_retry_create` - `POST` `/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}/retry`
+- `cloudflare_pages_projects_project_name_deployments_deployment_id_rollback` - `POST` `/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}/rollback`
+- `cloudflare_pages_projects_project_name_domains_list` - `GET` `/accounts/{account_id}/pages/projects/{project_name}/domains`
+- `cloudflare_pages_projects_project_name_domains_create` - `POST` `/accounts/{account_id}/pages/projects/{project_name}/domains`
+- `cloudflare_pages_projects_project_name_domains_get` - `GET` `/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}`
+- `cloudflare_pages_projects_project_name_domains_update` - `PATCH` `/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}`
+- `cloudflare_pages_projects_project_name_domains_delete` - `DELETE` `/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}`
+- `cloudflare_pages_projects_project_name_purge_build_cache` - `POST` `/accounts/{account_id}/pages/projects/{project_name}/purge_build_cache`
+- `cloudflare_pages_projects_project_name_source_create` - `POST` `/accounts/{account_id}/pages/projects/{project_name}/source`
+- `cloudflare_pages_projects_project_name_source_delete` - `DELETE` `/accounts/{account_id}/pages/projects/{project_name}/source`
 
-Not shipped (20):
-- `GET` `/accounts/{account_id}/pages/projects`
-- `POST` `/accounts/{account_id}/pages/projects`
-- `GET` `/accounts/{account_id}/pages/projects/{project_name}`
-- `PATCH` `/accounts/{account_id}/pages/projects/{project_name}`
-- `DELETE` `/accounts/{account_id}/pages/projects/{project_name}`
-- `GET` `/accounts/{account_id}/pages/projects/{project_name}/deployments`
+Not shipped (1):
 - `POST` `/accounts/{account_id}/pages/projects/{project_name}/deployments`
-- `GET` `/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}`
-- `DELETE` `/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}`
-- `GET` `/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}/history/logs`
-- `POST` `/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}/retry`
-- `POST` `/accounts/{account_id}/pages/projects/{project_name}/deployments/{deployment_id}/rollback`
-- `GET` `/accounts/{account_id}/pages/projects/{project_name}/domains`
-- `POST` `/accounts/{account_id}/pages/projects/{project_name}/domains`
-- `GET` `/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}`
-- `PATCH` `/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}`
-- `DELETE` `/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}`
-- `POST` `/accounts/{account_id}/pages/projects/{project_name}/purge_build_cache`
-- `POST` `/accounts/{account_id}/pages/projects/{project_name}/source`
-- `DELETE` `/accounts/{account_id}/pages/projects/{project_name}/source`
 
 ### `accounts/pay` - 0 of 24 reviewable shipped
 
@@ -1654,87 +1944,85 @@ Not shipped (2):
 - `GET` `/accounts/{account_id}/profile`
 - `PUT` `/accounts/{account_id}/profile`
 
-### `accounts/queues` - 0 of 20 reviewable shipped, 3 filtered out
+### `accounts/queues` - 20 of 20 reviewable shipped, 3 filtered out
 
+- `cloudflare_queues_list` - `GET` `/accounts/{account_id}/queues`
+- `cloudflare_queues_create` - `POST` `/accounts/{account_id}/queues`
+- `cloudflare_queues_get` - `GET` `/accounts/{account_id}/queues/{queue_id}`
+- `cloudflare_queues_update` - `PATCH` `/accounts/{account_id}/queues/{queue_id}`
+- `cloudflare_queues_delete` - `DELETE` `/accounts/{account_id}/queues/{queue_id}`
+- `cloudflare_queues_queue_id_consumers_list` - `GET` `/accounts/{account_id}/queues/{queue_id}/consumers`
+- `cloudflare_queues_queue_id_consumers_create` - `POST` `/accounts/{account_id}/queues/{queue_id}/consumers`
+- `cloudflare_queues_queue_id_consumers_get` - `GET` `/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}`
+- `cloudflare_queues_queue_id_consumers_replace` - `PUT` `/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}`
+- `cloudflare_queues_queue_id_consumers_delete` - `DELETE` `/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}`
+- `cloudflare_queues_queue_id_messages_create` - `POST` `/accounts/{account_id}/queues/{queue_id}/messages`
+- `cloudflare_queues_queue_id_messages_ack_create` - `POST` `/accounts/{account_id}/queues/{queue_id}/messages/ack`
+- `cloudflare_queues_queue_id_messages_batch` - `POST` `/accounts/{account_id}/queues/{queue_id}/messages/batch`
+- `cloudflare_queues_queue_id_messages_extend_create` - `POST` `/accounts/{account_id}/queues/{queue_id}/messages/extend`
+- `cloudflare_queues_queue_id_messages_peek_create` - `POST` `/accounts/{account_id}/queues/{queue_id}/messages/peek`
+- `cloudflare_queues_queue_id_messages_pull_create` - `POST` `/accounts/{account_id}/queues/{queue_id}/messages/pull`
+- `cloudflare_queues_queue_id_messages_purge` - `POST` `/accounts/{account_id}/queues/{queue_id}/messages/purge`
+- `cloudflare_queues_queue_id_metrics_list` - `GET` `/accounts/{account_id}/queues/{queue_id}/metrics`
+- `cloudflare_queues_queue_id_purge_status_get` - `GET` `/accounts/{account_id}/queues/{queue_id}/purge`
+- `cloudflare_queues_queue_id_purge` - `POST` `/accounts/{account_id}/queues/{queue_id}/purge`
 
-Not shipped (20):
-- `GET` `/accounts/{account_id}/queues`
-- `POST` `/accounts/{account_id}/queues`
-- `GET` `/accounts/{account_id}/queues/{queue_id}`
-- `PATCH` `/accounts/{account_id}/queues/{queue_id}`
-- `DELETE` `/accounts/{account_id}/queues/{queue_id}`
-- `GET` `/accounts/{account_id}/queues/{queue_id}/consumers`
-- `POST` `/accounts/{account_id}/queues/{queue_id}/consumers`
-- `GET` `/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}`
-- `PUT` `/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}`
-- `DELETE` `/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}`
-- `POST` `/accounts/{account_id}/queues/{queue_id}/messages`
-- `POST` `/accounts/{account_id}/queues/{queue_id}/messages/ack`
-- `POST` `/accounts/{account_id}/queues/{queue_id}/messages/batch`
-- `POST` `/accounts/{account_id}/queues/{queue_id}/messages/extend`
-- `POST` `/accounts/{account_id}/queues/{queue_id}/messages/peek`
-- `POST` `/accounts/{account_id}/queues/{queue_id}/messages/pull`
-- `POST` `/accounts/{account_id}/queues/{queue_id}/messages/purge`
-- `GET` `/accounts/{account_id}/queues/{queue_id}/metrics`
-- `GET` `/accounts/{account_id}/queues/{queue_id}/purge`
-- `POST` `/accounts/{account_id}/queues/{queue_id}/purge`
+### `accounts/r2` - 51 of 52 reviewable shipped
 
-### `accounts/r2` - 0 of 52 reviewable shipped
+- `cloudflare_r2_catalog_list` - `GET` `/accounts/{account_id}/r2-catalog`
+- `cloudflare_r2_catalog_get` - `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}`
+- `cloudflare_r2_catalog_bucket_name_credential_create` - `POST` `/accounts/{account_id}/r2-catalog/{bucket_name}/credential`
+- `cloudflare_r2_catalog_bucket_name_credential_status_list` - `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}/credential/status`
+- `cloudflare_r2_catalog_bucket_name_delete_create` - `POST` `/accounts/{account_id}/r2-catalog/{bucket_name}/delete`
+- `cloudflare_r2_catalog_bucket_name_disable` - `POST` `/accounts/{account_id}/r2-catalog/{bucket_name}/disable`
+- `cloudflare_r2_catalog_bucket_name_enable` - `POST` `/accounts/{account_id}/r2-catalog/{bucket_name}/enable`
+- `cloudflare_r2_catalog_bucket_name_maintenance_configs_list` - `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}/maintenance-configs`
+- `cloudflare_r2_catalog_bucket_name_maintenance_configs_create` - `POST` `/accounts/{account_id}/r2-catalog/{bucket_name}/maintenance-configs`
+- `cloudflare_r2_catalog_bucket_name_namespaces_list` - `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces`
+- `cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_list` - `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables`
+- `cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_get` - `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}`
+- `cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_configs_list` - `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-configs`
+- `cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_configs_create` - `POST` `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-configs`
+- `cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_configs_configuration_type_queue_create` - `POST` `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-configs/{configuration_type}/queue`
+- `cloudflare_r2_catalog_bucket_name_namespaces_namespace_tables_table_name_maintenance_runs_list` - `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-runs`
+- `cloudflare_r2_buckets_list` - `GET` `/accounts/{account_id}/r2/buckets`
+- `cloudflare_r2_buckets_create` - `POST` `/accounts/{account_id}/r2/buckets`
+- `cloudflare_r2_buckets_get` - `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}`
+- `cloudflare_r2_buckets_replace` - `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}`
+- `cloudflare_r2_buckets_update` - `PATCH` `/accounts/{account_id}/r2/buckets/{bucket_name}`
+- `cloudflare_r2_buckets_delete` - `DELETE` `/accounts/{account_id}/r2/buckets/{bucket_name}`
+- `cloudflare_r2_buckets_bucket_name_cors_list` - `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/cors`
+- `cloudflare_r2_buckets_bucket_name_cors_put` - `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}/cors`
+- `cloudflare_r2_buckets_bucket_name_cors_delete` - `DELETE` `/accounts/{account_id}/r2/buckets/{bucket_name}/cors`
+- `cloudflare_r2_buckets_bucket_name_domains_custom_list` - `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom`
+- `cloudflare_r2_buckets_bucket_name_domains_custom_create` - `POST` `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom`
+- `cloudflare_r2_buckets_bucket_name_domains_custom_get` - `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom/{domain}`
+- `cloudflare_r2_buckets_bucket_name_domains_custom_replace` - `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom/{domain}`
+- `cloudflare_r2_buckets_bucket_name_domains_custom_delete` - `DELETE` `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom/{domain}`
+- `cloudflare_r2_buckets_bucket_name_domains_managed_list` - `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/managed`
+- `cloudflare_r2_buckets_bucket_name_domains_managed_put` - `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/managed`
+- `cloudflare_r2_buckets_bucket_name_jobs_list` - `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/jobs`
+- `cloudflare_r2_buckets_bucket_name_jobs_create` - `POST` `/accounts/{account_id}/r2/buckets/{bucket_name}/jobs`
+- `cloudflare_r2_buckets_bucket_name_jobs_get` - `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/jobs/{job_id}`
+- `cloudflare_r2_buckets_bucket_name_lifecycle_list` - `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/lifecycle`
+- `cloudflare_r2_buckets_bucket_name_lifecycle_put` - `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}/lifecycle`
+- `cloudflare_r2_buckets_bucket_name_local_uploads_list` - `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/local-uploads`
+- `cloudflare_r2_buckets_bucket_name_local_uploads_put` - `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}/local-uploads`
+- `cloudflare_r2_buckets_bucket_name_lock_list` - `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/lock`
+- `cloudflare_r2_buckets_bucket_name_lock_put` - `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}/lock`
+- `cloudflare_r2_buckets_bucket_name_lock_delete` - `DELETE` `/accounts/{account_id}/r2/buckets/{bucket_name}/lock`
+- `cloudflare_r2_buckets_bucket_name_objects_list` - `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/objects`
+- `cloudflare_r2_buckets_bucket_name_objects_delete_bulk` - `DELETE` `/accounts/{account_id}/r2/buckets/{bucket_name}/objects`
+- `cloudflare_r2_buckets_bucket_name_objects_get` - `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/objects/{object_key}`
+- `cloudflare_r2_buckets_bucket_name_objects_delete` - `DELETE` `/accounts/{account_id}/r2/buckets/{bucket_name}/objects/{object_key}`
+- `cloudflare_r2_buckets_bucket_name_sippy_list` - `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/sippy`
+- `cloudflare_r2_buckets_bucket_name_sippy_put` - `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}/sippy`
+- `cloudflare_r2_buckets_bucket_name_sippy_delete` - `DELETE` `/accounts/{account_id}/r2/buckets/{bucket_name}/sippy`
+- `cloudflare_r2_metrics_list` - `GET` `/accounts/{account_id}/r2/metrics`
+- `cloudflare_r2_temp_access_credentials_create` - `POST` `/accounts/{account_id}/r2/temp-access-credentials`
 
-
-Not shipped (52):
-- `GET` `/accounts/{account_id}/r2-catalog`
-- `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}`
-- `POST` `/accounts/{account_id}/r2-catalog/{bucket_name}/credential`
-- `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}/credential/status`
-- `POST` `/accounts/{account_id}/r2-catalog/{bucket_name}/delete`
-- `POST` `/accounts/{account_id}/r2-catalog/{bucket_name}/disable`
-- `POST` `/accounts/{account_id}/r2-catalog/{bucket_name}/enable`
-- `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}/maintenance-configs`
-- `POST` `/accounts/{account_id}/r2-catalog/{bucket_name}/maintenance-configs`
-- `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces`
-- `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables`
-- `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}`
-- `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-configs`
-- `POST` `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-configs`
-- `POST` `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-configs/{configuration_type}/queue`
-- `GET` `/accounts/{account_id}/r2-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-runs`
-- `GET` `/accounts/{account_id}/r2/buckets`
-- `POST` `/accounts/{account_id}/r2/buckets`
-- `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}`
-- `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}`
-- `PATCH` `/accounts/{account_id}/r2/buckets/{bucket_name}`
-- `DELETE` `/accounts/{account_id}/r2/buckets/{bucket_name}`
-- `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/cors`
-- `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}/cors`
-- `DELETE` `/accounts/{account_id}/r2/buckets/{bucket_name}/cors`
-- `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom`
-- `POST` `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom`
-- `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom/{domain}`
-- `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom/{domain}`
-- `DELETE` `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom/{domain}`
-- `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/managed`
-- `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}/domains/managed`
-- `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/jobs`
-- `POST` `/accounts/{account_id}/r2/buckets/{bucket_name}/jobs`
-- `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/jobs/{job_id}`
-- `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/lifecycle`
-- `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}/lifecycle`
-- `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/local-uploads`
-- `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}/local-uploads`
-- `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/lock`
-- `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}/lock`
-- `DELETE` `/accounts/{account_id}/r2/buckets/{bucket_name}/lock`
-- `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/objects`
-- `DELETE` `/accounts/{account_id}/r2/buckets/{bucket_name}/objects`
-- `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/objects/{object_key}`
+Not shipped (1):
 - `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}/objects/{object_key}`
-- `DELETE` `/accounts/{account_id}/r2/buckets/{bucket_name}/objects/{object_key}`
-- `GET` `/accounts/{account_id}/r2/buckets/{bucket_name}/sippy`
-- `PUT` `/accounts/{account_id}/r2/buckets/{bucket_name}/sippy`
-- `DELETE` `/accounts/{account_id}/r2/buckets/{bucket_name}/sippy`
-- `GET` `/accounts/{account_id}/r2/metrics`
-- `POST` `/accounts/{account_id}/r2/temp-access-credentials`
 
 ### `accounts/realtime` - 0 of 58 reviewable shipped, 3 filtered out
 
@@ -1983,23 +2271,21 @@ Not shipped (20):
 ### `accounts/sso` - 0 of 0 reviewable shipped, 6 filtered out
 
 
-### `accounts/storage` - 0 of 13 reviewable shipped, 1 filtered out
+### `accounts/storage` - 13 of 13 reviewable shipped, 1 filtered out
 
-
-Not shipped (13):
-- `GET` `/accounts/{account_id}/storage/kv/namespaces`
-- `POST` `/accounts/{account_id}/storage/kv/namespaces`
-- `GET` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}`
-- `PUT` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}`
-- `DELETE` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}`
-- `PUT` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/bulk`
-- `POST` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/bulk/delete`
-- `POST` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/bulk/get`
-- `GET` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/keys`
-- `GET` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/metadata/{key_name}`
-- `GET` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/values/{key_name}`
-- `PUT` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/values/{key_name}`
-- `DELETE` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/values/{key_name}`
+- `cloudflare_storage_kv_namespaces_list` - `GET` `/accounts/{account_id}/storage/kv/namespaces`
+- `cloudflare_storage_kv_namespaces_create` - `POST` `/accounts/{account_id}/storage/kv/namespaces`
+- `cloudflare_storage_kv_namespaces_get` - `GET` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}`
+- `cloudflare_storage_kv_namespaces_replace` - `PUT` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}`
+- `cloudflare_storage_kv_namespaces_delete` - `DELETE` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}`
+- `cloudflare_storage_kv_namespaces_namespace_id_bulk_put` - `PUT` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/bulk`
+- `cloudflare_storage_kv_namespaces_namespace_id_bulk_delete_create` - `POST` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/bulk/delete`
+- `cloudflare_storage_kv_namespaces_namespace_id_bulk_get_create` - `POST` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/bulk/get`
+- `cloudflare_storage_kv_namespaces_namespace_id_keys_list` - `GET` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/keys`
+- `cloudflare_storage_kv_namespaces_namespace_id_metadata_get` - `GET` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/metadata/{key_name}`
+- `cloudflare_storage_kv_namespaces_namespace_id_values_get` - `GET` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/values/{key_name}`
+- `cloudflare_storage_kv_namespaces_namespace_id_values_replace` - `PUT` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/values/{key_name}`
+- `cloudflare_storage_kv_namespaces_namespace_id_values_delete` - `DELETE` `/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/values/{key_name}`
 
 ### `accounts/stream` - 0 of 26 reviewable shipped, 23 filtered out
 
@@ -2088,24 +2374,22 @@ Not shipped (1):
 ### `accounts/urlscanner` - 0 of 0 reviewable shipped, 14 filtered out
 
 
-### `accounts/vectorize` - 0 of 14 reviewable shipped, 10 filtered out
+### `accounts/vectorize` - 14 of 14 reviewable shipped, 10 filtered out
 
-
-Not shipped (14):
-- `GET` `/accounts/{account_id}/vectorize/v2/indexes`
-- `POST` `/accounts/{account_id}/vectorize/v2/indexes`
-- `GET` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}`
-- `DELETE` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}`
-- `POST` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/delete_by_ids`
-- `POST` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/get_by_ids`
-- `GET` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/info`
-- `POST` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/insert`
-- `GET` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/list`
-- `POST` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/metadata_index/create`
-- `POST` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/metadata_index/delete`
-- `GET` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/metadata_index/list`
-- `POST` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/query`
-- `POST` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/upsert`
+- `cloudflare_vectorize_v2_indexes_list` - `GET` `/accounts/{account_id}/vectorize/v2/indexes`
+- `cloudflare_vectorize_v2_indexes_create` - `POST` `/accounts/{account_id}/vectorize/v2/indexes`
+- `cloudflare_vectorize_v2_indexes_get` - `GET` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}`
+- `cloudflare_vectorize_v2_indexes_delete` - `DELETE` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}`
+- `cloudflare_vectorize_v2_indexes_index_name_delete_by_ids_create` - `POST` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/delete_by_ids`
+- `cloudflare_vectorize_v2_indexes_index_name_get_by_ids_create` - `POST` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/get_by_ids`
+- `cloudflare_vectorize_v2_indexes_index_name_info_list` - `GET` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/info`
+- `cloudflare_vectorize_v2_indexes_index_name_insert_create` - `POST` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/insert`
+- `cloudflare_vectorize_v2_indexes_index_name_list_list` - `GET` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/list`
+- `cloudflare_vectorize_v2_indexes_index_name_metadata_index_create_create` - `POST` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/metadata_index/create`
+- `cloudflare_vectorize_v2_indexes_index_name_metadata_index_delete_create` - `POST` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/metadata_index/delete`
+- `cloudflare_vectorize_v2_indexes_index_name_metadata_index_list_list` - `GET` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/metadata_index/list`
+- `cloudflare_vectorize_v2_indexes_index_name_query` - `POST` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/query`
+- `cloudflare_vectorize_v2_indexes_index_name_upsert_create` - `POST` `/accounts/{account_id}/vectorize/v2/indexes/{index_name}/upsert`
 
 ### `accounts/vuln` - 0 of 0 reviewable shipped, 22 filtered out
 
@@ -2129,165 +2413,163 @@ Not shipped (11):
 - `PUT` `/accounts/{account_id}/warp_connector/{tunnel_id}/failover`
 - `GET` `/accounts/{account_id}/warp_connector/{tunnel_id}/token`
 
-### `accounts/workers` - 0 of 129 reviewable shipped, 10 filtered out
+### `accounts/workers` - 121 of 129 reviewable shipped, 10 filtered out
 
+- `cloudflare_workers_account_settings_list` - `GET` `/accounts/{account_id}/workers/account-settings`
+- `cloudflare_workers_account_settings_put` - `PUT` `/accounts/{account_id}/workers/account-settings`
+- `cloudflare_workers_dispatch_namespaces_list` - `GET` `/accounts/{account_id}/workers/dispatch/namespaces`
+- `cloudflare_workers_dispatch_namespaces_create` - `POST` `/accounts/{account_id}/workers/dispatch/namespaces`
+- `cloudflare_workers_dispatch_namespaces_get` - `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}`
+- `cloudflare_workers_dispatch_namespaces_replace` - `PUT` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}`
+- `cloudflare_workers_dispatch_namespaces_update` - `PATCH` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}`
+- `cloudflare_workers_dispatch_namespaces_delete` - `DELETE` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_list` - `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_delete_all` - `DELETE` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_get` - `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_delete` - `DELETE` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_assets_upload_session_create` - `POST` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/assets-upload-session`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_bindings_list` - `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/bindings`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_content_list` - `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/content`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_secrets_list` - `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_secrets_put` - `PUT` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_secrets_bulk_patch` - `PATCH` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets-bulk`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_secrets_get` - `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets/{secret_name}`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_secrets_delete` - `DELETE` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets/{secret_name}`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_settings_list` - `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/settings`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_tags_list` - `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_tags_put` - `PUT` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_tags_replace` - `PUT` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags/{tag}`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_tags_update` - `PATCH` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags/{tag}`
+- `cloudflare_workers_dispatch_namespaces_dispatch_namespace_scripts_script_name_tags_delete` - `DELETE` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags/{tag}`
+- `cloudflare_workers_domains_list` - `GET` `/accounts/{account_id}/workers/domains`
+- `cloudflare_workers_domains_put` - `PUT` `/accounts/{account_id}/workers/domains`
+- `cloudflare_workers_domains_get` - `GET` `/accounts/{account_id}/workers/domains/{domain_id}`
+- `cloudflare_workers_domains_delete` - `DELETE` `/accounts/{account_id}/workers/domains/{domain_id}`
+- `cloudflare_workers_durable_objects_namespaces_list` - `GET` `/accounts/{account_id}/workers/durable_objects/namespaces`
+- `cloudflare_workers_durable_objects_namespaces_id_objects_list` - `GET` `/accounts/{account_id}/workers/durable_objects/namespaces/{id}/objects`
+- `cloudflare_workers_durable_objects_namespaces_id_query_v2_create` - `POST` `/accounts/{account_id}/workers/durable_objects/namespaces/{id}/query/v2`
+- `cloudflare_workers_observability_agents_sessions_list` - `GET` `/accounts/{account_id}/workers/observability/agents/sessions`
+- `cloudflare_workers_observability_agents_sessions_conversation_id_runs_list` - `GET` `/accounts/{account_id}/workers/observability/agents/sessions/{conversationId}/runs`
+- `cloudflare_workers_observability_destinations_list` - `GET` `/accounts/{account_id}/workers/observability/destinations`
+- `cloudflare_workers_observability_destinations_create` - `POST` `/accounts/{account_id}/workers/observability/destinations`
+- `cloudflare_workers_observability_destinations_update` - `PATCH` `/accounts/{account_id}/workers/observability/destinations/{slug}`
+- `cloudflare_workers_observability_destinations_delete` - `DELETE` `/accounts/{account_id}/workers/observability/destinations/{slug}`
+- `cloudflare_workers_observability_issues_list` - `GET` `/accounts/{account_id}/workers/observability/issues`
+- `cloudflare_workers_observability_issues_automations_list` - `GET` `/accounts/{account_id}/workers/observability/issues/automations`
+- `cloudflare_workers_observability_issues_automations_create` - `POST` `/accounts/{account_id}/workers/observability/issues/automations`
+- `cloudflare_workers_observability_issues_automations_get` - `GET` `/accounts/{account_id}/workers/observability/issues/automations/{automationId}`
+- `cloudflare_workers_observability_issues_automations_replace` - `PUT` `/accounts/{account_id}/workers/observability/issues/automations/{automationId}`
+- `cloudflare_workers_observability_issues_automations_delete` - `DELETE` `/accounts/{account_id}/workers/observability/issues/automations/{automationId}`
+- `cloudflare_workers_observability_issues_groups_create` - `POST` `/accounts/{account_id}/workers/observability/issues/groups`
+- `cloudflare_workers_observability_issues_groups_delete` - `DELETE` `/accounts/{account_id}/workers/observability/issues/groups/{groupId}`
+- `cloudflare_workers_observability_issues_groups_group_id_members_create` - `POST` `/accounts/{account_id}/workers/observability/issues/groups/{groupId}/members`
+- `cloudflare_workers_observability_issues_groups_group_id_members_delete` - `DELETE` `/accounts/{account_id}/workers/observability/issues/groups/{groupId}/members/{issueId}`
+- `cloudflare_workers_observability_issues_summary_list` - `GET` `/accounts/{account_id}/workers/observability/issues/summary`
+- `cloudflare_workers_observability_issues_get` - `GET` `/accounts/{account_id}/workers/observability/issues/{issueId}`
+- `cloudflare_workers_observability_issues_update` - `PATCH` `/accounts/{account_id}/workers/observability/issues/{issueId}`
+- `cloudflare_workers_observability_issues_issue_id_notification_runs_create` - `POST` `/accounts/{account_id}/workers/observability/issues/{issueId}/notification-runs`
+- `cloudflare_workers_observability_issues_issue_id_occurrences_list` - `GET` `/accounts/{account_id}/workers/observability/issues/{issueId}/occurrences`
+- `cloudflare_workers_observability_queries_list` - `GET` `/accounts/{account_id}/workers/observability/queries`
+- `cloudflare_workers_observability_queries_create` - `POST` `/accounts/{account_id}/workers/observability/queries`
+- `cloudflare_workers_observability_queries_get` - `GET` `/accounts/{account_id}/workers/observability/queries/{queryId}`
+- `cloudflare_workers_observability_queries_update` - `PATCH` `/accounts/{account_id}/workers/observability/queries/{queryId}`
+- `cloudflare_workers_observability_queries_delete` - `DELETE` `/accounts/{account_id}/workers/observability/queries/{queryId}`
+- `cloudflare_workers_observability_shared_query` - `POST` `/accounts/{account_id}/workers/observability/shared/query`
+- `cloudflare_workers_observability_shared_query_get` - `GET` `/accounts/{account_id}/workers/observability/shared/query/{id}`
+- `cloudflare_workers_observability_telemetry_keys_create` - `POST` `/accounts/{account_id}/workers/observability/telemetry/keys`
+- `cloudflare_workers_observability_telemetry_query` - `POST` `/accounts/{account_id}/workers/observability/telemetry/query`
+- `cloudflare_workers_observability_telemetry_values_create` - `POST` `/accounts/{account_id}/workers/observability/telemetry/values`
+- `cloudflare_workers_placement_regions_list` - `GET` `/accounts/{account_id}/workers/placement/regions`
+- `cloudflare_workers_scripts_list` - `GET` `/accounts/{account_id}/workers/scripts`
+- `cloudflare_workers_scripts_search_list` - `GET` `/accounts/{account_id}/workers/scripts-search`
+- `cloudflare_workers_scripts_get` - `GET` `/accounts/{account_id}/workers/scripts/{script_name}`
+- `cloudflare_workers_scripts_delete` - `DELETE` `/accounts/{account_id}/workers/scripts/{script_name}`
+- `cloudflare_workers_scripts_script_name_assets_upload_session_create` - `POST` `/accounts/{account_id}/workers/scripts/{script_name}/assets-upload-session`
+- `cloudflare_workers_scripts_script_name_content_v2_list` - `GET` `/accounts/{account_id}/workers/scripts/{script_name}/content/v2`
+- `cloudflare_workers_scripts_script_name_deployments_list` - `GET` `/accounts/{account_id}/workers/scripts/{script_name}/deployments`
+- `cloudflare_workers_scripts_script_name_deployments_create` - `POST` `/accounts/{account_id}/workers/scripts/{script_name}/deployments`
+- `cloudflare_workers_scripts_script_name_deployments_get` - `GET` `/accounts/{account_id}/workers/scripts/{script_name}/deployments/{deployment_id}`
+- `cloudflare_workers_scripts_script_name_deployments_delete` - `DELETE` `/accounts/{account_id}/workers/scripts/{script_name}/deployments/{deployment_id}`
+- `cloudflare_workers_scripts_script_name_schedules_list` - `GET` `/accounts/{account_id}/workers/scripts/{script_name}/schedules`
+- `cloudflare_workers_scripts_script_name_schedules_put` - `PUT` `/accounts/{account_id}/workers/scripts/{script_name}/schedules`
+- `cloudflare_workers_scripts_script_name_script_settings_list` - `GET` `/accounts/{account_id}/workers/scripts/{script_name}/script-settings`
+- `cloudflare_workers_scripts_script_name_script_settings_patch` - `PATCH` `/accounts/{account_id}/workers/scripts/{script_name}/script-settings`
+- `cloudflare_workers_scripts_script_name_secrets_list` - `GET` `/accounts/{account_id}/workers/scripts/{script_name}/secrets`
+- `cloudflare_workers_scripts_script_name_secrets_put` - `PUT` `/accounts/{account_id}/workers/scripts/{script_name}/secrets`
+- `cloudflare_workers_scripts_script_name_secrets_bulk_patch` - `PATCH` `/accounts/{account_id}/workers/scripts/{script_name}/secrets-bulk`
+- `cloudflare_workers_scripts_script_name_secrets_get` - `GET` `/accounts/{account_id}/workers/scripts/{script_name}/secrets/{secret_name}`
+- `cloudflare_workers_scripts_script_name_secrets_delete` - `DELETE` `/accounts/{account_id}/workers/scripts/{script_name}/secrets/{secret_name}`
+- `cloudflare_workers_scripts_script_name_settings_list` - `GET` `/accounts/{account_id}/workers/scripts/{script_name}/settings`
+- `cloudflare_workers_scripts_script_name_subdomain_list` - `GET` `/accounts/{account_id}/workers/scripts/{script_name}/subdomain`
+- `cloudflare_workers_scripts_script_name_subdomain_create` - `POST` `/accounts/{account_id}/workers/scripts/{script_name}/subdomain`
+- `cloudflare_workers_scripts_script_name_subdomain_delete` - `DELETE` `/accounts/{account_id}/workers/scripts/{script_name}/subdomain`
+- `cloudflare_workers_scripts_script_name_tails_list` - `GET` `/accounts/{account_id}/workers/scripts/{script_name}/tails`
+- `cloudflare_workers_scripts_script_name_tails_create` - `POST` `/accounts/{account_id}/workers/scripts/{script_name}/tails`
+- `cloudflare_workers_scripts_script_name_tails_delete` - `DELETE` `/accounts/{account_id}/workers/scripts/{script_name}/tails/{id}`
+- `cloudflare_workers_scripts_script_name_usage_model_list` - `GET` `/accounts/{account_id}/workers/scripts/{script_name}/usage-model`
+- `cloudflare_workers_scripts_script_name_usage_model_put` - `PUT` `/accounts/{account_id}/workers/scripts/{script_name}/usage-model`
+- `cloudflare_workers_scripts_script_name_versions_list` - `GET` `/accounts/{account_id}/workers/scripts/{script_name}/versions`
+- `cloudflare_workers_scripts_script_name_versions_get` - `GET` `/accounts/{account_id}/workers/scripts/{script_name}/versions/{version_id}`
+- `cloudflare_workers_subdomain_list` - `GET` `/accounts/{account_id}/workers/subdomain`
+- `cloudflare_workers_subdomain_put` - `PUT` `/accounts/{account_id}/workers/subdomain`
+- `cloudflare_workers_subdomain_delete` - `DELETE` `/accounts/{account_id}/workers/subdomain`
+- `cloudflare_workers_workers_list` - `GET` `/accounts/{account_id}/workers/workers`
+- `cloudflare_workers_workers_create` - `POST` `/accounts/{account_id}/workers/workers`
+- `cloudflare_workers_workers_get` - `GET` `/accounts/{account_id}/workers/workers/{worker_id}`
+- `cloudflare_workers_workers_replace` - `PUT` `/accounts/{account_id}/workers/workers/{worker_id}`
+- `cloudflare_workers_workers_update` - `PATCH` `/accounts/{account_id}/workers/workers/{worker_id}`
+- `cloudflare_workers_workers_delete` - `DELETE` `/accounts/{account_id}/workers/workers/{worker_id}`
+- `cloudflare_workers_workers_worker_id_previews_list` - `GET` `/accounts/{account_id}/workers/workers/{worker_id}/previews`
+- `cloudflare_workers_workers_worker_id_previews_create` - `POST` `/accounts/{account_id}/workers/workers/{worker_id}/previews`
+- `cloudflare_workers_workers_worker_id_previews_get` - `GET` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}`
+- `cloudflare_workers_workers_worker_id_previews_replace` - `PUT` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}`
+- `cloudflare_workers_workers_worker_id_previews_update` - `PATCH` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}`
+- `cloudflare_workers_workers_worker_id_previews_delete` - `DELETE` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}`
+- `cloudflare_workers_workers_worker_id_previews_preview_id_deployments_list` - `GET` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments`
+- `cloudflare_workers_workers_worker_id_previews_preview_id_deployments_create` - `POST` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments`
+- `cloudflare_workers_workers_worker_id_previews_preview_id_deployments_latest_patch` - `PATCH` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments/latest`
+- `cloudflare_workers_workers_worker_id_previews_preview_id_deployments_get` - `GET` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments/{deployment_id}`
+- `cloudflare_workers_workers_worker_id_previews_preview_id_deployments_delete` - `DELETE` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments/{deployment_id}`
+- `cloudflare_workers_workers_worker_id_versions_list` - `GET` `/accounts/{account_id}/workers/workers/{worker_id}/versions`
+- `cloudflare_workers_workers_worker_id_versions_create` - `POST` `/accounts/{account_id}/workers/workers/{worker_id}/versions`
+- `cloudflare_workers_workers_worker_id_versions_latest_patch` - `PATCH` `/accounts/{account_id}/workers/workers/{worker_id}/versions/latest`
+- `cloudflare_workers_workers_worker_id_versions_get` - `GET` `/accounts/{account_id}/workers/workers/{worker_id}/versions/{version_id}`
+- `cloudflare_workers_workers_worker_id_versions_delete` - `DELETE` `/accounts/{account_id}/workers/workers/{worker_id}/versions/{version_id}`
+- `cloudflare_workers_workers_worker_id_versions_version_id_profile_create` - `POST` `/accounts/{account_id}/workers/workers/{worker_id}/versions/{version_id}/profile`
 
-Not shipped (129):
-- `GET` `/accounts/{account_id}/workers/account-settings`
-- `PUT` `/accounts/{account_id}/workers/account-settings`
+Not shipped (8):
 - `POST` `/accounts/{account_id}/workers/assets/upload`
-- `GET` `/accounts/{account_id}/workers/dispatch/namespaces`
-- `POST` `/accounts/{account_id}/workers/dispatch/namespaces`
-- `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}`
-- `PUT` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}`
-- `PATCH` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}`
-- `DELETE` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}`
-- `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts`
-- `DELETE` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts`
-- `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}`
 - `PUT` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}`
-- `DELETE` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}`
-- `POST` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/assets-upload-session`
-- `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/bindings`
-- `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/content`
 - `PUT` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/content`
-- `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets`
-- `PUT` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets`
-- `PATCH` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets-bulk`
-- `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets/{secret_name}`
-- `DELETE` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets/{secret_name}`
-- `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/settings`
 - `PATCH` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/settings`
-- `GET` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags`
-- `PUT` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags`
-- `PUT` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags/{tag}`
-- `PATCH` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags/{tag}`
-- `DELETE` `/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/tags/{tag}`
-- `GET` `/accounts/{account_id}/workers/domains`
-- `PUT` `/accounts/{account_id}/workers/domains`
-- `GET` `/accounts/{account_id}/workers/domains/{domain_id}`
-- `DELETE` `/accounts/{account_id}/workers/domains/{domain_id}`
-- `GET` `/accounts/{account_id}/workers/durable_objects/namespaces`
-- `GET` `/accounts/{account_id}/workers/durable_objects/namespaces/{id}/objects`
-- `POST` `/accounts/{account_id}/workers/durable_objects/namespaces/{id}/query/v2`
-- `GET` `/accounts/{account_id}/workers/observability/agents/sessions`
-- `GET` `/accounts/{account_id}/workers/observability/agents/sessions/{conversationId}/runs`
-- `GET` `/accounts/{account_id}/workers/observability/destinations`
-- `POST` `/accounts/{account_id}/workers/observability/destinations`
-- `PATCH` `/accounts/{account_id}/workers/observability/destinations/{slug}`
-- `DELETE` `/accounts/{account_id}/workers/observability/destinations/{slug}`
-- `GET` `/accounts/{account_id}/workers/observability/issues`
-- `GET` `/accounts/{account_id}/workers/observability/issues/automations`
-- `POST` `/accounts/{account_id}/workers/observability/issues/automations`
-- `GET` `/accounts/{account_id}/workers/observability/issues/automations/{automationId}`
-- `PUT` `/accounts/{account_id}/workers/observability/issues/automations/{automationId}`
-- `DELETE` `/accounts/{account_id}/workers/observability/issues/automations/{automationId}`
-- `POST` `/accounts/{account_id}/workers/observability/issues/groups`
-- `DELETE` `/accounts/{account_id}/workers/observability/issues/groups/{groupId}`
-- `POST` `/accounts/{account_id}/workers/observability/issues/groups/{groupId}/members`
-- `DELETE` `/accounts/{account_id}/workers/observability/issues/groups/{groupId}/members/{issueId}`
-- `GET` `/accounts/{account_id}/workers/observability/issues/summary`
-- `GET` `/accounts/{account_id}/workers/observability/issues/{issueId}`
-- `PATCH` `/accounts/{account_id}/workers/observability/issues/{issueId}`
-- `POST` `/accounts/{account_id}/workers/observability/issues/{issueId}/notification-runs`
-- `GET` `/accounts/{account_id}/workers/observability/issues/{issueId}/occurrences`
-- `GET` `/accounts/{account_id}/workers/observability/queries`
-- `POST` `/accounts/{account_id}/workers/observability/queries`
-- `GET` `/accounts/{account_id}/workers/observability/queries/{queryId}`
-- `PATCH` `/accounts/{account_id}/workers/observability/queries/{queryId}`
-- `DELETE` `/accounts/{account_id}/workers/observability/queries/{queryId}`
-- `POST` `/accounts/{account_id}/workers/observability/shared/query`
-- `GET` `/accounts/{account_id}/workers/observability/shared/query/{id}`
-- `POST` `/accounts/{account_id}/workers/observability/telemetry/keys`
-- `POST` `/accounts/{account_id}/workers/observability/telemetry/query`
-- `POST` `/accounts/{account_id}/workers/observability/telemetry/values`
-- `GET` `/accounts/{account_id}/workers/placement/regions`
-- `GET` `/accounts/{account_id}/workers/scripts`
-- `GET` `/accounts/{account_id}/workers/scripts-search`
-- `GET` `/accounts/{account_id}/workers/scripts/{script_name}`
 - `PUT` `/accounts/{account_id}/workers/scripts/{script_name}`
-- `DELETE` `/accounts/{account_id}/workers/scripts/{script_name}`
-- `POST` `/accounts/{account_id}/workers/scripts/{script_name}/assets-upload-session`
 - `PUT` `/accounts/{account_id}/workers/scripts/{script_name}/content`
-- `GET` `/accounts/{account_id}/workers/scripts/{script_name}/content/v2`
-- `GET` `/accounts/{account_id}/workers/scripts/{script_name}/deployments`
-- `POST` `/accounts/{account_id}/workers/scripts/{script_name}/deployments`
-- `GET` `/accounts/{account_id}/workers/scripts/{script_name}/deployments/{deployment_id}`
-- `DELETE` `/accounts/{account_id}/workers/scripts/{script_name}/deployments/{deployment_id}`
-- `GET` `/accounts/{account_id}/workers/scripts/{script_name}/schedules`
-- `PUT` `/accounts/{account_id}/workers/scripts/{script_name}/schedules`
-- `GET` `/accounts/{account_id}/workers/scripts/{script_name}/script-settings`
-- `PATCH` `/accounts/{account_id}/workers/scripts/{script_name}/script-settings`
-- `GET` `/accounts/{account_id}/workers/scripts/{script_name}/secrets`
-- `PUT` `/accounts/{account_id}/workers/scripts/{script_name}/secrets`
-- `PATCH` `/accounts/{account_id}/workers/scripts/{script_name}/secrets-bulk`
-- `GET` `/accounts/{account_id}/workers/scripts/{script_name}/secrets/{secret_name}`
-- `DELETE` `/accounts/{account_id}/workers/scripts/{script_name}/secrets/{secret_name}`
-- `GET` `/accounts/{account_id}/workers/scripts/{script_name}/settings`
 - `PATCH` `/accounts/{account_id}/workers/scripts/{script_name}/settings`
-- `GET` `/accounts/{account_id}/workers/scripts/{script_name}/subdomain`
-- `POST` `/accounts/{account_id}/workers/scripts/{script_name}/subdomain`
-- `DELETE` `/accounts/{account_id}/workers/scripts/{script_name}/subdomain`
-- `GET` `/accounts/{account_id}/workers/scripts/{script_name}/tails`
-- `POST` `/accounts/{account_id}/workers/scripts/{script_name}/tails`
-- `DELETE` `/accounts/{account_id}/workers/scripts/{script_name}/tails/{id}`
-- `GET` `/accounts/{account_id}/workers/scripts/{script_name}/usage-model`
-- `PUT` `/accounts/{account_id}/workers/scripts/{script_name}/usage-model`
-- `GET` `/accounts/{account_id}/workers/scripts/{script_name}/versions`
 - `POST` `/accounts/{account_id}/workers/scripts/{script_name}/versions`
-- `GET` `/accounts/{account_id}/workers/scripts/{script_name}/versions/{version_id}`
-- `GET` `/accounts/{account_id}/workers/subdomain`
-- `PUT` `/accounts/{account_id}/workers/subdomain`
-- `DELETE` `/accounts/{account_id}/workers/subdomain`
-- `GET` `/accounts/{account_id}/workers/workers`
-- `POST` `/accounts/{account_id}/workers/workers`
-- `GET` `/accounts/{account_id}/workers/workers/{worker_id}`
-- `PUT` `/accounts/{account_id}/workers/workers/{worker_id}`
-- `PATCH` `/accounts/{account_id}/workers/workers/{worker_id}`
-- `DELETE` `/accounts/{account_id}/workers/workers/{worker_id}`
-- `GET` `/accounts/{account_id}/workers/workers/{worker_id}/previews`
-- `POST` `/accounts/{account_id}/workers/workers/{worker_id}/previews`
-- `GET` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}`
-- `PUT` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}`
-- `PATCH` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}`
-- `DELETE` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}`
-- `GET` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments`
-- `POST` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments`
-- `PATCH` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments/latest`
-- `GET` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments/{deployment_id}`
-- `DELETE` `/accounts/{account_id}/workers/workers/{worker_id}/previews/{preview_id}/deployments/{deployment_id}`
-- `GET` `/accounts/{account_id}/workers/workers/{worker_id}/versions`
-- `POST` `/accounts/{account_id}/workers/workers/{worker_id}/versions`
-- `PATCH` `/accounts/{account_id}/workers/workers/{worker_id}/versions/latest`
-- `GET` `/accounts/{account_id}/workers/workers/{worker_id}/versions/{version_id}`
-- `DELETE` `/accounts/{account_id}/workers/workers/{worker_id}/versions/{version_id}`
-- `POST` `/accounts/{account_id}/workers/workers/{worker_id}/versions/{version_id}/profile`
 
-### `accounts/workflows` - 0 of 21 reviewable shipped, 6 filtered out
+### `accounts/workflows` - 21 of 21 reviewable shipped, 6 filtered out
 
-
-Not shipped (21):
-- `GET` `/accounts/{account_id}/workflows`
-- `GET` `/accounts/{account_id}/workflows/concurrency`
-- `POST` `/accounts/{account_id}/workflows/concurrency`
-- `GET` `/accounts/{account_id}/workflows/concurrency/{key_id}`
-- `PATCH` `/accounts/{account_id}/workflows/concurrency/{key_id}`
-- `DELETE` `/accounts/{account_id}/workflows/concurrency/{key_id}`
-- `GET` `/accounts/{account_id}/workflows/settings`
-- `PATCH` `/accounts/{account_id}/workflows/settings`
-- `GET` `/accounts/{account_id}/workflows/{workflow_name}`
-- `DELETE` `/accounts/{account_id}/workflows/{workflow_name}`
-- `GET` `/accounts/{account_id}/workflows/{workflow_name}/instances`
-- `POST` `/accounts/{account_id}/workflows/{workflow_name}/instances`
-- `POST` `/accounts/{account_id}/workflows/{workflow_name}/instances/batch`
-- `GET` `/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}`
-- `DELETE` `/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}`
-- `POST` `/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}/events/{event_type}`
-- `PATCH` `/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}/status`
-- `GET` `/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}/step`
-- `GET` `/accounts/{account_id}/workflows/{workflow_name}/versions`
-- `GET` `/accounts/{account_id}/workflows/{workflow_name}/versions/{version_id}`
-- `GET` `/accounts/{account_id}/workflows/{workflow_name}/versions/{version_id}/graph`
+- `cloudflare_workflows_list` - `GET` `/accounts/{account_id}/workflows`
+- `cloudflare_workflows_concurrency_list` - `GET` `/accounts/{account_id}/workflows/concurrency`
+- `cloudflare_workflows_concurrency_create` - `POST` `/accounts/{account_id}/workflows/concurrency`
+- `cloudflare_workflows_concurrency_get` - `GET` `/accounts/{account_id}/workflows/concurrency/{key_id}`
+- `cloudflare_workflows_concurrency_update` - `PATCH` `/accounts/{account_id}/workflows/concurrency/{key_id}`
+- `cloudflare_workflows_concurrency_delete` - `DELETE` `/accounts/{account_id}/workflows/concurrency/{key_id}`
+- `cloudflare_workflows_settings_list` - `GET` `/accounts/{account_id}/workflows/settings`
+- `cloudflare_workflows_settings_patch` - `PATCH` `/accounts/{account_id}/workflows/settings`
+- `cloudflare_workflows_get` - `GET` `/accounts/{account_id}/workflows/{workflow_name}`
+- `cloudflare_workflows_delete` - `DELETE` `/accounts/{account_id}/workflows/{workflow_name}`
+- `cloudflare_workflows_workflow_name_instances_list` - `GET` `/accounts/{account_id}/workflows/{workflow_name}/instances`
+- `cloudflare_workflows_workflow_name_instances_create` - `POST` `/accounts/{account_id}/workflows/{workflow_name}/instances`
+- `cloudflare_workflows_workflow_name_instances_batch` - `POST` `/accounts/{account_id}/workflows/{workflow_name}/instances/batch`
+- `cloudflare_workflows_workflow_name_instances_get` - `GET` `/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}`
+- `cloudflare_workflows_workflow_name_instances_delete` - `DELETE` `/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}`
+- `cloudflare_workflows_workflow_name_instances_instance_id_events_create` - `POST` `/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}/events/{event_type}`
+- `cloudflare_workflows_workflow_name_instances_instance_id_status_patch` - `PATCH` `/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}/status`
+- `cloudflare_workflows_workflow_name_instances_instance_id_step_list` - `GET` `/accounts/{account_id}/workflows/{workflow_name}/instances/{instance_id}/step`
+- `cloudflare_workflows_workflow_name_versions_list` - `GET` `/accounts/{account_id}/workflows/{workflow_name}/versions`
+- `cloudflare_workflows_workflow_name_versions_get` - `GET` `/accounts/{account_id}/workflows/{workflow_name}/versions/{version_id}`
+- `cloudflare_workflows_workflow_name_versions_version_id_graph_list` - `GET` `/accounts/{account_id}/workflows/{workflow_name}/versions/{version_id}/graph`
 
 ### `accounts/zerotrust` - 0 of 16 reviewable shipped
 

@@ -1,0 +1,12 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/vectorize/v2/indexes/sample_index_name/metadata_index/create",
+  "body": {
+    "indexType": "string",
+    "propertyName": "sample_property_name"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

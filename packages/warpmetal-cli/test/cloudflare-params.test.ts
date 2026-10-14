@@ -44,6 +44,7 @@ interface Operation {
   readonly filtered: boolean;
   readonly keepFiltered: boolean;
   readonly rawBody: boolean;
+  readonly dropBodyFields?: readonly string[];
   readonly bodyKind: string;
   readonly bodyContentType: string | null;
   readonly pathParams: readonly Parameter[];
@@ -278,6 +279,26 @@ describe("cloudflare request shapes match the published API", () => {
         );
         return;
       }
+      if (operation.bodyKind === "free-form") {
+        // The spec publishes no fields for this one, so the builder forwards
+        // whatever else the caller sent - minus the path and query arguments,
+        // which belong in the URL and must not leak into the payload.
+        assert.equal(
+          typeof request.body,
+          "object",
+          `${def.toolSlug}: a free-form body must be an object`,
+        );
+        const forwarded = new Set(Object.keys((request.body ?? {}) as Record<string, unknown>));
+        const leaked = [...operation.pathParams, ...operation.queryParams]
+          .map((parameter) => parameter.arg)
+          .filter((arg) => forwarded.has(arg));
+        assert.deepEqual(
+          leaked,
+          [],
+          `${def.toolSlug}: a declared argument leaked into the free-form body`,
+        );
+        return;
+      }
       if (operation.bodyKind !== "object") {
         assert.equal(request.body, undefined, `${def.toolSlug}: an unexpected body was sent`);
         return;
@@ -287,8 +308,17 @@ describe("cloudflare request shapes match the published API", () => {
         (key) => !operation.bodyFields.some((field) => field.name === key),
       );
       assert.deepEqual(invented, [], `${def.toolSlug}: body fields the spec does not declare`);
+      // A reviewed drop is the one declared field that must not travel: it is
+      // the operation's own identifier, which the path already carries.
+      const dropped = new Set(operation.dropBodyFields ?? []);
+      assert.deepEqual(
+        [...body].filter((key) => dropped.has(key)),
+        [],
+        `${def.toolSlug}: a dropped body field reached the request`,
+      );
       const missing = operation.bodyFields
         .map((field) => field.name)
+        .filter((name) => !dropped.has(name))
         .filter((name) => !body.has(name));
       assert.deepEqual(
         missing,

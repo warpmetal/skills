@@ -24,7 +24,7 @@ function readFixture(slug: string): McpToolRequest {
 }
 
 describe("mcp provider request contracts", () => {
-  it("has a fixture for every one of the 174 tools", () => {
+  it("has a fixture for every one of the 452 tools", () => {
     for (const def of MCP_TOOL_DEFS) {
       assert.ok(
         existsSync(join(fixtures, `${def.toolSlug}.json`)),

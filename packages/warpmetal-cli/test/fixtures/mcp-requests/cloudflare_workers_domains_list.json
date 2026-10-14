@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/domains?zone_id=sample_zone_id&zone_name=sample_zone_name&service=sample_service&hostname=sample_hostname&environment=sample_environment&previews_enabled=true&enabled=true",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

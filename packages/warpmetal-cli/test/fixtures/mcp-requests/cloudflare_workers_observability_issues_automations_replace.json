@@ -1,0 +1,16 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/observability/issues/automations/sample_automation_id",
+  "body": {
+    "afterInactivitySeconds": 1,
+    "afterOccurrences": 1,
+    "enabled": true,
+    "name": "sample_name",
+    "policyId": "sample_policy_id",
+    "service": "sample_service"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

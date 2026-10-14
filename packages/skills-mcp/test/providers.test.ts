@@ -28,10 +28,10 @@ import { makeRegistryFixture } from "./helpers.js";
 
 const CONTENT_TOOLS = ["skill_list", "skill_read", "skill_search"] as const;
 
-test("catalog aggregates one hundred and seventy-four tools across all providers with input schemas", () => {
+test("catalog aggregates four hundred and fifty-two tools across all providers with input schemas", () => {
   const tools = loadProviderCatalog();
-  assert.equal(tools.length, 174);
-  assert.equal(PROVIDER_TOOL_COUNT, 174);
+  assert.equal(tools.length, 452);
+  assert.equal(PROVIDER_TOOL_COUNT, 452);
 
   const slugs = providerToolSlugs();
   const expected = [
@@ -224,7 +224,7 @@ test("catalog aggregates one hundred and seventy-four tools across all providers
     assert.ok(tool.description.length > 10);
   }
 
-  assert.equal(PROVIDER_TOOL_MAPPINGS.length, 174);
+  assert.equal(PROVIDER_TOOL_MAPPINGS.length, 452);
   for (const slug of slugs) {
     assert.ok(
       PROVIDER_TOOL_MAPPINGS.some((entry) => entry.toolSlug === slug),

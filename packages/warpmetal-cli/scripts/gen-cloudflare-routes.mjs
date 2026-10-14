@@ -120,14 +120,18 @@ function buildRoute(entry) {
 
   if (body.freeForm) {
     // The declared arguments are removed from the copy that becomes the body,
-    // so a path or query argument cannot be sent as a field by accident.
+    // so a path or query argument cannot be sent as a field by accident. The
+    // spread is over `args` itself: `arg("")` would emit `args.args`, which is
+    // not an object at all and only a free-form tool would have found out.
     const declared = [
       ...op.pathParams.map((parameter) => parameter.snake),
       ...op.queryParams.map((parameter) => parameter.snake),
     ];
-    const removals = declared.map((name) => `delete body.${name};`).join(" ");
+    const removals = declared
+      .map((name) => `delete body.${name};`)
+      .join(" ");
     return (
-      `({args}) => { const body = { ...${arg("")}args }; ${removals} ` +
+      `({args}) => { const body = { ...args }; ${removals} ` +
       `return { method: ${JSON.stringify(op.method)}, url: ${url}, body${headers} }; }`
     );
   }
@@ -204,10 +208,13 @@ function bodySource(entry) {
   const op = entry.op;
   if (!op.body) return { inline: null, freeForm: false, raw: null };
   if (op.body.kind === "object") {
-    const fields = op.body.fields.map(
-      (field) =>
-        `${JSON.stringify(field.name)}: ${field.required ? arg(field.snake) : `${arg(field.snake)} ?? undefined`}`,
-    );
+    const dropped = new Set(entry.dropBodyFields ?? []);
+    const fields = op.body.fields
+      .filter((field) => !dropped.has(field.name))
+      .map(
+        (field) =>
+          `${JSON.stringify(field.name)}: ${field.required ? arg(field.snake) : `${arg(field.snake)} ?? undefined`}`,
+      );
     return { inline: `{ ${fields.join(", ")} }`, freeForm: false, raw: null };
   }
   if (op.body.kind === "free-form") return { inline: "body", freeForm: true, raw: null };
