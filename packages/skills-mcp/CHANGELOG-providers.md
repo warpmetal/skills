@@ -347,11 +347,24 @@ it and their output is what gets reviewed:
   and the permission in every description, annotations that follow the method,
   a gate on every write, and the reviewed destructive set.
 - `cloudflare_zones_delete`, `cloudflare_dns_records_delete`,
-  `cloudflare_dns_records_batch`, `cloudflare_dns_records_import`,
-  `cloudflare_dnssec_delete` and `cloudflare_purge_cache` are
+  `cloudflare_dns_records_batch`, `cloudflare_dnssec_delete` and
+  `cloudflare_purge_cache` are
   `destructiveHint: true`. The zone's firewall deletes are not: they take
   protection away rather than break what is running, and every write already
   travels behind `CONFIRM CLOUDFLARE ...`.
+
+### Withdrawn: `cloudflare_dns_records_import`
+
+`POST /zones/{zone_id}/dns_records/import` declares a `multipart/form-data` body -
+a BIND zone file upload - and every generated builder speaks JSON, so the tool
+sent `{"file": …, "proxied": …}` under `application/json` to an endpoint that
+reads a form. It could never have worked.
+
+The allowlist now refuses a declared body whose content type the JSON builder
+cannot send, which is what found it, and the slug is retired rather than left in
+`tools/list` as something that always fails. A multipart or binary upload is not
+reachable through a JSON-argument surface, so an operation like this one stays
+out until the pipeline learns to carry it deliberately; nothing else changes.
 
 Four more waves are planned in the allowlist (`w2` storage and compute, `w3` Zero
 Trust, `w4` observability, `w5` Radar). Each is an additive change to the same

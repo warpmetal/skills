@@ -36,7 +36,8 @@
     }
   },
   "retired": [
-    "cloudflare_accounts_list_accounts"
+    "cloudflare_accounts_list_accounts",
+    "cloudflare_dns_records_import"
   ],
   "renamed": {
     "cloudflare_zones_get": "cloudflare_zones_list",
@@ -45,7 +46,7 @@
   "reused": {
     "cloudflare_zones_get": "This slug survives a change of meaning: it listed zones (GET /zones) and now reads one zone by id (GET /zones/{zone_id}). A caller that sends {} gets a loud invalid-arguments error from the required zone_id, and cloudflare_zones_list is the old behaviour."
   },
-  "retiredNote": "The two original slugs did not follow the naming rule cloudflare_<module>_<verb>. cloudflare_accounts_list_accounts disappears; cloudflare_zones_get keeps its name for a different operation, which is a breaking change for a caller of the old tool. See packages/skills-mcp/CHANGELOG-providers.md.",
+  "retiredNote": "The two original slugs did not follow the naming rule cloudflare_<module>_<verb>. cloudflare_accounts_list_accounts disappears; cloudflare_zones_get keeps its name for a different operation, which is a breaking change for a caller of the old tool. cloudflare_dns_records_import was withdrawn later and for a different reason: the API reads a multipart form and every generated builder speaks JSON, so the tool could never have worked. See packages/skills-mcp/CHANGELOG-providers.md.",
 
   "tools": [
     {
@@ -198,15 +199,6 @@
       "path": "/zones/{zone_id}/dns_records/batch",
       "wave": "w1",
       "reason": "One call that posts, puts, patches and deletes a set of records at once. It is the tool that can take several names off the air in a single request.",
-      "destructive": true,
-      "auth": "api-token"
-    },
-    {
-      "toolSlug": "cloudflare_dns_records_import",
-      "method": "POST",
-      "path": "/zones/{zone_id}/dns_records/import",
-      "wave": "w1",
-      "reason": "Imports a BIND zone file, replacing what the zone already holds for the names it carries. The most dangerous DNS call in the surface.",
       "destructive": true,
       "auth": "api-token"
     },

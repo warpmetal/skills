@@ -206,13 +206,6 @@ export const PROVIDER_TOOL_MAPPINGS: readonly ProviderToolMapping[] = [
     "gate": "CONFIRM CLOUDFLARE DNS RECORDS BATCH"
   },
   {
-    "toolSlug": "cloudflare_dns_records_import",
-    "provider": "cloudflare",
-    "verb": "dns-records-import",
-    "mutating": true,
-    "gate": "CONFIRM CLOUDFLARE DNS RECORDS IMPORT"
-  },
-  {
     "toolSlug": "cloudflare_dns_settings_list",
     "provider": "cloudflare",
     "verb": "dns-settings-list",

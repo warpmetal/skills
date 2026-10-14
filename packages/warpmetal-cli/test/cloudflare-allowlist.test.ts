@@ -178,4 +178,28 @@ describe("cloudflare allowlist raw bodies", () => {
     assert.equal(problems.length, 1);
     assert.match(problems[0] ?? "", /add freeFormBody: true/);
   });
+
+  // The generator serializes every declared body with `JSON.stringify` under
+  // `application/json`, so a declared body of another type would arrive at
+  // Cloudflare mis-encoded - the multipart upload endpoint is the case that
+  // exists in the spec, and it has no field list, so it looks free-form.
+  for (const contentType of ["multipart/form-data", "application/x-www-form-urlencoded"]) {
+    it(`refuses a declared ${contentType} body`, () => {
+      const problems = problemsFor({ freeFormBody: true }, {
+        ...RAW_OPERATION,
+        body: { kind: "free-form", contentType },
+      });
+      assert.equal(problems.length, 1);
+      assert.match(problems[0] ?? "", /which the JSON builder cannot send/);
+    });
+
+    it(`refuses a ${contentType} body even when reviewed as a raw one`, () => {
+      const problems = problemsFor({ freeFormBody: true, rawBody: true }, {
+        ...RAW_OPERATION,
+        body: { kind: "free-form", contentType },
+      });
+      assert.equal(problems.length, 1);
+      assert.match(problems[0] ?? "", /not text a JSON argument can carry/);
+    });
+  }
 });

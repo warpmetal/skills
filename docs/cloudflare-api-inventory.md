@@ -17,7 +17,7 @@ which is what keeps it true.
 | `x-forge-hidden` | 1093 | hidden from Cloudflare's own Forge docs: internal or unreleased |
 | `x-fern-ignore` | 489 | dropped from the published Fern docs before Forge replaced them |
 | Reviewable | 2227 | what remains, and the pool every wave is chosen from |
-| Shipped | 46 | pinned in `scripts/cloudflare/allowlist.json` |
+| Shipped | 45 | pinned in `scripts/cloudflare/allowlist.json` |
 
 234 reviewable operations carry `x-forge-require-confirmation`,
 30 carry `x-cfDeprecation` and 4 declare `security: []`.
@@ -29,7 +29,7 @@ fields the spec does not publish; either is shipped only where the allowlist say
 
 | Wave | Status | Tools | Scope | Groups |
 | --- | --- | --- | --- | --- |
-| `w1` | reviewed | 46 | Zonas, DNS, ajustes de zona, cache y tokens de identidad | `zones/zones`, `zones/activation`, `zones/hold`, `zones/dns`, `zones/dnssec`, `zones/settings`, `zones/purge`, `zones/firewall`, `accounts/accounts`, `user/user` |
+| `w1` | reviewed | 45 | Zonas, DNS, ajustes de zona, cache y tokens de identidad | `zones/zones`, `zones/activation`, `zones/hold`, `zones/dns`, `zones/dnssec`, `zones/settings`, `zones/purge`, `zones/firewall`, `accounts/accounts`, `user/user` |
 | `w2` | planned | 0 | Almacenamiento y computo: R2, KV, D1, Workers, Queues, Pages | - |
 | `w3` | planned | 0 | Zero Trust y Access: apps, politicas, identity providers, gateway | - |
 | `w4` | planned | 0 | Observabilidad y analitica: logs, analytics, alertas, WAF | - |
@@ -56,35 +56,34 @@ fields the spec does not publish; either is shipped only where the allowlist say
 | 15 | `cloudflare_dns_records_replace` | `PUT` | `/zones/{zone_id}/dns_records/{dns_record_id}` | w1 | - |
 | 16 | `cloudflare_dns_records_delete` | `DELETE` | `/zones/{zone_id}/dns_records/{dns_record_id}` | w1 | destructive |
 | 17 | `cloudflare_dns_records_batch` | `POST` | `/zones/{zone_id}/dns_records/batch` | w1 | destructive |
-| 18 | `cloudflare_dns_records_import` | `POST` | `/zones/{zone_id}/dns_records/import` | w1 | destructive |
-| 19 | `cloudflare_dns_settings_list` | `GET` | `/zones/{zone_id}/dns_settings` | w1 | - |
-| 20 | `cloudflare_dns_settings_patch` | `PATCH` | `/zones/{zone_id}/dns_settings` | w1 | - |
-| 21 | `cloudflare_dnssec_list` | `GET` | `/zones/{zone_id}/dnssec` | w1 | - |
-| 22 | `cloudflare_dnssec_patch` | `PATCH` | `/zones/{zone_id}/dnssec` | w1 | - |
-| 23 | `cloudflare_dnssec_delete` | `DELETE` | `/zones/{zone_id}/dnssec` | w1 | destructive |
-| 24 | `cloudflare_settings_list` | `GET` | `/zones/{zone_id}/settings` | w1 | deprecated |
-| 25 | `cloudflare_settings_get` | `GET` | `/zones/{zone_id}/settings/{setting_id}` | w1 | - |
-| 26 | `cloudflare_settings_update` | `PATCH` | `/zones/{zone_id}/settings/{setting_id}` | w1 | - |
-| 27 | `cloudflare_purge_cache` | `POST` | `/zones/{zone_id}/purge_cache` | w1 | destructive, needs confirmation |
-| 28 | `cloudflare_firewall_access_rules_rules_list` | `GET` | `/zones/{zone_id}/firewall/access_rules/rules` | w1 | - |
-| 29 | `cloudflare_firewall_access_rules_rules_create` | `POST` | `/zones/{zone_id}/firewall/access_rules/rules` | w1 | - |
-| 30 | `cloudflare_firewall_access_rules_rules_update` | `PATCH` | `/zones/{zone_id}/firewall/access_rules/rules/{rule_id}` | w1 | - |
-| 31 | `cloudflare_firewall_access_rules_rules_delete` | `DELETE` | `/zones/{zone_id}/firewall/access_rules/rules/{rule_id}` | w1 | needs confirmation |
-| 32 | `cloudflare_firewall_lockdowns_list` | `GET` | `/zones/{zone_id}/firewall/lockdowns` | w1 | - |
-| 33 | `cloudflare_firewall_lockdowns_create` | `POST` | `/zones/{zone_id}/firewall/lockdowns` | w1 | - |
-| 34 | `cloudflare_firewall_lockdowns_get` | `GET` | `/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}` | w1 | - |
-| 35 | `cloudflare_firewall_lockdowns_replace` | `PUT` | `/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}` | w1 | - |
-| 36 | `cloudflare_firewall_lockdowns_delete` | `DELETE` | `/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}` | w1 | needs confirmation |
-| 37 | `cloudflare_firewall_ua_rules_list` | `GET` | `/zones/{zone_id}/firewall/ua_rules` | w1 | - |
-| 38 | `cloudflare_firewall_ua_rules_create` | `POST` | `/zones/{zone_id}/firewall/ua_rules` | w1 | - |
-| 39 | `cloudflare_firewall_ua_rules_get` | `GET` | `/zones/{zone_id}/firewall/ua_rules/{ua_rule_id}` | w1 | - |
-| 40 | `cloudflare_firewall_ua_rules_replace` | `PUT` | `/zones/{zone_id}/firewall/ua_rules/{ua_rule_id}` | w1 | - |
-| 41 | `cloudflare_firewall_ua_rules_delete` | `DELETE` | `/zones/{zone_id}/firewall/ua_rules/{ua_rule_id}` | w1 | needs confirmation |
-| 42 | `cloudflare_accounts_list` | `GET` | `/accounts` | w1 | spec-hidden |
-| 43 | `cloudflare_user_tokens_list` | `GET` | `/user/tokens` | w1 | spec-hidden |
-| 44 | `cloudflare_user_tokens_get` | `GET` | `/user/tokens/{token_id}` | w1 | spec-hidden |
-| 45 | `cloudflare_user_tokens_verify` | `GET` | `/user/tokens/verify` | w1 | spec-hidden |
-| 46 | `cloudflare_user_tokens_permission_groups_list` | `GET` | `/user/tokens/permission_groups` | w1 | spec-hidden |
+| 18 | `cloudflare_dns_settings_list` | `GET` | `/zones/{zone_id}/dns_settings` | w1 | - |
+| 19 | `cloudflare_dns_settings_patch` | `PATCH` | `/zones/{zone_id}/dns_settings` | w1 | - |
+| 20 | `cloudflare_dnssec_list` | `GET` | `/zones/{zone_id}/dnssec` | w1 | - |
+| 21 | `cloudflare_dnssec_patch` | `PATCH` | `/zones/{zone_id}/dnssec` | w1 | - |
+| 22 | `cloudflare_dnssec_delete` | `DELETE` | `/zones/{zone_id}/dnssec` | w1 | destructive |
+| 23 | `cloudflare_settings_list` | `GET` | `/zones/{zone_id}/settings` | w1 | deprecated |
+| 24 | `cloudflare_settings_get` | `GET` | `/zones/{zone_id}/settings/{setting_id}` | w1 | - |
+| 25 | `cloudflare_settings_update` | `PATCH` | `/zones/{zone_id}/settings/{setting_id}` | w1 | - |
+| 26 | `cloudflare_purge_cache` | `POST` | `/zones/{zone_id}/purge_cache` | w1 | destructive, needs confirmation |
+| 27 | `cloudflare_firewall_access_rules_rules_list` | `GET` | `/zones/{zone_id}/firewall/access_rules/rules` | w1 | - |
+| 28 | `cloudflare_firewall_access_rules_rules_create` | `POST` | `/zones/{zone_id}/firewall/access_rules/rules` | w1 | - |
+| 29 | `cloudflare_firewall_access_rules_rules_update` | `PATCH` | `/zones/{zone_id}/firewall/access_rules/rules/{rule_id}` | w1 | - |
+| 30 | `cloudflare_firewall_access_rules_rules_delete` | `DELETE` | `/zones/{zone_id}/firewall/access_rules/rules/{rule_id}` | w1 | needs confirmation |
+| 31 | `cloudflare_firewall_lockdowns_list` | `GET` | `/zones/{zone_id}/firewall/lockdowns` | w1 | - |
+| 32 | `cloudflare_firewall_lockdowns_create` | `POST` | `/zones/{zone_id}/firewall/lockdowns` | w1 | - |
+| 33 | `cloudflare_firewall_lockdowns_get` | `GET` | `/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}` | w1 | - |
+| 34 | `cloudflare_firewall_lockdowns_replace` | `PUT` | `/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}` | w1 | - |
+| 35 | `cloudflare_firewall_lockdowns_delete` | `DELETE` | `/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}` | w1 | needs confirmation |
+| 36 | `cloudflare_firewall_ua_rules_list` | `GET` | `/zones/{zone_id}/firewall/ua_rules` | w1 | - |
+| 37 | `cloudflare_firewall_ua_rules_create` | `POST` | `/zones/{zone_id}/firewall/ua_rules` | w1 | - |
+| 38 | `cloudflare_firewall_ua_rules_get` | `GET` | `/zones/{zone_id}/firewall/ua_rules/{ua_rule_id}` | w1 | - |
+| 39 | `cloudflare_firewall_ua_rules_replace` | `PUT` | `/zones/{zone_id}/firewall/ua_rules/{ua_rule_id}` | w1 | - |
+| 40 | `cloudflare_firewall_ua_rules_delete` | `DELETE` | `/zones/{zone_id}/firewall/ua_rules/{ua_rule_id}` | w1 | needs confirmation |
+| 41 | `cloudflare_accounts_list` | `GET` | `/accounts` | w1 | spec-hidden |
+| 42 | `cloudflare_user_tokens_list` | `GET` | `/user/tokens` | w1 | spec-hidden |
+| 43 | `cloudflare_user_tokens_get` | `GET` | `/user/tokens/{token_id}` | w1 | spec-hidden |
+| 44 | `cloudflare_user_tokens_verify` | `GET` | `/user/tokens/verify` | w1 | spec-hidden |
+| 45 | `cloudflare_user_tokens_permission_groups_list` | `GET` | `/user/tokens/permission_groups` | w1 | spec-hidden |
 
 ## Review notes
 
@@ -92,11 +91,12 @@ fields the spec does not publish; either is shipped only where the allowlist say
 
 ## Renames and retirements
 
-The two original slugs did not follow the naming rule cloudflare_<module>_<verb>. cloudflare_accounts_list_accounts disappears; cloudflare_zones_get keeps its name for a different operation, which is a breaking change for a caller of the old tool. See packages/skills-mcp/CHANGELOG-providers.md.
+The two original slugs did not follow the naming rule cloudflare_<module>_<verb>. cloudflare_accounts_list_accounts disappears; cloudflare_zones_get keeps its name for a different operation, which is a breaking change for a caller of the old tool. cloudflare_dns_records_import was withdrawn later and for a different reason: the API reads a multipart form and every generated builder speaks JSON, so the tool could never have worked. See packages/skills-mcp/CHANGELOG-providers.md.
 
 - `cloudflare_zones_get` -> `cloudflare_zones_list`
 - `cloudflare_accounts_list_accounts` -> `cloudflare_accounts_list`
 - `cloudflare_accounts_list_accounts` no longer exists
+- `cloudflare_dns_records_import` no longer exists
 - `cloudflare_zones_get` is reused: This slug survives a change of meaning: it listed zones (GET /zones) and now reads one zone by id (GET /zones/{zone_id}). A caller that sends {} gets a loud invalid-arguments error from the required zone_id, and cloudflare_zones_list is the old behaviour.
 
 ## Every reviewable operation, by group
@@ -2765,12 +2765,11 @@ Not shipped (2):
 ### `zones/devices` - 0 of 0 reviewable shipped, 2 filtered out
 
 
-### `zones/dns` - 10 of 16 reviewable shipped, 2 filtered out
+### `zones/dns` - 9 of 16 reviewable shipped, 2 filtered out
 
 - `cloudflare_dns_records_list` - `GET` `/zones/{zone_id}/dns_records`
 - `cloudflare_dns_records_create` - `POST` `/zones/{zone_id}/dns_records`
 - `cloudflare_dns_records_batch` - `POST` `/zones/{zone_id}/dns_records/batch`
-- `cloudflare_dns_records_import` - `POST` `/zones/{zone_id}/dns_records/import`
 - `cloudflare_dns_records_get` - `GET` `/zones/{zone_id}/dns_records/{dns_record_id}`
 - `cloudflare_dns_records_replace` - `PUT` `/zones/{zone_id}/dns_records/{dns_record_id}`
 - `cloudflare_dns_records_update` - `PATCH` `/zones/{zone_id}/dns_records/{dns_record_id}`
@@ -2778,8 +2777,9 @@ Not shipped (2):
 - `cloudflare_dns_settings_list` - `GET` `/zones/{zone_id}/dns_settings`
 - `cloudflare_dns_settings_patch` - `PATCH` `/zones/{zone_id}/dns_settings`
 
-Not shipped (6):
+Not shipped (7):
 - `GET` `/zones/{zone_id}/dns_records/export`
+- `POST` `/zones/{zone_id}/dns_records/import`
 - `POST` `/zones/{zone_id}/dns_records/scan`
 - `GET` `/zones/{zone_id}/dns_records/scan/review`
 - `POST` `/zones/{zone_id}/dns_records/scan/review`

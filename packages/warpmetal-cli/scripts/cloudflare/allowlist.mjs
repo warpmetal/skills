@@ -36,6 +36,20 @@ const SLUG = /^cloudflare_[a-z0-9]+(_[a-z0-9]+)*$/;
  */
 const RAW_BODY_TYPES = new Set(["application/json", "application/x-ndjson", "text/plain"]);
 
+/**
+ * Content types the generated builder can send as JSON.
+ *
+ * Every declared body is serialized by `JSON.stringify` under
+ * `application/json`, so an operation whose body is `multipart/form-data` or
+ * `application/x-www-form-urlencoded` cannot travel through it at all: the
+ * fields would arrive mis-encoded. Such an operation is either shipped as a
+ * reviewed `rawBody` (when the payload is text) or left out.
+ */
+function jsonType(contentType) {
+  return contentType === "application/json" || String(contentType).endsWith("+json");
+}
+
+/** Whether a reviewed `rawBody` can carry this payload as text. */
 function rawBodyType(contentType) {
   return RAW_BODY_TYPES.has(contentType) || String(contentType).endsWith("+json");
 }
@@ -121,18 +135,29 @@ export function loadAllowlist(path, spec, file) {
     if (entry.rawBody !== undefined && typeof entry.rawBody !== "boolean") {
       problems.push(`${where}: rawBody must be true or false`);
     }
+    const contentType = op.body?.contentType ?? null;
     if (op.body?.kind === "unsupported") {
       if (entry.rawBody !== true) {
         problems.push(
-          `${where}: its request body is ${op.body.contentType}, which has no field list to expose; ` +
+          `${where}: its request body is ${contentType}, which has no field list to expose; ` +
             "add rawBody: true to send it verbatim as a string",
         );
-      } else if (!rawBodyType(op.body.contentType)) {
+      } else if (!rawBodyType(contentType)) {
         problems.push(
-          `${where}: its request body is ${op.body.contentType}, which a JSON argument cannot carry; ` +
+          `${where}: its request body is ${contentType}, which a JSON argument cannot carry; ` +
             "leave the operation out of the allowlist",
         );
       }
+    } else if (op.body && !jsonType(contentType)) {
+      // A declared body (object or free-form) that is not JSON. The builder
+      // serializes every declared body with `JSON.stringify` under
+      // `application/json`, so these fields would reach Cloudflare mis-encoded.
+      problems.push(
+        `${where}: its request body is ${contentType}, which the JSON builder cannot send` +
+          (entry.rawBody === true
+            ? "; a multipart or form payload is not text a JSON argument can carry"
+            : "; leave the operation out of the allowlist"),
+      );
     } else if (entry.rawBody === true) {
       problems.push(
         `${where}: rawBody only applies to a body the spec does not publish as fields (this one is ${op.body?.kind ?? "none"})`,

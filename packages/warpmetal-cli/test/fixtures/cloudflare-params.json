@@ -1234,45 +1234,6 @@
         "DNS Write"
       ]
     },
-    "cloudflare_dns_records_import": {
-      "toolSlug": "cloudflare_dns_records_import",
-      "method": "POST",
-      "path": "/zones/{zone_id}/dns_records/import",
-      "summary": "Import DNS Records",
-      "auth": "api-token",
-      "destructive": true,
-      "filtered": false,
-      "keepFiltered": false,
-      "rawBody": false,
-      "bodyKind": "object",
-      "bodyContentType": "multipart/form-data",
-      "pathParams": [
-        {
-          "name": "zone_id",
-          "arg": "zone_id",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "queryParams": [],
-      "bodyFields": [
-        {
-          "name": "file",
-          "arg": "file",
-          "required": true,
-          "type": "string"
-        },
-        {
-          "name": "proxied",
-          "arg": "proxied",
-          "required": false,
-          "type": "string"
-        }
-      ],
-      "tokenGroups": [
-        "DNS Write"
-      ]
-    },
     "cloudflare_dns_settings_list": {
       "toolSlug": "cloudflare_dns_settings_list",
       "method": "GET",

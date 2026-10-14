@@ -224,11 +224,6 @@
     "puts": [],
     "zone_id": "sample_zone_id"
   },
-  "cloudflare_dns_records_import": {
-    "file": "sample_file",
-    "proxied": "sample_proxied",
-    "zone_id": "sample_zone_id"
-  },
   "cloudflare_dns_settings_list": {
     "zone_id": "sample_zone_id"
   },

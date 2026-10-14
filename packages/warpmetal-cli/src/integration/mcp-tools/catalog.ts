@@ -141,7 +141,6 @@ const BUILDS: Record<string, BuildFn> = {
   "cloudflare_dns_records_replace": ({args}) => ({ method: "PUT", url: `https://api.cloudflare.com/client/v4/zones/${pf(args.zone_id)}/dns_records/${pf(args.dns_record_id)}?${qs({ "include_shadow_metadata": args.include_shadow_metadata })}`, body: { "comment": args.comment ?? undefined, "name": args.name ?? undefined, "proxied": args.proxied ?? undefined, "settings": args.settings ?? undefined, "tags": args.tags ?? undefined, "ttl": args.ttl ?? undefined, "content": args.content ?? undefined, "private_routing": args.private_routing ?? undefined, "type": args.type ?? undefined, "priority": args.priority ?? undefined, "data": args.data ?? undefined }, headers: cfHeaders() }),
   "cloudflare_dns_records_delete": ({args}) => ({ method: "DELETE", url: `https://api.cloudflare.com/client/v4/zones/${pf(args.zone_id)}/dns_records/${pf(args.dns_record_id)}`, headers: cfHeaders() }),
   "cloudflare_dns_records_batch": ({args}) => ({ method: "POST", url: `https://api.cloudflare.com/client/v4/zones/${pf(args.zone_id)}/dns_records/batch?${qs({ "include_shadow_metadata": args.include_shadow_metadata })}`, body: { "deletes": args.deletes ?? undefined, "patches": args.patches ?? undefined, "posts": args.posts ?? undefined, "puts": args.puts ?? undefined }, headers: cfHeaders() }),
-  "cloudflare_dns_records_import": ({args}) => ({ method: "POST", url: `https://api.cloudflare.com/client/v4/zones/${pf(args.zone_id)}/dns_records/import`, body: { "file": args.file, "proxied": args.proxied ?? undefined }, headers: cfHeaders() }),
   "cloudflare_dns_settings_list": ({args}) => ({ method: "GET", url: `https://api.cloudflare.com/client/v4/zones/${pf(args.zone_id)}/dns_settings`, headers: cfHeaders() }),
   "cloudflare_dns_settings_patch": ({args}) => ({ method: "PATCH", url: `https://api.cloudflare.com/client/v4/zones/${pf(args.zone_id)}/dns_settings`, body: { "flatten_all_cnames": args.flatten_all_cnames ?? undefined, "foundation_dns": args.foundation_dns ?? undefined, "internal_dns": args.internal_dns ?? undefined, "multi_provider": args.multi_provider ?? undefined, "ns_ttl": args.ns_ttl ?? undefined, "secondary_overrides": args.secondary_overrides ?? undefined, "soa": args.soa ?? undefined, "zone_mode": args.zone_mode ?? undefined, "nameservers": args.nameservers ?? undefined }, headers: cfHeaders() }),
   "cloudflare_dnssec_list": ({args}) => ({ method: "GET", url: `https://api.cloudflare.com/client/v4/zones/${pf(args.zone_id)}/dnssec`, headers: cfHeaders() }),
@@ -653,15 +652,6 @@ export const MCP_TOOL_DEFS: readonly McpToolDef[] = [
     validate: (args) => (["posts", "puts", "patches", "deletes"].every((key) => args[key] === undefined || (Array.isArray(args[key]) && args[key].length === 0)) ? "Provide at least one of posts, puts, patches or deletes: an empty batch does nothing and Cloudflare rejects it." : null),
     secretName: "cloudflare.token",
     build: BUILDS["cloudflare_dns_records_batch"]!,
-  },
-  {
-    toolSlug: "cloudflare_dns_records_import",
-    provider: "cloudflare",
-    verb: "dns-records-import",
-    mutating: true,
-    gate: "CONFIRM CLOUDFLARE DNS RECORDS IMPORT",
-    secretName: "cloudflare.token",
-    build: BUILDS["cloudflare_dns_records_import"]!,
   },
   {
     toolSlug: "cloudflare_dns_settings_list",

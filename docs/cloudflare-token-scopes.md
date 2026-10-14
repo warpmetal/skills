@@ -43,7 +43,7 @@ Tools (3):
 
 ## DNS Write
 
-Tools (12):
+Tools (11):
 - `cloudflare_dns_records_list` - `GET` `/zones/{zone_id}/dns_records`
 - `cloudflare_dns_records_create` - `POST` `/zones/{zone_id}/dns_records`
 - `cloudflare_dns_records_get` - `GET` `/zones/{zone_id}/dns_records/{dns_record_id}`
@@ -51,7 +51,6 @@ Tools (12):
 - `cloudflare_dns_records_replace` - `PUT` `/zones/{zone_id}/dns_records/{dns_record_id}`
 - `cloudflare_dns_records_delete` - `DELETE` `/zones/{zone_id}/dns_records/{dns_record_id}`
 - `cloudflare_dns_records_batch` - `POST` `/zones/{zone_id}/dns_records/batch`
-- `cloudflare_dns_records_import` - `POST` `/zones/{zone_id}/dns_records/import`
 - `cloudflare_dns_settings_patch` - `PATCH` `/zones/{zone_id}/dns_settings`
 - `cloudflare_dnssec_list` - `GET` `/zones/{zone_id}/dnssec`
 - `cloudflare_dnssec_patch` - `PATCH` `/zones/{zone_id}/dnssec`
@@ -151,7 +150,6 @@ quotes back.
 - `cloudflare_dns_records_replace`: `#dns_records:edit`
 - `cloudflare_dns_records_delete`: `#dns_records:edit`
 - `cloudflare_dns_records_batch`: `#dns_records:batch`
-- `cloudflare_dns_records_import`: `#dns_records:edit`
 - `cloudflare_dns_settings_list`: `#dns_records:read`
 - `cloudflare_dns_settings_patch`: `#dns_records:edit`
 - `cloudflare_dnssec_list`: `#zone_settings:read`

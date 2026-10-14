@@ -46,7 +46,6 @@ const operations = Object.values(fixture.tools);
 const REVIEWED_DESTRUCTIVE = [
   "cloudflare_dns_records_batch",
   "cloudflare_dns_records_delete",
-  "cloudflare_dns_records_import",
   "cloudflare_dnssec_delete",
   "cloudflare_purge_cache",
   "cloudflare_zones_delete",
@@ -70,7 +69,6 @@ test("the cloudflare wave ships the operations it says it does", () => {
     "cloudflare_dns_records_replace",
     "cloudflare_dns_records_delete",
     "cloudflare_dns_records_batch",
-    "cloudflare_dns_records_import",
     "cloudflare_dns_settings_list",
     "cloudflare_dnssec_list",
     "cloudflare_settings_list",

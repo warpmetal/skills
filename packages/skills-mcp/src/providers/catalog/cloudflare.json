@@ -1222,48 +1222,6 @@
       }
     },
     {
-      "toolSlug": "cloudflare_dns_records_import",
-      "name": "dns_records_import",
-      "title": "Import DNS Records",
-      "description": "Import DNS Records. POST /zones/{zone_id}/dns_records/import. Requires a token with the DNS Write permission. The request body is required.",
-      "toolkitId": "cloudflare",
-      "version": "v4",
-      "inputSchema": {
-        "additionalProperties": false,
-        "properties": {
-          "file": {
-            "type": "string",
-            "description": "Body field file."
-          },
-          "proxied": {
-            "type": "string",
-            "default": "false",
-            "description": "Body field proxied."
-          },
-          "zone_id": {
-            "type": "string",
-            "description": "Path parameter zone_id."
-          }
-        },
-        "required": [
-          "file",
-          "zone_id"
-        ],
-        "type": "object"
-      },
-      "outputSchema": {
-        "additionalProperties": true,
-        "type": "object"
-      },
-      "annotations": {
-        "title": "Import DNS Records",
-        "readOnlyHint": false,
-        "idempotentHint": false,
-        "openWorldHint": true,
-        "destructiveHint": true
-      }
-    },
-    {
       "toolSlug": "cloudflare_dns_settings_list",
       "name": "dns_settings_list",
       "title": "Show DNS Settings",
