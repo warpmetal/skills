@@ -49,204 +49,75 @@ A CLI below the version floor is refused rather than warned about: reads still w
 can be diagnosed, but every `*_apply` is answered `DENIED` before any process exists. An _unreadable_
 version refuses nothing, because an override or a bare PATH executable is _unknown_ rather than old.
 
+<!-- provider-index:begin -->
+
 ## Providers (42 providers, 175 tools)
 
-Airtable tools (stdio / `full` only):
-
-- **1.** `airtable_list_bases`
-
-Amplitude tools (stdio / `full` only):
-
-- **2.** `amplitude_get_flags`
-
-Anthropic Admin tools (stdio / `full` only):
-
-- **3.** `anthropic-admin_list_workspaces` · **4.** `anthropic-admin_list_api_keys`
-
-Asana tools (stdio / `full` only):
-
-- **5.** `asana_get_a_task` · **6.** `asana_create_a_project`
-
-Calendly tools (stdio / `full` only):
-
-- **7.** `calendly_list_event_types` · **8.** `calendly_get_current_user`
-
-CircleCI tools (stdio / `full` only):
-
-- **9.** `circleci_list_pipelines` · **10.** `circleci_get_pipeline_by_id`
-
-ClickUp tools (stdio / `full` only):
-
-- **11.** `clickup_create_task` · **12.** `clickup_get_task` · **13.** `clickup_create_task_comment`
-
-Cloudflare tools (stdio / `full` only):
-
-- **14.** `cloudflare_zones_list` · **15.** `cloudflare_zones_create` · **16.** `cloudflare_zones_get`
-- **17.** `cloudflare_zones_update` · **18.** `cloudflare_zones_delete` · **19.** `cloudflare_activation_check`
-- **20.** `cloudflare_hold_list` · **21.** `cloudflare_hold_create` · **22.** `cloudflare_hold_patch`
-- **23.** `cloudflare_hold_delete` · **24.** `cloudflare_dns_records_list` · **25.** `cloudflare_dns_records_create`
-- **26.** `cloudflare_dns_records_get` · **27.** `cloudflare_dns_records_update` · **28.** `cloudflare_dns_records_replace`
-- **29.** `cloudflare_dns_records_delete` · **30.** `cloudflare_dns_records_batch` · **31.** `cloudflare_dns_records_import`
-- **32.** `cloudflare_dns_settings_list` · **33.** `cloudflare_dns_settings_patch` · **34.** `cloudflare_dnssec_list`
-- **35.** `cloudflare_dnssec_patch` · **36.** `cloudflare_dnssec_delete` · **37.** `cloudflare_settings_list`
-- **38.** `cloudflare_settings_get` · **39.** `cloudflare_settings_update` · **40.** `cloudflare_purge_cache`
-- **41.** `cloudflare_firewall_access_rules_rules_list` · **42.** `cloudflare_firewall_access_rules_rules_create` · **43.** `cloudflare_firewall_access_rules_rules_update`
-- **44.** `cloudflare_firewall_access_rules_rules_delete` · **45.** `cloudflare_firewall_lockdowns_list` · **46.** `cloudflare_firewall_lockdowns_create`
-- **47.** `cloudflare_firewall_lockdowns_get` · **48.** `cloudflare_firewall_lockdowns_replace` · **49.** `cloudflare_firewall_lockdowns_delete`
-- **50.** `cloudflare_firewall_ua_rules_list` · **51.** `cloudflare_firewall_ua_rules_create` · **52.** `cloudflare_firewall_ua_rules_get`
-- **53.** `cloudflare_firewall_ua_rules_replace` · **54.** `cloudflare_firewall_ua_rules_delete` · **55.** `cloudflare_accounts_list`
-- **56.** `cloudflare_user_tokens_list` · **57.** `cloudflare_user_tokens_get` · **58.** `cloudflare_user_tokens_verify`
-- **59.** `cloudflare_user_tokens_permission_groups_list`
-
-Confluence tools (stdio / `full` only):
-
-- **60.** `confluence_get_page_by_id` · **61.** `confluence_get_pages`
-
-Datadog tools (stdio / `full` only):
-
-- **62.** `datadog_v1_get_ip_ranges`
-
-Discord tools (stdio / `full` only):
-
-- **63.** `discord_get_my_user` · **64.** `discord_list_my_guilds`
-
-Dropbox tools (stdio / `full` only):
-
-- **65.** `dropbox_list_folder` · **66.** `dropbox_search_files`
-
-Exa tools (stdio / `full` only):
-
-- **67.** `exa_web_search` · **68.** `exa_web_fetch`
-
-Figma tools (stdio / `full` only):
-
-- **69.** `figma_get_file` · **70.** `figma_get_file_nodes`
-
-Gemini tools (stdio / `full` only):
-
-- **71.** `gemini_generate_content` · **72.** `gemini_list_models`
-
-GitHub tools (stdio / `full` only):
-
-- **73.** `github_create_issue` · **74.** `github_list_issues` · **75.** `github_get_issue`
-- **76.** `github_create_pull_request` · **77.** `github_get_pull_request` · **78.** `github_search_repositories`
-
-GitLab tools (stdio / `full` only):
-
-- **79.** `gitlab_list_projects` · **80.** `gitlab_create_project_issue` · **81.** `gitlab_create_merge_request`
-
-Grafana Cloud tools (stdio / `full` only):
-
-- **82.** `grafana-cloud_list_stacks` · **83.** `grafana-cloud_get_org`
-
-Grafana Stack tools (stdio / `full` only):
-
-- **84.** `grafana-stack_health` · **85.** `grafana-stack_get_current_user` · **86.** `grafana-stack_search`
-- **87.** `grafana-stack_get_dashboard` · **88.** `grafana-stack_list_datasources` · **89.** `grafana-stack_check_datasource_health`
-- **90.** `grafana-stack_list_folders` · **91.** `grafana-stack_list_alert_rules` · **92.** `grafana-stack_list_annotations`
-- **93.** `grafana-stack_list_contact_points` · **94.** `grafana-stack_list_mute_timings` · **95.** `grafana-stack_list_dashboard_tags`
-- **96.** `grafana-stack_search_teams` · **97.** `grafana-stack_list_org_users` · **98.** `grafana-stack_list_library_elements`
-
-HubSpot tools (stdio / `full` only):
-
-- **99.** `hubspot_crm_contacts_list` · **100.** `hubspot_crm_contacts_create` · **101.** `hubspot_crm_deals_list`
-
-Intercom tools (stdio / `full` only):
-
-- **102.** `intercom_list_all_contacts` · **103.** `intercom_create_contact`
-
-Jira tools (stdio / `full` only):
-
-- **104.** `jira_create_issue` · **105.** `jira_get_issue` · **106.** `jira_add_comment`
-- **107.** `jira_transition_issue` · **108.** `jira_get_project`
-
-Linear tools (stdio / `full` only):
-
-- **109.** `linear_create_issue` · **110.** `linear_list_issues` · **111.** `linear_get_issue`
-- **112.** `linear_create_comment`
-
-Mailchimp tools (stdio / `full` only):
-
-- **113.** `mailchimp_list_campaigns` · **114.** `mailchimp_add_member_to_list`
-
-Mixpanel tools (stdio / `full` only):
-
-- **115.** `mixpanel_track_event` · **116.** `mixpanel_raw_event_export`
-
-Monday.com tools (stdio / `full` only):
-
-- **117.** `monday_boards` · **118.** `monday_get_workspaces`
-
-Notion tools (stdio / `full` only):
-
-- **119.** `notion_search` · **120.** `notion_query_database` · **121.** `notion_get_page`
-- **122.** `notion_create_page` · **123.** `notion_append_block_children`
-
-OneSignal tools (stdio / `full` only):
-
-- **124.** `onesignal_view_an_app`
-
-OpenAI tools (stdio / `full` only):
-
-- **125.** `openai_list_models`
-
-PagerDuty tools (stdio / `full` only):
-
-- **126.** `pagerduty_list_incidents` · **127.** `pagerduty_create_incident` · **128.** `pagerduty_list_services`
-
-Perplexity tools (stdio / `full` only):
-
-- **129.** `perplexity_chat_completion` · **130.** `perplexity_search`
-
-PostHog tools (stdio / `full` only):
-
-- **131.** `posthog_list_project_dashboards` · **132.** `posthog_get_feature_flags_matching_ids`
-
-Resend tools (stdio / `full` only):
-
-- **133.** `resend_list_emails` · **134.** `resend_create_contact`
-
-Sentry tools (stdio / `full` only):
-
-- **135.** `sentry_list_organization_projects` · **136.** `sentry_list_a_project_s_issues`
-
-Shopify tools (stdio / `full` only):
-
-- **137.** `shopify_list_products` · **138.** `shopify_get_product` · **139.** `shopify_list_orders`
-
-Snowflake tools (stdio / `full` only):
-
-- **140.** `snowflake_list_databases` · **141.** `snowflake_list_tables`
-
-Square tools (stdio / `full` only):
-
-- **142.** `square_list_payments` · **143.** `square_create_payment` · **144.** `square_list_customers`
-
-Stripe tools (stdio / `full` only):
-
-- **145.** `stripe_post_customers` · **146.** `stripe_get_customers` · **147.** `stripe_post_payment_intents`
-- **148.** `stripe_get_payment_intents` · **149.** `stripe_get_balance` · **150.** `stripe_post_invoices`
-
-Supabase tools (stdio / `full` only):
-
-- **151.** `supabase_list_projects` · **152.** `supabase_create_a_project` · **153.** `supabase_apply_a_migration`
-
-Vercel tools (stdio / `full` only):
-
-- **154.** `vercel_get_projects` · **155.** `vercel_create_project` · **156.** `vercel_get_deployments`
-
-X tools (stdio / `full` only):
-
-- **157.** `x_create_posts` · **158.** `x_get_users_me` · **159.** `x_search_posts_recent`
-
-Zendesk tools (stdio / `full` only):
-
-- **160.** `zendesk_list_tickets` · **161.** `zendesk_get_ticket` · **162.** `zendesk_list_ticket_comments`
-- **163.** `zendesk_search` · **164.** `zendesk_get_current_user` · **165.** `zendesk_list_users`
-- **166.** `zendesk_list_organizations` · **167.** `zendesk_list_views` · **168.** `zendesk_list_view_tickets`
-- **169.** `zendesk_create_ticket` · **170.** `zendesk_add_ticket_comment` · **171.** `zendesk_update_ticket`
-- **172.** `zendesk_get_user` · **173.** `zendesk_get_organization` · **174.** `zendesk_count_view_tickets`
-- **175.** `zendesk_get_ticket_metrics`
+Every tool below is registered on the `full` (stdio) profile and calls `warpmetal integration
+<provider> <verb>` with secrets from the WarpMetal vault; the arguments, the endpoint and the
+token permission are declared in the provider's own catalog file under `src/providers/catalog/`.
+A provider with more tools than fit on one line points at its file instead of listing them.
+
+| Provider | Tools | Registered |
+| -------- | ----- | ---------- |
+| `airtable` | 1 | `list_bases` |
+| `amplitude` | 1 | `get_flags` |
+| `anthropic-admin` | 2 | `list_workspaces`, `list_api_keys` |
+| `asana` | 2 | `get_a_task`, `create_a_project` |
+| `calendly` | 2 | `list_event_types`, `get_current_user` |
+| `circleci` | 2 | `list_pipelines`, `get_pipeline_by_id` |
+| `clickup` | 3 | `create_task`, `get_task`, `create_task_comment` |
+| `cloudflare` | 46 | `catalog/cloudflare.json` |
+| `confluence` | 2 | `get_page_by_id`, `get_pages` |
+| `datadog` | 1 | `v1_get_ip_ranges` |
+| `discord` | 2 | `get_my_user`, `list_my_guilds` |
+| `dropbox` | 2 | `list_folder`, `search_files` |
+| `exa` | 2 | `web_search`, `web_fetch` |
+| `figma` | 2 | `get_file`, `get_file_nodes` |
+| `gemini` | 2 | `generate_content`, `list_models` |
+| `github` | 6 | `create_issue`, `list_issues`, `get_issue`, `create_pull_request`, `get_pull_request`, `search_repositories` |
+| `gitlab` | 3 | `list_projects`, `create_project_issue`, `create_merge_request` |
+| `grafana-cloud` | 2 | `list_stacks`, `get_org` |
+| `grafana-stack` | 15 | `catalog/grafana-stack.json` |
+| `hubspot` | 3 | `crm_contacts_list`, `crm_contacts_create`, `crm_deals_list` |
+| `intercom` | 2 | `list_all_contacts`, `create_contact` |
+| `jira` | 5 | `create_issue`, `get_issue`, `add_comment`, `transition_issue`, `get_project` |
+| `linear` | 4 | `create_issue`, `list_issues`, `get_issue`, `create_comment` |
+| `mailchimp` | 2 | `list_campaigns`, `add_member_to_list` |
+| `mixpanel` | 2 | `track_event`, `raw_event_export` |
+| `monday` | 2 | `boards`, `get_workspaces` |
+| `notion` | 5 | `search`, `query_database`, `get_page`, `create_page`, `append_block_children` |
+| `onesignal` | 1 | `view_an_app` |
+| `openai` | 1 | `list_models` |
+| `pagerduty` | 3 | `list_incidents`, `create_incident`, `list_services` |
+| `perplexity` | 2 | `chat_completion`, `search` |
+| `posthog` | 2 | `list_project_dashboards`, `get_feature_flags_matching_ids` |
+| `resend` | 2 | `list_emails`, `create_contact` |
+| `sentry` | 2 | `list_organization_projects`, `list_a_project_s_issues` |
+| `shopify` | 3 | `list_products`, `get_product`, `list_orders` |
+| `snowflake` | 2 | `list_databases`, `list_tables` |
+| `square` | 3 | `list_payments`, `create_payment`, `list_customers` |
+| `stripe` | 6 | `post_customers`, `get_customers`, `post_payment_intents`, `get_payment_intents`, `get_balance`, `post_invoices` |
+| `supabase` | 3 | `list_projects`, `create_a_project`, `apply_a_migration` |
+| `vercel` | 3 | `get_projects`, `create_project`, `get_deployments` |
+| `x` | 3 | `create_posts`, `get_users_me`, `search_posts_recent` |
+| `zendesk` | 16 | `catalog/zendesk.json` |
+| **42 providers** | **175** | `src/providers/catalog/` |
+
+Cloudflare's record is the reviewed one:
+[`docs/cloudflare-api-inventory.md`](../../docs/cloudflare-api-inventory.md) accounts for every
+operation of the API - the filter that dropped it or the tool that shipped for it - grouped by
+the wave it was reviewed in.
+
+| Wave | Tools | Status | Scope |
+| ---- | ----- | ------ | ----- |
+| `w1` | 46 | reviewed | Zonas, DNS, ajustes de zona, cache y tokens de identidad |
+| `w2` | 0 | planned | Almacenamiento y computo: R2, KV, D1, Workers, Queues, Pages |
+| `w3` | 0 | planned | Zero Trust y Access: apps, politicas, identity providers, gateway |
+| `w4` | 0 | planned | Observabilidad y analitica: logs, analytics, alertas, WAF |
+| `w5` | 0 | planned | Radar y el resto de colecciones de cuenta con valor operativo |
+
+<!-- provider-index:end -->
 
 Setup:
 
