@@ -2,57 +2,97 @@
   "version": 1,
   "provider": "cloudflare",
   "source": "warpmetal-providers",
-  "extractedAt": "2026-10-05",
+  "extractedAt": "2026-10-14",
+  "spec": {
+    "title": "Cloudflare API",
+    "version": "4.0.0",
+    "operations": 3743,
+    "reviewable": 2227,
+    "sha256": "2f54916a15c27eb354e330dcc162a519f9822f021ab83975be9ef97ce707c51f"
+  },
   "tools": [
     {
-      "toolSlug": "cloudflare_zones_get",
-      "name": "zones_get",
-      "title": "List Cloudflare Zones",
-      "description": "cloudflare_zones_get: list Cloudflare DNS zones/domains for the authenticated API token using GET /zones. Returns zone IDs and domain names. Use this when you need to list zones or discover zone IDs before calling zone-scoped Cloudflare APIs.",
+      "toolSlug": "cloudflare_zones_list",
+      "name": "zones_list",
+      "title": "List Zones",
+      "description": "List Zones. GET /zones. Use it to browse; the get tool reads one when its id is already known. Requires a token with the Zone Zone Read permission.",
       "toolkitId": "cloudflare",
-      "version": "v3",
+      "version": "v4",
       "inputSchema": {
         "additionalProperties": false,
         "properties": {
           "account_id": {
-            "description": "Query parameter account.id.",
-            "type": "string"
+            "type": "string",
+            "description": "Query parameter account.id."
           },
           "account_name": {
-            "description": "Query parameter account.name.",
-            "type": "string"
+            "type": "string",
+            "description": "Query parameter account.name."
           },
           "direction": {
-            "description": "Query parameter direction.",
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "description": "Query parameter direction."
           },
           "match": {
-            "description": "Query parameter match.",
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "any",
+              "all"
+            ],
+            "default": "all",
+            "description": "Query parameter match."
           },
           "name": {
-            "description": "Query parameter name.",
-            "type": "string"
+            "type": "string",
+            "description": "Query parameter name."
           },
           "order": {
-            "description": "Query parameter order.",
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "name",
+              "status",
+              "account.id",
+              "account.name",
+              "plan.id"
+            ],
+            "description": "Query parameter order."
           },
           "page": {
-            "description": "Query parameter page.",
-            "type": "string"
+            "type": "number",
+            "default": 1,
+            "description": "Query parameter page."
           },
           "per_page": {
-            "description": "Query parameter per_page.",
-            "type": "string"
+            "type": "number",
+            "default": 20,
+            "description": "Query parameter per_page."
           },
           "status": {
-            "description": "Query parameter status.",
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "initializing",
+              "pending",
+              "active",
+              "moved"
+            ],
+            "description": "Query parameter status."
           },
           "type": {
-            "description": "Query parameter type.",
-            "type": "string"
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "full",
+                "partial",
+                "secondary",
+                "internal"
+              ]
+            },
+            "description": "Query parameter type."
           }
         },
         "type": "object"
@@ -62,7 +102,7 @@
         "type": "object"
       },
       "annotations": {
-        "title": "List Cloudflare Zones",
+        "title": "List Zones",
         "readOnlyHint": true,
         "idempotentHint": true,
         "openWorldHint": true,
@@ -70,30 +110,2454 @@
       }
     },
     {
-      "toolSlug": "cloudflare_accounts_list_accounts",
-      "name": "accounts_list_accounts",
-      "title": "List Cloudflare Accounts",
-      "description": "cloudflare_accounts_list_accounts: list Cloudflare accounts for the authenticated API token using GET /accounts (top-level accounts collection, no account_id path). Returns account IDs and account names. Use this when you need to list accounts or discover account IDs before calling account-scoped Cloudflare APIs.",
+      "toolSlug": "cloudflare_zones_create",
+      "name": "zones_create",
+      "title": "Create Zone",
+      "description": "Create Zone. POST /zones. Use it to add one; the response echoes what Cloudflare created. Requires a token with the Zone Zone Edit or Zone DNS Edit permission. The request body is required.",
       "toolkitId": "cloudflare",
-      "version": "v3",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "account": {
+            "type": "object",
+            "properties": {
+              "id": {}
+            },
+            "required": [],
+            "additionalProperties": true,
+            "description": "Body field account."
+          },
+          "name": {
+            "type": "string",
+            "description": "Body field name."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "full",
+              "partial",
+              "secondary",
+              "internal"
+            ],
+            "default": "full",
+            "description": "Body field type."
+          }
+        },
+        "required": [
+          "account",
+          "name"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Zone",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_zones_get",
+      "name": "zones_get",
+      "title": "Zone Details",
+      "description": "Zone Details. GET /zones/{zone_id}. Use it when the id is already known. Requires any one of a long list of token permissions; see the scope doc.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Zone Details",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_zones_update",
+      "name": "zones_update",
+      "title": "Edit Zone",
+      "description": "Edit Zone. PATCH /zones/{zone_id}. Only the fields you pass are sent, so a field you leave out is kept. Requires a token with the Zone Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "paused": {
+            "type": "boolean",
+            "default": false,
+            "description": "Body field paused."
+          },
+          "plan": {
+            "type": "object",
+            "properties": {
+              "id": {}
+            },
+            "required": [],
+            "additionalProperties": true,
+            "description": "Body field plan."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "full",
+              "partial",
+              "secondary",
+              "internal"
+            ],
+            "description": "Body field type."
+          },
+          "vanity_name_servers": {
+            "type": "array",
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "description": "Body field vanity_name_servers."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Edit Zone",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_zones_delete",
+      "name": "zones_delete",
+      "title": "Delete Zone",
+      "description": "Delete Zone. DELETE /zones/{zone_id}. What it removes is gone; check the id before calling it. Requires a token with the Zone Write permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Delete Zone",
+        "readOnlyHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "cloudflare_activation_check",
+      "name": "activation_check",
+      "title": "Rerun the Activation Check",
+      "description": "Rerun the Activation Check. PUT /zones/{zone_id}/activation_check. Requires a token with the Zone Write permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Rerun the Activation Check",
+        "readOnlyHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_hold_list",
+      "name": "hold_list",
+      "title": "Get Zone Hold",
+      "description": "Get Zone Hold. GET /zones/{zone_id}/hold. Use it to browse. Requires any one of a long list of token permissions; see the scope doc.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Zone Hold",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_hold_create",
+      "name": "hold_create",
+      "title": "Create Zone Hold",
+      "description": "Create Zone Hold. POST /zones/{zone_id}/hold. Use it to add one; the response echoes what Cloudflare created. Requires a token with the Zone Write permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "include_subdomains": {
+            "type": "boolean",
+            "description": "Query parameter include_subdomains."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Zone Hold",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_hold_patch",
+      "name": "hold_patch",
+      "title": "Update Zone Hold",
+      "description": "Update Zone Hold. PATCH /zones/{zone_id}/hold. Requires a token with the Zone Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "hold_after": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": "",
+            "description": "Body field hold_after."
+          },
+          "include_subdomains": {
+            "type": "boolean",
+            "default": false,
+            "description": "Body field include_subdomains."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Update Zone Hold",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_hold_delete",
+      "name": "hold_delete",
+      "title": "Remove Zone Hold",
+      "description": "Remove Zone Hold. DELETE /zones/{zone_id}/hold. What it removes is gone; check the id before calling it. Requires a token with the Zone Write permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "hold_after": {
+            "type": "string",
+            "description": "Query parameter hold_after."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Remove Zone Hold",
+        "readOnlyHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_list",
+      "name": "dns_records_list",
+      "title": "List DNS Records",
+      "description": "List DNS Records. GET /zones/{zone_id}/dns_records. Use it to browse; the get tool reads one when its id is already known. Requires a token with the DNS Read or DNS Write permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "comment": {
+            "type": "string",
+            "description": "Query parameter comment."
+          },
+          "comment_absent": {
+            "type": "string",
+            "description": "Query parameter comment.absent."
+          },
+          "comment_contains": {
+            "type": "string",
+            "description": "Query parameter comment.contains."
+          },
+          "comment_endswith": {
+            "type": "string",
+            "description": "Query parameter comment.endswith."
+          },
+          "comment_exact": {
+            "type": "string",
+            "description": "Query parameter comment.exact."
+          },
+          "comment_present": {
+            "type": "string",
+            "description": "Query parameter comment.present."
+          },
+          "comment_startswith": {
+            "type": "string",
+            "description": "Query parameter comment.startswith."
+          },
+          "content": {
+            "type": "string",
+            "description": "Query parameter content."
+          },
+          "content_contains": {
+            "type": "string",
+            "description": "Query parameter content.contains."
+          },
+          "content_endswith": {
+            "type": "string",
+            "description": "Query parameter content.endswith."
+          },
+          "content_exact": {
+            "type": "string",
+            "description": "Query parameter content.exact."
+          },
+          "content_startswith": {
+            "type": "string",
+            "description": "Query parameter content.startswith."
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "default": "asc",
+            "description": "Query parameter direction."
+          },
+          "include_shadow_metadata": {
+            "type": "boolean",
+            "default": false,
+            "description": "Query parameter include_shadow_metadata."
+          },
+          "match": {
+            "type": "string",
+            "enum": [
+              "any",
+              "all"
+            ],
+            "default": "all",
+            "description": "Query parameter match."
+          },
+          "name": {
+            "type": "string",
+            "description": "Query parameter name."
+          },
+          "name_contains": {
+            "type": "string",
+            "description": "Query parameter name.contains."
+          },
+          "name_endswith": {
+            "type": "string",
+            "description": "Query parameter name.endswith."
+          },
+          "name_exact": {
+            "type": "string",
+            "description": "Query parameter name.exact."
+          },
+          "name_startswith": {
+            "type": "string",
+            "description": "Query parameter name.startswith."
+          },
+          "order": {
+            "type": "string",
+            "enum": [
+              "type",
+              "name",
+              "content",
+              "ttl",
+              "proxied"
+            ],
+            "default": "type",
+            "description": "Query parameter order."
+          },
+          "page": {
+            "type": "number",
+            "default": 1,
+            "description": "Query parameter page."
+          },
+          "per_page": {
+            "type": "number",
+            "default": 100,
+            "description": "Query parameter per_page."
+          },
+          "proxied": {
+            "type": "boolean",
+            "default": false,
+            "description": "Query parameter proxied."
+          },
+          "search": {
+            "type": "string",
+            "description": "Query parameter search."
+          },
+          "shadowed_by_name": {
+            "type": "string",
+            "description": "Query parameter shadowed_by_name."
+          },
+          "shadowing_name": {
+            "type": "string",
+            "description": "Query parameter shadowing_name."
+          },
+          "tag": {
+            "type": "string",
+            "description": "Query parameter tag."
+          },
+          "tag_absent": {
+            "type": "string",
+            "description": "Query parameter tag.absent."
+          },
+          "tag_contains": {
+            "type": "string",
+            "description": "Query parameter tag.contains."
+          },
+          "tag_endswith": {
+            "type": "string",
+            "description": "Query parameter tag.endswith."
+          },
+          "tag_exact": {
+            "type": "string",
+            "description": "Query parameter tag.exact."
+          },
+          "tag_match": {
+            "type": "string",
+            "enum": [
+              "any",
+              "all"
+            ],
+            "default": "all",
+            "description": "Query parameter tag_match."
+          },
+          "tag_present": {
+            "type": "string",
+            "description": "Query parameter tag.present."
+          },
+          "tag_startswith": {
+            "type": "string",
+            "description": "Query parameter tag.startswith."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "A",
+              "AAAA",
+              "CAA",
+              "CERT",
+              "CNAME",
+              "DNSKEY",
+              "DS",
+              "HTTPS",
+              "LOC",
+              "MX",
+              "NAPTR",
+              "NS",
+              "OPENPGPKEY",
+              "PTR",
+              "SMIMEA",
+              "SRV",
+              "SSHFP",
+              "SVCB",
+              "TLSA",
+              "TXT",
+              "URI"
+            ],
+            "description": "Query parameter type."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List DNS Records",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_create",
+      "name": "dns_records_create",
+      "title": "Create DNS Record",
+      "description": "Create DNS Record. POST /zones/{zone_id}/dns_records. Use it to add one; the response echoes what Cloudflare created. Requires a token with the DNS Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "comment": {
+            "type": "string",
+            "description": "Body field comment."
+          },
+          "content": {
+            "type": "string",
+            "description": "Body field content."
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "flags": {
+                "type": "number"
+              },
+              "tag": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [],
+            "additionalProperties": true,
+            "description": "Body field data."
+          },
+          "include_shadow_metadata": {
+            "type": "boolean",
+            "default": false,
+            "description": "Query parameter include_shadow_metadata."
+          },
+          "name": {
+            "type": "string",
+            "description": "Body field name."
+          },
+          "priority": {
+            "type": "number",
+            "description": "Body field priority."
+          },
+          "private_routing": {
+            "type": "boolean",
+            "default": false,
+            "description": "Body field private_routing."
+          },
+          "proxied": {
+            "type": "boolean",
+            "default": false,
+            "description": "Body field proxied."
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "ipv4_only": {
+                "type": "boolean",
+                "default": false
+              },
+              "ipv6_only": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "required": [],
+            "additionalProperties": true,
+            "description": "Body field settings."
+          },
+          "tags": {
+            "type": "array",
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "description": "Body field tags."
+          },
+          "ttl": {
+            "default": 1,
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number",
+                "enum": [
+                  1
+                ]
+              }
+            ],
+            "description": "Body field ttl."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "A"
+            ],
+            "description": "Body field type."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create DNS Record",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_get",
+      "name": "dns_records_get",
+      "title": "DNS Record Details",
+      "description": "DNS Record Details. GET /zones/{zone_id}/dns_records/{dns_record_id}. Use it when the id is already known. Requires a token with the DNS Read or DNS Write permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "dns_record_id": {
+            "type": "string",
+            "description": "Path parameter dns_record_id."
+          },
+          "include_shadow_metadata": {
+            "type": "boolean",
+            "default": false,
+            "description": "Query parameter include_shadow_metadata."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "dns_record_id",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "DNS Record Details",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_update",
+      "name": "dns_records_update",
+      "title": "Update DNS Record",
+      "description": "Update DNS Record. PATCH /zones/{zone_id}/dns_records/{dns_record_id}. Only the fields you pass are sent, so a field you leave out is kept. Requires a token with the DNS Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "comment": {
+            "type": "string",
+            "description": "Body field comment."
+          },
+          "content": {
+            "type": "string",
+            "description": "Body field content."
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "flags": {
+                "type": "number"
+              },
+              "tag": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [],
+            "additionalProperties": true,
+            "description": "Body field data."
+          },
+          "dns_record_id": {
+            "type": "string",
+            "description": "Path parameter dns_record_id."
+          },
+          "include_shadow_metadata": {
+            "type": "boolean",
+            "default": false,
+            "description": "Query parameter include_shadow_metadata."
+          },
+          "name": {
+            "type": "string",
+            "description": "Body field name."
+          },
+          "priority": {
+            "type": "number",
+            "description": "Body field priority."
+          },
+          "private_routing": {
+            "type": "boolean",
+            "default": false,
+            "description": "Body field private_routing."
+          },
+          "proxied": {
+            "type": "boolean",
+            "default": false,
+            "description": "Body field proxied."
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "ipv4_only": {
+                "type": "boolean",
+                "default": false
+              },
+              "ipv6_only": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "required": [],
+            "additionalProperties": true,
+            "description": "Body field settings."
+          },
+          "tags": {
+            "type": "array",
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "description": "Body field tags."
+          },
+          "ttl": {
+            "default": 1,
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number",
+                "enum": [
+                  1
+                ]
+              }
+            ],
+            "description": "Body field ttl."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "A"
+            ],
+            "description": "Body field type."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "dns_record_id",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Update DNS Record",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_replace",
+      "name": "dns_records_replace",
+      "title": "Overwrite DNS Record",
+      "description": "Overwrite DNS Record. PUT /zones/{zone_id}/dns_records/{dns_record_id}. The record is replaced whole: a field you leave out is cleared. Requires a token with the DNS Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "comment": {
+            "type": "string",
+            "description": "Body field comment."
+          },
+          "content": {
+            "type": "string",
+            "description": "Body field content."
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "flags": {
+                "type": "number"
+              },
+              "tag": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [],
+            "additionalProperties": true,
+            "description": "Body field data."
+          },
+          "dns_record_id": {
+            "type": "string",
+            "description": "Path parameter dns_record_id."
+          },
+          "include_shadow_metadata": {
+            "type": "boolean",
+            "default": false,
+            "description": "Query parameter include_shadow_metadata."
+          },
+          "name": {
+            "type": "string",
+            "description": "Body field name."
+          },
+          "priority": {
+            "type": "number",
+            "description": "Body field priority."
+          },
+          "private_routing": {
+            "type": "boolean",
+            "default": false,
+            "description": "Body field private_routing."
+          },
+          "proxied": {
+            "type": "boolean",
+            "default": false,
+            "description": "Body field proxied."
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "ipv4_only": {
+                "type": "boolean",
+                "default": false
+              },
+              "ipv6_only": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "required": [],
+            "additionalProperties": true,
+            "description": "Body field settings."
+          },
+          "tags": {
+            "type": "array",
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "description": "Body field tags."
+          },
+          "ttl": {
+            "default": 1,
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number",
+                "enum": [
+                  1
+                ]
+              }
+            ],
+            "description": "Body field ttl."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "A"
+            ],
+            "description": "Body field type."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "dns_record_id",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Overwrite DNS Record",
+        "readOnlyHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_delete",
+      "name": "dns_records_delete",
+      "title": "Delete DNS Record",
+      "description": "Delete DNS Record. DELETE /zones/{zone_id}/dns_records/{dns_record_id}. What it removes is gone; check the id before calling it. Requires a token with the DNS Write permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "dns_record_id": {
+            "type": "string",
+            "description": "Path parameter dns_record_id."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "dns_record_id",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Delete DNS Record",
+        "readOnlyHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_batch",
+      "name": "dns_records_batch",
+      "title": "Batch DNS Records",
+      "description": "Batch DNS Records. POST /zones/{zone_id}/dns_records/batch. Requires a token with the DNS Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "deletes": {
+            "type": "array",
+            "items": {},
+            "description": "Body field deletes."
+          },
+          "include_shadow_metadata": {
+            "type": "boolean",
+            "default": false,
+            "description": "Query parameter include_shadow_metadata."
+          },
+          "patches": {
+            "type": "array",
+            "items": {},
+            "description": "Body field patches."
+          },
+          "posts": {
+            "type": "array",
+            "items": {},
+            "description": "Body field posts."
+          },
+          "puts": {
+            "type": "array",
+            "items": {},
+            "description": "Body field puts."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Batch DNS Records",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_import",
+      "name": "dns_records_import",
+      "title": "Import DNS Records",
+      "description": "Import DNS Records. POST /zones/{zone_id}/dns_records/import. Requires a token with the DNS Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "file": {
+            "type": "string",
+            "description": "Body field file."
+          },
+          "proxied": {
+            "type": "string",
+            "default": "false",
+            "description": "Body field proxied."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "file",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Import DNS Records",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "cloudflare_dns_settings_list",
+      "name": "dns_settings_list",
+      "title": "Show DNS Settings",
+      "description": "Show DNS Settings. GET /zones/{zone_id}/dns_settings. Use it to browse. Requires any one of a long list of token permissions; see the scope doc.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Show DNS Settings",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_dns_settings_patch",
+      "name": "dns_settings_patch",
+      "title": "Update DNS Settings",
+      "description": "Update DNS Settings. PATCH /zones/{zone_id}/dns_settings. Requires a token with the Zone DNS Settings Write or DNS Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "flatten_all_cnames": {
+            "type": "boolean",
+            "description": "Body field flatten_all_cnames."
+          },
+          "foundation_dns": {
+            "type": "boolean",
+            "description": "Body field foundation_dns."
+          },
+          "internal_dns": {
+            "type": "object",
+            "properties": {
+              "reference_zone_id": {
+                "type": "string"
+              }
+            },
+            "required": [],
+            "additionalProperties": true,
+            "description": "Body field internal_dns."
+          },
+          "multi_provider": {
+            "type": "boolean",
+            "description": "Body field multi_provider."
+          },
+          "nameservers": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "cloudflare.standard",
+                  "cloudflare.advanced"
+                ]
+              },
+              "ns_set": {
+                "type": "integer",
+                "default": 1
+              },
+              "nameserver_set_id": {}
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": true,
+            "description": "Body field nameservers."
+          },
+          "ns_ttl": {
+            "type": "number",
+            "description": "Body field ns_ttl."
+          },
+          "secondary_overrides": {
+            "type": "boolean",
+            "description": "Body field secondary_overrides."
+          },
+          "soa": {
+            "type": "object",
+            "properties": {
+              "expire": {
+                "type": "number"
+              },
+              "min_ttl": {
+                "type": "number"
+              },
+              "mname": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "refresh": {
+                "type": "number"
+              },
+              "retry": {
+                "type": "number"
+              },
+              "rname": {
+                "type": "string"
+              },
+              "ttl": {
+                "type": "number"
+              }
+            },
+            "required": [],
+            "additionalProperties": true,
+            "description": "Body field soa."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          },
+          "zone_mode": {
+            "type": "string",
+            "enum": [
+              "standard",
+              "cdn_only",
+              "dns_only"
+            ],
+            "description": "Body field zone_mode."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Update DNS Settings",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_dnssec_list",
+      "name": "dnssec_list",
+      "title": "DNSSEC Details",
+      "description": "DNSSEC Details. GET /zones/{zone_id}/dnssec. Use it to browse. Requires a token with the DNS Read or DNS Write permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "DNSSEC Details",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_dnssec_patch",
+      "name": "dnssec_patch",
+      "title": "Edit DNSSEC Status",
+      "description": "Edit DNSSEC Status. PATCH /zones/{zone_id}/dnssec. Requires a token with the DNS Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "dnssec_multi_signer": {
+            "type": "boolean",
+            "description": "Body field dnssec_multi_signer."
+          },
+          "dnssec_presigned": {
+            "type": "boolean",
+            "description": "Body field dnssec_presigned."
+          },
+          "dnssec_use_nsec3": {
+            "type": "boolean",
+            "description": "Body field dnssec_use_nsec3."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "disabled"
+            ],
+            "description": "Body field status."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Edit DNSSEC Status",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_dnssec_delete",
+      "name": "dnssec_delete",
+      "title": "Delete DNSSEC records",
+      "description": "Delete DNSSEC records. DELETE /zones/{zone_id}/dnssec. What it removes is gone; check the id before calling it. Requires a token with the DNS Write permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Delete DNSSEC records",
+        "readOnlyHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "cloudflare_settings_list",
+      "name": "settings_list",
+      "title": "Get all zone settings",
+      "description": "Get all zone settings. GET /zones/{zone_id}/settings. Use it to browse; the get tool reads one when its id is already known. Requires a token with the Zone Settings Write or Zone Settings Read permission. Cloudflare marks this operation deprecated.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get all zone settings",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_settings_get",
+      "name": "settings_get",
+      "title": "Get zone setting",
+      "description": "Get zone setting. GET /zones/{zone_id}/settings/{setting_id}. Use it when the id is already known. Requires a token with the Zone Settings Write or Zone Settings Read permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "setting_id": {
+            "type": "string",
+            "description": "Path parameter setting_id."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "setting_id",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get zone setting",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_settings_update",
+      "name": "settings_update",
+      "title": "Edit zone setting",
+      "description": "Edit zone setting. PATCH /zones/{zone_id}/settings/{setting_id}. Only the fields you pass are sent, so a field you leave out is kept. Requires a token with the Zone Settings Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "default": false,
+            "description": "Body field enabled."
+          },
+          "setting_id": {
+            "type": "string",
+            "description": "Path parameter setting_id."
+          },
+          "value": {
+            "description": "Body field value. The spec does not declare its type, so any JSON value is accepted."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "setting_id",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Edit zone setting",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_purge_cache",
+      "name": "purge_cache",
+      "title": "Purge Cached Content",
+      "description": "Purge Cached Content. POST /zones/{zone_id}/purge_cache. Requires a token with the Cache Purge permission. Cloudflare flags this operation as one that asks for confirmation. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Body field files."
+          },
+          "hosts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Body field hosts."
+          },
+          "prefixes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Body field prefixes."
+          },
+          "purge_everything": {
+            "type": "boolean",
+            "description": "Body field purge_everything."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Body field tags."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Purge Cached Content",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "cloudflare_firewall_access_rules_rules_list",
+      "name": "firewall_access_rules_rules_list",
+      "title": "List IP Access rules",
+      "description": "List IP Access rules. GET /zones/{zone_id}/firewall/access_rules/rules. Use it to browse. Requires a token with the Firewall Services Write or Firewall Services Read permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "configuration_target": {
+            "type": "string",
+            "enum": [
+              "ip",
+              "ip_range",
+              "asn",
+              "country"
+            ],
+            "description": "Query parameter configuration.target."
+          },
+          "configuration_value": {
+            "type": "string",
+            "description": "Query parameter configuration.value."
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "description": "Query parameter direction."
+          },
+          "match": {
+            "type": "string",
+            "enum": [
+              "any",
+              "all"
+            ],
+            "default": "all",
+            "description": "Query parameter match."
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "block",
+              "challenge",
+              "whitelist",
+              "js_challenge",
+              "managed_challenge"
+            ],
+            "description": "Query parameter mode."
+          },
+          "notes": {
+            "type": "string",
+            "description": "Query parameter notes."
+          },
+          "order": {
+            "type": "string",
+            "enum": [
+              "configuration.target",
+              "configuration.value",
+              "mode"
+            ],
+            "description": "Query parameter order."
+          },
+          "page": {
+            "type": "number",
+            "description": "Query parameter page."
+          },
+          "per_page": {
+            "type": "number",
+            "description": "Query parameter per_page."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List IP Access rules",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_firewall_access_rules_rules_create",
+      "name": "firewall_access_rules_rules_create",
+      "title": "Create an IP Access rule",
+      "description": "Create an IP Access rule. POST /zones/{zone_id}/firewall/access_rules/rules. Use it to add one; the response echoes what Cloudflare created. Requires a token with the Firewall Services Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "configuration": {
+            "type": "object",
+            "properties": {
+              "target": {
+                "type": "string",
+                "enum": [
+                  "ip"
+                ]
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [],
+            "additionalProperties": true,
+            "description": "Body field configuration."
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "block",
+              "challenge",
+              "whitelist",
+              "js_challenge",
+              "managed_challenge"
+            ],
+            "description": "Body field mode."
+          },
+          "notes": {
+            "default": "",
+            "anyOf": [
+              {}
+            ],
+            "description": "Body field notes."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "configuration",
+          "mode",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create an IP Access rule",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_firewall_access_rules_rules_update",
+      "name": "firewall_access_rules_rules_update",
+      "title": "Update an IP Access rule",
+      "description": "Update an IP Access rule. PATCH /zones/{zone_id}/firewall/access_rules/rules/{rule_id}. Only the fields you pass are sent, so a field you leave out is kept. Requires a token with the Firewall Services Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "block",
+              "challenge",
+              "whitelist",
+              "js_challenge",
+              "managed_challenge"
+            ],
+            "description": "Body field mode."
+          },
+          "notes": {
+            "type": "string",
+            "description": "Body field notes."
+          },
+          "rule_id": {
+            "type": "string",
+            "description": "Path parameter rule_id."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "rule_id",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Update an IP Access rule",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_firewall_access_rules_rules_delete",
+      "name": "firewall_access_rules_rules_delete",
+      "title": "Delete an IP Access rule",
+      "description": "Delete an IP Access rule. DELETE /zones/{zone_id}/firewall/access_rules/rules/{rule_id}. What it removes is gone; check the id before calling it. Requires a token with the Firewall Services Write permission. Cloudflare flags this operation as one that asks for confirmation. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cascade": {
+            "type": "string",
+            "enum": [
+              "none",
+              "basic",
+              "aggressive"
+            ],
+            "default": "none",
+            "description": "Body field cascade."
+          },
+          "rule_id": {
+            "type": "string",
+            "description": "Path parameter rule_id."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "rule_id",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Delete an IP Access rule",
+        "readOnlyHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_firewall_lockdowns_list",
+      "name": "firewall_lockdowns_list",
+      "title": "List Zone Lockdown rules",
+      "description": "List Zone Lockdown rules. GET /zones/{zone_id}/firewall/lockdowns. Use it to browse; the get tool reads one when its id is already known. Requires a token with the Firewall Services Write or Firewall Services Read permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "created_on": {
+            "type": "string",
+            "description": "Query parameter created_on."
+          },
+          "description": {
+            "type": "string",
+            "description": "Query parameter description."
+          },
+          "description_search": {
+            "type": "string",
+            "description": "Query parameter description_search."
+          },
+          "ip": {
+            "type": "string",
+            "description": "Query parameter ip."
+          },
+          "ip_range_search": {
+            "type": "string",
+            "description": "Query parameter ip_range_search."
+          },
+          "ip_search": {
+            "type": "string",
+            "description": "Query parameter ip_search."
+          },
+          "modified_on": {
+            "type": "string",
+            "description": "Query parameter modified_on."
+          },
+          "page": {
+            "type": "number",
+            "default": 1,
+            "description": "Query parameter page."
+          },
+          "per_page": {
+            "type": "number",
+            "default": 20,
+            "description": "Query parameter per_page."
+          },
+          "priority": {
+            "type": "number",
+            "description": "Query parameter priority."
+          },
+          "uri_search": {
+            "type": "string",
+            "description": "Query parameter uri_search."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Zone Lockdown rules",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_firewall_lockdowns_create",
+      "name": "firewall_lockdowns_create",
+      "title": "Create a Zone Lockdown rule",
+      "description": "Create a Zone Lockdown rule. POST /zones/{zone_id}/firewall/lockdowns. Use it to add one; the response echoes what Cloudflare created. Requires a token with the Firewall Services Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "configurations": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {},
+                {}
+              ]
+            },
+            "description": "Body field configurations."
+          },
+          "description": {
+            "type": "string",
+            "description": "Body field description."
+          },
+          "paused": {
+            "type": "boolean",
+            "description": "Body field paused."
+          },
+          "priority": {
+            "type": "number",
+            "description": "Body field priority."
+          },
+          "urls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Body field urls."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "configurations",
+          "urls",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create a Zone Lockdown rule",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_firewall_lockdowns_get",
+      "name": "firewall_lockdowns_get",
+      "title": "Get a Zone Lockdown rule",
+      "description": "Get a Zone Lockdown rule. GET /zones/{zone_id}/firewall/lockdowns/{lock_downs_id}. Use it when the id is already known. Requires a token with the Firewall Services Write or Firewall Services Read permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "lock_downs_id": {
+            "type": "string",
+            "description": "Path parameter lock_downs_id."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "lock_downs_id",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get a Zone Lockdown rule",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_firewall_lockdowns_replace",
+      "name": "firewall_lockdowns_replace",
+      "title": "Update a Zone Lockdown rule",
+      "description": "Update a Zone Lockdown rule. PUT /zones/{zone_id}/firewall/lockdowns/{lock_downs_id}. The record is replaced whole: a field you leave out is cleared. Requires a token with the Firewall Services Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "configurations": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {},
+                {}
+              ]
+            },
+            "description": "Body field configurations."
+          },
+          "lock_downs_id": {
+            "type": "string",
+            "description": "Path parameter lock_downs_id."
+          },
+          "urls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Body field urls."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "configurations",
+          "lock_downs_id",
+          "urls",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Update a Zone Lockdown rule",
+        "readOnlyHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_firewall_lockdowns_delete",
+      "name": "firewall_lockdowns_delete",
+      "title": "Delete a Zone Lockdown rule",
+      "description": "Delete a Zone Lockdown rule. DELETE /zones/{zone_id}/firewall/lockdowns/{lock_downs_id}. What it removes is gone; check the id before calling it. Requires a token with the Firewall Services Write permission. Cloudflare flags this operation as one that asks for confirmation.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "lock_downs_id": {
+            "type": "string",
+            "description": "Path parameter lock_downs_id."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "lock_downs_id",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Delete a Zone Lockdown rule",
+        "readOnlyHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_firewall_ua_rules_list",
+      "name": "firewall_ua_rules_list",
+      "title": "List User Agent Blocking rules",
+      "description": "List User Agent Blocking rules. GET /zones/{zone_id}/firewall/ua_rules. Use it to browse; the get tool reads one when its id is already known. Requires a token with the Firewall Services Write or Firewall Services Read permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Query parameter description."
+          },
+          "page": {
+            "type": "number",
+            "default": 1,
+            "description": "Query parameter page."
+          },
+          "paused": {
+            "type": "boolean",
+            "description": "Query parameter paused."
+          },
+          "per_page": {
+            "type": "number",
+            "default": 20,
+            "description": "Query parameter per_page."
+          },
+          "user_agent": {
+            "type": "string",
+            "description": "Query parameter user_agent."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List User Agent Blocking rules",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_firewall_ua_rules_create",
+      "name": "firewall_ua_rules_create",
+      "title": "Create a User Agent Blocking rule",
+      "description": "Create a User Agent Blocking rule. POST /zones/{zone_id}/firewall/ua_rules. Use it to add one; the response echoes what Cloudflare created. Requires a token with the Firewall Services Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "configuration": {
+            "type": "object",
+            "properties": {
+              "target": {
+                "type": "string",
+                "enum": [
+                  "ua"
+                ]
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [],
+            "additionalProperties": true,
+            "description": "Body field configuration."
+          },
+          "description": {
+            "type": "string",
+            "description": "Body field description."
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "block",
+              "challenge",
+              "whitelist",
+              "js_challenge",
+              "managed_challenge"
+            ],
+            "description": "Body field mode."
+          },
+          "paused": {
+            "type": "boolean",
+            "description": "Body field paused."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "configuration",
+          "mode",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create a User Agent Blocking rule",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_firewall_ua_rules_get",
+      "name": "firewall_ua_rules_get",
+      "title": "Get a User Agent Blocking rule",
+      "description": "Get a User Agent Blocking rule. GET /zones/{zone_id}/firewall/ua_rules/{ua_rule_id}. Use it when the id is already known. Requires a token with the Firewall Services Write or Firewall Services Read permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "ua_rule_id": {
+            "type": "string",
+            "description": "Path parameter ua_rule_id."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "ua_rule_id",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get a User Agent Blocking rule",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_firewall_ua_rules_replace",
+      "name": "firewall_ua_rules_replace",
+      "title": "Update a User Agent Blocking rule",
+      "description": "Update a User Agent Blocking rule. PUT /zones/{zone_id}/firewall/ua_rules/{ua_rule_id}. The record is replaced whole: a field you leave out is cleared. Requires a token with the Firewall Services Write permission. The request body is required.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "configuration": {
+            "type": "object",
+            "properties": {
+              "target": {
+                "type": "string",
+                "enum": [
+                  "ip"
+                ]
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [],
+            "additionalProperties": true,
+            "description": "Body field configuration."
+          },
+          "description": {
+            "type": "string",
+            "description": "Body field description."
+          },
+          "id": {
+            "type": "string",
+            "description": "Body field id."
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "block",
+              "challenge",
+              "whitelist",
+              "js_challenge",
+              "managed_challenge"
+            ],
+            "description": "Body field mode."
+          },
+          "paused": {
+            "type": "boolean",
+            "description": "Body field paused."
+          },
+          "ua_rule_id": {
+            "type": "string",
+            "description": "Path parameter ua_rule_id."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "configuration",
+          "id",
+          "mode",
+          "ua_rule_id",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Update a User Agent Blocking rule",
+        "readOnlyHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_firewall_ua_rules_delete",
+      "name": "firewall_ua_rules_delete",
+      "title": "Delete a User Agent Blocking rule",
+      "description": "Delete a User Agent Blocking rule. DELETE /zones/{zone_id}/firewall/ua_rules/{ua_rule_id}. What it removes is gone; check the id before calling it. Requires a token with the Firewall Services Write permission. Cloudflare flags this operation as one that asks for confirmation.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "ua_rule_id": {
+            "type": "string",
+            "description": "Path parameter ua_rule_id."
+          },
+          "zone_id": {
+            "type": "string",
+            "description": "Path parameter zone_id."
+          }
+        },
+        "required": [
+          "ua_rule_id",
+          "zone_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Delete a User Agent Blocking rule",
+        "readOnlyHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_accounts_list",
+      "name": "accounts_list",
+      "title": "List Accounts",
+      "description": "List Accounts. GET /accounts. Use it to browse.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
       "inputSchema": {
         "additionalProperties": false,
         "properties": {
           "direction": {
-            "description": "Query parameter direction.",
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "description": "Query parameter direction."
           },
           "name": {
-            "description": "Query parameter name.",
-            "type": "string"
+            "type": "string",
+            "description": "Query parameter name."
           },
           "page": {
-            "description": "Query parameter page.",
-            "type": "string"
+            "type": "number",
+            "default": 1,
+            "description": "Query parameter page."
           },
           "per_page": {
-            "description": "Query parameter per_page.",
-            "type": "string"
+            "type": "number",
+            "default": 20,
+            "description": "Query parameter per_page."
           }
         },
         "type": "object"
@@ -103,7 +2567,144 @@
         "type": "object"
       },
       "annotations": {
-        "title": "List Cloudflare Accounts",
+        "title": "List Accounts",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_user_tokens_list",
+      "name": "user_tokens_list",
+      "title": "List Tokens",
+      "description": "List Tokens. GET /user/tokens. Use it to browse; the get tool reads one when its id is already known. Requires a token with the API Tokens Write or API Tokens Read permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "direction": {
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "description": "Query parameter direction."
+          },
+          "include_expired": {
+            "type": "boolean",
+            "default": false,
+            "description": "Query parameter include_expired."
+          },
+          "page": {
+            "type": "number",
+            "default": 1,
+            "description": "Query parameter page."
+          },
+          "per_page": {
+            "type": "number",
+            "default": 20,
+            "description": "Query parameter per_page."
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Tokens",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_user_tokens_get",
+      "name": "user_tokens_get",
+      "title": "Token Details",
+      "description": "Token Details. GET /user/tokens/{token_id}. Use it when the id is already known. Requires a token with the API Tokens Write or API Tokens Read permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "token_id": {
+            "type": "string",
+            "description": "Path parameter token_id."
+          }
+        },
+        "required": [
+          "token_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Token Details",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_user_tokens_verify",
+      "name": "user_tokens_verify",
+      "title": "Verify Token",
+      "description": "Verify Token. GET /user/tokens/verify.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Verify Token",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "cloudflare_user_tokens_permission_groups_list",
+      "name": "user_tokens_permission_groups_list",
+      "title": "List Token Permission Groups",
+      "description": "List Token Permission Groups. GET /user/tokens/permission_groups. Use it to browse. Requires a token with the API Tokens Write or API Tokens Read permission.",
+      "toolkitId": "cloudflare",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Query parameter name."
+          },
+          "scope": {
+            "type": "string",
+            "description": "Query parameter scope."
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Token Permission Groups",
         "readOnlyHint": true,
         "idempotentHint": true,
         "openWorldHint": true,

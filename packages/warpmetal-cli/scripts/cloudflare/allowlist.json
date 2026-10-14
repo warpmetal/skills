@@ -1,0 +1,480 @@
+{
+  "version": 1,
+  "extractedAt": "2026-10-14",
+  "note": "Reviewed decisions about which Cloudflare API operations become MCP tools. Every entry is a decision: the final toolSlug, the wave it ships in, and why. The generators only obey this file, and scripts/cloudflare/allowlist.mjs refuses anything that does not square with the spec - a name that disagrees with the path, an operation that is not in the spec, a reason that is missing, a body nobody reviewed. Regenerating the docs: node packages/warpmetal-cli/scripts/gen-cloudflare-inventory.mjs",
+  "filterPolicy": {
+    "dropped": "x-forge-hidden and x-fern-ignore operations are out of the published surface, so they are not shipped unless an entry says keepFiltered with a reason.",
+    "keepFiltered": "Used where the operation is documented public API and the surface would be incomplete without it: the two legacy tools that must not break (GET /accounts), and the /user identity reads the token model needs."
+  },
+  "spec": {
+    "title": "Cloudflare API",
+    "version": "4.0.0",
+    "document": "https://raw.githubusercontent.com/cloudflare/api-schemas/main/openapi.json",
+    "reference": "https://developers.cloudflare.com/api/",
+    "sha256": "2f54916a15c27eb354e330dcc162a519f9822f021ab83975be9ef97ce707c51f"
+  },
+  "waves": {
+    "w1": {
+      "status": "reviewed",
+      "scope": "Zonas, DNS, ajustes de zona, cache y tokens de identidad"
+    },
+    "w2": {
+      "status": "planned",
+      "scope": "Almacenamiento y computo: R2, KV, D1, Workers, Queues, Pages"
+    },
+    "w3": {
+      "status": "planned",
+      "scope": "Zero Trust y Access: apps, politicas, identity providers, gateway"
+    },
+    "w4": {
+      "status": "planned",
+      "scope": "Observabilidad y analitica: logs, analytics, alertas, WAF"
+    },
+    "w5": {
+      "status": "planned",
+      "scope": "Radar y el resto de colecciones de cuenta con valor operativo"
+    }
+  },
+  "retired": [
+    "cloudflare_accounts_list_accounts"
+  ],
+  "renamed": {
+    "cloudflare_zones_get": "cloudflare_zones_list",
+    "cloudflare_accounts_list_accounts": "cloudflare_accounts_list"
+  },
+  "reused": {
+    "cloudflare_zones_get": "This slug survives a change of meaning: it listed zones (GET /zones) and now reads one zone by id (GET /zones/{zone_id}). A caller that sends {} gets a loud invalid-arguments error from the required zone_id, and cloudflare_zones_list is the old behaviour."
+  },
+  "retiredNote": "The two original slugs did not follow the naming rule cloudflare_<module>_<verb>. cloudflare_accounts_list_accounts disappears; cloudflare_zones_get keeps its name for a different operation, which is a breaking change for a caller of the old tool. See packages/skills-mcp/CHANGELOG-providers.md.",
+
+  "tools": [
+    {
+      "toolSlug": "cloudflare_zones_list",
+      "method": "GET",
+      "path": "/zones",
+      "wave": "w1",
+      "reason": "The entry point: every zone-scoped tool needs a zone_id, and this is the only way to discover one. Also what the legacy cloudflare status verb reads.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zones_create",
+      "method": "POST",
+      "path": "/zones",
+      "wave": "w1",
+      "reason": "Adding a domain to the account. Additive and reversible by zones_delete; the plan and subscription are a separate call.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zones_get",
+      "method": "GET",
+      "path": "/zones/{zone_id}",
+      "wave": "w1",
+      "reason": "One zone in full: status, name servers, plan, paused flag. Reads the state every other zone tool acts on.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zones_update",
+      "method": "PATCH",
+      "path": "/zones/{zone_id}",
+      "wave": "w1",
+      "reason": "The settable zone fields (paused, plan, type, vanity name servers). Pausing a zone takes the site off Cloudflare at once.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_zones_delete",
+      "method": "DELETE",
+      "path": "/zones/{zone_id}",
+      "wave": "w1",
+      "reason": "Deleting the zone stops DNS from answering and mail from arriving: nothing is served until the domain is added back and its records are rebuilt.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_activation_check",
+      "method": "PUT",
+      "path": "/zones/{zone_id}/activation_check",
+      "wave": "w1",
+      "reason": "Re-runs the zone activation check, which is the step that finishes a migration after the registrar's name servers point at Cloudflare.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_hold_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/hold",
+      "wave": "w1",
+      "reason": "Reads whether the zone is held and until when. A hold is what keeps a zone from being deleted or moved by mistake mid-migration.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_hold_create",
+      "method": "POST",
+      "path": "/zones/{zone_id}/hold",
+      "wave": "w1",
+      "reason": "Binds a hold to the zone for a number of days, the safety net for a cutover.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_hold_patch",
+      "method": "PATCH",
+      "path": "/zones/{zone_id}/hold",
+      "wave": "w1",
+      "reason": "Extends or shortens an existing hold, the operation a long migration needs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_hold_delete",
+      "method": "DELETE",
+      "path": "/zones/{zone_id}/hold",
+      "wave": "w1",
+      "reason": "Releases the hold, which also re-enables the account-transfer path it was blocking. Reviewed as a normal gated write: it protects nothing by itself.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/dns_records",
+      "wave": "w1",
+      "reason": "Lists a zone's records with the API's own filters (name, type, tag, comment, content). The read half of the legacy dns-list verb.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_create",
+      "method": "POST",
+      "path": "/zones/{zone_id}/dns_records",
+      "wave": "w1",
+      "reason": "Creates one record. The spec's body is a union of per-record-type schemas and the resolver flattens it to the 11 fields they share.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_get",
+      "method": "GET",
+      "path": "/zones/{zone_id}/dns_records/{dns_record_id}",
+      "wave": "w1",
+      "reason": "Reads one record by id, the lookup a caller needs before an update it does not want to guess at.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_update",
+      "method": "PATCH",
+      "path": "/zones/{zone_id}/dns_records/{dns_record_id}",
+      "wave": "w1",
+      "reason": "Changes the fields it is given and leaves the rest alone, which is what an upsert during a cutover wants.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_replace",
+      "method": "PUT",
+      "path": "/zones/{zone_id}/dns_records/{dns_record_id}",
+      "wave": "w1",
+      "reason": "Replaces the whole record: a field left out is cleared. Distinct from update on purpose, so a caller picks which semantics they mean.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_delete",
+      "method": "DELETE",
+      "path": "/zones/{zone_id}/dns_records/{dns_record_id}",
+      "wave": "w1",
+      "reason": "Removing a record takes that name off the air until it is created again; the service it pointed at is unreachable meanwhile.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_batch",
+      "method": "POST",
+      "path": "/zones/{zone_id}/dns_records/batch",
+      "wave": "w1",
+      "reason": "One call that posts, puts, patches and deletes a set of records at once. It is the tool that can take several names off the air in a single request.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dns_records_import",
+      "method": "POST",
+      "path": "/zones/{zone_id}/dns_records/import",
+      "wave": "w1",
+      "reason": "Imports a BIND zone file, replacing what the zone already holds for the names it carries. The most dangerous DNS call in the surface.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dns_settings_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/dns_settings",
+      "wave": "w1",
+      "reason": "The zone's DNS-level settings in one read: zone transfer, flattening, multi-provider, nameserver behaviour.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dns_settings_patch",
+      "method": "PATCH",
+      "path": "/zones/{zone_id}/dns_settings",
+      "wave": "w1",
+      "reason": "Writes those settings. It is a PATCH because the API accepts the subset it is given; the schema carries the 9 documented fields.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dnssec_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/dnssec",
+      "wave": "w1",
+      "reason": "Reads whether DNSSEC is on for the zone and the DS record the registrar has to publish, which is what a secure-zone audit needs.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dnssec_patch",
+      "method": "PATCH",
+      "path": "/zones/{zone_id}/dnssec",
+      "wave": "w1",
+      "reason": "Turns DNSSEC on or off. Enabling it before the DS record is published, or leaving the DS record behind, is the failure this tool is gated for.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_dnssec_delete",
+      "method": "DELETE",
+      "path": "/zones/{zone_id}/dnssec",
+      "wave": "w1",
+      "reason": "Disabling DNSSEC while the registrar still holds the DS record makes the whole domain fail to resolve (SERVFAIL), not just lose validation.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_settings_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/settings",
+      "wave": "w1",
+      "reason": "Every zone setting in one call: the audit a migration starts from. Cloudflare marks the operation deprecated but keeps serving it, and it is the only bulk read.",
+      "destructive": false,
+      "auth": "api-token",
+      "note": "Deprecated in the spec; the per-setting read below is the supported path."
+    },
+    {
+      "toolSlug": "cloudflare_settings_get",
+      "method": "GET",
+      "path": "/zones/{zone_id}/settings/{setting_id}",
+      "wave": "w1",
+      "reason": "Reads one setting by its documented id (ssl, min_tls_version, always_use_https, cache_level...).",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_settings_update",
+      "method": "PATCH",
+      "path": "/zones/{zone_id}/settings/{setting_id}",
+      "wave": "w1",
+      "reason": "Changes one setting. The supported way to turn on always_use_https or raise min_tls_version, one named value at a time.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_purge_cache",
+      "method": "POST",
+      "path": "/zones/{zone_id}/purge_cache",
+      "wave": "w1",
+      "reason": "Empties the edge cache for everything, by host, by tag, by URL or by prefix. Cloudflare flags it for confirmation because a full purge sends every request to the origin at once and cannot be recalled.",
+      "destructive": true,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_firewall_access_rules_rules_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/firewall/access_rules/rules",
+      "wave": "w1",
+      "reason": "Lists the zone's IP allow/block rules, the state an incident responder reads first.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_firewall_access_rules_rules_create",
+      "method": "POST",
+      "path": "/zones/{zone_id}/firewall/access_rules/rules",
+      "wave": "w1",
+      "reason": "Blocks or challenges an IP, range, ASN or country at the edge: the first move against an abusive source.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_firewall_access_rules_rules_update",
+      "method": "PATCH",
+      "path": "/zones/{zone_id}/firewall/access_rules/rules/{rule_id}",
+      "wave": "w1",
+      "reason": "Changes a rule's mode or target without deleting and recreating it, so the rule id stays stable for other systems.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_firewall_access_rules_rules_delete",
+      "method": "DELETE",
+      "path": "/zones/{zone_id}/firewall/access_rules/rules/{rule_id}",
+      "wave": "w1",
+      "reason": "Removes the block. Cloudflare marks it confirmation-worthy, so it is a reviewed note rather than a destructive flag: nothing is unrecoverable, the rule can be created again.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_firewall_lockdowns_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/firewall/lockdowns",
+      "wave": "w1",
+      "reason": "Lists the zone's lockdowns (host or path reachable only from stated IPs), the scheduled kind of access rule.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_firewall_lockdowns_create",
+      "method": "POST",
+      "path": "/zones/{zone_id}/firewall/lockdowns",
+      "wave": "w1",
+      "reason": "Closes a host or path to everyone outside a list of IPs, which is how a staging site or an admin path is protected.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_firewall_lockdowns_get",
+      "method": "GET",
+      "path": "/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}",
+      "wave": "w1",
+      "reason": "Reads one lockdown, including the window it applies in.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_firewall_lockdowns_replace",
+      "method": "PUT",
+      "path": "/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}",
+      "wave": "w1",
+      "reason": "Replaces a lockdown's urls, schedule and configuration. A mistaken replacement can open a path that was closed, which is why it stays behind the write gate.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_firewall_lockdowns_delete",
+      "method": "DELETE",
+      "path": "/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}",
+      "wave": "w1",
+      "reason": "Removes a lockdown, reopening the host or path to the internet. Cloudflare marks it confirmation-worthy; the write gate covers it.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_firewall_ua_rules_list",
+      "method": "GET",
+      "path": "/zones/{zone_id}/firewall/ua_rules",
+      "wave": "w1",
+      "reason": "Lists the user-agent block rules, the other half of the classic edge block list.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_firewall_ua_rules_create",
+      "method": "POST",
+      "path": "/zones/{zone_id}/firewall/ua_rules",
+      "wave": "w1",
+      "reason": "Blocks a user agent at the edge (a scraper, a bot that ignores robots.txt) without touching the origin.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_firewall_ua_rules_get",
+      "method": "GET",
+      "path": "/zones/{zone_id}/firewall/ua_rules/{ua_rule_id}",
+      "wave": "w1",
+      "reason": "Reads one user-agent rule by id.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_firewall_ua_rules_replace",
+      "method": "PUT",
+      "path": "/zones/{zone_id}/firewall/ua_rules/{ua_rule_id}",
+      "wave": "w1",
+      "reason": "Replaces a user-agent rule: the way to narrow a block that turned out to catch real traffic.",
+      "destructive": false,
+      "auth": "api-token"
+    },
+    {
+      "toolSlug": "cloudflare_firewall_ua_rules_delete",
+      "method": "DELETE",
+      "path": "/zones/{zone_id}/firewall/ua_rules/{ua_rule_id}",
+      "wave": "w1",
+      "reason": "Removes a user-agent block. Cloudflare marks it confirmation-worthy; the write gate covers it and the rule can be recreated.",
+      "destructive": false,
+      "auth": "api-token",
+      "confirmGate": true
+    },
+    {
+      "toolSlug": "cloudflare_accounts_list",
+      "method": "GET",
+      "path": "/accounts",
+      "wave": "w1",
+      "reason": "The account_id every account-scoped tool needs comes from here, and the legacy cloudflare adapter already ships this tool. Renamed from cloudflare_accounts_list_accounts to follow the naming rule.",
+      "destructive": false,
+      "auth": "api-token",
+      "keepFiltered": true,
+      "filterNote": "x-fern-ignore on the whole /accounts group, but this is published public API and it is already shipped; dropping it would break a documented tool."
+    },
+    {
+      "toolSlug": "cloudflare_user_tokens_list",
+      "method": "GET",
+      "path": "/user/tokens",
+      "wave": "w1",
+      "reason": "Lists the user's API tokens with their status and expiry: the read that answers which credential this is and whether it is about to expire.",
+      "destructive": false,
+      "auth": "api-token",
+      "keepFiltered": true,
+      "filterNote": "x-fern-ignore, but the token surface is documented public API and these identity reads are the half a status check needs."
+    },
+    {
+      "toolSlug": "cloudflare_user_tokens_get",
+      "method": "GET",
+      "path": "/user/tokens/{token_id}",
+      "wave": "w1",
+      "reason": "Reads one token, including the policies and resources it is scoped to.",
+      "destructive": false,
+      "auth": "api-token",
+      "keepFiltered": true,
+      "filterNote": "Same x-fern-ignore group as the list above."
+    },
+    {
+      "toolSlug": "cloudflare_user_tokens_verify",
+      "method": "GET",
+      "path": "/user/tokens/verify",
+      "wave": "w1",
+      "reason": "Validates the stored token and reports its status: the call that separates no token from a token Cloudflare rejects without spending a real request.",
+      "destructive": false,
+      "auth": "api-token",
+      "keepFiltered": true,
+      "filterNote": "Same x-fern-ignore group; this is the call a credential check needs."
+    },
+    {
+      "toolSlug": "cloudflare_user_tokens_permission_groups_list",
+      "method": "GET",
+      "path": "/user/tokens/permission_groups",
+      "wave": "w1",
+      "reason": "Lists the permission group ids a token policy is built from, which is how a caller discovers what a scope name means.",
+      "destructive": false,
+      "auth": "api-token",
+      "keepFiltered": true,
+      "filterNote": "Same x-fern-ignore group; read-only and needed to interpret the token policies above."
+    }
+  ]
+}

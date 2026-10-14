@@ -1,7 +1,0 @@
-{
-  "method": "GET",
-  "url": "https://api.cloudflare.com/client/v4/accounts?name=sample_name&page=sample_page&per_page=sample_per_page&direction=sample_direction",
-  "headers": {
-    "Authorization": "Bearer __TOKEN__"
-  }
-}

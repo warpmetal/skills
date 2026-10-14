@@ -1,0 +1,12 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/hold",
+  "body": {
+    "hold_after": "sample_hold_after",
+    "include_subdomains": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

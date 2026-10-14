@@ -1,7 +1,8 @@
 {
   "method": "GET",
-  "url": "https://api.cloudflare.com/client/v4/zones?name=sample_name&status=sample_status&account.id=sample_account_id&account.name=sample_account_name&page=sample_page&per_page=sample_per_page&order=sample_order&direction=sample_direction&match=sample_match&type=sample_type",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id",
   "headers": {
-    "Authorization": "Bearer __TOKEN__"
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
   }
 }

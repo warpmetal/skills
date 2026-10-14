@@ -92,15 +92,306 @@ export const PROVIDER_TOOL_MAPPINGS: readonly ProviderToolMapping[] = [
     "gate": "CONFIRM CLICKUP CREATE TASK COMMENT"
   },
   {
+    "toolSlug": "cloudflare_zones_list",
+    "provider": "cloudflare",
+    "verb": "zones-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_zones_create",
+    "provider": "cloudflare",
+    "verb": "zones-create",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE ZONES CREATE"
+  },
+  {
     "toolSlug": "cloudflare_zones_get",
     "provider": "cloudflare",
     "verb": "zones-get",
     "mutating": false
   },
   {
-    "toolSlug": "cloudflare_accounts_list_accounts",
+    "toolSlug": "cloudflare_zones_update",
     "provider": "cloudflare",
-    "verb": "accounts-list-accounts",
+    "verb": "zones-update",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE ZONES UPDATE"
+  },
+  {
+    "toolSlug": "cloudflare_zones_delete",
+    "provider": "cloudflare",
+    "verb": "zones-delete",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE ZONES DELETE"
+  },
+  {
+    "toolSlug": "cloudflare_activation_check",
+    "provider": "cloudflare",
+    "verb": "activation-check",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE ACTIVATION CHECK"
+  },
+  {
+    "toolSlug": "cloudflare_hold_list",
+    "provider": "cloudflare",
+    "verb": "hold-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_hold_create",
+    "provider": "cloudflare",
+    "verb": "hold-create",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE HOLD CREATE"
+  },
+  {
+    "toolSlug": "cloudflare_hold_patch",
+    "provider": "cloudflare",
+    "verb": "hold-patch",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE HOLD PATCH"
+  },
+  {
+    "toolSlug": "cloudflare_hold_delete",
+    "provider": "cloudflare",
+    "verb": "hold-delete",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE HOLD DELETE"
+  },
+  {
+    "toolSlug": "cloudflare_dns_records_list",
+    "provider": "cloudflare",
+    "verb": "dns-records-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_dns_records_create",
+    "provider": "cloudflare",
+    "verb": "dns-records-create",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE DNS RECORDS CREATE"
+  },
+  {
+    "toolSlug": "cloudflare_dns_records_get",
+    "provider": "cloudflare",
+    "verb": "dns-records-get",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_dns_records_update",
+    "provider": "cloudflare",
+    "verb": "dns-records-update",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE DNS RECORDS UPDATE"
+  },
+  {
+    "toolSlug": "cloudflare_dns_records_replace",
+    "provider": "cloudflare",
+    "verb": "dns-records-replace",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE DNS RECORDS REPLACE"
+  },
+  {
+    "toolSlug": "cloudflare_dns_records_delete",
+    "provider": "cloudflare",
+    "verb": "dns-records-delete",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE DNS RECORDS DELETE"
+  },
+  {
+    "toolSlug": "cloudflare_dns_records_batch",
+    "provider": "cloudflare",
+    "verb": "dns-records-batch",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE DNS RECORDS BATCH"
+  },
+  {
+    "toolSlug": "cloudflare_dns_records_import",
+    "provider": "cloudflare",
+    "verb": "dns-records-import",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE DNS RECORDS IMPORT"
+  },
+  {
+    "toolSlug": "cloudflare_dns_settings_list",
+    "provider": "cloudflare",
+    "verb": "dns-settings-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_dns_settings_patch",
+    "provider": "cloudflare",
+    "verb": "dns-settings-patch",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE DNS SETTINGS PATCH"
+  },
+  {
+    "toolSlug": "cloudflare_dnssec_list",
+    "provider": "cloudflare",
+    "verb": "dnssec-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_dnssec_patch",
+    "provider": "cloudflare",
+    "verb": "dnssec-patch",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE DNSSEC PATCH"
+  },
+  {
+    "toolSlug": "cloudflare_dnssec_delete",
+    "provider": "cloudflare",
+    "verb": "dnssec-delete",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE DNSSEC DELETE"
+  },
+  {
+    "toolSlug": "cloudflare_settings_list",
+    "provider": "cloudflare",
+    "verb": "settings-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_settings_get",
+    "provider": "cloudflare",
+    "verb": "settings-get",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_settings_update",
+    "provider": "cloudflare",
+    "verb": "settings-update",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE SETTINGS UPDATE"
+  },
+  {
+    "toolSlug": "cloudflare_purge_cache",
+    "provider": "cloudflare",
+    "verb": "purge-cache",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE PURGE CACHE"
+  },
+  {
+    "toolSlug": "cloudflare_firewall_access_rules_rules_list",
+    "provider": "cloudflare",
+    "verb": "firewall-access-rules-rules-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_firewall_access_rules_rules_create",
+    "provider": "cloudflare",
+    "verb": "firewall-access-rules-rules-create",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE FIREWALL ACCESS RULES RULES CREATE"
+  },
+  {
+    "toolSlug": "cloudflare_firewall_access_rules_rules_update",
+    "provider": "cloudflare",
+    "verb": "firewall-access-rules-rules-update",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE FIREWALL ACCESS RULES RULES UPDATE"
+  },
+  {
+    "toolSlug": "cloudflare_firewall_access_rules_rules_delete",
+    "provider": "cloudflare",
+    "verb": "firewall-access-rules-rules-delete",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE FIREWALL ACCESS RULES RULES DELETE"
+  },
+  {
+    "toolSlug": "cloudflare_firewall_lockdowns_list",
+    "provider": "cloudflare",
+    "verb": "firewall-lockdowns-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_firewall_lockdowns_create",
+    "provider": "cloudflare",
+    "verb": "firewall-lockdowns-create",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE FIREWALL LOCKDOWNS CREATE"
+  },
+  {
+    "toolSlug": "cloudflare_firewall_lockdowns_get",
+    "provider": "cloudflare",
+    "verb": "firewall-lockdowns-get",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_firewall_lockdowns_replace",
+    "provider": "cloudflare",
+    "verb": "firewall-lockdowns-replace",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE FIREWALL LOCKDOWNS REPLACE"
+  },
+  {
+    "toolSlug": "cloudflare_firewall_lockdowns_delete",
+    "provider": "cloudflare",
+    "verb": "firewall-lockdowns-delete",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE FIREWALL LOCKDOWNS DELETE"
+  },
+  {
+    "toolSlug": "cloudflare_firewall_ua_rules_list",
+    "provider": "cloudflare",
+    "verb": "firewall-ua-rules-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_firewall_ua_rules_create",
+    "provider": "cloudflare",
+    "verb": "firewall-ua-rules-create",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE FIREWALL UA RULES CREATE"
+  },
+  {
+    "toolSlug": "cloudflare_firewall_ua_rules_get",
+    "provider": "cloudflare",
+    "verb": "firewall-ua-rules-get",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_firewall_ua_rules_replace",
+    "provider": "cloudflare",
+    "verb": "firewall-ua-rules-replace",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE FIREWALL UA RULES REPLACE"
+  },
+  {
+    "toolSlug": "cloudflare_firewall_ua_rules_delete",
+    "provider": "cloudflare",
+    "verb": "firewall-ua-rules-delete",
+    "mutating": true,
+    "gate": "CONFIRM CLOUDFLARE FIREWALL UA RULES DELETE"
+  },
+  {
+    "toolSlug": "cloudflare_accounts_list",
+    "provider": "cloudflare",
+    "verb": "accounts-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_user_tokens_list",
+    "provider": "cloudflare",
+    "verb": "user-tokens-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_user_tokens_get",
+    "provider": "cloudflare",
+    "verb": "user-tokens-get",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_user_tokens_verify",
+    "provider": "cloudflare",
+    "verb": "user-tokens-verify",
+    "mutating": false
+  },
+  {
+    "toolSlug": "cloudflare_user_tokens_permission_groups_list",
+    "provider": "cloudflare",
+    "verb": "user-tokens-permission-groups-list",
     "mutating": false
   },
   {

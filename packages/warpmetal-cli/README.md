@@ -150,7 +150,7 @@ a stored value never appears in any diagnostic, plan, list, error or `--json`
 document, and that it _does_ appear on the one sanctioned stream.
 
 `npm run probe` is the one network-bound check, and it is deliberately outside
-`npm test`. It builds each of the 131 provider requests from the reviewed sample
+`npm test`. It builds each of the 175 provider requests from the reviewed sample
 args, swaps the token for a sentinel and sends it: a real route answers 401/403
 (auth required), 400/422 or 2xx, while a route the provider does not serve answers
 404/405. A per-host control request to a bogus path marks auth-first and

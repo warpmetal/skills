@@ -1,0 +1,15 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/purge_cache",
+  "body": {
+    "tags": [],
+    "hosts": [],
+    "prefixes": [],
+    "purge_everything": true,
+    "files": []
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

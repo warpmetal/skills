@@ -1,0 +1,12 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/dns_records/import",
+  "body": {
+    "file": "sample_file",
+    "proxied": "sample_proxied"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

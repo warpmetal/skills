@@ -55,7 +55,7 @@
     "cloudflare": {
       "docUrl": "https://developers.cloudflare.com/api/",
       "allowedHosts": ["api.cloudflare.com"],
-      "methods": ["GET"],
+      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"],
       "auth": { "header": "Authorization", "placeholder": "__TOKEN__" }
     },
     "vercel": {

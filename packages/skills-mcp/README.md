@@ -6,7 +6,7 @@ Unified MCP (Model Context Protocol) server for WarpMetal. One package, one host
   (`registry.json`) with checksum verification and the `skill://` URI semantics the hosts already use.
 - **CLI** — exposes the `warpmetal` command-line tool as 43 typed tools: 16 read-only, 3 task tools,
   and 12 plan/apply pairs, six of which guard the verbs that cannot be taken back.
-- **Providers (42 providers, one catalog file each)** — 131 WarpMetal-backed provider tools (GitHub / GitLab / Notion / Stripe / Jira / Confluence / Linear / Supabase / Cloudflare / Vercel / Figma / Shopify / HubSpot / Asana / Dropbox / Discord / Airtable / Intercom / Snowflake / Sentry / Datadog / PagerDuty / Exa / Perplexity / Resend / Calendly / ClickUp / PostHog / Mixpanel / CircleCI / Mailchimp / X / Square / OpenAI / Gemini / Anthropic Admin / Grafana Cloud / Grafana Stack / Monday.com / OneSignal / Amplitude / Zendesk)
+- **Providers (42 providers, one catalog file each)** — 175 WarpMetal-backed provider tools (GitHub / GitLab / Notion / Stripe / Jira / Confluence / Linear / Supabase / Cloudflare / Vercel / Figma / Shopify / HubSpot / Asana / Dropbox / Discord / Airtable / Intercom / Snowflake / Sentry / Datadog / PagerDuty / Exa / Perplexity / Resend / Calendly / ClickUp / PostHog / Mixpanel / CircleCI / Mailchimp / X / Square / OpenAI / Gemini / Anthropic Admin / Grafana Cloud / Grafana Stack / Monday.com / OneSignal / Amplitude / Zendesk)
   registered only on the `full` (stdio) profile; calls run `warpmetal integration <provider> <verb>` with secrets from the WarpMetal vault. No DigitalOcean dependency.
 
 ## Two profiles, split by transport
@@ -16,7 +16,7 @@ boundary, not a configuration preference.
 
 | Profile   | Transport                  | Tools                                             | Why                                                                         |
 | --------- | -------------------------- | ------------------------------------------------- | --------------------------------------------------------------------------- |
-| `full`    | stdio (default)            | **177** — 3 `skill_*` + 43 `wm_*` + 131 providers | stdio is a local, operator-controlled channel                               |
+| `full`    | stdio (default)            | **221** — 3 `skill_*` + 43 `wm_*` + 175 providers | stdio is a local, operator-controlled channel                               |
 | `content` | Streamable HTTP (`--http`) | **3** — only `skill_*`                            | HTTP has no authentication; `wm_*` and provider tools must not be reachable |
 
 On the `content` profile the `wm_*` and provider tools are _not registered at all_, not
@@ -49,7 +49,7 @@ A CLI below the version floor is refused rather than warned about: reads still w
 can be diagnosed, but every `*_apply` is answered `DENIED` before any process exists. An _unreadable_
 version refuses nothing, because an override or a bare PATH executable is _unknown_ rather than old.
 
-## Providers (42 providers, 131 tools)
+## Providers (42 providers, 175 tools)
 
 Airtable tools (stdio / `full` only):
 
@@ -81,157 +81,172 @@ ClickUp tools (stdio / `full` only):
 
 Cloudflare tools (stdio / `full` only):
 
-- **14.** `cloudflare_zones_get` · **15.** `cloudflare_accounts_list_accounts`
+- **14.** `cloudflare_zones_list` · **15.** `cloudflare_zones_create` · **16.** `cloudflare_zones_get`
+- **17.** `cloudflare_zones_update` · **18.** `cloudflare_zones_delete` · **19.** `cloudflare_activation_check`
+- **20.** `cloudflare_hold_list` · **21.** `cloudflare_hold_create` · **22.** `cloudflare_hold_patch`
+- **23.** `cloudflare_hold_delete` · **24.** `cloudflare_dns_records_list` · **25.** `cloudflare_dns_records_create`
+- **26.** `cloudflare_dns_records_get` · **27.** `cloudflare_dns_records_update` · **28.** `cloudflare_dns_records_replace`
+- **29.** `cloudflare_dns_records_delete` · **30.** `cloudflare_dns_records_batch` · **31.** `cloudflare_dns_records_import`
+- **32.** `cloudflare_dns_settings_list` · **33.** `cloudflare_dns_settings_patch` · **34.** `cloudflare_dnssec_list`
+- **35.** `cloudflare_dnssec_patch` · **36.** `cloudflare_dnssec_delete` · **37.** `cloudflare_settings_list`
+- **38.** `cloudflare_settings_get` · **39.** `cloudflare_settings_update` · **40.** `cloudflare_purge_cache`
+- **41.** `cloudflare_firewall_access_rules_rules_list` · **42.** `cloudflare_firewall_access_rules_rules_create` · **43.** `cloudflare_firewall_access_rules_rules_update`
+- **44.** `cloudflare_firewall_access_rules_rules_delete` · **45.** `cloudflare_firewall_lockdowns_list` · **46.** `cloudflare_firewall_lockdowns_create`
+- **47.** `cloudflare_firewall_lockdowns_get` · **48.** `cloudflare_firewall_lockdowns_replace` · **49.** `cloudflare_firewall_lockdowns_delete`
+- **50.** `cloudflare_firewall_ua_rules_list` · **51.** `cloudflare_firewall_ua_rules_create` · **52.** `cloudflare_firewall_ua_rules_get`
+- **53.** `cloudflare_firewall_ua_rules_replace` · **54.** `cloudflare_firewall_ua_rules_delete` · **55.** `cloudflare_accounts_list`
+- **56.** `cloudflare_user_tokens_list` · **57.** `cloudflare_user_tokens_get` · **58.** `cloudflare_user_tokens_verify`
+- **59.** `cloudflare_user_tokens_permission_groups_list`
 
 Confluence tools (stdio / `full` only):
 
-- **16.** `confluence_get_page_by_id` · **17.** `confluence_get_pages`
+- **60.** `confluence_get_page_by_id` · **61.** `confluence_get_pages`
 
 Datadog tools (stdio / `full` only):
 
-- **18.** `datadog_v1_get_ip_ranges`
+- **62.** `datadog_v1_get_ip_ranges`
 
 Discord tools (stdio / `full` only):
 
-- **19.** `discord_get_my_user` · **20.** `discord_list_my_guilds`
+- **63.** `discord_get_my_user` · **64.** `discord_list_my_guilds`
 
 Dropbox tools (stdio / `full` only):
 
-- **21.** `dropbox_list_folder` · **22.** `dropbox_search_files`
+- **65.** `dropbox_list_folder` · **66.** `dropbox_search_files`
 
 Exa tools (stdio / `full` only):
 
-- **23.** `exa_web_search` · **24.** `exa_web_fetch`
+- **67.** `exa_web_search` · **68.** `exa_web_fetch`
 
 Figma tools (stdio / `full` only):
 
-- **25.** `figma_get_file` · **26.** `figma_get_file_nodes`
+- **69.** `figma_get_file` · **70.** `figma_get_file_nodes`
 
 Gemini tools (stdio / `full` only):
 
-- **27.** `gemini_generate_content` · **28.** `gemini_list_models`
+- **71.** `gemini_generate_content` · **72.** `gemini_list_models`
 
 GitHub tools (stdio / `full` only):
 
-- **29.** `github_create_issue` · **30.** `github_list_issues` · **31.** `github_get_issue`
-- **32.** `github_create_pull_request` · **33.** `github_get_pull_request` · **34.** `github_search_repositories`
+- **73.** `github_create_issue` · **74.** `github_list_issues` · **75.** `github_get_issue`
+- **76.** `github_create_pull_request` · **77.** `github_get_pull_request` · **78.** `github_search_repositories`
 
 GitLab tools (stdio / `full` only):
 
-- **35.** `gitlab_list_projects` · **36.** `gitlab_create_project_issue` · **37.** `gitlab_create_merge_request`
+- **79.** `gitlab_list_projects` · **80.** `gitlab_create_project_issue` · **81.** `gitlab_create_merge_request`
 
 Grafana Cloud tools (stdio / `full` only):
 
-- **38.** `grafana-cloud_list_stacks` · **39.** `grafana-cloud_get_org`
+- **82.** `grafana-cloud_list_stacks` · **83.** `grafana-cloud_get_org`
 
 Grafana Stack tools (stdio / `full` only):
 
-- **40.** `grafana-stack_health` · **41.** `grafana-stack_get_current_user` · **42.** `grafana-stack_search`
-- **43.** `grafana-stack_get_dashboard` · **44.** `grafana-stack_list_datasources` · **45.** `grafana-stack_check_datasource_health`
-- **46.** `grafana-stack_list_folders` · **47.** `grafana-stack_list_alert_rules` · **48.** `grafana-stack_list_annotations`
-- **49.** `grafana-stack_list_contact_points` · **50.** `grafana-stack_list_mute_timings` · **51.** `grafana-stack_list_dashboard_tags`
-- **52.** `grafana-stack_search_teams` · **53.** `grafana-stack_list_org_users` · **54.** `grafana-stack_list_library_elements`
+- **84.** `grafana-stack_health` · **85.** `grafana-stack_get_current_user` · **86.** `grafana-stack_search`
+- **87.** `grafana-stack_get_dashboard` · **88.** `grafana-stack_list_datasources` · **89.** `grafana-stack_check_datasource_health`
+- **90.** `grafana-stack_list_folders` · **91.** `grafana-stack_list_alert_rules` · **92.** `grafana-stack_list_annotations`
+- **93.** `grafana-stack_list_contact_points` · **94.** `grafana-stack_list_mute_timings` · **95.** `grafana-stack_list_dashboard_tags`
+- **96.** `grafana-stack_search_teams` · **97.** `grafana-stack_list_org_users` · **98.** `grafana-stack_list_library_elements`
 
 HubSpot tools (stdio / `full` only):
 
-- **55.** `hubspot_crm_contacts_list` · **56.** `hubspot_crm_contacts_create` · **57.** `hubspot_crm_deals_list`
+- **99.** `hubspot_crm_contacts_list` · **100.** `hubspot_crm_contacts_create` · **101.** `hubspot_crm_deals_list`
 
 Intercom tools (stdio / `full` only):
 
-- **58.** `intercom_list_all_contacts` · **59.** `intercom_create_contact`
+- **102.** `intercom_list_all_contacts` · **103.** `intercom_create_contact`
 
 Jira tools (stdio / `full` only):
 
-- **60.** `jira_create_issue` · **61.** `jira_get_issue` · **62.** `jira_add_comment`
-- **63.** `jira_transition_issue` · **64.** `jira_get_project`
+- **104.** `jira_create_issue` · **105.** `jira_get_issue` · **106.** `jira_add_comment`
+- **107.** `jira_transition_issue` · **108.** `jira_get_project`
 
 Linear tools (stdio / `full` only):
 
-- **65.** `linear_create_issue` · **66.** `linear_list_issues` · **67.** `linear_get_issue`
-- **68.** `linear_create_comment`
+- **109.** `linear_create_issue` · **110.** `linear_list_issues` · **111.** `linear_get_issue`
+- **112.** `linear_create_comment`
 
 Mailchimp tools (stdio / `full` only):
 
-- **69.** `mailchimp_list_campaigns` · **70.** `mailchimp_add_member_to_list`
+- **113.** `mailchimp_list_campaigns` · **114.** `mailchimp_add_member_to_list`
 
 Mixpanel tools (stdio / `full` only):
 
-- **71.** `mixpanel_track_event` · **72.** `mixpanel_raw_event_export`
+- **115.** `mixpanel_track_event` · **116.** `mixpanel_raw_event_export`
 
 Monday.com tools (stdio / `full` only):
 
-- **73.** `monday_boards` · **74.** `monday_get_workspaces`
+- **117.** `monday_boards` · **118.** `monday_get_workspaces`
 
 Notion tools (stdio / `full` only):
 
-- **75.** `notion_search` · **76.** `notion_query_database` · **77.** `notion_get_page`
-- **78.** `notion_create_page` · **79.** `notion_append_block_children`
+- **119.** `notion_search` · **120.** `notion_query_database` · **121.** `notion_get_page`
+- **122.** `notion_create_page` · **123.** `notion_append_block_children`
 
 OneSignal tools (stdio / `full` only):
 
-- **80.** `onesignal_view_an_app`
+- **124.** `onesignal_view_an_app`
 
 OpenAI tools (stdio / `full` only):
 
-- **81.** `openai_list_models`
+- **125.** `openai_list_models`
 
 PagerDuty tools (stdio / `full` only):
 
-- **82.** `pagerduty_list_incidents` · **83.** `pagerduty_create_incident` · **84.** `pagerduty_list_services`
+- **126.** `pagerduty_list_incidents` · **127.** `pagerduty_create_incident` · **128.** `pagerduty_list_services`
 
 Perplexity tools (stdio / `full` only):
 
-- **85.** `perplexity_chat_completion` · **86.** `perplexity_search`
+- **129.** `perplexity_chat_completion` · **130.** `perplexity_search`
 
 PostHog tools (stdio / `full` only):
 
-- **87.** `posthog_list_project_dashboards` · **88.** `posthog_get_feature_flags_matching_ids`
+- **131.** `posthog_list_project_dashboards` · **132.** `posthog_get_feature_flags_matching_ids`
 
 Resend tools (stdio / `full` only):
 
-- **89.** `resend_list_emails` · **90.** `resend_create_contact`
+- **133.** `resend_list_emails` · **134.** `resend_create_contact`
 
 Sentry tools (stdio / `full` only):
 
-- **91.** `sentry_list_organization_projects` · **92.** `sentry_list_a_project_s_issues`
+- **135.** `sentry_list_organization_projects` · **136.** `sentry_list_a_project_s_issues`
 
 Shopify tools (stdio / `full` only):
 
-- **93.** `shopify_list_products` · **94.** `shopify_get_product` · **95.** `shopify_list_orders`
+- **137.** `shopify_list_products` · **138.** `shopify_get_product` · **139.** `shopify_list_orders`
 
 Snowflake tools (stdio / `full` only):
 
-- **96.** `snowflake_list_databases` · **97.** `snowflake_list_tables`
+- **140.** `snowflake_list_databases` · **141.** `snowflake_list_tables`
 
 Square tools (stdio / `full` only):
 
-- **98.** `square_list_payments` · **99.** `square_create_payment` · **100.** `square_list_customers`
+- **142.** `square_list_payments` · **143.** `square_create_payment` · **144.** `square_list_customers`
 
 Stripe tools (stdio / `full` only):
 
-- **101.** `stripe_post_customers` · **102.** `stripe_get_customers` · **103.** `stripe_post_payment_intents`
-- **104.** `stripe_get_payment_intents` · **105.** `stripe_get_balance` · **106.** `stripe_post_invoices`
+- **145.** `stripe_post_customers` · **146.** `stripe_get_customers` · **147.** `stripe_post_payment_intents`
+- **148.** `stripe_get_payment_intents` · **149.** `stripe_get_balance` · **150.** `stripe_post_invoices`
 
 Supabase tools (stdio / `full` only):
 
-- **107.** `supabase_list_projects` · **108.** `supabase_create_a_project` · **109.** `supabase_apply_a_migration`
+- **151.** `supabase_list_projects` · **152.** `supabase_create_a_project` · **153.** `supabase_apply_a_migration`
 
 Vercel tools (stdio / `full` only):
 
-- **110.** `vercel_get_projects` · **111.** `vercel_create_project` · **112.** `vercel_get_deployments`
+- **154.** `vercel_get_projects` · **155.** `vercel_create_project` · **156.** `vercel_get_deployments`
 
 X tools (stdio / `full` only):
 
-- **113.** `x_create_posts` · **114.** `x_get_users_me` · **115.** `x_search_posts_recent`
+- **157.** `x_create_posts` · **158.** `x_get_users_me` · **159.** `x_search_posts_recent`
 
 Zendesk tools (stdio / `full` only):
 
-- **116.** `zendesk_list_tickets` · **117.** `zendesk_get_ticket` · **118.** `zendesk_list_ticket_comments`
-- **119.** `zendesk_search` · **120.** `zendesk_get_current_user` · **121.** `zendesk_list_users`
-- **122.** `zendesk_list_organizations` · **123.** `zendesk_list_views` · **124.** `zendesk_list_view_tickets`
-- **125.** `zendesk_create_ticket` · **126.** `zendesk_add_ticket_comment` · **127.** `zendesk_update_ticket`
-- **128.** `zendesk_get_user` · **129.** `zendesk_get_organization` · **130.** `zendesk_count_view_tickets`
-- **131.** `zendesk_get_ticket_metrics`
+- **160.** `zendesk_list_tickets` · **161.** `zendesk_get_ticket` · **162.** `zendesk_list_ticket_comments`
+- **163.** `zendesk_search` · **164.** `zendesk_get_current_user` · **165.** `zendesk_list_users`
+- **166.** `zendesk_list_organizations` · **167.** `zendesk_list_views` · **168.** `zendesk_list_view_tickets`
+- **169.** `zendesk_create_ticket` · **170.** `zendesk_add_ticket_comment` · **171.** `zendesk_update_ticket`
+- **172.** `zendesk_get_user` · **173.** `zendesk_get_organization` · **174.** `zendesk_count_view_tickets`
+- **175.** `zendesk_get_ticket_metrics`
 
 Setup:
 
@@ -253,7 +268,7 @@ Each provider `tools/call` maps to `warpmetal integration <provider> <verb> --ar
 (and `--confirm <gate>` for mutations). The arguments are written to the CLI's stdin rather than the
 command line, so payloads never appear in `ps` or shell history; `--args-json` remains available for
 manual use. Catalog contracts live in `src/providers/catalog/` - one `<toolkitId>.json` per
-provider (42 files, 131 tools), aggregated by `src/providers/catalog.ts`. `catalog/index.ts` is
+provider (42 files, 175 tools), aggregated by `src/providers/catalog.ts`. `catalog/index.ts` is
 generated by `node packages/skills-mcp/scripts/gen-catalog-barrel.mjs`. The MCP never holds
 provider OAuth tokens in process env; they stay in the WarpMetal vault.
 
@@ -320,7 +335,7 @@ Each tool is verified at one of three tiers, and the tier is visible in the repo
 Two credential-free checks back the docs-confirmed tier, so a builder that drifts is caught even
 without a token:
 
-1. `provider-contract.test.ts` builds all 131 requests from the reviewed sample args and asserts the
+1. `provider-contract.test.ts` builds all 175 requests from the reviewed sample args and asserts the
    URL host, method and auth header against the hand-authored manifest.
 2. `npm run probe` (in `packages/warpmetal-cli`, opt-in, needs network) sends every request with a
    sentinel token. A route the provider does not serve answers 404/405, while a real route answers
@@ -361,7 +376,7 @@ for what the gate does and does not prove.
 ## Run
 
 ```sh
-# stdio, full profile (177 tools: 3 skill_* + 43 wm_* + 131 providers)
+# stdio, full profile (221 tools: 3 skill_* + 43 wm_* + 175 providers)
 npx -y @warpmetal/skills-mcp
 
 # Pin a registry tag

@@ -1,0 +1,12 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/firewall/lockdowns/sample_lock_downs_id",
+  "body": {
+    "configurations": [],
+    "urls": []
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

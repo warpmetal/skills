@@ -268,6 +268,95 @@ different credential, different contract entry.
   route that exists, so the route probe now sends the argument-free shape; and the classic
   `/api/dashboards/uid/{uid}` surface is still served by a current Grafana.
 
+## Batch 14 - Cloudflare zone and DNS surface
+
+The `cloudflare` provider went from two tools to forty-six, generated from
+Cloudflare's published OpenAPI document rather than hand-written. The two it had
+did not follow the naming rule, and both had to change:
+
+| Before | After |
+| --- | --- |
+| `cloudflare_zones_get` (listed zones) | `cloudflare_zones_list` (lists zones) and `cloudflare_zones_get` (reads one zone by id) |
+| `cloudflare_accounts_list_accounts` | `cloudflare_accounts_list` |
+
+`cloudflare_zones_get` is the breaking one: the slug survives, but it used to
+list zones and now requires a `zone_id`. A caller that sent it `{}` gets a loud
+invalid-arguments error rather than a wrong answer, and `cloudflare_zones_list`
+is the old behaviour.
+
+What ships: the zone lifecycle (`list`, `create`, `get`, `update`, `delete`,
+`activation_check`), the migration hold (`list`, `create`, `patch`, `delete`),
+DNS records (`list`, `create`, `get`, `update`, `replace`, `delete`, `batch`,
+`import`), DNS settings, DNSSEC, the zone settings (`list`, `get`, `update`), the
+cache purge, the three edge rule families (access rules, lockdowns, user-agent
+blocks) and the read half of the token model (`/accounts`, `/user/tokens` list,
+get, verify and `permission_groups`).
+
+### How it is built
+
+`openapi.json` is 27 MB of scratch and is not committed, so three generators read
+it and their output is what gets reviewed:
+
+- `packages/warpmetal-cli/scripts/cloudflare/spec.mjs` is the one reading of the
+  document: it resolves `$ref`s, flattens `allOf`, folds an object union into one
+  field list (Cloudflare's DNS-record body is an `anyOf` over `with-data` /
+  `without-data`, each of them a `oneOf` over the record types), and names each
+  operation `cloudflare_<module>_<verb>` from its path. `operationId` is not a
+  naming source a reviewer can defend (`zones-get`,
+  `dns-records-for-a-zone-list-dns-records`).
+- `scripts/cloudflare/allowlist.json` is the reviewed decision file, one line per
+  tool with the wave it ships in and why. `scripts/cloudflare/allowlist.mjs`
+  refuses a name that disagrees with its path, an operation that is not in the
+  spec, a missing reason, an unreviewed free-form body, or a hidden operation
+  included without saying so.
+- `gen-cloudflare-routes.mjs` writes the route table, `gen-cloudflare-catalog.mjs`
+  writes the catalog, and `gen-cloudflare-inventory.mjs` writes
+  `docs/cloudflare-api-inventory.md` (every operation, grouped, with the filter
+  that dropped it or the tool that shipped for it) and
+  `docs/cloudflare-token-scopes.md` (the token permission each tool needs, read
+  from `x-api-token-group`). Both docs are checked with `--check`.
+
+### What the spec forced
+
+- **A filter over the document.** 3,743 operations: 1,093 carry `x-forge-hidden`
+  and 489 `x-fern-ignore`, leaving 2,227 reviewable, and the wave is chosen from
+  those. Five operations ship *despite* being hidden, each saying why: the two
+  that keep a shipped tool working and the read-only token tools, which are
+  public API the spec hides from its own docs.
+- **Numbers are not requirements.** The DNS-record body is a union, so no field
+  is required by every branch; `jsonSchemaToZodObject` therefore marks none of
+  them required and the "provide type, name and either content or data" check
+  lives where it can name both alternatives - a CLI validator, like the Zendesk
+  requester pair.
+- **Path parameters are percent-encoded.** A record name or an R2 key can carry
+  a `/`, which would build a different route instead of a bad argument.
+- **`/zones/{zone_id}/settings` is deprecated and its bulk PATCH body is not
+  published**, so the wave ships the bulk read and the per-setting
+  `get`/`update`, and says so in the allowlist.
+
+### What proves it
+
+- `test/cloudflare-params.test.ts` asserts every builder against the operation it
+  claims to call, from a distillation of the spec
+  (`test/fixtures/cloudflare-params.json`): host, method, path template, that
+  every query key is declared by that operation, that no argument is dead and
+  that the body carries exactly the declared fields.
+- `test/cloudflare.test.ts` covers what no fixture can: the three validators, the
+  encoding, and a PATCH that sends only what it was given.
+- `test/cloudflare-catalog.test.ts` checks the catalog's promises - the endpoint
+  and the permission in every description, annotations that follow the method,
+  a gate on every write, and the reviewed destructive set.
+- `cloudflare_zones_delete`, `cloudflare_dns_records_delete`,
+  `cloudflare_dns_records_batch`, `cloudflare_dns_records_import`,
+  `cloudflare_dnssec_delete` and `cloudflare_purge_cache` are
+  `destructiveHint: true`. The zone's firewall deletes are not: they take
+  protection away rather than break what is running, and every write already
+  travels behind `CONFIRM CLOUDFLARE ...`.
+
+Four more waves are planned in the allowlist (`w2` storage and compute, `w3` Zero
+Trust, `w4` observability, `w5` Radar). Each is an additive change to the same
+three generators.
+
 ## Catalog layout - one file per provider
 
 The catalog used to be thirteen `batch-NN.json` files, each holding whatever

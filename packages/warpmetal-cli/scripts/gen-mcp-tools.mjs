@@ -5,6 +5,8 @@ import { readFileSync, readdirSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { CLOUDFLARE_ROUTES } from "./cloudflare/routes.generated.mjs";
+
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, "..", "..", "..");
 const catalogDir = join(root, "packages/skills-mcp/src/providers/catalog");
@@ -178,8 +180,10 @@ const ROUTES = {
   // the SQL and its optional metadata.
   supabase_apply_a_migration: `({args}) => ({ method: "POST", url: \`https://api.supabase.com/v1/projects/\${args.ref}/database/migrations\`, body: { query: args.query, name: args.name ?? undefined, rollback: args.rollback ?? undefined }, headers: { Authorization: "Bearer __TOKEN__", "Content-Type": "application/json" } })`,
 
-  cloudflare_zones_get: `({args}) => ({ method: "GET", url: \`https://api.cloudflare.com/client/v4/zones?\${qs({ name: args.name, status: args.status, "account.id": args.account_id, "account.name": args.account_name, page: args.page, per_page: args.per_page, order: args.order, direction: args.direction, match: args.match, type: args.type })}\`, headers: { Authorization: "Bearer __TOKEN__" } })`,
-  cloudflare_accounts_list_accounts: `({args}) => ({ method: "GET", url: \`https://api.cloudflare.com/client/v4/accounts?\${qs({ name: args.name, page: args.page, per_page: args.per_page, direction: args.direction })}\`, headers: { Authorization: "Bearer __TOKEN__" } })`,
+  // Cloudflare's routes are generated from the reviewed allowlist and the API
+  // spec, so this file does not carry them by hand behind the generator's back:
+  //   node packages/warpmetal-cli/scripts/gen-cloudflare-routes.mjs
+  ...CLOUDFLARE_ROUTES,
 
   // Vercel's list endpoint is /v10/projects (v9 is for per-project ops) and its
   // query params are camelCase while the MCP schema is snake_case.
@@ -456,7 +460,19 @@ const VALIDATORS = {
   // schema cannot say "one of the two", so the pair is checked here rather than
   // letting Zendesk answer 422 for a request that never had a chance.
   zendesk_create_ticket: `(args) => (args.requester_id === undefined && args.requester_email === undefined ? "Provide requester_id or requester_email: Zendesk cannot create a ticket without a requester." : null)`,
+  // Cloudflare's DNS-record body is a union over the record types, so the
+  // generated schema marks nothing required: a `content` field is required for
+  // an A record and meaningless for an SRV one, which uses `data`. The union
+  // cannot be spelled in JSON Schema without lying about one of the record
+  // types, so the check lives here, where it can name the two alternatives.
+  cloudflare_dns_records_create: `(args) => (args.type === undefined || args.name === undefined || (args.content === undefined && args.data === undefined) ? "Provide type, name and either content or data: a Cloudflare record needs all three, and SRV/other data-shaped records carry their value in data." : null)`,
+  cloudflare_dns_records_replace: `(args) => (args.type === undefined || args.name === undefined || (args.content === undefined && args.data === undefined) ? "Provide type, name and either content or data: a PUT replaces the record whole, and a record without its value is not a record." : null)`,
+  // A batch with nothing in it is a request Cloudflare answers with an error;
+  // the four arrays are the whole body, so an empty body - or four empty arrays,
+  // which is what a caller looping over matches produces - is a wasted call.
+  cloudflare_dns_records_batch: `(args) => (["posts", "puts", "patches", "deletes"].every((key) => args[key] === undefined || (Array.isArray(args[key]) && args[key].length === 0)) ? "Provide at least one of posts, puts, patches or deletes: an empty batch does nothing and Cloudflare rejects it." : null)`,
 };
+
 
 const missing = tools.filter((t) => !ROUTES[t.toolSlug]).map((t) => t.toolSlug);
 if (missing.length) {
@@ -528,6 +544,23 @@ function githubHeaders(): Record<string, string> {
     Accept: "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
     "User-Agent": "warpmetal-cli",
+    "Content-Type": "application/json",
+  };
+}
+
+/**
+ * A path parameter, percent-encoded. Every Cloudflare id is interpolated through
+ * this: a zone name, an R2 object key or a DNS record name can carry a slash or
+ * a space, and a raw interpolation would silently build a different route.
+ */
+function pf(value: unknown): string {
+  return encodeURIComponent(String(value));
+}
+
+/** Cloudflare's API-token auth, the scheme every generated route uses. */
+function cfHeaders(): Record<string, string> {
+  return {
+    Authorization: "Bearer __TOKEN__",
     "Content-Type": "application/json",
   };
 }

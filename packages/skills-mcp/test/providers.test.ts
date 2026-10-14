@@ -28,10 +28,10 @@ import { makeRegistryFixture } from "./helpers.js";
 
 const CONTENT_TOOLS = ["skill_list", "skill_read", "skill_search"] as const;
 
-test("catalog aggregates one hundred and thirty-one tools across all providers with input schemas", () => {
+test("catalog aggregates one hundred and seventy-five tools across all providers with input schemas", () => {
   const tools = loadProviderCatalog();
-  assert.equal(tools.length, 131);
-  assert.equal(PROVIDER_TOOL_COUNT, 131);
+  assert.equal(tools.length, 175);
+  assert.equal(PROVIDER_TOOL_COUNT, 175);
 
   const slugs = providerToolSlugs();
   const expected = [
@@ -56,8 +56,11 @@ test("catalog aggregates one hundred and thirty-one tools across all providers w
     "clickup_get_task",
     "clickup_create_task_comment",
     // cloudflare
+    "cloudflare_zones_list",
     "cloudflare_zones_get",
-    "cloudflare_accounts_list_accounts",
+    "cloudflare_dns_records_list",
+    "cloudflare_dns_records_create",
+    "cloudflare_purge_cache",
     // confluence
     "confluence_get_page_by_id",
     "confluence_get_pages",
@@ -221,7 +224,7 @@ test("catalog aggregates one hundred and thirty-one tools across all providers w
     assert.ok(tool.description.length > 10);
   }
 
-  assert.equal(PROVIDER_TOOL_MAPPINGS.length, 131);
+  assert.equal(PROVIDER_TOOL_MAPPINGS.length, 175);
   for (const slug of slugs) {
     assert.ok(
       PROVIDER_TOOL_MAPPINGS.some((entry) => entry.toolSlug === slug),
@@ -762,7 +765,7 @@ test("a jira provider tool (jira_get_project) is registered and forwards its arg
   }
 });
 
-test("a cloudflare provider tool (cloudflare_zones_get) is registered and forwards its args", async () => {
+test("a cloudflare provider tool (cloudflare_dns_records_list) is registered and forwards its args", async () => {
   const fixture = await makeRegistryFixture();
   try {
     const loaded = await loadRegistry({ registry: fixture.dir });
@@ -796,13 +799,13 @@ test("a cloudflare provider tool (cloudflare_zones_get) is registered and forwar
     try {
       const { tools } = await client.listTools();
       assert.ok(
-        tools.map((tool) => tool.name).includes("cloudflare_zones_get"),
+        tools.map((tool) => tool.name).includes("cloudflare_dns_records_list"),
         "the full profile must register cloudflare tools",
       );
 
       const result = await client.callTool({
-        name: "cloudflare_zones_get",
-        arguments: {},
+        name: "cloudflare_dns_records_list",
+        arguments: { zone_id: "zone_1", type: "A" },
       });
       assert.notEqual(result.isError, true);
       const structured = result.structuredContent as {
@@ -811,9 +814,16 @@ test("a cloudflare provider tool (cloudflare_zones_get) is registered and forwar
         result?: { result?: Array<{ name?: string }> };
       };
       assert.equal(structured.ok, true);
-      assert.equal(structured.tool, "cloudflare_zones_get");
+      assert.equal(structured.tool, "cloudflare_dns_records_list");
       assert.equal(structured.result?.result?.[0]?.name, "example.com");
-      assert.deepEqual(calls, [{ tool: "cloudflare_zones_get", args: {} }]);
+      assert.equal(calls.length, 1);
+      assert.equal(calls[0]?.tool, "cloudflare_dns_records_list");
+      assert.equal(calls[0]?.args.zone_id, "zone_1");
+      assert.equal(calls[0]?.args.type, "A");
+      // The catalog carries the spec's own defaults, and `registerProviderTools`
+      // honours them, so the invoker sees the declared value for a filter the
+      // caller left out rather than an absent key.
+      assert.equal(calls[0]?.args.per_page, 100);
     } finally {
       await client.close();
     }

@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/firewall/access_rules/rules?mode=block&configuration.target=ip&configuration.value=sample_configuration_value&notes=sample_notes&match=any&page=1&per_page=1&order=configuration.target&direction=asc",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

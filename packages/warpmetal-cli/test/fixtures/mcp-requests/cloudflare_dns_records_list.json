@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/dns_records?name=sample_name&name.exact=sample_name_exact&name.contains=sample_name_contains&name.startswith=sample_name_startswith&name.endswith=sample_name_endswith&type=A&content=sample_content&content.exact=sample_content_exact&content.contains=sample_content_contains&content.startswith=sample_content_startswith&content.endswith=sample_content_endswith&proxied=true&match=any&comment=sample_comment&comment.present=sample_comment_present&comment.absent=sample_comment_absent&comment.exact=sample_comment_exact&comment.contains=sample_comment_contains&comment.startswith=sample_comment_startswith&comment.endswith=sample_comment_endswith&tag=sample_tag&tag.present=sample_tag_present&tag.absent=sample_tag_absent&tag.exact=sample_tag_exact&tag.contains=sample_tag_contains&tag.startswith=sample_tag_startswith&tag.endswith=sample_tag_endswith&search=sample_search&tag_match=any&page=1&per_page=1&order=type&direction=asc&include_shadow_metadata=true&shadowed_by_name=sample_shadowed_by_name&shadowing_name=sample_shadowing_name",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

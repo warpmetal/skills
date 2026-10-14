@@ -49,4 +49,23 @@ export const DESTRUCTIVE_SLUGS: ReadonlySet<string> = new Set([
   "hubspot_crm_contacts_create",
   "asana_create_a_project",
   "notion_create_page",
+  // Cloudflare: what takes a domain or a service off the air, or cannot be
+  // recalled. Deleting a zone or a single record stops names from resolving;
+  // importing a zone file replaces the record set the zone already had; a batch
+  // can delete several records in one call; disabling DNSSEC while the registrar
+  // still holds the DS record makes the whole domain fail to resolve; a full
+  // cache purge cannot be called back and sends every request to the origin
+  // until the cache refills.
+  //
+  // The zone's firewall deletes are deliberately absent: removing a block rule
+  // takes protection away rather than breaking what is running, and every
+  // mutating Cloudflare tool already travels behind the provider's confirm gate
+  // (`CONFIRM CLOUDFLARE ...`), which is where that decision is enforced.
+  "cloudflare_zones_delete",
+  "cloudflare_dns_records_delete",
+  "cloudflare_dns_records_batch",
+  "cloudflare_dns_records_import",
+  "cloudflare_dnssec_delete",
+  "cloudflare_purge_cache",
 ]);
+
