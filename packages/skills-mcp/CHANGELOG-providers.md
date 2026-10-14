@@ -622,3 +622,33 @@ and the file header field `batch`, replaced by `provider`.
 removing a provider file. `test/catalog-layout.test.ts` fails when the barrel
 and the directory drift apart. The entries above keep the names they shipped
 under.
+
+## Keeping the generated surface honest
+
+`npm run build` regenerates none of this: the inventory, the catalog, the route
+table and the parameter fixture come from generators that are run by hand, so the
+`git diff --exit-code` step in `verify.yml` cannot see a stale one. A wave that
+skipped the fixture step would land a fixture that disagrees with the catalog,
+and nothing in CI would say so.
+
+`.github/workflows/spec-drift.yml` closes that gap without putting a vendor
+document on the merge path. It is scheduled, never a pull request: it fetches the
+public spec, compares the two committed records of that document (`spec.sha256`
+in the allowlist, `source.sha256` in the parameter fixture) with each other and
+then with the fetched file, re-runs those generators in that order (plus the catalog barrel, which
+follows the provider files) and reads the diff.
+
+- **The digest matches.** The artifacts are re-derived from the document they were
+  generated from, so a diff is our own drift and a generator that stops is a
+  defect; both fail the job.
+- **The digest moved.** The allowlist refuses a document it was not reviewed
+  against, which is the designed answer, so the job only reports the move.
+  Adopting new Cloudflare surface is a wave, not a CI fix.
+
+Two things in the concurrency block of `conformance.test.ts` changed for the same
+reason the job exists: a check that cannot be trusted is not a check. The
+stand-in CLI burned time in a busy loop, holding a core at 100% while the block
+measured how long calls took, so it now blocks on `Atomics.wait`. And the timeout
+case gave its second call a 200 ms budget, which a loaded Windows runner spends
+on the process spawn alone, so the case was measuring the machine rather than the
+semaphore; it now runs against a 2 s clock.

@@ -167,6 +167,15 @@ other, so the order matters:
 Steps 2, 7 and 8 and the CLI's fixture generator take a `--check` that fails when the committed
 file is stale, which is how a wave is reviewed without the 26 MB spec being in the repository.
 
+`verify.yml` cannot see any of this: `npm run build` does not regenerate these files, so its
+`git diff --exit-code` step says nothing about them. `.github/workflows/spec-drift.yml` covers the
+gap - scheduled only, never a merge gate - by fetching the public spec, comparing its digest with
+the one the artifacts record (`spec.sha256` in the allowlist, cross-checked against `source.sha256`
+in the parameter fixture) and running the generators above in that order, plus the catalog barrel,
+which is generated from the provider files. A diff with a matching digest is stale committed output
+and fails the job; a moved digest makes the allowlist refuse the document by design, so the job
+reports the move and stays green, because adopting new surface is a wave rather than a CI fix.
+
 ### Provider secrets
 
 Store the primary secret for each provider you use. Providers marked _contextual_ also need extra
