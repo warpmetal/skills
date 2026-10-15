@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.plane.so/api/v1/workspaces/acme/work-items/sample_workitem_identifier/?expand=sample_expand&fields=sample_fields&external_id=sample_external_id&external_source=sample_external_source&order_by=sample_order_by",
+  "headers": {
+    "x-api-key": "__TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

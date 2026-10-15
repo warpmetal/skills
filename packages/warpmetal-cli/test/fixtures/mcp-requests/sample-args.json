@@ -8777,6 +8777,283 @@
     "search_language_filter": [],
     "search_type": "web"
   },
+  "plane_customer_list": {
+    "cursor": "sample_cursor",
+    "per_page": 1,
+    "query": "sample_query"
+  },
+  "plane_customer_retrieve": {
+    "customer_id": "sample_customer_id"
+  },
+  "plane_customer_list_workitems": {
+    "customer_id": "sample_customer_id",
+    "customer_request_id": "sample_customer_request_id",
+    "search": "sample_search"
+  },
+  "plane_customer_property_list": {
+    "cursor": "sample_cursor",
+    "per_page": 1
+  },
+  "plane_customer_property_retrieve": {
+    "property_id": "sample_property_id"
+  },
+  "plane_customer_request_list": {
+    "cursor": "sample_cursor",
+    "customer_id": "sample_customer_id",
+    "per_page": 1,
+    "query": "sample_query"
+  },
+  "plane_customer_request_retrieve": {
+    "customer_id": "sample_customer_id",
+    "request_id": "sample_request_id"
+  },
+  "plane_cycle_retrieve": {
+    "cycle_id": "sample_cycle_id",
+    "project_id": "sample_project_id"
+  },
+  "plane_cycle_list_workitems": {
+    "cursor": "sample_cursor",
+    "cycle_id": "sample_cycle_id",
+    "expand": "sample_expand",
+    "fields": "sample_fields",
+    "order_by": "sample_order_by",
+    "per_page": 1,
+    "pql": "sample_pql",
+    "project_id": "sample_project_id"
+  },
+  "plane_initiative_list": {},
+  "plane_initiative_retrieve": {
+    "initiative_id": "sample_initiative_id"
+  },
+  "plane_intake_list": {
+    "cursor": "sample_cursor",
+    "per_page": 1,
+    "project_id": "sample_project_id"
+  },
+  "plane_intake_retrieve": {
+    "project_id": "sample_project_id",
+    "workitem_id": "sample_workitem_id"
+  },
+  "plane_label_list": {
+    "cursor": "sample_cursor",
+    "per_page": 1,
+    "project_id": "sample_project_id"
+  },
+  "plane_label_retrieve": {
+    "label_id": "sample_label_id",
+    "project_id": "sample_project_id"
+  },
+  "plane_member_me": {},
+  "plane_member_list_workspace": {
+    "cursor": "sample_cursor",
+    "display_name": "sample_display_name",
+    "email": "sample_email",
+    "first_name": "sample_first_name",
+    "is_active": true,
+    "is_bot": true,
+    "last_name": "sample_last_name",
+    "order_by": "sample_order_by",
+    "per_page": 1,
+    "role_slug": "sample_role_slug"
+  },
+  "plane_member_list_project": {
+    "project_id": "sample_project_id"
+  },
+  "plane_member_list_roles": {
+    "cursor": "sample_cursor",
+    "namespace": "sample_namespace",
+    "per_page": 1
+  },
+  "plane_milestone_list": {
+    "cursor": "sample_cursor",
+    "per_page": 1,
+    "project_id": "sample_project_id"
+  },
+  "plane_milestone_retrieve": {
+    "milestone_id": "sample_milestone_id",
+    "project_id": "sample_project_id"
+  },
+  "plane_milestone_list_workitems": {
+    "cursor": "sample_cursor",
+    "milestone_id": "sample_milestone_id",
+    "per_page": 1,
+    "project_id": "sample_project_id"
+  },
+  "plane_module_retrieve": {
+    "module_id": "sample_module_id",
+    "project_id": "sample_project_id"
+  },
+  "plane_module_list_workitems": {
+    "cursor": "sample_cursor",
+    "expand": "sample_expand",
+    "fields": "sample_fields",
+    "module_id": "sample_module_id",
+    "order_by": "sample_order_by",
+    "per_page": 1,
+    "pql": "sample_pql",
+    "project_id": "sample_project_id"
+  },
+  "plane_page_list_workitem_pages": {
+    "project_id": "sample_project_id",
+    "workitem_id": "sample_workitem_id"
+  },
+  "plane_project_list": {
+    "cursor": "sample_cursor",
+    "order_by": "sample_order_by",
+    "per_page": 1
+  },
+  "plane_project_retrieve": {
+    "project_id": "sample_project_id"
+  },
+  "plane_project_worklog_summary": {
+    "project_id": "sample_project_id"
+  },
+  "plane_project_get_features": {
+    "project_id": "sample_project_id"
+  },
+  "plane_project_estimate_retrieve": {
+    "project_id": "sample_project_id"
+  },
+  "plane_project_estimate_list_points": {
+    "estimate_id": "sample_estimate_id",
+    "project_id": "sample_project_id"
+  },
+  "plane_release_list": {
+    "cursor": "sample_cursor",
+    "per_page": 1
+  },
+  "plane_release_retrieve": {
+    "release_id": "sample_release_id"
+  },
+  "plane_release_get_changelog": {
+    "release_id": "sample_release_id"
+  },
+  "plane_release_list_workitems": {
+    "cursor": "sample_cursor",
+    "per_page": 1,
+    "release_id": "sample_release_id"
+  },
+  "plane_release_tag_list": {
+    "cursor": "sample_cursor",
+    "per_page": 1
+  },
+  "plane_release_tag_retrieve": {
+    "tag_id": "sample_tag_id"
+  },
+  "plane_state_list": {
+    "cursor": "sample_cursor",
+    "per_page": 1,
+    "project_id": "sample_project_id"
+  },
+  "plane_state_retrieve": {
+    "project_id": "sample_project_id",
+    "state_id": "sample_state_id"
+  },
+  "plane_work_log_list": {
+    "cursor": "sample_cursor",
+    "per_page": 1,
+    "project_id": "sample_project_id",
+    "workitem_id": "sample_workitem_id"
+  },
+  "plane_workitem_retrieve": {
+    "expand": "sample_expand",
+    "external_id": "sample_external_id",
+    "external_source": "sample_external_source",
+    "fields": "sample_fields",
+    "order_by": "sample_order_by",
+    "project_id": "sample_project_id",
+    "workitem_id": "sample_workitem_id"
+  },
+  "plane_workitem_retrieve_by_identifier": {
+    "expand": "sample_expand",
+    "external_id": "sample_external_id",
+    "external_source": "sample_external_source",
+    "fields": "sample_fields",
+    "order_by": "sample_order_by",
+    "workitem_identifier": "sample_workitem_identifier"
+  },
+  "plane_workitem_search": {
+    "expand": "sample_expand",
+    "external_id": "sample_external_id",
+    "external_source": "sample_external_source",
+    "fields": "sample_fields",
+    "order_by": "sample_order_by",
+    "query": "sample_query"
+  },
+  "plane_workitem_activity_list": {
+    "cursor": "sample_cursor",
+    "per_page": 1,
+    "project_id": "sample_project_id",
+    "workitem_id": "sample_workitem_id"
+  },
+  "plane_workitem_attachment_list": {
+    "project_id": "sample_project_id",
+    "workitem_id": "sample_workitem_id"
+  },
+  "plane_workitem_comment_list": {
+    "cursor": "sample_cursor",
+    "per_page": 1,
+    "project_id": "sample_project_id",
+    "workitem_id": "sample_workitem_id"
+  },
+  "plane_workitem_comment_retrieve": {
+    "comment_id": "sample_comment_id",
+    "project_id": "sample_project_id",
+    "workitem_id": "sample_workitem_id"
+  },
+  "plane_workitem_link_list": {
+    "cursor": "sample_cursor",
+    "per_page": 1,
+    "project_id": "sample_project_id",
+    "workitem_id": "sample_workitem_id"
+  },
+  "plane_workitem_link_retrieve": {
+    "link_id": "sample_link_id",
+    "project_id": "sample_project_id",
+    "workitem_id": "sample_workitem_id"
+  },
+  "plane_workitem_property_retrieve_option": {
+    "option_id": "sample_option_id",
+    "project_id": "sample_project_id",
+    "property_id": "sample_property_id"
+  },
+  "plane_workitem_property_get_value": {
+    "project_id": "sample_project_id",
+    "property_id": "sample_property_id",
+    "workitem_id": "sample_workitem_id"
+  },
+  "plane_workitem_type_list": {
+    "cursor": "sample_cursor",
+    "per_page": 1,
+    "project_id": "sample_project_id"
+  },
+  "plane_workitem_type_retrieve": {
+    "project_id": "sample_project_id",
+    "workitem_type_id": "sample_workitem_type_id"
+  },
+  "plane_workspace_get_features": {},
+  "plane_template_list": {
+    "kind": "sample_kind",
+    "project_id": "sample_project_id"
+  },
+  "plane_collection_list": {},
+  "plane_collection_retrieve": {
+    "collection_id": "sample_collection_id"
+  },
+  "plane_collection_list_pages": {
+    "collection_id": "sample_collection_id",
+    "cursor": "sample_cursor",
+    "parent_id": "sample_parent_id",
+    "per_page": 1,
+    "search": "sample_search"
+  },
+  "plane_collection_search_pages": {
+    "collection_id": "sample_collection_id",
+    "search": "sample_search"
+  },
+  "plane_collection_list_members": {
+    "collection_id": "sample_collection_id"
+  },
   "posthog_list_project_dashboards": {
     "limit": 1,
     "offset": 1,

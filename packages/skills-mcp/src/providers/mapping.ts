@@ -7936,6 +7936,366 @@ export const PROVIDER_TOOL_MAPPINGS: readonly ProviderToolMapping[] = [
     "mutating": false
   },
   {
+    "toolSlug": "plane_customer_list",
+    "provider": "plane",
+    "verb": "customer-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_customer_retrieve",
+    "provider": "plane",
+    "verb": "customer-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_customer_list_workitems",
+    "provider": "plane",
+    "verb": "customer-list-workitems",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_customer_property_list",
+    "provider": "plane",
+    "verb": "customer-property-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_customer_property_retrieve",
+    "provider": "plane",
+    "verb": "customer-property-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_customer_request_list",
+    "provider": "plane",
+    "verb": "customer-request-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_customer_request_retrieve",
+    "provider": "plane",
+    "verb": "customer-request-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_cycle_retrieve",
+    "provider": "plane",
+    "verb": "cycle-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_cycle_list_workitems",
+    "provider": "plane",
+    "verb": "cycle-list-workitems",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_initiative_list",
+    "provider": "plane",
+    "verb": "initiative-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_initiative_retrieve",
+    "provider": "plane",
+    "verb": "initiative-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_intake_list",
+    "provider": "plane",
+    "verb": "intake-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_intake_retrieve",
+    "provider": "plane",
+    "verb": "intake-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_label_list",
+    "provider": "plane",
+    "verb": "label-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_label_retrieve",
+    "provider": "plane",
+    "verb": "label-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_member_me",
+    "provider": "plane",
+    "verb": "member-me",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_member_list_workspace",
+    "provider": "plane",
+    "verb": "member-list-workspace",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_member_list_project",
+    "provider": "plane",
+    "verb": "member-list-project",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_member_list_roles",
+    "provider": "plane",
+    "verb": "member-list-roles",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_milestone_list",
+    "provider": "plane",
+    "verb": "milestone-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_milestone_retrieve",
+    "provider": "plane",
+    "verb": "milestone-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_milestone_list_workitems",
+    "provider": "plane",
+    "verb": "milestone-list-workitems",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_module_retrieve",
+    "provider": "plane",
+    "verb": "module-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_module_list_workitems",
+    "provider": "plane",
+    "verb": "module-list-workitems",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_page_list_workitem_pages",
+    "provider": "plane",
+    "verb": "page-list-workitem-pages",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_project_list",
+    "provider": "plane",
+    "verb": "project-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_project_retrieve",
+    "provider": "plane",
+    "verb": "project-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_project_worklog_summary",
+    "provider": "plane",
+    "verb": "project-worklog-summary",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_project_get_features",
+    "provider": "plane",
+    "verb": "project-get-features",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_project_estimate_retrieve",
+    "provider": "plane",
+    "verb": "project-estimate-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_project_estimate_list_points",
+    "provider": "plane",
+    "verb": "project-estimate-list-points",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_release_list",
+    "provider": "plane",
+    "verb": "release-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_release_retrieve",
+    "provider": "plane",
+    "verb": "release-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_release_get_changelog",
+    "provider": "plane",
+    "verb": "release-get-changelog",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_release_list_workitems",
+    "provider": "plane",
+    "verb": "release-list-workitems",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_release_tag_list",
+    "provider": "plane",
+    "verb": "release-tag-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_release_tag_retrieve",
+    "provider": "plane",
+    "verb": "release-tag-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_state_list",
+    "provider": "plane",
+    "verb": "state-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_state_retrieve",
+    "provider": "plane",
+    "verb": "state-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_work_log_list",
+    "provider": "plane",
+    "verb": "work-log-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_workitem_retrieve",
+    "provider": "plane",
+    "verb": "workitem-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_workitem_retrieve_by_identifier",
+    "provider": "plane",
+    "verb": "workitem-retrieve-by-identifier",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_workitem_search",
+    "provider": "plane",
+    "verb": "workitem-search",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_workitem_activity_list",
+    "provider": "plane",
+    "verb": "workitem-activity-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_workitem_attachment_list",
+    "provider": "plane",
+    "verb": "workitem-attachment-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_workitem_comment_list",
+    "provider": "plane",
+    "verb": "workitem-comment-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_workitem_comment_retrieve",
+    "provider": "plane",
+    "verb": "workitem-comment-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_workitem_link_list",
+    "provider": "plane",
+    "verb": "workitem-link-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_workitem_link_retrieve",
+    "provider": "plane",
+    "verb": "workitem-link-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_workitem_property_retrieve_option",
+    "provider": "plane",
+    "verb": "workitem-property-retrieve-option",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_workitem_property_get_value",
+    "provider": "plane",
+    "verb": "workitem-property-get-value",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_workitem_type_list",
+    "provider": "plane",
+    "verb": "workitem-type-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_workitem_type_retrieve",
+    "provider": "plane",
+    "verb": "workitem-type-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_workspace_get_features",
+    "provider": "plane",
+    "verb": "workspace-get-features",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_template_list",
+    "provider": "plane",
+    "verb": "template-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_collection_list",
+    "provider": "plane",
+    "verb": "collection-list",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_collection_retrieve",
+    "provider": "plane",
+    "verb": "collection-retrieve",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_collection_list_pages",
+    "provider": "plane",
+    "verb": "collection-list-pages",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_collection_search_pages",
+    "provider": "plane",
+    "verb": "collection-search-pages",
+    "mutating": false
+  },
+  {
+    "toolSlug": "plane_collection_list_members",
+    "provider": "plane",
+    "verb": "collection-list-members",
+    "mutating": false
+  },
+  {
     "toolSlug": "posthog_list_project_dashboards",
     "provider": "posthog",
     "verb": "list-project-dashboards",

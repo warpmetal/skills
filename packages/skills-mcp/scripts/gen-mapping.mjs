@@ -1,7 +1,22 @@
+/**
+ * Generates `src/providers/mapping.ts` from the provider catalog.
+ *
+ *   node packages/skills-mcp/scripts/gen-mapping.mjs            # write
+ *   node packages/skills-mcp/scripts/gen-mapping.mjs --check    # prove the committed file
+ *
+ * The mapping is what resolves a provider toolSlug to a provider/verb call, so it
+ * has to be regenerated whenever a `catalog/<provider>.json` file changes.
+ * `--check` compares instead of writing and exits 1 with a `re-run:` line.
+ */
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const dir = "packages/skills-mcp/src/providers/catalog";
+// Resolved from this file rather than the working directory: this is run from CI,
+// from the package and from the repository root.
+const here = dirname(fileURLToPath(import.meta.url));
+const outFile = join(here, "..", "src", "providers", "mapping.ts");
+const dir = join(here, "..", "src", "providers", "catalog");
 const files = readdirSync(dir)
   .filter((f) => f.endsWith(".json"))
   .sort();
@@ -51,5 +66,21 @@ export function mappedProviderToolSlugs(): readonly string[] {
 }
 `;
 
-writeFileSync("packages/skills-mcp/src/providers/mapping.ts", body);
+if (process.argv.includes("--check")) {
+  let current = null;
+  try {
+    current = readFileSync(outFile, "utf8");
+  } catch {
+    current = null;
+  }
+  if (current !== body) {
+    console.error(`${outFile} is out of date`);
+    console.error("re-run: node packages/skills-mcp/scripts/gen-mapping.mjs");
+    process.exit(1);
+  }
+  console.log(`the ${entries.length} mappings are up to date`);
+  process.exit(0);
+}
+
+writeFileSync(outFile, body);
 console.log("wrote", entries.length, "mappings");

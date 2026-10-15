@@ -282,6 +282,18 @@ function crossCheck(tools, summary, readme) {
       );
     }
   }
+  // One request, one operation, and the name of it. The endpoint table a reviewer
+  // writes for our surface is built from these names, so an action that reaches a
+  // single request without recording which one would leave that table a guess.
+  for (const tool of tools) {
+    for (const action of tool.actions) {
+      if (action.requestShape === "single" && (action.sdkCalls ?? []).length === 0) {
+        problems.push(
+          `${tool.tool}.${action.name}: a single request with no SDK call recorded, so the operation it reaches is unproven`,
+        );
+      }
+    }
+  }
   return problems;
 }
 
@@ -290,8 +302,9 @@ function buildInventory({ sources, tools, summary, publishedAt }) {
     version: 1,
     note:
       "Generated from the pinned release of Plane's MCP server by fetch-inventory.mjs. " +
-      "Each request shape is a source heuristic (see python-lite.mjs) and each action " +
-      "carries the line it was declared on, so a reviewer can check it against the module.",
+      "Each request shape is a source heuristic (see python-lite.mjs), each action carries " +
+      "the line it was declared on and the client member it calls, so a reviewer can check " +
+      "it against the module and tie it to one endpoint.",
     source: {
       repository: SOURCE.repository,
       tag: SOURCE.tag,
@@ -305,7 +318,7 @@ function buildInventory({ sources, tools, summary, publishedAt }) {
 }
 
 /** The inventory without release metadata, which a cache-only check cannot verify. */
-function comparable(inventory) {
+export function comparable(inventory) {
   const source = { ...inventory.source };
   for (const field of RELEASE_METADATA) delete source[field];
   return {
@@ -318,7 +331,7 @@ function comparable(inventory) {
 }
 
 /** The first difference between two parsed inventories, as a report line. */
-function firstDifference(left, right, path = "inventory") {
+export function firstDifference(left, right, path = "inventory") {
   if (typeof left !== typeof right || left === null || right === null || typeof left !== "object") {
     return left === right ? null : `${path}: ${JSON.stringify(left)} -> ${JSON.stringify(right)}`;
   }
@@ -456,7 +469,14 @@ async function main() {
   console.log("\ninventory.json matches the pinned release");
 }
 
-await main().catch((error) => {
-  console.error(`error: ${error.message}`);
-  process.exitCode = 1;
-});
+/**
+ * The script runs when it is the program being run, and exports its two comparison
+ * helpers when it is imported. `plane-inventory.test.ts` imports them, so the
+ * comparison the pin relies on is exercised rather than re-implemented beside it.
+ */
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  await main().catch((error) => {
+    console.error(`error: ${error.message}`);
+    process.exitCode = 1;
+  });
+}

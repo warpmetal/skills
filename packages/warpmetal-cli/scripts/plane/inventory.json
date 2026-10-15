@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "note": "Generated from the pinned release of Plane's MCP server by fetch-inventory.mjs. Each request shape is a source heuristic (see python-lite.mjs) and each action carries the line it was declared on, so a reviewer can check it against the module.",
+  "note": "Generated from the pinned release of Plane's MCP server by fetch-inventory.mjs. Each request shape is a source heuristic (see python-lite.mjs), each action carries the line it was declared on and the client member it calls, so a reviewer can check it against the module and tie it to one endpoint.",
   "source": {
     "repository": "https://github.com/makeplane/plane-mcp-server",
     "tag": "v0.3.4",
@@ -326,7 +326,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "customers.list"
+          ]
         },
         {
           "name": "retrieve",
@@ -342,7 +345,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "customers.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -369,7 +375,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "customers.create"
+          ]
         },
         {
           "name": "update",
@@ -397,7 +406,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "customers.update"
+          ]
         },
         {
           "name": "delete",
@@ -415,7 +427,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "customers.delete"
+          ]
         },
         {
           "name": "list_workitems",
@@ -434,7 +449,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "work_items.list"
+          ]
         },
         {
           "name": "manage_workitems",
@@ -454,7 +472,11 @@
           "requestLines": 2,
           "loops": true,
           "branch": "fall-through",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "work_items.create",
+            "work_items.delete"
+          ]
         }
       ],
       "legacy": {
@@ -489,7 +511,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "properties.list"
+          ]
         },
         {
           "name": "retrieve",
@@ -505,7 +530,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "properties.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -534,6 +562,9 @@
           "loops": false,
           "branch": "own",
           "requestShape": "single",
+          "sdkCalls": [
+            "properties.create"
+          ],
           "requestHelpers": [
             "_json",
             "_settings"
@@ -565,6 +596,9 @@
           "loops": false,
           "branch": "own",
           "requestShape": "single",
+          "sdkCalls": [
+            "properties.update"
+          ],
           "requestHelpers": [
             "_json"
           ]
@@ -583,7 +617,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "properties.delete"
+          ]
         },
         {
           "name": "get_values",
@@ -601,7 +638,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "property_values.list",
+            "property_values.retrieve"
+          ]
         },
         {
           "name": "set_values",
@@ -619,6 +660,9 @@
           "loops": false,
           "branch": "own",
           "requestShape": "single",
+          "sdkCalls": [
+            "property_values.create"
+          ],
           "requestHelpers": [
             "_json"
           ]
@@ -658,7 +702,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "requests.list"
+          ]
         },
         {
           "name": "retrieve",
@@ -675,7 +722,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "requests.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -696,7 +746,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "requests.create"
+          ]
         },
         {
           "name": "update",
@@ -717,7 +770,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "requests.update"
+          ]
         },
         {
           "name": "delete",
@@ -734,7 +790,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "requests.delete"
+          ]
         }
       ],
       "legacy": {
@@ -771,7 +830,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.cycles.list_archived",
+            "client.cycles.list_lite"
+          ]
         },
         {
           "name": "retrieve",
@@ -788,7 +851,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.cycles.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -813,7 +879,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.cycles.create"
+          ]
         },
         {
           "name": "update",
@@ -839,7 +908,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.cycles.update"
+          ]
         },
         {
           "name": "delete",
@@ -856,7 +928,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.cycles.delete"
+          ]
         },
         {
           "name": "list_workitems",
@@ -880,7 +955,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.cycles.list_work_items"
+          ]
         },
         {
           "name": "manage_workitems",
@@ -900,7 +978,11 @@
           "requestLines": 2,
           "loops": true,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.cycles.add_work_items",
+            "client.cycles.remove_work_item"
+          ]
         },
         {
           "name": "transfer_workitems",
@@ -918,7 +1000,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.cycles.transfer_work_items"
+          ]
         },
         {
           "name": "complete",
@@ -935,7 +1020,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.cycles.update"
+          ]
         },
         {
           "name": "archive",
@@ -953,6 +1041,11 @@
           "loops": false,
           "branch": "own",
           "requestShape": "multi",
+          "sdkCalls": [
+            "client.cycles.archive",
+            "client.cycles.retrieve",
+            "client.cycles.update"
+          ],
           "requestHelpers": [
             "_still_running"
           ]
@@ -972,7 +1065,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.cycles.unarchive"
+          ]
         }
       ],
       "legacy": {
@@ -1032,7 +1128,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.initiatives.list"
+          ]
         },
         {
           "name": "retrieve",
@@ -1048,7 +1147,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.initiatives.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -1070,7 +1172,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.initiatives.create"
+          ]
         },
         {
           "name": "update",
@@ -1093,7 +1198,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.initiatives.update"
+          ]
         },
         {
           "name": "delete",
@@ -1109,7 +1217,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.initiatives.delete"
+          ]
         },
         {
           "name": "list_projects",
@@ -1129,6 +1240,10 @@
           "loops": false,
           "branch": "own",
           "requestShape": "multi",
+          "sdkCalls": [
+            "client.workspaces.get_features",
+            "features.model_dump"
+          ],
           "requestHelpers": [
             "_require_native"
           ]
@@ -1149,6 +1264,10 @@
           "loops": false,
           "branch": "own",
           "requestShape": "multi",
+          "sdkCalls": [
+            "client.workspaces.get_features",
+            "features.model_dump"
+          ],
           "requestHelpers": [
             "_require_native"
           ]
@@ -1169,6 +1288,10 @@
           "loops": false,
           "branch": "own",
           "requestShape": "multi",
+          "sdkCalls": [
+            "client.workspaces.get_features",
+            "features.model_dump"
+          ],
           "requestHelpers": [
             "_require_native"
           ]
@@ -1191,6 +1314,10 @@
           "loops": false,
           "branch": "own",
           "requestShape": "multi",
+          "sdkCalls": [
+            "client.workspaces.get_features",
+            "features.model_dump"
+          ],
           "requestHelpers": [
             "_require_native"
           ]
@@ -1213,6 +1340,10 @@
           "loops": false,
           "branch": "own",
           "requestShape": "multi",
+          "sdkCalls": [
+            "client.workspaces.get_features",
+            "features.model_dump"
+          ],
           "requestHelpers": [
             "_require_native"
           ]
@@ -1252,7 +1383,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.intake.list"
+          ]
         },
         {
           "name": "retrieve",
@@ -1269,7 +1403,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.intake.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -1289,7 +1426,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.intake.create"
+          ]
         },
         {
           "name": "update",
@@ -1312,7 +1452,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.intake.update",
+            "client.intake.update_status"
+          ]
         },
         {
           "name": "delete",
@@ -1329,7 +1473,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.intake.delete"
+          ]
         }
       ],
       "legacy": {
@@ -1363,7 +1510,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.labels.list"
+          ]
         },
         {
           "name": "retrieve",
@@ -1380,7 +1530,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.labels.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -1404,7 +1557,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.labels.create"
+          ]
         },
         {
           "name": "update",
@@ -1429,7 +1585,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.labels.update"
+          ]
         },
         {
           "name": "delete",
@@ -1446,7 +1605,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.labels.delete"
+          ]
         }
       ],
       "legacy": {
@@ -1475,7 +1637,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.users.get_me"
+          ]
         },
         {
           "name": "list_workspace",
@@ -1500,7 +1665,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.workspaces.get_members_lite"
+          ]
         },
         {
           "name": "list_project",
@@ -1516,7 +1684,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.projects.get_members"
+          ]
         },
         {
           "name": "list_roles",
@@ -1534,7 +1705,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.roles.list"
+          ]
         },
         {
           "name": "retrieve_role",
@@ -1550,7 +1724,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.roles.retrieve"
+          ]
         }
       ],
       "legacy": {
@@ -1584,7 +1761,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.milestones.list"
+          ]
         },
         {
           "name": "retrieve",
@@ -1601,7 +1781,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.milestones.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -1622,7 +1805,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.milestones.create"
+          ]
         },
         {
           "name": "update",
@@ -1644,7 +1830,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.milestones.update"
+          ]
         },
         {
           "name": "delete",
@@ -1661,7 +1850,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.milestones.delete"
+          ]
         },
         {
           "name": "list_workitems",
@@ -1681,7 +1873,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.milestones.list_work_items"
+          ]
         },
         {
           "name": "manage_workitems",
@@ -1701,7 +1896,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.milestones.add_work_items",
+            "client.milestones.remove_work_items"
+          ]
         }
       ],
       "legacy": {
@@ -1739,7 +1938,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.modules.list_archived",
+            "client.modules.list_lite"
+          ]
         },
         {
           "name": "retrieve",
@@ -1756,7 +1959,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.modules.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -1782,7 +1988,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.modules.create"
+          ]
         },
         {
           "name": "update",
@@ -1809,7 +2018,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.modules.update"
+          ]
         },
         {
           "name": "delete",
@@ -1826,7 +2038,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.modules.delete"
+          ]
         },
         {
           "name": "list_workitems",
@@ -1850,7 +2065,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.modules.list_work_items"
+          ]
         },
         {
           "name": "manage_workitems",
@@ -1870,7 +2088,11 @@
           "requestLines": 2,
           "loops": true,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.modules.add_work_items",
+            "client.modules.remove_work_item"
+          ]
         },
         {
           "name": "archive",
@@ -1887,7 +2109,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.modules.archive"
+          ]
         },
         {
           "name": "unarchive",
@@ -1904,7 +2129,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.modules.unarchive"
+          ]
         }
       ],
       "legacy": {
@@ -1941,7 +2169,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.pages.list_project_pages",
+            "client.pages.list_workspace_pages"
+          ]
         },
         {
           "name": "retrieve",
@@ -1959,7 +2191,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.pages.retrieve_project_page",
+            "client.pages.retrieve_workspace_page"
+          ]
         },
         {
           "name": "create",
@@ -1985,7 +2221,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.pages.create_project_page",
+            "client.pages.create_workspace_page"
+          ]
         },
         {
           "name": "update",
@@ -2005,7 +2245,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "updater"
+          ]
         },
         {
           "name": "archive",
@@ -2024,7 +2267,10 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "mover"
+          ]
         },
         {
           "name": "delete",
@@ -2042,7 +2288,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "deleter",
+            "updater"
+          ]
         },
         {
           "name": "set_collection",
@@ -2059,7 +2309,12 @@
           "requestLines": 3,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.collections.pages.add",
+            "client.collections.pages.update",
+            "client.pages.retrieve_workspace_page"
+          ]
         },
         {
           "name": "list_workitem_pages",
@@ -2076,7 +2331,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.pages.list"
+          ]
         },
         {
           "name": "attach_to_workitem",
@@ -2094,7 +2352,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.pages.create"
+          ]
         },
         {
           "name": "detach_from_workitem",
@@ -2112,7 +2373,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.pages.delete"
+          ]
         }
       ],
       "legacy": {
@@ -2146,7 +2410,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.projects.list_lite"
+          ]
         },
         {
           "name": "retrieve",
@@ -2162,7 +2429,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.projects.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -2191,7 +2461,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.projects.create"
+          ]
         },
         {
           "name": "update",
@@ -2225,7 +2498,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.projects.update"
+          ]
         },
         {
           "name": "delete",
@@ -2241,7 +2517,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.projects.delete"
+          ]
         },
         {
           "name": "archive",
@@ -2257,7 +2536,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.projects.archive"
+          ]
         },
         {
           "name": "unarchive",
@@ -2273,7 +2555,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.projects.unarchive"
+          ]
         },
         {
           "name": "worklog_summary",
@@ -2289,7 +2574,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.projects.get_worklog_summary"
+          ]
         },
         {
           "name": "get_features",
@@ -2305,7 +2593,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.projects.get_features"
+          ]
         },
         {
           "name": "update_features",
@@ -2332,7 +2623,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.projects.update_features"
+          ]
         }
       ],
       "legacy": {
@@ -2367,7 +2661,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "estimates.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -2390,7 +2687,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "estimates.create"
+          ]
         },
         {
           "name": "update",
@@ -2411,7 +2711,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "estimates.update"
+          ]
         },
         {
           "name": "delete",
@@ -2427,7 +2730,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "estimates.delete"
+          ]
         },
         {
           "name": "link",
@@ -2444,7 +2750,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "estimates.link_to_project"
+          ]
         },
         {
           "name": "list_points",
@@ -2461,7 +2770,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "estimates.list_points"
+          ]
         },
         {
           "name": "create_points",
@@ -2479,7 +2791,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "estimates.create_points"
+          ]
         },
         {
           "name": "update_point",
@@ -2503,7 +2818,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "estimates.update_point"
+          ]
         },
         {
           "name": "delete_point",
@@ -2521,7 +2839,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "estimates.delete_point"
+          ]
         }
       ],
       "legacy": {
@@ -2557,7 +2878,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "releases.list"
+          ]
         },
         {
           "name": "retrieve",
@@ -2573,7 +2897,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "releases.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -2599,7 +2926,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "releases.create"
+          ]
         },
         {
           "name": "update",
@@ -2624,7 +2954,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "releases.update"
+          ]
         },
         {
           "name": "delete",
@@ -2640,7 +2973,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "releases.delete"
+          ]
         },
         {
           "name": "get_changelog",
@@ -2656,7 +2992,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "releases.changelog.retrieve"
+          ]
         },
         {
           "name": "update_changelog",
@@ -2676,6 +3015,9 @@
           "loops": false,
           "branch": "own",
           "requestShape": "single",
+          "sdkCalls": [
+            "releases.changelog.update"
+          ],
           "requestHelpers": [
             "_prosemirror"
           ]
@@ -2697,7 +3039,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "work_items.list"
+          ]
         },
         {
           "name": "manage_workitems",
@@ -2716,7 +3061,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "work_items.create",
+            "work_items.delete"
+          ]
         }
       ],
       "legacy": {
@@ -2754,7 +3103,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "item_labels.list",
+            "labels.list"
+          ]
         },
         {
           "name": "create",
@@ -2773,7 +3126,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "labels.create"
+          ]
         },
         {
           "name": "update",
@@ -2793,7 +3149,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "labels.delete",
+            "labels.update"
+          ]
         },
         {
           "name": "delete",
@@ -2809,7 +3169,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "labels.delete"
+          ]
         },
         {
           "name": "attach",
@@ -2826,7 +3189,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "item_labels.create"
+          ]
         },
         {
           "name": "detach",
@@ -2843,7 +3209,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "item_labels.delete"
+          ]
         }
       ],
       "legacy": {
@@ -2876,7 +3245,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "tags.list"
+          ]
         },
         {
           "name": "retrieve",
@@ -2892,7 +3264,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "tags.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -2912,7 +3287,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "tags.create"
+          ]
         },
         {
           "name": "update",
@@ -2933,7 +3311,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "tags.update"
+          ]
         },
         {
           "name": "delete",
@@ -2949,7 +3330,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "tags.delete"
+          ]
         }
       ],
       "legacy": {
@@ -2982,7 +3366,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "scope.namespace.list"
+          ]
         },
         {
           "name": "retrieve",
@@ -3000,7 +3387,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "scope.namespace.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -3025,7 +3415,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "scope.namespace.create"
+          ]
         },
         {
           "name": "update",
@@ -3049,7 +3442,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "scope.namespace.update"
+          ]
         },
         {
           "name": "delete",
@@ -3067,7 +3463,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "scope.namespace.delete"
+          ]
         }
       ],
       "legacy": {
@@ -3102,7 +3501,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.work_logs.list"
+          ]
         },
         {
           "name": "create",
@@ -3122,7 +3524,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.work_logs.create"
+          ]
         },
         {
           "name": "update",
@@ -3143,7 +3548,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.work_logs.update"
+          ]
         },
         {
           "name": "delete",
@@ -3161,7 +3569,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.work_logs.delete"
+          ]
         }
       ],
       "legacy": {
@@ -3199,7 +3610,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.work_items.list",
+            "client.work_items.list_workspace"
+          ]
         },
         {
           "name": "list_archived",
@@ -3224,7 +3639,12 @@
           "requestLines": 3,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.work_items.list",
+            "client.work_items.list_archived",
+            "client.work_items.list_workspace"
+          ]
         },
         {
           "name": "retrieve",
@@ -3247,7 +3667,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.retrieve"
+          ]
         },
         {
           "name": "retrieve_by_identifier",
@@ -3269,7 +3692,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.retrieve_by_identifier"
+          ]
         },
         {
           "name": "search",
@@ -3291,7 +3717,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.search"
+          ]
         },
         {
           "name": "count",
@@ -3311,6 +3740,10 @@
           "loops": false,
           "branch": "own",
           "requestShape": "multi",
+          "sdkCalls": [
+            "client.work_items.count_workspace",
+            "response.model_dump"
+          ],
           "requestHelpers": [
             "_scoped_pql"
           ]
@@ -3347,7 +3780,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.create"
+          ]
         },
         {
           "name": "update",
@@ -3382,7 +3818,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.update"
+          ]
         },
         {
           "name": "delete",
@@ -3399,7 +3838,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.delete"
+          ]
         },
         {
           "name": "archive",
@@ -3418,7 +3860,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "operation"
+          ]
         },
         {
           "name": "manage_assignee",
@@ -3438,7 +3883,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.work_items.retrieve",
+            "client.work_items.update"
+          ]
         },
         {
           "name": "manage_label",
@@ -3458,7 +3907,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.work_items.retrieve",
+            "client.work_items.update"
+          ]
         }
       ],
       "legacy": {
@@ -3500,7 +3953,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.activities.list"
+          ]
         },
         {
           "name": "retrieve",
@@ -3518,7 +3974,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.activities.retrieve"
+          ]
         }
       ],
       "legacy": {
@@ -3547,7 +4006,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.attachments.list"
+          ]
         },
         {
           "name": "read",
@@ -3566,6 +4028,12 @@
           "loops": false,
           "branch": "own",
           "requestShape": "multi",
+          "sdkCalls": [
+            "Image",
+            "attrs.get",
+            "client.work_items.attachments.get_download_url",
+            "client.work_items.attachments.list"
+          ],
           "requestHelpers": [
             "_read"
           ]
@@ -3587,6 +4055,11 @@
           "loops": false,
           "branch": "own",
           "requestShape": "multi",
+          "sdkCalls": [
+            "attrs.get",
+            "client.work_items.attachments.get_download_url",
+            "client.work_items.attachments.list"
+          ],
           "requestHelpers": [
             "_download_url",
             "_find"
@@ -3611,6 +4084,9 @@
           "loops": false,
           "branch": "own",
           "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.attachments.upload_from_bytes"
+          ],
           "requestHelpers": [
             "_upload"
           ]
@@ -3631,7 +4107,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.attachments.delete"
+          ]
         }
       ],
       "legacy": {
@@ -3667,6 +4146,9 @@
           "loops": false,
           "branch": "own",
           "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.comments.list"
+          ],
           "requestHelpers": [
             "_legible"
           ]
@@ -3688,6 +4170,9 @@
           "loops": false,
           "branch": "own",
           "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.comments.retrieve"
+          ],
           "requestHelpers": [
             "_legible"
           ]
@@ -3713,6 +4198,9 @@
           "loops": false,
           "branch": "own",
           "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.comments.create"
+          ],
           "requestHelpers": [
             "_legible"
           ]
@@ -3739,6 +4227,9 @@
           "loops": false,
           "branch": "own",
           "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.comments.update"
+          ],
           "requestHelpers": [
             "_legible"
           ]
@@ -3759,7 +4250,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.comments.delete"
+          ]
         }
       ],
       "legacy": {
@@ -3794,7 +4288,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.links.list"
+          ]
         },
         {
           "name": "retrieve",
@@ -3812,7 +4309,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.links.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -3832,7 +4332,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.links.create"
+          ]
         },
         {
           "name": "update",
@@ -3853,7 +4356,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.links.update"
+          ]
         },
         {
           "name": "delete",
@@ -3871,7 +4377,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_items.links.delete"
+          ]
         }
       ],
       "legacy": {
@@ -3906,6 +4415,13 @@
           "loops": false,
           "branch": "own",
           "requestShape": "multi",
+          "sdkCalls": [
+            "client.workspace_work_item_properties.list",
+            "client.workspace_work_item_types.properties.list",
+            "properties.list",
+            "properties.list_project",
+            "workspace_properties.list"
+          ],
           "requestHelpers": [
             "_workspace_props_for_type"
           ]
@@ -3927,7 +4443,11 @@
           "requestLines": 3,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "scope.call",
+            "scope.target"
+          ]
         },
         {
           "name": "create",
@@ -3958,6 +4478,11 @@
           "loops": false,
           "branch": "own",
           "requestShape": "multi",
+          "sdkCalls": [
+            "client.workspace_work_item_properties.create",
+            "client.workspace_work_item_types.properties.create",
+            "scope.call"
+          ],
           "requestHelpers": [
             "_create_at_workspace",
             "_options",
@@ -3993,6 +4518,10 @@
           "loops": false,
           "branch": "own",
           "requestShape": "multi",
+          "sdkCalls": [
+            "scope.call",
+            "scope.target"
+          ],
           "requestHelpers": [
             "_settings"
           ]
@@ -4014,7 +4543,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "scope.call",
+            "scope.target"
+          ]
         },
         {
           "name": "manage_type_properties",
@@ -4035,6 +4568,12 @@
           "loops": true,
           "branch": "own",
           "requestShape": "multi",
+          "sdkCalls": [
+            "client.workspace_work_item_types.properties.create",
+            "links.delete",
+            "properties.attach_to_type",
+            "properties.detach_from_type"
+          ],
           "requestHelpers": [
             "_manage_project_links",
             "_manage_workspace_links"
@@ -4056,7 +4595,10 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "scoped_options.list"
+          ]
         },
         {
           "name": "retrieve_option",
@@ -4075,7 +4617,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "scoped_options.retrieve"
+          ]
         },
         {
           "name": "create_option",
@@ -4099,7 +4644,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "scoped_options.create"
+          ]
         },
         {
           "name": "update_option",
@@ -4124,7 +4672,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "scoped_options.update"
+          ]
         },
         {
           "name": "delete_option",
@@ -4143,7 +4694,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "scoped_options.delete",
+            "values.delete"
+          ]
         },
         {
           "name": "get_value",
@@ -4161,7 +4716,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "values.retrieve"
+          ]
         },
         {
           "name": "set_value",
@@ -4185,6 +4743,9 @@
           "loops": false,
           "branch": "own",
           "requestShape": "single",
+          "sdkCalls": [
+            "values.create"
+          ],
           "requestHelpers": [
             "_wants_rich_text"
           ]
@@ -4205,7 +4766,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "scoped_options.delete",
+            "values.delete"
+          ]
         }
       ],
       "legacy": {
@@ -4246,7 +4811,13 @@
           "requestLines": 4,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.work_items.custom_relations.list",
+            "client.work_items.dependencies.list",
+            "custom.items",
+            "dependencies.model_dump"
+          ]
         },
         {
           "name": "create",
@@ -4268,7 +4839,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.work_items.custom_relations.create",
+            "client.work_items.dependencies.create"
+          ]
         },
         {
           "name": "delete",
@@ -4288,7 +4863,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "remove"
+          ]
         },
         {
           "name": "list_definitions",
@@ -4306,6 +4884,9 @@
           "loops": true,
           "branch": "own",
           "requestShape": "multi",
+          "sdkCalls": [
+            "client.work_item_relation_definitions.list"
+          ],
           "requestHelpers": [
             "_all_definitions"
           ]
@@ -4329,7 +4910,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_item_relation_definitions.create"
+          ]
         },
         {
           "name": "update_definition",
@@ -4351,7 +4935,11 @@
           "requestLines": 2,
           "loops": false,
           "branch": "own",
-          "requestShape": "multi"
+          "requestShape": "multi",
+          "sdkCalls": [
+            "client.work_item_relation_definitions.delete",
+            "client.work_item_relation_definitions.update"
+          ]
         },
         {
           "name": "delete_definition",
@@ -4367,7 +4955,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_item_relation_definitions.delete"
+          ]
         }
       ],
       "legacy": {
@@ -4402,7 +4993,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "types.list"
+          ]
         },
         {
           "name": "retrieve",
@@ -4420,7 +5014,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "types.retrieve"
+          ]
         },
         {
           "name": "resolve",
@@ -4438,6 +5035,16 @@
           "loops": false,
           "branch": "own",
           "requestShape": "multi",
+          "sdkCalls": [
+            "client.projects.get_features",
+            "client.projects.update_features",
+            "client.work_item_types.create",
+            "client.work_item_types.import_to_project",
+            "client.work_item_types.list",
+            "client.workspace_work_item_types.create",
+            "client.workspace_work_item_types.list",
+            "project_features.model_dump"
+          ],
           "requestHelpers": [
             "_resolve"
           ]
@@ -4463,7 +5070,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "types.create"
+          ]
         },
         {
           "name": "update",
@@ -4487,7 +5097,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "types.update"
+          ]
         },
         {
           "name": "delete",
@@ -4505,7 +5118,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "types.delete"
+          ]
         },
         {
           "name": "import_to_project",
@@ -4522,7 +5138,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.work_item_types.import_to_project"
+          ]
         }
       ],
       "legacy": {
@@ -4567,7 +5186,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.workspaces.get_features"
+          ]
         },
         {
           "name": "update_features",
@@ -4588,7 +5210,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "client.workspaces.update_features"
+          ]
         }
       ],
       "legacy": {
@@ -4618,7 +5243,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "namespace.list"
+          ]
         },
         {
           "name": "create",
@@ -4640,6 +5268,9 @@
           "loops": false,
           "branch": "own",
           "requestShape": "single",
+          "sdkCalls": [
+            "namespace.create"
+          ],
           "requestHelpers": [
             "_payload"
           ]
@@ -4665,6 +5296,9 @@
           "loops": false,
           "branch": "own",
           "requestShape": "single",
+          "sdkCalls": [
+            "namespace.update"
+          ],
           "requestHelpers": [
             "_payload"
           ]
@@ -4687,6 +5321,9 @@
           "loops": false,
           "branch": "fall-through",
           "requestShape": "single",
+          "sdkCalls": [
+            "namespace.delete"
+          ],
           "requestHelpers": [
             "_body"
           ]
@@ -4712,7 +5349,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "collections.list"
+          ]
         },
         {
           "name": "retrieve",
@@ -4728,7 +5368,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "collections.retrieve"
+          ]
         },
         {
           "name": "create",
@@ -4746,7 +5389,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "collections.create"
+          ]
         },
         {
           "name": "update",
@@ -4765,7 +5411,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "collections.update"
+          ]
         },
         {
           "name": "delete",
@@ -4783,7 +5432,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "collections.delete"
+          ]
         },
         {
           "name": "list_pages",
@@ -4804,7 +5456,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "collections.pages.list"
+          ]
         },
         {
           "name": "search_pages",
@@ -4822,7 +5477,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "collections.pages.search"
+          ]
         },
         {
           "name": "add_pages",
@@ -4839,7 +5497,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "collections.pages.add"
+          ]
         },
         {
           "name": "remove_page",
@@ -4856,7 +5517,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "collections.pages.remove"
+          ]
         },
         {
           "name": "list_members",
@@ -4872,7 +5536,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "collections.members.list"
+          ]
         },
         {
           "name": "add_member",
@@ -4890,7 +5557,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "collections.members.add"
+          ]
         },
         {
           "name": "update_member",
@@ -4908,7 +5578,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "own",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "collections.members.update"
+          ]
         },
         {
           "name": "remove_member",
@@ -4925,7 +5598,10 @@
           "requestLines": 1,
           "loops": false,
           "branch": "fall-through",
-          "requestShape": "single"
+          "requestShape": "single",
+          "sdkCalls": [
+            "collections.members.remove"
+          ]
         }
       ],
       "legacy": {},

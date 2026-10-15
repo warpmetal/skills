@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.plane.so/api/v1/workspaces/acme/initiatives/sample_initiative_id/",
+  "headers": {
+    "x-api-key": "__TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

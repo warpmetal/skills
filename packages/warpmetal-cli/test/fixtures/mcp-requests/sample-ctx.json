@@ -29,5 +29,8 @@
   },
   "grafana-stack": {
     "grafanaStack": "acme"
+  },
+  "plane": {
+    "planeWorkspace": "acme"
   }
 }

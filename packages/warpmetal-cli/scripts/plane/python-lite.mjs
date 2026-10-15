@@ -617,16 +617,27 @@ export function readDispatcherShapes(source) {
   }
 
   const names = [...clientish].join("|");
-  const call = new RegExp(`(?:^|[^A-Za-z_0-9.])(?:${names})(?:\\.[A-Za-z_0-9]+)*\\s*\\(`);
+  // Each pattern captures the client member it calls, because that name is the
+  // vendor's own word for the operation (`work_items.list`, `work_items.create`)
+  // and it is what ties one of their actions to one endpoint.
+  const call = new RegExp(`(?:^|[^A-Za-z_0-9.])((?:${names})(?:\\.[A-Za-z_0-9]+)*)\\s*\\(`);
   // A bound method handed to a toolkit helper is a request too, and the reference
   // is the only trace of it: `client.cycles.list_work_items,` passed to
   // `workitem_page`, which calls it once.
-  const handed = new RegExp(`^\\s*(?:${names})(?:\\.[A-Za-z_0-9]+)+,\\s*$`);
+  const handed = new RegExp(`^\\s*((?:${names})(?:\\.[A-Za-z_0-9]+)+),\\s*$`);
 
   const sdk = new Set();
+  /** The client member each request line calls, by line index. */
+  const callees = new Map();
   const loopBlocks = new Map();
   lines.forEach((text, index) => {
-    if (!/^\s*#/.test(text) && (call.test(text) || handed.test(text))) sdk.add(index);
+    if (!/^\s*#/.test(text)) {
+      const matched = call.exec(text) ?? handed.exec(text);
+      if (matched !== null) {
+        sdk.add(index);
+        callees.set(index, matched[1]);
+      }
+    }
     if (/^\s+(?:for|while)\s/.test(text) && /:\s*$/.test(text)) {
       let stop = lines.length;
       for (let next = index + 1; next < lines.length; next += 1) {
@@ -741,7 +752,13 @@ export function readDispatcherShapes(source) {
     // `for` that formats a response is still one call.
     const looped = [...visited].some((line) => (loopBlocks.get(line) ?? []).some((inner) => found.has(inner)));
     const requestShape = found.size === 0 ? "none" : found.size === 1 && !looped ? "single" : "multi";
+    // What the vendor calls, in their own words. The allowlist maps one action to
+    // one endpoint, so this is the evidence that the endpoint it names is the one
+    // the action actually reaches - and that an action reaching two different
+    // operations was not quietly mapped to one of them.
+    const sdkCalls = [...new Set([...found].map((line) => callees.get(line)).filter(Boolean))].sort();
     const shape = { requestLines: found.size, loops: looped, branch, requestShape };
+    if (sdkCalls.length > 0) shape.sdkCalls = sdkCalls;
     if (called.size > 0) shape.requestHelpers = [...called].sort();
     return shape;
   };

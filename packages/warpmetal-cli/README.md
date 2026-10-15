@@ -115,7 +115,7 @@ Notion, Jira, Confluence, Linear, Supabase, Figma, Shopify, HubSpot, Asana,
 Dropbox, Airtable, Intercom, Snowflake, Datadog, PagerDuty, Exa, Perplexity,
 Calendly, ClickUp, PostHog, Mixpanel, CircleCI, Mailchimp, X, Square, OpenAI,
 Gemini, Anthropic Admin, Grafana Cloud, Monday.com, OneSignal, Amplitude,
-Zendesk). The provider verbs that back the MCP tools are dispatched through
+Zendesk, Plane). The provider verbs that back the MCP tools are dispatched through
 `--args-stdin`/`--args-json`; the generated adapters implement `status` only.
 
 Two rules hold for every adapter:
@@ -150,7 +150,7 @@ a stored value never appears in any diagnostic, plan, list, error or `--json`
 document, and that it _does_ appear on the one sanctioned stream.
 
 `npm run probe` is the one network-bound check, and it is deliberately outside
-`npm test`. It builds each of the 1271 provider requests from the reviewed sample
+`npm test`. It builds each of the 1331 provider requests from the reviewed sample
 args, swaps the token for a sentinel and sends it: a real route answers 401/403
 (auth required), 400/422 or 2xx, while a route the provider does not serve answers
 404/405. A per-host control request to a bogus path marks auth-first and
@@ -193,3 +193,51 @@ curl -o api-merged.json https://raw.githubusercontent.com/grafana/grafana/main/p
 npm run gen:grafana-stack-params --prefix packages/warpmetal-cli
 rm api-merged.json
 ```
+
+### Verifying the Plane surface without a token
+
+Plane publishes no API document, so its surface is pinned from the vendor's own
+MCP server source - `scripts/plane/inventory.json` records the tag, the license
+and a digest per file - and from the published `plane-sdk` release in
+`scripts/plane/sdk.json`. Nothing about it is hand-written, and nothing about it
+needs a credential to check. The offline half runs in CI on every pull request,
+and locally as one command:
+
+```bash
+# The reviewed allowlist against the pin and the routes it names; the route
+# table; the two documents generated from the allowlist
+# (docs/plane-mcp-inventory.md, docs/plane-endpoint-map.md); the tool catalog the
+# runtime dispatches through; and the request fixture per tool.
+npm run check:plane-offline --prefix packages/warpmetal-cli
+```
+
+Every one of them compares against files that are committed and exits 1 with a
+`re-run:` line naming its generator, so a hand-edit or a forgotten generator is
+the whole failure mode. The remaining two read the vendor's release, which is
+exactly why they cannot be in that gate - a vendor outage must not be able to
+block a merge - so they are scheduled instead, in
+`.github/workflows/plane-drift.yml`:
+
+```bash
+# All five, plus the two above: reads `.cache/` when it is there and downloads
+# the release when it is not, and refuses a release that no longer hashes to the
+# digests the review was made against.
+npm run check:plane --prefix packages/warpmetal-cli
+```
+
+`.cache/` holds the two downloaded releases. It is git-ignored and never
+committed; populate it with `npm run gen:plane-inventory` and
+`npm run gen:plane-sdk` (both `--prefix packages/warpmetal-cli`). On a cold clone
+the six cases that need it skip by name rather than failing, and the scheduled job
+is what keeps the pin honest there.
+
+`npm run probe:plane` is the one network-bound check outside both halves, in the
+same position as `npm run probe` above. It needs no credential and no real
+workspace - the key is a sentinel and the workspace slug is invented, so nothing
+on any account is read - and it proves what no pin can: that every one of the 60
+reviewed paths is one the live API serves. Plane's router resolves the path before
+the tenant and the tenant before the key, so a shipped path answers
+`Workspace not found.` while an invented one answers `Page not found.`; the probe
+asks the controls too, and fails as inconclusive rather than passing quietly if
+the host ever stops keeping those two bodies apart.
+

@@ -114,6 +114,7 @@ const MCP_PROVIDERS: readonly ProviderSpec[] = [
   mcpProvider("onesignal", "OneSignal", ["onesignal.token"]),
   mcpProvider("amplitude", "Amplitude", ["amplitude.token"]),
   mcpProvider("zendesk", "Zendesk", ["zendesk.token", "zendesk.subdomain", "zendesk.email"]),
+  mcpProvider("plane", "Plane", ["plane.token", "plane.workspace_slug"]),
 ];
 
 export const PROVIDERS: readonly ProviderSpec[] = [
