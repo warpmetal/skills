@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/devices/physical-devices?cursor=sample_cursor&sort_by=name&sort_order=asc&last_seen_user.email=sample_last_seen_user_email&seen_after=sample_seen_after&seen_before=sample_seen_before&per_page=1&search=sample_search&active_registrations=include&has_registration_type=warp&last_seen_registration.policy.id=sample_last_seen_registration_policy_id&include=sample_include&&",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

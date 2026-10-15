@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://acme.grafana.net/api/annotations?from=1&to=1&dashboardUID=sample_dashboard_uid&limit=1&type=alert&matchAny=true",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

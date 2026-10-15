@@ -1,0 +1,123 @@
+{
+  "version": 1,
+  "provider": "gemini",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "gemini_generate_content",
+      "name": "generate_content",
+      "title": "Generate content",
+      "description": "Generate a model response for the given conversation contents.",
+      "toolkitId": "gemini",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cachedContent": {
+            "description": "Name of cached content to use as context, e.g. `cachedContents/abc123`.",
+            "type": "string"
+          },
+          "contents": {
+            "description": "Ordered conversation turns. Each item is a Content with `role` and `parts`.",
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "generationConfig": {
+            "additionalProperties": true,
+            "description": "Sampling and output options, e.g. temperature, maxOutputTokens, responseMimeType.",
+            "properties": {},
+            "type": "object"
+          },
+          "model": {
+            "description": "Bare model id with no slashes, e.g. `gemini-2.5-flash`. Do not pass the `models/`-prefixed resource name — the slash is percent-encoded and the request will not match.",
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9._-]+$",
+            "type": "string"
+          },
+          "safetySettings": {
+            "description": "Per-category safety thresholds.",
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "systemInstruction": {
+            "additionalProperties": true,
+            "description": "Developer-set system instruction, as a Content object.",
+            "properties": {},
+            "type": "object"
+          },
+          "toolConfig": {
+            "additionalProperties": true,
+            "description": "Configuration for the declared tools.",
+            "properties": {},
+            "type": "object"
+          },
+          "tools": {
+            "description": "Tool declarations the model may call.",
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "contents",
+          "model"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Generate content",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "gemini_list_models",
+      "name": "list_models",
+      "title": "List models",
+      "description": "List the models available to the calling API key.",
+      "toolkitId": "gemini",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "page_size": {
+            "description": "Maximum number of items to return in one page.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Page token from a previous response, to fetch the next page.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List models",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://grafana.com/api/instances?orgSlug=sample_org_slug",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/registrar/registrations",
+  "body": {
+    "acknowledgements": {},
+    "auto_renew": true,
+    "contact_extensions": {},
+    "contacts": {},
+    "domain_name": "sample_domain_name",
+    "privacy_mode": "off",
+    "years": 1
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

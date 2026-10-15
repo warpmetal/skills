@@ -28,14 +28,20 @@ export function createHttp(fetchFn: typeof fetch, defaultTimeoutMs = 15000): Htt
     const timeoutMs = request.timeoutMs ?? defaultTimeoutMs;
     let response: Response;
     try {
+      const hasBody = request.body !== undefined;
+      const bodyIsString = typeof request.body === "string";
       response = await fetchFn(request.url, {
         method: request.method,
         headers: {
           accept: "application/json",
-          ...(request.body !== undefined ? { "content-type": "application/json" } : {}),
+          ...(hasBody && !bodyIsString && !request.headers?.["content-type"] && !request.headers?.["Content-Type"]
+            ? { "content-type": "application/json" }
+            : {}),
           ...request.headers,
         },
-        ...(request.body !== undefined ? { body: JSON.stringify(request.body) } : {}),
+        ...(hasBody
+          ? { body: bodyIsString ? request.body : JSON.stringify(request.body) }
+          : {}),
         signal: AbortSignal.timeout(timeoutMs),
       });
     } catch (error) {

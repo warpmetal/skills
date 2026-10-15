@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/cache/tiered_cache_smart_topology_enable",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

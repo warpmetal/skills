@@ -1,0 +1,17 @@
+{
+  "method": "POST",
+  "url": "https://api.linear.app/graphql",
+  "body": {
+    "query": "mutation($input: IssueCreateInput!) { issueCreate(input: $input) { success issue { id identifier title url } } }",
+    "variables": {
+      "input": {
+        "teamId": "sample_linear_team_id",
+        "title": "sample_title"
+      }
+    }
+  },
+  "headers": {
+    "Authorization": "__TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

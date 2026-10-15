@@ -1,0 +1,19 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/security-center/securitytxt",
+  "body": {
+    "acknowledgments": [],
+    "canonical": [],
+    "contact": [],
+    "enabled": true,
+    "encryption": [],
+    "expires": "sample_expires",
+    "hiring": [],
+    "policy": [],
+    "preferred_languages": "sample_preferred_languages"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/logs/explorer/datasets/sample_dataset_id",
+  "body": {
+    "deletion_protection": true,
+    "enabled": true,
+    "fields": [],
+    "filter": "sample_filter",
+    "filter_attack_traffic": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://api.lab.amplitude.com/v1/flags?flag_keys=sample_flag_keys",
+  "headers": {
+    "Authorization": "Api-Key __TOKEN__"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/pages/projects",
+  "body": {
+    "build_config": {},
+    "deployment_configs": {},
+    "name": "sample_name",
+    "production_branch": "sample_production_branch",
+    "source": {}
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "provider": "discord",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "discord_get_my_user",
+      "name": "get_my_user",
+      "title": "Get My Discord User",
+      "description": "Get the Discord user profile of the connected account, including id, username, global display name, avatar, and locale.",
+      "toolkitId": "discord",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get My Discord User",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "discord_list_my_guilds",
+      "name": "list_my_guilds",
+      "title": "List My Discord Servers",
+      "description": "List the Discord servers (guilds) the connected user belongs to, with the user's permissions in each. Use this to find a guild id before calling other guild tools.",
+      "toolkitId": "discord",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "after": {
+            "description": "Return guilds after this guild id.",
+            "pattern": "^[0-9]{17,20}$",
+            "type": "string"
+          },
+          "before": {
+            "description": "Return guilds before this guild id.",
+            "pattern": "^[0-9]{17,20}$",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum number of guilds to return. Defaults to 200.",
+            "maximum": 200,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "with_counts": {
+            "description": "When true, include approximate member and presence counts for each guild.",
+            "type": "boolean"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List My Discord Servers",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

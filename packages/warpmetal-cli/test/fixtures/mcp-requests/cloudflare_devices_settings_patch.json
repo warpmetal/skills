@@ -1,0 +1,19 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/devices/settings",
+  "body": {
+    "disable_for_time": 1,
+    "external_emergency_signal_enabled": true,
+    "external_emergency_signal_fingerprint": "sample_external_emergency_signal_fingerprint",
+    "external_emergency_signal_interval": "sample_external_emergency_signal_interval",
+    "external_emergency_signal_url": "sample_external_emergency_signal_url",
+    "gateway_proxy_enabled": true,
+    "gateway_udp_proxy_enabled": true,
+    "root_certificate_installation_enabled": true,
+    "use_zt_virtual_ip": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

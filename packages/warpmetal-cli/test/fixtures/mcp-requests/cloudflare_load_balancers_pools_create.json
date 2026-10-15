@@ -1,0 +1,23 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/load_balancers/pools",
+  "body": {
+    "description": "sample_description",
+    "enabled": true,
+    "latitude": 1,
+    "load_shedding": {},
+    "longitude": 1,
+    "minimum_origins": 1,
+    "monitor": "sample_monitor",
+    "monitor_group": "sample_monitor_group",
+    "name": "sample_name",
+    "notification_email": "sample_notification_email",
+    "notification_filter": {},
+    "origin_steering": {},
+    "origins": []
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

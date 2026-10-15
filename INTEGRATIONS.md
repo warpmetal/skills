@@ -498,8 +498,17 @@ skills/migrate-site/scripts/cutover.sh --client acme --dry-run
 These limits are deliberate and declared in the catalog; you can read them back with
 `warpmetal integration list --json`.
 
-- **Cloudflare: DNS only.** `dns-list` and `dns-upsert`. WAF and firewall rules are a
-  later phase.
+- **Cloudflare's adapter verbs are still DNS only.** `dns-list` and `dns-upsert` are what
+  `warpmetal integration cloudflare` answers to. The provider tools are the wider surface:
+  zones, DNS, zone settings, cache and tokens in batch 14, and R2, Workers, Queues, Pages,
+  Workers KV, Vectorize, D1, Workflows and Hyperdrive in batch 15. WAF rulesets, cache rules
+  and alerts are a later wave.
+- **Cloudflare cannot upload bytes through the MCP surface.** A Worker script or version
+  upload, a Pages deployment, an R2 object and a Workers asset are multipart or binary
+  bodies with no field list to expose, so those operations are not in the catalog at all
+  rather than shipped as calls that could never succeed. What manages what is already
+  uploaded - buckets, object listings and deletes, scripts, versions, deployments and
+  secrets - is there.
 - **Platform providers are read-only.** `vercel` (`deployment-list`), `sentry`
   (`issue-list`) and `stripe` (`balance-get`) expose no
   mutating verb, so there is nothing to gate. No deploy is

@@ -1,0 +1,12 @@
+{
+  "method": "POST",
+  "url": "https://api.clickup.com/api/v2/task/sample_task_id/comment",
+  "body": {
+    "comment_text": "sample_comment_text",
+    "task_id": "sample_task_id"
+  },
+  "headers": {
+    "Authorization": "__TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

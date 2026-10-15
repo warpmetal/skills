@@ -1,0 +1,8 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/access/bookmarks/sample_bookmark_id",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/devices/ip-profiles",
+  "body": {
+    "description": "sample_description",
+    "enabled": true,
+    "match": "sample_match",
+    "name": "sample_name",
+    "precedence": 1,
+    "subnet_id": "sample_subnet_id"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

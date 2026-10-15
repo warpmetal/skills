@@ -1,0 +1,15 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/members/sample_member_id",
+  "body": {
+    "id": "sample_id",
+    "roles": [],
+    "status": "accepted",
+    "user": {},
+    "policies": []
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.pagerduty.com/incidents?date_range=all&incident_key=sample_incident_key&include=acknowledgers&limit=1&offset=1&since=sample_since&statuses=triggered&time_zone=sample_time_zone&total=true&until=sample_until&urgencies=high",
+  "headers": {
+    "Authorization": "Token token=__TOKEN__",
+    "Accept": "application/vnd.pagerduty+json;version=2"
+  }
+}

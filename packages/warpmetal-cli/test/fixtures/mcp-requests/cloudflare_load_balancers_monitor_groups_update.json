@@ -1,0 +1,15 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/load_balancers/monitor_groups/sample_monitor_group_id",
+  "body": {
+    "created_on": "sample_created_on",
+    "description": "sample_description",
+    "id": "sample_id",
+    "members": [],
+    "modified_on": "sample_modified_on"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

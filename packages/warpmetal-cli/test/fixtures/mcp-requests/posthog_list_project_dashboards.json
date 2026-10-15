@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://us.posthog.com/api/projects/sample_project_id/dashboards/?limit=1&offset=1",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

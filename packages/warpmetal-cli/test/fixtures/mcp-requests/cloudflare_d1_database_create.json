@@ -1,0 +1,14 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/d1/database",
+  "body": {
+    "jurisdiction": "eu",
+    "name": "sample_name",
+    "primary_location_hint": "wnam",
+    "read_replication": {}
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

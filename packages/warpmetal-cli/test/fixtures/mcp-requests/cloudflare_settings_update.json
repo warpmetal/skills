@@ -1,0 +1,12 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/settings/sample_setting_id",
+  "body": {
+    "enabled": true,
+    "value": "sample_value"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

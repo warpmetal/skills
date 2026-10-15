@@ -1,0 +1,14 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/analytics/query/data-security/content-findings/top-n",
+  "body": {
+    "filters": [],
+    "from": "sample_from",
+    "n": 1,
+    "to": "sample_to"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

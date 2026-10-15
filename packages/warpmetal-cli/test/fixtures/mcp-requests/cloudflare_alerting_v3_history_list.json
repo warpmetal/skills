@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/alerting/v3/history?per_page=1&before=sample_before&page=1&since=sample_since",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

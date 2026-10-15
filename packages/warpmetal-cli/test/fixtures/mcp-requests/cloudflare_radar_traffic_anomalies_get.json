@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/radar/traffic_anomalies/sample_uuid?format=JSON",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

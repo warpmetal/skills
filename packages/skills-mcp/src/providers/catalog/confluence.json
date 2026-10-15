@@ -1,0 +1,140 @@
+{
+  "version": 1,
+  "provider": "confluence",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "confluence_get_page_by_id",
+      "name": "get_page_by_id",
+      "title": "Get Confluence Page by ID",
+      "description": "Get one Confluence page by its numeric page ID.",
+      "toolkitId": "confluence",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "draft": {
+            "description": "Whether to return a draft version when one is available.",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Numeric ID of the requested Confluence resource.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "version": {
+            "description": "Specific page version to return.",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Confluence Page by ID",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "confluence_get_pages",
+      "name": "get_pages",
+      "title": "Get Confluence Pages",
+      "description": "List Confluence pages, optionally filtering by space, title, status, subtype, or body format.",
+      "toolkitId": "confluence",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "body_format": {
+            "description": "Representation to use for returned Confluence page content.",
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "cursor": {
+            "description": "Pagination cursor returned by a previous request.",
+            "maxLength": 2048,
+            "minLength": 1,
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum number of results to return.",
+            "maximum": 250,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "sort": {
+            "description": "Provider-supported ordering for the returned results.",
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string"
+          },
+          "space_id": {
+            "description": "Numeric ID of the Confluence space.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "status": {
+            "description": "Provider-supported status used to filter results.",
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "subtype": {
+            "description": "Confluence content subtype used to filter pages.",
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": {
+            "description": "Exact page title used to filter results.",
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Confluence Pages",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

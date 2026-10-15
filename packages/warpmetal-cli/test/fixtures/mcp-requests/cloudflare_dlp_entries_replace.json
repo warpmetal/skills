@@ -1,0 +1,15 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/dlp/entries/sample_entry_id",
+  "body": {
+    "description": "sample_description",
+    "name": "sample_name",
+    "pattern": {},
+    "type": "custom",
+    "enabled": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

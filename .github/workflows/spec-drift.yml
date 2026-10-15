@@ -1,0 +1,156 @@
+# Drift check for the generated Cloudflare surface.
+#
+# The Cloudflare generators read `openapi.json` (27 MB), which is deliberately
+# not committed (`.gitignore`). Nothing else can see what they produce:
+# `npm run build` does not regenerate the inventory, the provider catalog, the
+# route table or the distilled-parameter fixture, so the `git diff --exit-code`
+# step in `verify.yml` proves nothing about them and a stale generated file lands
+# silently.
+#
+# Scheduled, never on a pull request, for the same reason the `live` job in
+# `mcp.yml` is: the document is a vendor artifact that moves on Cloudflare's
+# schedule, and a vendor bump must not be able to block a merge.
+#
+# The pin is `spec.sha256` in the allowlist, the digest the reviewed decisions
+# were made against. `scripts/cloudflare/allowlist.mjs` refuses a document that
+# hashes to anything else, which is why the two outcomes are handled differently:
+#
+#   the digest matches   the artifacts are re-derived from the document they
+#                        came from and must come back byte-identical. A diff is
+#                        our own drift and a stopped generator is a defect; both
+#                        fail the job.
+#   the digest moved     the refusal in the allowlist is the expected answer, so
+#                        the job only reports the move. Adopting new Cloudflare
+#                        surface is a wave with its own review, not a CI fix.
+name: spec-drift
+
+on:
+  schedule:
+    # 06:30 UTC daily, half an hour after the MCP live contract job.
+    - cron: "30 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cloudflare:
+    name: Cloudflare artifacts against the pinned spec
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            packages/skills-mcp/package-lock.json
+            packages/warpmetal-cli/package-lock.json
+
+      - name: Install integration engine
+        run: npm ci --prefix packages/warpmetal-cli
+
+      - name: Install MCP server
+        run: npm ci --prefix packages/skills-mcp
+
+      # Public and unauthenticated, so it is fetched unpinned; the digest below
+      # is what decides whether anything derived from it may be trusted.
+      - name: Fetch the spec
+        run: |
+          curl -fsSL --retry 3 --retry-delay 5 \
+            -o openapi.json \
+            https://raw.githubusercontent.com/cloudflare/api-schemas/main/openapi.json
+
+      # Two committed records name the same document - the allowlist the review
+      # was made against and the fixture the builders are asserted from - so they
+      # are compared with each other first. That half of the check needs no spec
+      # and no generator: it catches an inconsistent pair on its own.
+      - name: Compare the digests
+        id: pin
+        run: |
+          pinned="$(node -p 'require("./packages/warpmetal-cli/scripts/cloudflare/allowlist.json").spec.sha256')"
+          recorded="$(node -p 'require("./packages/warpmetal-cli/test/fixtures/cloudflare-params.json").source.sha256')"
+          actual="$(sha256sum openapi.json | cut -d' ' -f1)"
+          echo "pinned=${pinned}" >> "$GITHUB_OUTPUT"
+          echo "recorded=${recorded}" >> "$GITHUB_OUTPUT"
+          echo "actual=${actual}" >> "$GITHUB_OUTPUT"
+          if [ "$pinned" != "$recorded" ]; then
+            echo "::error::The allowlist pins ${pinned} but the parameter fixture records ${recorded}: the two records of the document disagree."
+            exit 1
+          fi
+          if [ "$pinned" = "$actual" ]; then
+            echo "match=true" >> "$GITHUB_OUTPUT"
+            echo "Fetched document is the one the reviewed decisions were made against."
+          else
+            echo "match=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::The spec moved: pinned ${pinned}, fetched ${actual}. The allowlist refuses a document it was not reviewed against, so the generators below are expected to stop."
+          fi
+
+      # The order is the one documented in `packages/skills-mcp/README.md`
+      # ("Regenerating the Cloudflare surface"): routes, then the catalog, then
+      # everything distilled from them. Running them out of order would compare
+      # files against the wrong inputs. A moved spec stops this step at the first
+      # Cloudflare generator - by design - so its failure is captured here and
+      # judged in the report below instead of ending the job.
+      - name: Regenerate every artifact
+        id: regen
+        continue-on-error: true
+        run: |
+          set -e
+          npm --prefix packages/warpmetal-cli run gen:cloudflare-routes
+          node packages/skills-mcp/scripts/gen-cloudflare-catalog.mjs
+          node packages/skills-mcp/scripts/gen-mapping.mjs
+          node packages/skills-mcp/scripts/gen-catalog-barrel.mjs
+          npm --prefix packages/warpmetal-cli run gen:mcp-tools
+          npm --prefix packages/warpmetal-cli run gen:cloudflare-params
+          npm --prefix packages/warpmetal-cli run gen:mcp-fixtures
+          npm --prefix packages/warpmetal-cli run gen:cloudflare-inventory
+          node packages/skills-mcp/scripts/gen-readme-index.mjs
+
+      # The whole point of the digest is that this step can tell a stale file
+      # from a vendor bump, so it judges both inputs: whether the document is the
+      # reviewed one, and whether the generators ran at all.
+      - name: Report the drift
+        env:
+          MATCH: ${{ steps.pin.outputs.match }}
+          PINNED: ${{ steps.pin.outputs.pinned }}
+          ACTUAL: ${{ steps.pin.outputs.actual }}
+          REGEN: ${{ steps.regen.outcome }}
+        run: |
+          if [ "$MATCH" = "true" ]; then
+            if [ "$REGEN" != "success" ]; then
+              echo "::error::A generator failed against the document it was reviewed against (${PINNED}), so this is not a vendor change. Read the step above."
+              echo "Generators failed against the pinned document \`${PINNED}\`." >> "$GITHUB_STEP_SUMMARY"
+              exit 1
+            fi
+            if git diff --quiet; then
+              echo "Every generated artifact matches its inputs (spec \`${ACTUAL}\`)." >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            git --no-pager diff --stat
+            {
+              echo "### Stale generated artifact"
+              echo
+              echo '```'
+              git --no-pager diff --stat
+              echo '```'
+              echo
+              echo "Regenerating from \`${PINNED}\`, the document these artifacts record, changed them: re-run the generator and commit the result."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::error::A generated artifact is stale: regenerating it from spec ${PINNED} (the document it records) changed it."
+            exit 1
+          fi
+
+          # The spec moved. The allowlist refusal is the designed answer, so a
+          # stopped generator is not a failure, and whatever was regenerated
+          # before it stopped is reported for the maintainer. Nothing is claimed
+          # about staleness, because that judgement needs the pinned document.
+          echo "::warning::The spec moved (pinned ${PINNED}, fetched ${ACTUAL}); adopting it is a wave, so nothing committed is stale."
+          git --no-pager diff --stat
+          {
+            echo "### The Cloudflare spec moved"
+            echo
+            echo "Pinned \`${PINNED}\`, fetched \`${ACTUAL}\`. The allowlist refuses a document it was not reviewed against, so the generators stop by design and no committed file is stale. Adopting the new surface is a wave."
+          } >> "$GITHUB_STEP_SUMMARY"

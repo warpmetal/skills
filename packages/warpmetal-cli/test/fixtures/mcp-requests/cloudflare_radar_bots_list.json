@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/radar/bots?limit=1&offset=1&botCategory=SEARCH_ENGINE_CRAWLER&botOperator=sample_bot_operator&kind=AGENT&botVerificationStatus=VERIFIED&format=JSON",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

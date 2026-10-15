@@ -1,0 +1,20 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/stream/sample_identifier",
+  "body": {
+    "allowedOrigins": [],
+    "creator": "sample_creator",
+    "maxDurationSeconds": 1,
+    "meta": {},
+    "publicDetails": {},
+    "requireSignedURLs": true,
+    "scheduledDeletion": "sample_scheduled_deletion",
+    "thumbnailTimestampPct": 1,
+    "uid": "sample_uid",
+    "uploadExpiry": "sample_upload_expiry"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

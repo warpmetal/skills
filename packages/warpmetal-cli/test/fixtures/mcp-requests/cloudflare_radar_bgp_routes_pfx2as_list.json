@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/radar/bgp/routes/pfx2as?prefix=sample_prefix&origin=1&rpkiStatus=VALID&longestPrefixMatch=true&format=JSON",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

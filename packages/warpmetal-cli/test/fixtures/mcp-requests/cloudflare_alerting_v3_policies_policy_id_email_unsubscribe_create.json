@@ -1,0 +1,4 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/alerting/v3/policies/sample_policy_id/email/unsubscribe?email=sample_email&token=sample_token"
+}

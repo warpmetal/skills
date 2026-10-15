@@ -1,0 +1,15 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/dlp/email/rules/sample_rule_id",
+  "body": {
+    "action": {},
+    "conditions": [],
+    "description": "sample_description",
+    "enabled": true,
+    "name": "sample_name"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

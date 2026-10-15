@@ -1,0 +1,12 @@
+{
+  "method": "POST",
+  "url": "https://api.hubapi.com/crm/v3/objects/contacts",
+  "body": {
+    "associations": [],
+    "properties": {}
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

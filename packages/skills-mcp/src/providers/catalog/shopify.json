@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "provider": "shopify",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "shopify_list_products",
+      "name": "list_products",
+      "title": "List Shopify Products",
+      "description": "List products in the connected Shopify shop with optional first-page size.",
+      "toolkitId": "shopify",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "first": {
+            "default": 10,
+            "description": "Number of products to return (max 50).",
+            "maximum": 50,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Shopify Products",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "shopify_get_product",
+      "name": "get_product",
+      "title": "Get Shopify Product",
+      "description": "Get a single Shopify product by GraphQL ID (gid://shopify/Product/...).",
+      "toolkitId": "shopify",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "description": "Product GraphQL ID.",
+            "maxLength": 128,
+            "minLength": 10,
+            "pattern": "^gid://shopify/Product/[0-9]+$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Shopify Product",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "shopify_list_orders",
+      "name": "list_orders",
+      "title": "List Shopify Orders",
+      "description": "List recent orders for the connected Shopify shop (default 60-day window unless read_all_orders is granted).",
+      "toolkitId": "shopify",
+      "version": "v2",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "first": {
+            "default": 10,
+            "description": "Number of orders to return.",
+            "maximum": 50,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Shopify Orders",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

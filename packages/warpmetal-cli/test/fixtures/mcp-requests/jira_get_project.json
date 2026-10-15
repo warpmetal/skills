@@ -1,0 +1,9 @@
+{
+  "method": "GET",
+  "url": "https://acme.atlassian.net/rest/api/3/project/sample_project_key?expand=sample_expand",
+  "headers": {
+    "Authorization": "Basic __BASIC__",
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+}

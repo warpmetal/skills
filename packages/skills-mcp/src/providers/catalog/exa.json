@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "provider": "exa",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "exa_web_search",
+      "name": "web_search",
+      "title": "Web Search",
+      "description": "Search the public internet for current information, news, announcements, and general web content, returning relevant results with normalized text snippets.",
+      "toolkitId": "exa",
+      "version": "v2",
+      "inputSchema": {
+        "properties": {
+          "max_results": {
+            "description": "Maximum number of search results to return.",
+            "type": "integer"
+          },
+          "query": {
+            "description": "Search query string.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "provider": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "results": {
+            "items": {
+              "properties": {
+                "publishedDate": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Web Search",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "exa_web_fetch",
+      "name": "web_fetch",
+      "title": "Web Fetch",
+      "description": "Fetch and extract public web page content with Exa.",
+      "toolkitId": "exa",
+      "version": "v2",
+      "inputSchema": {
+        "properties": {
+          "max_characters": {
+            "description": "Maximum extracted text characters to return.",
+            "type": "integer"
+          },
+          "url": {
+            "description": "Public web page URL to fetch.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "provider": {
+            "type": "string"
+          },
+          "results": {
+            "items": {
+              "properties": {
+                "publishedDate": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Web Fetch",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

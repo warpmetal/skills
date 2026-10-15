@@ -1,0 +1,9 @@
+{
+  "method": "GET",
+  "url": "https://acme.zendesk.com/api/v2/search.json?query=sample_query&sort_by=updated_at&sort_order=asc&per_page=1",
+  "headers": {
+    "Authorization": "Basic __BASIC__",
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+}

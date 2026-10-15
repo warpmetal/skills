@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://gitlab.com/api/v4/projects?membership=true&active=true&archived=true&id_after=1&id_before=1&imported=true&include_hidden=true&include_pending_delete=true&last_activity_after=sample_last_activity_after&last_activity_before=sample_last_activity_before&marked_for_deletion_on=sample_marked_for_deletion_on&min_access_level=10&order_by=id&owned=true&page=1&per_page=1&repository_checksum_failed=true&repository_storage=sample_repository_storage&search=sample_search&search_namespaces=true&simple=true&sort=asc&starred=true&statistics=true&topic_id=1&updated_after=sample_updated_after&updated_before=sample_updated_before&visibility=private&wiki_checksum_failed=true&with_custom_attributes=true&with_issues_enabled=true&with_merge_requests_enabled=true&with_programming_language=sample_with_programming_language",
+  "headers": {
+    "PRIVATE-TOKEN": "__TOKEN__"
+  }
+}

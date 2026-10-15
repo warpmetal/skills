@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "provider": "clickup",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "clickup_create_task",
+      "name": "create_task",
+      "title": "Create Task",
+      "description": "Create a task in a list, with its name, assignees, and due date. Use to add work; use update_task to change a task that exists.",
+      "toolkitId": "clickup",
+      "version": "v3",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "list_id": {
+            "description": "ClickUp list id.",
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9._:-]+$",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the created resource.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "list_id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Task",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "clickup_get_task",
+      "name": "get_task",
+      "title": "Get Task",
+      "description": "Return one task with its full detail, including custom fields and subtasks. Use when the task id is already known.",
+      "toolkitId": "clickup",
+      "version": "v3",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "task_id": {
+            "description": "ClickUp task id.",
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9._:-]+$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Task",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "clickup_create_task_comment",
+      "name": "create_task_comment",
+      "title": "Create Task Comment",
+      "description": "Add a comment to a task. Use to comment on work; use create_threaded_comment to reply inside an existing thread.",
+      "toolkitId": "clickup",
+      "version": "v3",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "comment_text": {
+            "description": "Comment body.",
+            "type": "string"
+          },
+          "task_id": {
+            "description": "ClickUp task id.",
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9._:-]+$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id",
+          "comment_text"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Task Comment",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

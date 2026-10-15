@@ -1,0 +1,30 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/access/organizations",
+  "body": {
+    "allow_authenticate_via_warp": true,
+    "auth_domain": "sample_auth_domain",
+    "auto_redirect_to_identity": true,
+    "custom_pages": {},
+    "deny_unmatched_requests": true,
+    "deny_unmatched_requests_exempted_zone_names": [],
+    "disable_end_user_app_creation": true,
+    "is_ui_read_only": true,
+    "login_design": {},
+    "mfa_config": {},
+    "mfa_piv_key_requirements": {},
+    "mfa_required_for_all_apps": true,
+    "name": "sample_name",
+    "service_token_inactivity": {},
+    "session_duration": "sample_session_duration",
+    "strict_service_token_auth": true,
+    "ui_read_only_toggle_reason": "sample_ui_read_only_toggle_reason",
+    "user_seat_expiration_inactive_time": "sample_user_seat_expiration_inactive_time",
+    "warp_auth_non_browser_401": true,
+    "warp_auth_session_duration": "sample_warp_auth_session_duration"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

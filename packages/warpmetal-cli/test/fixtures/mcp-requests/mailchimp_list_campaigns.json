@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://us1.api.mailchimp.com/3.0/campaigns?before_create_time=sample_before_create_time&before_send_time=sample_before_send_time&count=1&folder_id=sample_folder_id&include_resend_shortcut_eligibility=true&include_resend_shortcut_usage=true&list_id=sample_list_id&member_id=sample_member_id&offset=1&since_create_time=sample_since_create_time&since_send_time=sample_since_send_time&sort_dir=ASC&sort_field=create_time&status=save&type=regular",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

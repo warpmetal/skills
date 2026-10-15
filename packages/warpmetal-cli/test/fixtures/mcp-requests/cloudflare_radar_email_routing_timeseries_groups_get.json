@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/radar/email/routing/timeseries_groups/IP_VERSION?aggInterval=15m&limitPerGroup=1&format=JSON&&&&&&&&&&",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

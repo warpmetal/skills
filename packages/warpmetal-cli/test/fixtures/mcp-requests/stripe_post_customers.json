@@ -1,0 +1,30 @@
+{
+  "method": "POST",
+  "url": "https://api.stripe.com/v1/customers",
+  "form": {
+    "address": {},
+    "balance": 1,
+    "business_name": {},
+    "cash_balance": {},
+    "description": "sample_description",
+    "email": "sample_email",
+    "individual_name": {},
+    "invoice_prefix": "sample_invoice_prefix",
+    "invoice_settings": {},
+    "metadata": {},
+    "name": "sample_name",
+    "next_invoice_sequence": 1,
+    "payment_method": "sample_payment_method",
+    "phone": "sample_phone",
+    "preferred_locales": [],
+    "shipping": {},
+    "source": "sample_source",
+    "tax": {},
+    "tax_exempt": "",
+    "tax_id_data": [],
+    "test_clock": "sample_test_clock"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

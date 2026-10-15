@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://api.resend.com/emails?after=sample_after&before=sample_before&limit=1",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

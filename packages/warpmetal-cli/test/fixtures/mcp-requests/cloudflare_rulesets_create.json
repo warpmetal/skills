@@ -1,0 +1,18 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/rulesets?dry_run=true",
+  "body": {
+    "description": "sample_description",
+    "id": "sample_id",
+    "last_updated": "sample_last_updated",
+    "name": "sample_name",
+    "version": "sample_version",
+    "kind": "managed",
+    "phase": "ddos_l4",
+    "rules": []
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,699 @@
+{
+  "version": 1,
+  "provider": "vercel",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "vercel_get_projects",
+      "name": "get_projects",
+      "title": "Retrieve a list of projects",
+      "description": "List the account's projects with their framework, linked repository, and latest deployment. Use to discover or search for a project; use get_project once its id or name is known.",
+      "toolkitId": "vercel",
+      "version": "v9",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "build_machine_types": {
+            "description": "Filter results by effective build machine types. Accepts comma-separated values. Use \"elastic\" for projects with elastic selection and \"default\" for projects without a build machine type set.",
+            "type": "string"
+          },
+          "build_queue_configuration": {
+            "description": "Filter results by build queue configuration. SKIP_NAMESPACE_QUEUE includes projects without a configuration set.",
+            "enum": [
+              "SKIP_NAMESPACE_QUEUE",
+              "WAIT_FOR_NAMESPACE_QUEUE"
+            ],
+            "type": "string"
+          },
+          "deprecated": {
+            "type": "boolean"
+          },
+          "edge_config_id": {
+            "description": "Filter results by connected Edge Config ID",
+            "type": "string"
+          },
+          "edge_config_token_id": {
+            "description": "Filter results by connected Edge Config Token ID",
+            "type": "string"
+          },
+          "elastic_concurrency_enabled": {
+            "description": "Filter results by projects with elastic concurrency enabled",
+            "enum": [
+              "1",
+              "0"
+            ],
+            "type": "string"
+          },
+          "exclude_repos": {
+            "description": "Filter results by excluding those projects that belong to a repo",
+            "type": "string"
+          },
+          "from": {
+            "description": "Query only projects updated after the given timestamp or continuation token.",
+            "type": "string"
+          },
+          "git_fork_protection": {
+            "description": "Specifies whether PRs from Git forks should require a team member's authorization before it can be deployed",
+            "enum": [
+              "1",
+              "0"
+            ],
+            "type": "string"
+          },
+          "limit": {
+            "description": "Limit the number of projects returned",
+            "type": "string"
+          },
+          "repo": {
+            "description": "Filter results by repo. Also used for project count",
+            "type": "string"
+          },
+          "repo_id": {
+            "description": "Filter results by Repository ID.",
+            "type": "string"
+          },
+          "repo_url": {
+            "description": "Filter results by Repository URL.",
+            "type": "string"
+          },
+          "search": {
+            "description": "Search projects by the name field",
+            "maxLength": 100,
+            "type": "string"
+          },
+          "slug": {
+            "description": "The Team slug to perform the request on behalf of.",
+            "type": "string"
+          },
+          "static_ips_enabled": {
+            "description": "Filter results by projects with Static IPs enabled",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "type": "string"
+          },
+          "team_id": {
+            "description": "The Team identifier to perform the request on behalf of.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Retrieve a list of projects",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "vercel_create_project",
+      "name": "create_project",
+      "title": "Create a new project",
+      "description": "Create a new Vercel project that deployments, domains, and environment variables attach to. Use for a project that does not exist yet; use update_project to change the settings of one that does.",
+      "toolkitId": "vercel",
+      "version": "v9",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "build_command": {
+            "description": "The build command for this project. When `null` is used this value will be automatically detected",
+            "maxLength": 256,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "command_for_ignoring_build_step": {
+            "maxLength": 256,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dev_command": {
+            "description": "The dev command for this project. When `null` is used this value will be automatically detected",
+            "maxLength": 256,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "enable_affected_projects_deployments": {
+            "description": "Opt-in to skip deployments when there are no changes to the root directory and its dependencies",
+            "type": "boolean"
+          },
+          "enable_preview_feedback": {
+            "description": "Opt-in to preview toolbar on the project level",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "enable_production_feedback": {
+            "description": "Opt-in to production toolbar on the project level",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "environment_variables": {
+            "description": "Collection of ENV Variables the Project will use",
+            "items": {
+              "properties": {
+                "gitBranch": {
+                  "description": "If defined, the git branch of the environment variable (must have target=preview)",
+                  "maxLength": 250,
+                  "type": "string"
+                },
+                "key": {
+                  "description": "Name of the ENV variable",
+                  "type": "string"
+                },
+                "target": {
+                  "description": "Deployment Target or Targets in which the ENV variable will be used",
+                  "oneOf": [
+                    {
+                      "enum": [
+                        "production",
+                        "preview",
+                        "development"
+                      ],
+                      "type": "string"
+                    },
+                    {
+                      "items": {
+                        "enum": [
+                          "production",
+                          "preview",
+                          "development"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  ]
+                },
+                "type": {
+                  "description": "Type of the ENV variable",
+                  "enum": [
+                    "system",
+                    "encrypted",
+                    "plain",
+                    "sensitive"
+                  ],
+                  "type": "string"
+                },
+                "value": {
+                  "description": "Value for the ENV variable",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "key",
+                "value",
+                "target"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "framework": {
+            "description": "The framework that is being used for this project. When `null` is used no framework is selected",
+            "enum": [
+              null,
+              "container",
+              "blitzjs",
+              "nextjs",
+              "gatsby",
+              "remix",
+              "react-router",
+              "astro",
+              "hexo",
+              "eleventy",
+              "docusaurus-2",
+              "docusaurus",
+              "preact",
+              "solidstart-1",
+              "solidstart",
+              "dojo",
+              "ember",
+              "vue",
+              "scully",
+              "ionic-angular",
+              "angular",
+              "polymer",
+              "svelte",
+              "sveltekit",
+              "sveltekit-1",
+              "ionic-react",
+              "create-react-app",
+              "gridsome",
+              "umijs",
+              "sapper",
+              "saber",
+              "stencil",
+              "nuxtjs",
+              "redwoodjs",
+              "hugo",
+              "jekyll",
+              "brunch",
+              "middleman",
+              "zola",
+              "hydrogen",
+              "vite",
+              "tanstack-start",
+              "tanstack-start-lovable",
+              "vitepress",
+              "vuepress",
+              "parcel",
+              "fastapi",
+              "flask",
+              "fasthtml",
+              "django",
+              "ash",
+              "eve",
+              "sanity",
+              "sanity-v2",
+              "storybook",
+              "nitro",
+              "hono",
+              "express",
+              "h3",
+              "koa",
+              "nestjs",
+              "elysia",
+              "fastify",
+              "xmcp",
+              "python",
+              "ruby",
+              "rust",
+              "axum",
+              "actix-web",
+              "bun",
+              "node",
+              "go",
+              "services",
+              "mastra"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "git_repository": {
+            "description": "The Git Repository that will be connected to the project. When this is defined, any pushes to the specified connected Git Repository will be automatically deployed",
+            "properties": {
+              "repo": {
+                "description": "The name of the git repository. For example: \\\"vercel/next.js\\\"",
+                "type": "string"
+              },
+              "type": {
+                "description": "The Git Provider of the repository",
+                "enum": [
+                  "github",
+                  "github-limited",
+                  "gitlab",
+                  "bitbucket",
+                  "vercel",
+                  "cursor-origin"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "repo"
+            ],
+            "type": "object"
+          },
+          "install_command": {
+            "description": "The install command for this project. When `null` is used this value will be automatically detected",
+            "maxLength": 256,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "description": "The desired name for the project",
+            "maxLength": 100,
+            "type": "string"
+          },
+          "oidc_token_config": {
+            "additionalProperties": false,
+            "description": "OpenID Connect JSON Web Token generation configuration.",
+            "properties": {
+              "enabled": {
+                "description": "Whether or not to generate OpenID Connect JSON Web Tokens.",
+                "type": "boolean"
+              },
+              "issuerMode": {
+                "description": "team: `https://oidc.vercel.com/[team_slug]` global: `https://oidc.vercel.com`",
+                "enum": [
+                  "team",
+                  "global"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "output_directory": {
+            "description": "The output directory of the project. When `null` is used this value will be automatically detected",
+            "maxLength": 256,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "preview_deployment_suffix": {
+            "description": "Custom domain suffix for preview deployments. Takes precedence over team-level suffix. Must be a domain owned by the team.",
+            "maxLength": 253,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "preview_deployments_disabled": {
+            "description": "Specifies whether preview deployments are disabled for this project.",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "public_source": {
+            "description": "Deprecated. Accepted for backwards compatibility but ignored.",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "resource_config": {
+            "additionalProperties": false,
+            "description": "Specifies resource override configuration for the project",
+            "properties": {
+              "buildMachineElasticLastUpdated": {
+                "type": "number"
+              },
+              "buildMachineElasticReason": {
+                "enum": [
+                  "oom-failure",
+                  "enospc-failure",
+                  "build-timeout-failure",
+                  "basic-floor",
+                  "high-peak-memory",
+                  "sustained-high-cpu",
+                  "high-peak-disk",
+                  "long-build-duration",
+                  "short-build-duration",
+                  "enterprise-floor"
+                ],
+                "type": "string"
+              },
+              "buildMachineSelection": {
+                "enum": [
+                  "elastic",
+                  "fixed"
+                ],
+                "type": "string"
+              },
+              "buildMachineType": {
+                "enum": [
+                  "basic",
+                  "enhanced",
+                  "turbo",
+                  "standard",
+                  "elastic"
+                ],
+                "type": "string"
+              },
+              "buildQueue": {
+                "properties": {
+                  "configuration": {
+                    "enum": [
+                      "SKIP_NAMESPACE_QUEUE",
+                      "WAIT_FOR_NAMESPACE_QUEUE"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "elasticConcurrencyEnabled": {
+                "type": "boolean"
+              },
+              "enableFunctionsBeta": {
+                "type": "boolean"
+              },
+              "fluid": {
+                "type": "boolean"
+              },
+              "functionDefaultMemoryType": {
+                "enum": [
+                  "standard_legacy",
+                  "standard",
+                  "performance",
+                  "performance_xl"
+                ],
+                "type": "string"
+              },
+              "functionDefaultRegions": {
+                "description": "The regions to deploy Vercel Functions to for this project",
+                "items": {
+                  "maxLength": 4,
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "functionDefaultTimeout": {
+                "maximum": 900,
+                "minimum": 1,
+                "type": "number"
+              },
+              "functionZeroConfigFailover": {
+                "description": "Specifies whether Zero Config Failover is enabled for this project.",
+                "oneOf": [
+                  {
+                    "type": "boolean"
+                  }
+                ]
+              },
+              "isNSNBDisabled": {
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          },
+          "root_directory": {
+            "description": "The name of a directory or relative path to the source code of your project. When `null` is used it will default to the project root",
+            "maxLength": 256,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sandbox": {
+            "additionalProperties": false,
+            "description": "Specifies the default region and failover regions for sandboxes created in the project",
+            "properties": {
+              "failoverRegions": {
+                "description": "The regions sandboxes in this project fall back to when they cannot be created in `region`.",
+                "items": {
+                  "enum": [
+                    "iad1",
+                    "sfo1",
+                    "cle1",
+                    "cdg1"
+                  ],
+                  "type": "string"
+                },
+                "maxItems": 4,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "region": {
+                "description": "The Vercel region sandboxes in this project are created in by default.",
+                "enum": [
+                  "iad1",
+                  "sfo1",
+                  "cle1",
+                  "cdg1"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "serverless_function_region": {
+            "description": "The region to deploy Serverless Functions in this project",
+            "maxLength": 4,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "serverless_function_zero_config_failover": {
+            "description": "Specifies whether Zero Config Failover is enabled for this project.",
+            "oneOf": [
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "skip_git_connect_during_link": {
+            "description": "Opts-out of the message prompting a CLI user to connect a Git repository in `vercel link`.",
+            "type": "boolean"
+          },
+          "slug": {
+            "description": "The Team slug to perform the request on behalf of.",
+            "type": "string"
+          },
+          "sso_protection": {
+            "description": "The Vercel Auth setting for the project (historically named \\\"SSO Protection\\\")",
+            "properties": {
+              "deploymentType": {
+                "enum": [
+                  "all",
+                  "preview",
+                  "prod_deployment_urls_and_all_previews",
+                  "all_except_custom_domains"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "deploymentType"
+            ],
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "team_id": {
+            "description": "The Team identifier to perform the request on behalf of.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create a new project",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "vercel_get_deployments",
+      "name": "get_deployments",
+      "title": "List deployments",
+      "description": "List deployments across the account or one project, with the state, target, and commit of each. Use to find recent builds and how they finished; use get_project for a project's configuration rather than its deploy history.",
+      "toolkitId": "vercel",
+      "version": "v9",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "app": {
+            "description": "Name of the deployment.",
+            "type": "string"
+          },
+          "branch": {
+            "description": "Filter deployments based on the branch name",
+            "type": "string"
+          },
+          "from": {
+            "description": "Gets the deployment created after this Date timestamp. (default: current time)",
+            "type": "number"
+          },
+          "limit": {
+            "description": "Maximum number of deployments to list from a request.",
+            "type": "number"
+          },
+          "project_id": {
+            "description": "Filter deployments from the given ID or name.",
+            "type": "string"
+          },
+          "project_ids": {
+            "description": "Filter deployments from the given project IDs. Cannot be used when projectId is specified.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 20,
+            "minItems": 1,
+            "type": "array"
+          },
+          "rollback_candidate": {
+            "description": "Filter deployments based on their rollback candidacy",
+            "type": "boolean"
+          },
+          "sha": {
+            "description": "Filter deployments based on the SHA",
+            "type": "string"
+          },
+          "since": {
+            "description": "Get Deployments created after this JavaScript timestamp.",
+            "type": "number"
+          },
+          "slug": {
+            "description": "The Team slug to perform the request on behalf of.",
+            "type": "string"
+          },
+          "state": {
+            "description": "Filter deployments based on their state (`BUILDING`, `ERROR`, `INITIALIZING`, `QUEUED`, `READY`, `CANCELED`, `BLOCKED`)",
+            "type": "string"
+          },
+          "target": {
+            "description": "Filter deployments based on the environment.",
+            "type": "string"
+          },
+          "team_id": {
+            "description": "The Team identifier to perform the request on behalf of.",
+            "type": "string"
+          },
+          "to": {
+            "description": "Gets the deployment created before this Date timestamp. (default: current time)",
+            "type": "number"
+          },
+          "until": {
+            "description": "Get Deployments created before this JavaScript timestamp.",
+            "type": "number"
+          },
+          "users": {
+            "description": "Filter out deployments based on users who have created the deployment.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List deployments",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

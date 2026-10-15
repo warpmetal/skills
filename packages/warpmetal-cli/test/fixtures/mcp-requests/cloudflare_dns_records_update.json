@@ -1,0 +1,21 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/dns_records/sample_dns_record_id?include_shadow_metadata=true",
+  "body": {
+    "comment": "sample_comment",
+    "name": "sample_name",
+    "proxied": true,
+    "settings": {},
+    "tags": [],
+    "ttl": "sample_ttl",
+    "content": "sample_content",
+    "private_routing": true,
+    "type": "A",
+    "priority": 1,
+    "data": {}
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

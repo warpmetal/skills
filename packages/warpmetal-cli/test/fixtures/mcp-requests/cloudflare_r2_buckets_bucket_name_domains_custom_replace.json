@@ -1,0 +1,13 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/r2/buckets/sample_bucket_name/domains/custom/sample_domain",
+  "body": {
+    "ciphers": [],
+    "enabled": true,
+    "minTLS": "1.0"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

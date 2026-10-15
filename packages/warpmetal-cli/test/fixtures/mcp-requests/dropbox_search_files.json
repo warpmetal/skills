@@ -1,0 +1,15 @@
+{
+  "method": "POST",
+  "url": "https://api.dropboxapi.com/2/files/search_v2",
+  "body": {
+    "query": "sample_query",
+    "options": {
+      "path": "sample_path",
+      "max_results": 1
+    }
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

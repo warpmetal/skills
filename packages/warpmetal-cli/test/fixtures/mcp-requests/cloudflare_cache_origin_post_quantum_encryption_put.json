@@ -1,0 +1,11 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/cache/origin_post_quantum_encryption",
+  "body": {
+    "value": "preferred"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

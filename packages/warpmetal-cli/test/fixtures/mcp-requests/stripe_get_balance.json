@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://api.stripe.com/v1/balance",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

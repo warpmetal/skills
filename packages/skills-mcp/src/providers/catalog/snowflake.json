@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "provider": "snowflake",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "snowflake_list_databases",
+      "name": "list_databases",
+      "title": "List the databases in a Snowflake account.",
+      "description": "List the databases in a Snowflake account, with optional name pattern, prefix, and dropped-database history filters. Use to find databases; to read one database's details, use fetch_database.",
+      "toolkitId": "snowflake",
+      "version": "v7",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "from_name": {
+            "description": "Return only databases ordered after this name, for paging through a large account.",
+            "type": "string"
+          },
+          "history": {
+            "description": "Include dropped databases that have not yet been purged.",
+            "type": "boolean"
+          },
+          "like": {
+            "description": "Filter databases by name using case-insensitive SQL wildcard matching, for example test_%.",
+            "type": "string"
+          },
+          "show_limit": {
+            "description": "Maximum number of databases to return.",
+            "maximum": 10000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "starts_with": {
+            "description": "Filter databases whose name begins with this case-sensitive prefix.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List the databases in a Snowflake account.",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "snowflake_list_tables",
+      "name": "list_tables",
+      "title": "List tables.",
+      "description": "List the tables in a Snowflake schema, with optional name pattern, prefix, and dropped-table history filters. Use to find tables in a schema; to read one table's columns and settings, use fetch_table.",
+      "toolkitId": "snowflake",
+      "version": "v6",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "database": {
+            "description": "The database.",
+            "type": "string"
+          },
+          "from_name": {
+            "description": "Parameter to enable fetching rows only following the first row whose object name matches the specified string. Case-sensitive and does not have to be the full name.",
+            "type": "string"
+          },
+          "history": {
+            "description": "Optionally includes dropped tables that have not yet been purged.",
+            "type": "boolean"
+          },
+          "like": {
+            "description": "Parameter to filter the command output by resource name. Uses case-insensitive pattern matching, with support for SQL wildcard characters.",
+            "type": "string"
+          },
+          "schema": {
+            "description": "The schema.",
+            "type": "string"
+          },
+          "show_limit": {
+            "description": "Parameter to limit the maximum number of rows returned by a command.",
+            "maximum": 10000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "starts_with": {
+            "description": "Parameter to filter the command output based on the string of characters that appear at the beginning of the object name. Uses case-sensitive pattern matching.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "database",
+          "schema"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List tables.",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

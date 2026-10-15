@@ -1,0 +1,24 @@
+{
+  "method": "POST",
+  "url": "https://us1.api.mailchimp.com/3.0/lists/sample_list_id/members?skip_merge_validation=true",
+  "body": {
+    "email_address": "sample_email_address",
+    "email_type": "sample_email_type",
+    "interests": {},
+    "ip_opt": "sample_ip_opt",
+    "ip_signup": "sample_ip_signup",
+    "language": "sample_language",
+    "location": {},
+    "marketing_permissions": [],
+    "merge_fields": {},
+    "status": "subscribed",
+    "tags": [],
+    "timestamp_opt": "sample_timestamp_opt",
+    "timestamp_signup": "sample_timestamp_signup",
+    "vip": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "method": "GET",
+  "url": "https://api.github.com/repos/sample_owner/sample_repo/issues/1",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Accept": "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+    "User-Agent": "warpmetal-cli",
+    "Content-Type": "application/json"
+  }
+}

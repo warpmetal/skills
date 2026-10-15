@@ -1,0 +1,14 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/firewall/ua_rules",
+  "body": {
+    "configuration": {},
+    "description": "sample_description",
+    "mode": "block",
+    "paused": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

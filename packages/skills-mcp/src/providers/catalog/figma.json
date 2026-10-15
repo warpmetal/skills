@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "provider": "figma",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "figma_get_file",
+      "name": "get_file",
+      "title": "Get File",
+      "description": "Return the full document tree for a Figma file, including every layer and its properties. This is the heaviest of the file reads; use get_file_nodes when only certain layers are needed.",
+      "toolkitId": "figma",
+      "version": "v2",
+      "inputSchema": {
+        "properties": {
+          "branch_data": {
+            "description": "Returns branch metadata for the requested file. If the file is a branch, the main file's key will be included in the returned response. If the file has branches, their metadata will be included in the returned response. Default: false.",
+            "type": "boolean"
+          },
+          "depth": {
+            "description": "Positive integer representing how deep into the document tree to traverse. For example, setting this to 1 returns only Pages, setting it to 2 returns Pages and all top level objects on each page. Not setting this parameter returns all nodes.",
+            "type": "number"
+          },
+          "file_key": {
+            "description": "File to export JSON from. This can be a file key or branch key. Use `GET /v1/files/:key` with the `branch_data` query param to get the branch key.",
+            "type": "string"
+          },
+          "geometry": {
+            "description": "Set to \"paths\" to export vector data.",
+            "type": "string"
+          },
+          "ids": {
+            "description": "Comma separated list of nodes that you care about in the document. If specified, only a subset of the document will be returned corresponding to the nodes listed, their children, and everything between the root node and the listed nodes. Note: There may be other nodes included in the returned JSON that are outside the ancestor chains of the desired nodes. The response may also include dependencies",
+            "type": "string"
+          },
+          "version": {
+            "description": "A specific version ID to get. Omitting this will get the current version of the file.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_key"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get File",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "figma_get_file_nodes",
+      "name": "get_file_nodes",
+      "title": "Get File Nodes",
+      "description": "Return the document subtree for specific layers of a Figma file, named by node id. Use instead of get_file when the whole document would be more than you need.",
+      "toolkitId": "figma",
+      "version": "v2",
+      "inputSchema": {
+        "properties": {
+          "depth": {
+            "description": "Positive integer representing how deep into the node tree to traverse. For example, setting this to 1 will return only the children directly underneath the desired nodes. Not setting this parameter returns all nodes. Note: this parameter behaves differently from the same parameter in the `GET /v1/files/:key` endpoint. In this endpoint, the depth will be counted starting from the desired node rathe",
+            "type": "number"
+          },
+          "file_key": {
+            "description": "File to export JSON from. This can be a file key or branch key. Use `GET /v1/files/:key` with the `branch_data` query param to get the branch key.",
+            "type": "string"
+          },
+          "geometry": {
+            "description": "Set to \"paths\" to export vector data.",
+            "type": "string"
+          },
+          "ids": {
+            "description": "A comma separated list of node IDs to retrieve and convert.",
+            "type": "string"
+          },
+          "version": {
+            "description": "A specific version ID to get. Omitting this will get the current version of the file.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_key",
+          "ids"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get File Nodes",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/alerting/v3/policies/sample_policy_id/test",
+  "body": {
+    "severity": 0,
+    "source": "sample_source",
+    "state_correlation_id": "sample_state_correlation_id",
+    "state_event": 0
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

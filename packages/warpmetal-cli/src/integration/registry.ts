@@ -14,7 +14,8 @@ export type Capability =
   | "notify.send"
   | "deployment.read"
   | "issue.read"
-  | "billing.read";
+  | "billing.read"
+  | "mcp.tool";
 
 /** How sure the engine can be that a revocation actually happened upstream. */
 export type RevokeConfidence = "confirmed" | "unsupported" | "uncertain";
@@ -45,13 +46,83 @@ export interface ProviderSpec {
   readonly notes?: string;
 }
 
+function mcpProvider(
+  name: string,
+  title: string,
+  secretNames: readonly string[],
+): ProviderSpec {
+  return {
+    name,
+    title,
+    authModes: ["api_token"],
+    secretNames,
+    capabilities: ["mcp.tool"],
+    requiresTools: [],
+    scoping: "Scope is set in the provider dashboard and cannot be tightened by this CLI.",
+    filesWritten: [],
+    verifyCommand: `warpmetal integration status ${name} --json`,
+    errorMap: {
+      "401": "The credential was rejected.",
+      "403": "The credential lacks permission for this resource.",
+      "404": "Not found, or the credential cannot see the resource.",
+    },
+    revoke: "unsupported",
+    notes: "MCP provider tools are dispatched via --args-stdin (or --args-json by hand).",
+  };
+}
+
+const MCP_PROVIDERS: readonly ProviderSpec[] = [
+  mcpProvider("gitlab", "GitLab", ["gitlab.token"]),
+  mcpProvider("notion", "Notion", ["notion.token"]),
+  mcpProvider("jira", "Jira", ["jira.token", "jira.site", "jira.email"]),
+  mcpProvider("confluence", "Confluence", ["confluence.token", "confluence.site", "confluence.email"]),
+  mcpProvider("linear", "Linear", ["linear.token"]),
+  mcpProvider("supabase", "Supabase", ["supabase.token"]),
+  mcpProvider("figma", "Figma", ["figma.token"]),
+  mcpProvider("shopify", "Shopify", ["shopify.token", "shopify.shop"]),
+  mcpProvider("hubspot", "HubSpot", ["hubspot.token"]),
+  mcpProvider("asana", "Asana", ["asana.token"]),
+  mcpProvider("dropbox", "Dropbox", ["dropbox.token"]),
+  mcpProvider("airtable", "Airtable", ["airtable.token"]),
+  mcpProvider("intercom", "Intercom", ["intercom.token"]),
+  mcpProvider("snowflake", "Snowflake", [
+    "snowflake.token",
+    "snowflake.account_url",
+    "snowflake.warehouse",
+  ]),
+  mcpProvider("datadog", "Datadog", ["datadog.token"]),
+  mcpProvider("pagerduty", "PagerDuty", ["pagerduty.token", "pagerduty.email"]),
+  mcpProvider("exa", "Exa", ["exa.token"]),
+  mcpProvider("perplexity", "Perplexity", ["perplexity.token"]),
+  mcpProvider("calendly", "Calendly", ["calendly.token"]),
+  mcpProvider("clickup", "ClickUp", ["clickup.token"]),
+  mcpProvider("posthog", "PostHog", ["posthog.token", "posthog.host"]),
+  mcpProvider("mixpanel", "Mixpanel", ["mixpanel.token"]),
+  mcpProvider("circleci", "CircleCI", ["circleci.token"]),
+  mcpProvider("mailchimp", "Mailchimp", ["mailchimp.token", "mailchimp.dc"]),
+  mcpProvider("x", "X", ["x.token"]),
+  mcpProvider("square", "Square", ["square.token"]),
+  mcpProvider("openai", "OpenAI", ["openai.token"]),
+  mcpProvider("gemini", "Google Gemini", ["gemini.token"]),
+  mcpProvider("anthropic-admin", "Anthropic Admin", ["anthropic-admin.token"]),
+  mcpProvider("grafana-cloud", "Grafana Cloud", ["grafana-cloud.token"]),
+  mcpProvider("grafana-stack", "Grafana Stack", [
+    "grafana-stack.token",
+    "grafana.stack",
+  ]),
+  mcpProvider("monday", "Monday.com", ["monday.token"]),
+  mcpProvider("onesignal", "OneSignal", ["onesignal.token"]),
+  mcpProvider("amplitude", "Amplitude", ["amplitude.token"]),
+  mcpProvider("zendesk", "Zendesk", ["zendesk.token", "zendesk.subdomain", "zendesk.email"]),
+];
+
 export const PROVIDERS: readonly ProviderSpec[] = [
   {
     name: "cloudflare",
     title: "Cloudflare DNS",
     authModes: ["api_token"],
     secretNames: ["cloudflare.token"],
-    capabilities: ["dns.record.list", "dns.record.upsert"],
+    capabilities: ["dns.record.list", "dns.record.upsert", "mcp.tool"],
     requiresTools: [],
     scoping:
       "Cloudflare can scope a token to a single zone with Zone:DNS:Edit. The token's real scope is set in the dashboard and cannot be tightened by this CLI; `integration status` reports only whether the token is valid, never which zones it can reach.",
@@ -64,14 +135,14 @@ export const PROVIDERS: readonly ProviderSpec[] = [
     },
     revoke:
       "unsupported",
-    notes: "DNS only in this release. WAF and firewall rules are a later phase.",
+    notes: "DNS plus MCP zone/account list tools.",
   },
   {
     name: "github",
     title: "GitHub",
     authModes: ["gh_session", "personal_access_token"],
     secretNames: ["github.token"],
-    capabilities: ["repo.view"],
+    capabilities: ["repo.view", "mcp.tool"],
     requiresTools: ["gh"],
     scoping:
       "A fine-grained PAT can be limited to selected repositories with read-only contents. Classic PAT scopes are broader than this CLI needs and cannot be narrowed here.",
@@ -111,10 +182,10 @@ export const PROVIDERS: readonly ProviderSpec[] = [
     title: "Email (Resend)",
     authModes: ["api_token"],
     secretNames: ["email.api_key"],
-    capabilities: ["notify.send"],
+    capabilities: ["notify.send", "mcp.tool"],
     requiresTools: [],
     scoping:
-      "An API key can send only from the domains verified in the account, and only to recipients the provider accepts. It cannot read an inbox or manage the account.",
+      "An API key can send only from the domains verified in the account. MCP resend_* tools map to this provider.",
     filesWritten: [],
     verifyCommand: "warpmetal integration status email --json",
     errorMap: {
@@ -125,14 +196,14 @@ export const PROVIDERS: readonly ProviderSpec[] = [
     },
     revoke:
       "unsupported",
-    notes: "Outbound notification only. The from address is a manifest reference; the reply-to is never asserted.",
+    notes: "Outbound notify plus MCP list-emails / create-contact (slugs resend_*).",
   },
   {
     name: "discord",
     title: "Discord",
     authModes: ["incoming_webhook", "bot_token"],
     secretNames: ["discord.webhook", "discord.token"],
-    capabilities: ["notify.send"],
+    capabilities: ["notify.send", "mcp.tool"],
     requiresTools: [],
     scoping:
       "An incoming webhook is bound to one channel forever and cannot be re-targeted. A bot token can post to any channel the bot was granted access to, which is managed in Discord, not here.",
@@ -146,17 +217,17 @@ export const PROVIDERS: readonly ProviderSpec[] = [
     },
     revoke:
       "unsupported",
-    notes: "The mirror of Slack: an incoming webhook can only be proven by posting, so a webhook-only `status` is DEGRADED.",
+    notes: "Notify plus MCP user/guild tools. Webhook-only status remains DEGRADED.",
   },
   {
     name: "vercel",
     title: "Vercel",
     authModes: ["api_token"],
     secretNames: ["vercel.token"],
-    capabilities: ["deployment.read"],
+    capabilities: ["deployment.read", "mcp.tool"],
     requiresTools: [],
     scoping:
-      "A token is bound to one user or team and exposes the projects that scope can see. This release only lists projects and deployments; it never promotes, rolls back or redeploys.",
+      "A token is bound to one user or team and exposes the projects that scope can see. MCP create-project is gated; promote/rollback stay outside this CLI.",
     filesWritten: [],
     verifyCommand: "warpmetal integration status vercel --json",
     errorMap: {
@@ -167,17 +238,17 @@ export const PROVIDERS: readonly ProviderSpec[] = [
     },
     revoke:
       "uncertain",
-    notes: "Read-only in this release. Deploys stay a human action; see the deploy skill for the gated path.",
+    notes: "Legacy deployment-list plus MCP project/deployment tools; create-project requires --confirm.",
   },
   {
     name: "sentry",
     title: "Sentry",
     authModes: ["api_token"],
     secretNames: ["sentry.token"],
-    capabilities: ["issue.read"],
+    capabilities: ["issue.read", "mcp.tool"],
     requiresTools: [],
     scoping:
-      "An auth token carries the scopes chosen at creation and can only see the organizations and projects it was granted. This release only lists projects; it never resolves, assigns or deletes an issue.",
+      "An auth token carries the scopes chosen at creation and can only see the organizations and projects it was granted.",
     filesWritten: [],
     verifyCommand: "warpmetal integration status sentry --json",
     errorMap: {
@@ -188,17 +259,17 @@ export const PROVIDERS: readonly ProviderSpec[] = [
     },
     revoke:
       "uncertain",
-    notes: "Read-only in this release. Triage actions remain manual.",
+    notes: "Legacy issue-list plus MCP organization/project issue tools.",
   },
   {
     name: "stripe",
     title: "Stripe",
     authModes: ["api_token"],
     secretNames: ["stripe.token"],
-    capabilities: ["billing.read"],
+    capabilities: ["billing.read", "mcp.tool"],
     requiresTools: [],
     scoping:
-      "A restricted key can be limited to specific resources and to read-only access. This release only reads the balance; it never creates a charge, a refund or a customer.",
+      "Prefer a restricted key. Mutating MCP verbs (customers, payment_intents, invoices) require --confirm gates.",
     filesWritten: [],
     verifyCommand: "warpmetal integration status stripe --json",
     errorMap: {
@@ -208,8 +279,9 @@ export const PROVIDERS: readonly ProviderSpec[] = [
     },
     revoke:
       "uncertain",
-    notes: "Read-only in this release. Money movements stay outside this CLI by design.",
+    notes: "Legacy balance-get plus gated MCP billing tools for DO parity.",
   },
+  ...MCP_PROVIDERS,
 ];
 
 const BY_NAME = new Map(PROVIDERS.map((provider) => [provider.name, provider]));

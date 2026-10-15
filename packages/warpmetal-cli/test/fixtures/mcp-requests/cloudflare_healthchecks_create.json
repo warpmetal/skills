@@ -1,0 +1,23 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/healthchecks",
+  "body": {
+    "address": "sample_address",
+    "check_regions": [],
+    "consecutive_fails": 1,
+    "consecutive_successes": 1,
+    "description": "sample_description",
+    "http_config": {},
+    "interval": 1,
+    "name": "sample_name",
+    "retries": 1,
+    "suspended": true,
+    "tcp_config": {},
+    "timeout": 1,
+    "type": "sample_type"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

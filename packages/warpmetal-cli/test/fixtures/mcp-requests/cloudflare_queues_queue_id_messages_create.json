@@ -1,0 +1,13 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/queues/sample_queue_id/messages",
+  "body": {
+    "delay_seconds": 1,
+    "body": "sample_body",
+    "content_type": "text"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

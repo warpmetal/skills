@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/radar/quality/iqi/timeseries_groups?aggInterval=15m&interpolation=true&metric=BANDWIDTH&format=JSON&&&&&&&",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

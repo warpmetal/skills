@@ -1,0 +1,18 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/access/ai-controls/mcp/portals",
+  "body": {
+    "allow_code_mode": true,
+    "code_mode": "off",
+    "description": "sample_description",
+    "hostname": "sample_hostname",
+    "id": "sample_id",
+    "name": "sample_name",
+    "secure_web_gateway": true,
+    "servers": []
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

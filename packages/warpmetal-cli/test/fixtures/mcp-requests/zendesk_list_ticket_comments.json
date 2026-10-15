@@ -1,0 +1,9 @@
+{
+  "method": "GET",
+  "url": "https://acme.zendesk.com/api/v2/tickets/1/comments.json?page%5Bsize%5D=1&page%5Bafter%5D=sample_page_after&sort_order=asc",
+  "headers": {
+    "Authorization": "Basic __BASIC__",
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+}

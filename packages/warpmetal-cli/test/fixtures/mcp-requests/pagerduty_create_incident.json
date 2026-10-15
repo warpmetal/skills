@@ -1,0 +1,11 @@
+{
+  "method": "POST",
+  "url": "https://api.pagerduty.com/incidents",
+  "body": {},
+  "headers": {
+    "Authorization": "Token token=__TOKEN__",
+    "Accept": "application/vnd.pagerduty+json;version=2",
+    "Content-Type": "application/json",
+    "From": "ops@acme.test"
+  }
+}

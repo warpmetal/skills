@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/radar/attacks/layer3/top/attacks?limit=1&limitDirection=ORIGIN&limitPerLocation=1&magnitude=MITIGATED_BYTES&normalization=PERCENTAGE&format=JSON&&&&&&&&",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

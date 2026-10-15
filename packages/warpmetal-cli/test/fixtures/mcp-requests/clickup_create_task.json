@@ -1,0 +1,12 @@
+{
+  "method": "POST",
+  "url": "https://api.clickup.com/api/v2/list/sample_list_id/task",
+  "body": {
+    "list_id": "sample_list_id",
+    "name": "sample_name"
+  },
+  "headers": {
+    "Authorization": "__TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

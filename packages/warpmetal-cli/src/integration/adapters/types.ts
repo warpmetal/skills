@@ -20,6 +20,8 @@ export interface AdapterContext {
   readonly run: CommandRunner;
   readonly http: HttpFn;
   readonly redactor: Redactor;
+  /** Reads the whole of stdin, for `--args-stdin` (payloads stay off argv). */
+  readonly readStdin: () => Promise<string>;
 }
 
 export type AdapterStatus = "OK" | "NEEDS_AUTH" | "DEGRADED" | "ERROR";

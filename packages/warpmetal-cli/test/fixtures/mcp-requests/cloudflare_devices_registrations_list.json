@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/devices/registrations?seen_after=sample_seen_after&seen_before=sample_seen_before&status=active&registration_type=warp&per_page=1&search=sample_search&sort_by=id&sort_order=asc&cursor=sample_cursor&device.id=sample_device_id&policy.id=sample_policy_id&include=sample_include&&",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

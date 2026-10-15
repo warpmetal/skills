@@ -1,0 +1,16 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/dlp/profiles/predefined/sample_profile_id",
+  "body": {
+    "ai_context_enabled": true,
+    "allowed_match_count": 1,
+    "confidence_threshold": "sample_confidence_threshold",
+    "context_awareness": {},
+    "entries": [],
+    "ocr_enabled": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

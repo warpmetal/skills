@@ -1,0 +1,11 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/r2-catalog/sample_bucket_name/namespaces/sample_namespace/tables/sample_table_name/maintenance-configs/compaction/queue",
+  "body": {
+    "request_id": "sample_request_id"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

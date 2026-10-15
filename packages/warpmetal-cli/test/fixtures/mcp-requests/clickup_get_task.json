@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://api.clickup.com/api/v2/task/sample_task_id",
+  "headers": {
+    "Authorization": "__TOKEN__"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/r2-catalog/sample_bucket_name/namespaces/sample_namespace/tables?page_token=sample_page_token&page_size=1&return_uuids=true&return_details=true",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

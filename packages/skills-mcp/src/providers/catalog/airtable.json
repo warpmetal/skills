@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "provider": "airtable",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "airtable_list_bases",
+      "name": "list_bases",
+      "title": "List Airtable Bases",
+      "description": "List the Airtable bases this key can access, with their names and ids. Use it when you need a base id before reading its tables or records.",
+      "toolkitId": "airtable",
+      "version": "v3",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "offset": {
+            "description": "Pagination cursor returned by a previous list-bases response.",
+            "maxLength": 1024,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Airtable Bases",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

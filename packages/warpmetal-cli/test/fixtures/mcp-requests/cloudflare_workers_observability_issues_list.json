@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/observability/issues?page=1&perPage=1&order=asc&orderBy=id&search=sample_search&service=sample_service&type=sample_type&status=active",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

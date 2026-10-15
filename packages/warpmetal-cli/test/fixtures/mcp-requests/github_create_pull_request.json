@@ -1,0 +1,18 @@
+{
+  "method": "POST",
+  "url": "https://api.github.com/repos/sample_owner/sample_repo/pulls",
+  "body": {
+    "title": "sample_title",
+    "head": "sample_head",
+    "base": "sample_base",
+    "body": "sample_body",
+    "draft": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Accept": "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+    "User-Agent": "warpmetal-cli",
+    "Content-Type": "application/json"
+  }
+}

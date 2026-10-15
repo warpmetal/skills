@@ -1,0 +1,35 @@
+{
+  "method": "POST",
+  "url": "https://api.vercel.com/v11/projects",
+  "body": {
+    "build_command": "sample_build_command",
+    "command_for_ignoring_build_step": "sample_command_for_ignoring_build_step",
+    "dev_command": "sample_dev_command",
+    "enable_affected_projects_deployments": true,
+    "enable_preview_feedback": true,
+    "enable_production_feedback": true,
+    "environment_variables": [],
+    "framework": null,
+    "git_repository": {},
+    "install_command": "sample_install_command",
+    "name": "sample_name",
+    "oidc_token_config": {},
+    "output_directory": "sample_output_directory",
+    "preview_deployment_suffix": "sample_preview_deployment_suffix",
+    "preview_deployments_disabled": true,
+    "public_source": true,
+    "resource_config": {},
+    "root_directory": "sample_root_directory",
+    "sandbox": {},
+    "serverless_function_region": "sample_serverless_function_region",
+    "serverless_function_zero_config_failover": "sample_serverless_function_zero_config_failover",
+    "skip_git_connect_during_link": true,
+    "slug": "sample_slug",
+    "sso_protection": {},
+    "team_id": "sample_team_id"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

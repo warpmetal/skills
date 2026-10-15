@@ -1,0 +1,17 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/devices/posture",
+  "body": {
+    "description": "sample_description",
+    "expiration": "sample_expiration",
+    "input": {},
+    "match": [],
+    "name": "sample_name",
+    "schedule": "sample_schedule",
+    "type": "file"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

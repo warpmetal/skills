@@ -1,0 +1,12 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/queues",
+  "body": {
+    "jurisdiction": "eu",
+    "queue_name": "sample_queue_name"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

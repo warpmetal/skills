@@ -1,0 +1,14 @@
+{
+  "method": "POST",
+  "url": "https://api.linear.app/graphql",
+  "body": {
+    "query": "query($first: Int) { issues(first: $first) { nodes { id identifier title state { name } } } }",
+    "variables": {
+      "first": 1
+    }
+  },
+  "headers": {
+    "Authorization": "__TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

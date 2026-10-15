@@ -63,9 +63,14 @@ async function readIfExists(path) {
  * The provider names the CLI actually implements, read from the catalog source.
  *
  * The catalog lives in TypeScript, which this Node-only gate cannot import
- * without a build step, so the `PROVIDERS` literal is read directly. The slice is
- * bounded by the array's own delimiters and a zero-result read is a failure, so
- * a refactor that renames the constant cannot turn this check into a no-op.
+ * without a build step, so the `PROVIDERS` literal is read directly. It has two
+ * sources of names: the hand-written `name: "…"` entries, and the MCP-backed
+ * providers that enter the array as `...MCP_PROVIDERS` and are declared as
+ * `mcpProvider("…")` calls above it. Both are collected, because a skill that
+ * declares an MCP-backed integration is declaring something the engine really
+ * implements. The slice is bounded by the array's own delimiters and a
+ * zero-result read is a failure, so a refactor that renames the constant cannot
+ * turn this check into a no-op.
  */
 export async function readProviderCatalog(root) {
   const path = join(root, "packages/warpmetal-cli/src/integration/registry.ts");
@@ -73,7 +78,13 @@ export async function readProviderCatalog(root) {
   if (source === null) {
     return { providers: [], capabilities: [], problem: `missing catalog: ${relative(root, path)}` };
   }
-  const start = source.indexOf("PROVIDERS: readonly ProviderSpec[] = [");
+  // Anchored on the exported declaration: the plain needle
+  // `PROVIDERS: readonly ProviderSpec[] = [` is also a substring of
+  // `const MCP_PROVIDERS: readonly ProviderSpec[] = [`, which appears earlier in
+  // the file. Searching for it landed on that array, whose entries are
+  // `mcpProvider(...)` calls and carry no `name:` line, so the gate reported
+  // "the PROVIDERS array declares no provider" for a healthy catalog.
+  const start = source.indexOf("export const PROVIDERS: readonly ProviderSpec[] = [");
   if (start === -1) {
     return { providers: [], capabilities: [], problem: "could not locate the PROVIDERS array" };
   }
@@ -82,12 +93,26 @@ export async function readProviderCatalog(root) {
     return { providers: [], capabilities: [], problem: "the PROVIDERS array is not terminated" };
   }
   const block = source.slice(start, end);
-  const providers = [...block.matchAll(/^\s{4}name: "([a-z0-9-]+)",$/gm)].map((match) => match[1]);
+  const literal = [...block.matchAll(/^\s{4}name: "([a-z0-9-]+)",$/gm)].map((match) => match[1]);
   const capabilities = [...block.matchAll(/"([a-z]+\.[a-z]+\.[a-z]+)"/g)].map((match) => match[1]);
-  if (providers.length === 0) {
+  if (literal.length === 0) {
     return { providers: [], capabilities: [], problem: "the PROVIDERS array declares no provider" };
   }
-  return { providers, capabilities, problem: null };
+  // Every `mcpProvider(` call must yield a name. A count mismatch means the call
+  // shape changed, and reading fewer providers than exist is exactly the silent
+  // blindness that let this gate fail unnoticed; report it instead. The pattern
+  // is anchored on leading whitespace so the function's own definition does not
+  // count as a call site.
+  const calls = [...source.matchAll(/^\s+mcpProvider\(/gm)].length;
+  const generated = [...source.matchAll(/^\s+mcpProvider\("([a-z0-9-]+)"/gm)].map((match) => match[1]);
+  if (calls !== generated.length) {
+    return {
+      providers: [],
+      capabilities: [],
+      problem: `read ${String(generated.length)} of ${String(calls)} mcpProvider entries; the catalog format changed`,
+    };
+  }
+  return { providers: [...new Set([...literal, ...generated])], capabilities, problem: null };
 }
 
 export async function collectSkillPolicyFailures({ root }) {

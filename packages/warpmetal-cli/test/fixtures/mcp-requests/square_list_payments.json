@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://connect.squareup.com/v2/payments?begin_time=sample_begin_time&card_brand=sample_card_brand&cursor=sample_cursor&end_time=sample_end_time&is_offline_payment=true&last_4=sample_last_4&limit=1&location_id=sample_location_id&offline_begin_time=sample_offline_begin_time&offline_end_time=sample_offline_end_time&sort_field=CREATED_AT&sort_order=sample_sort_order&total=1&updated_at_begin_time=sample_updated_at_begin_time&updated_at_end_time=sample_updated_at_end_time",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Square-Version": "2024-01-18"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://acme.grafana.net/api/search?query=sample_query&type=dash-folder&starred=true&limit=1&page=1&permission=Edit&sort=alpha-asc&deleted=true",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

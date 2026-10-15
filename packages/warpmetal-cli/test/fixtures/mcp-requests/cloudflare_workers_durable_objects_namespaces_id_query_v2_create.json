@@ -1,0 +1,14 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/durable_objects/namespaces/sample_id/query/v2",
+  "body": {
+    "durable_object_id": "sample_durable_object_id",
+    "queries": [],
+    "durable_object_name": "sample_durable_object_name",
+    "jurisdiction": "fedramp"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

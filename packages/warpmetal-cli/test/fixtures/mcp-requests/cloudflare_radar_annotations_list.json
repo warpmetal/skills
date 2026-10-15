@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/radar/annotations?limit=1&offset=1&dateRange=sample_date_range&dateStart=sample_date_start&dateEnd=sample_date_end&dataSource=ALL&eventType=EVENT&outageType=NATIONWIDE&outageCause=BLOCKING&query=sample_query&asn=1&location=sample_location&geoId=sample_geo_id&origin=sample_origin&tld=sample_tld&ca=sample_ca&log=sample_log&bot=sample_bot&format=JSON&",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

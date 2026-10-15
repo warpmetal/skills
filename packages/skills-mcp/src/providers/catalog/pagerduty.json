@@ -1,0 +1,236 @@
+{
+  "version": 1,
+  "provider": "pagerduty",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "pagerduty_list_incidents",
+      "name": "list_incidents",
+      "title": "List incidents",
+      "description": "Search incidents by service, team, status, urgency, or time. Use for discovery when no identifier is known, while get_incident returns one incident in full.",
+      "toolkitId": "pagerduty",
+      "version": "v9",
+      "inputSchema": {
+        "properties": {
+          "date_range": {
+            "description": "When set to all, the since and until parameters and defaults are ignored.",
+            "enum": [
+              "all"
+            ],
+            "type": "string"
+          },
+          "incident_key": {
+            "description": "Incident de-duplication key. Incidents with child alerts do not have an incident key; querying by incident key will return incidents whose alerts have alert_key matching the given incident key.",
+            "type": "string"
+          },
+          "include": {
+            "description": "Array of additional details to include.",
+            "enum": [
+              "acknowledgers",
+              "agents",
+              "assignees",
+              "conference_bridge",
+              "escalation_policies",
+              "first_trigger_log_entries",
+              "priorities",
+              "services",
+              "teams",
+              "users"
+            ],
+            "type": "string"
+          },
+          "limit": {
+            "description": "The number of results per page. Maximum of 100.",
+            "type": "integer"
+          },
+          "offset": {
+            "description": "Offset to start pagination search results.",
+            "type": "integer"
+          },
+          "service_ids": {
+            "description": "Returns only the incidents associated with the passed service(s). This expects one or more service IDs.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "since": {
+            "description": "The start of the date range over which you want to search. Maximum range is 6 months and default is 1 month.",
+            "type": "string"
+          },
+          "sort_by": {
+            "description": "Used to specify both the field you wish to sort the results on (incident_number/created_at/resolved_at/urgency), as well as the direction (asc/desc) of the results. The sort_by field and direction should be separated by a colon. A maximum of two fields can be included, separated by a comma. Sort direction defaults to ascending. The account must have the `urgencies` ability to sort by the urgency.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "statuses": {
+            "description": "Return only incidents with the given statuses. To query multiple statuses, pass `statuses[]` more than once, for example: `https://api.pagerduty.com/incidents?statuses[]=triggered&statuses[]=acknowledged`. (More status codes may be introduced in the future.)",
+            "enum": [
+              "triggered",
+              "acknowledged",
+              "resolved"
+            ],
+            "type": "string"
+          },
+          "team_ids": {
+            "description": "An array of team IDs. Only results related to these teams will be returned. Account must have the `teams` ability to use this parameter.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "time_zone": {
+            "description": "Time zone used to render timestamps and to interpret `since/until` values before filtering. Rendering defaults to UTC if omitted. `since/until` default to the account's time zone if omitted.",
+            "type": "string"
+          },
+          "total": {
+            "description": "By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.\n\nSee our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.\n",
+            "type": "boolean"
+          },
+          "until": {
+            "description": "The end of the date range over which you want to search. Maximum range is 6 months and default is 1 month.",
+            "type": "string"
+          },
+          "urgencies": {
+            "description": "Array of the urgencies of the incidents to be returned. Defaults to all urgencies. Account must have the `urgencies` ability to do this.",
+            "enum": [
+              "high",
+              "low"
+            ],
+            "type": "string"
+          },
+          "user_ids": {
+            "description": "Returns only the incidents currently assigned to the passed user(s). This expects one or more user IDs. Note: When using the assigned_to_user filter, you will only receive incidents with statuses of triggered or acknowledged. This is because resolved incidents are not assigned to any user.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List incidents",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "pagerduty_create_incident",
+      "name": "create_incident",
+      "title": "Create an Incident",
+      "description": "Open a new incident on a service and start its escalation. Use when a person or agent needs to declare an incident, while update_incident changes one that is already open.",
+      "toolkitId": "pagerduty",
+      "version": "v8",
+      "inputSchema": {
+        "properties": {
+          "body": {
+            "additionalProperties": true,
+            "description": "JSON request body for this PagerDuty operation.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "body"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create an Incident",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "pagerduty_list_services",
+      "name": "list_services",
+      "title": "List services",
+      "description": "Search technical services by name, team, or integration. Use for discovery, while list_business_services covers the customer-facing layer above them.",
+      "toolkitId": "pagerduty",
+      "version": "v9",
+      "inputSchema": {
+        "properties": {
+          "include": {
+            "description": "Array of additional details to include.",
+            "enum": [
+              "escalation_policies",
+              "teams",
+              "integrations",
+              "auto_pause_notifications_parameters"
+            ],
+            "type": "string"
+          },
+          "limit": {
+            "description": "The number of results per page.",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Filters the results, showing only services with the specified name.",
+            "type": "string"
+          },
+          "offset": {
+            "description": "Offset to start pagination search results.",
+            "type": "integer"
+          },
+          "query": {
+            "description": "Filters the result, showing only the records whose name matches the query.",
+            "type": "string"
+          },
+          "sort_by": {
+            "description": "Used to specify the field you wish to sort the results on.",
+            "enum": [
+              "name",
+              "name:asc",
+              "name:desc"
+            ],
+            "type": "string"
+          },
+          "team_ids": {
+            "description": "An array of team IDs. Only results related to these teams will be returned. Account must have the `teams` ability to use this parameter.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "time_zone": {
+            "description": "Time zone in which results will be rendered. This will default to the account time zone.",
+            "type": "string"
+          },
+          "total": {
+            "description": "By default the `total` field in pagination responses is set to `null` to provide the fastest possible response times. Set `total` to `true` for this field to be populated.\n\nSee our [Pagination Docs](https://developer.pagerduty.com/docs/rest-api-v2/pagination/) for more information.\n",
+            "type": "boolean"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List services",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

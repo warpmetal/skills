@@ -1,0 +1,14 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/zerotrust/subnets/warp/sample_subnet_id",
+  "body": {
+    "comment": "sample_comment",
+    "is_default_network": true,
+    "name": "sample_name",
+    "network": "sample_network"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

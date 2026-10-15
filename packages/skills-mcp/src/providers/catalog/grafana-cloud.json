@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "provider": "grafana-cloud",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "grafana-cloud_list_stacks",
+      "name": "list_stacks",
+      "title": "List Stacks",
+      "description": "List Grafana Cloud stacks (instances) for an org. Match the intended stack by slug; never pick the first item automatically.",
+      "toolkitId": "grafana-cloud",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "org_slug": {
+            "description": "Grafana Cloud org slug.",
+            "pattern": "^[a-z0-9]([a-z0-9-]{0,62}[a-z0-9])?$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "org_slug"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Stacks",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-cloud_get_org",
+      "name": "get_org",
+      "title": "Get Cloud Org",
+      "description": "Get a Grafana Cloud organization by slug. Use to resolve org id before stack-scoped calls. Do not guess slugs from docs examples.",
+      "toolkitId": "grafana-cloud",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "org_slug": {
+            "description": "Grafana Cloud org slug.",
+            "pattern": "^[a-z0-9]([a-z0-9-]{0,62}[a-z0-9])?$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "org_slug"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Cloud Org",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

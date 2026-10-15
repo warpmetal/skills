@@ -1,0 +1,588 @@
+{
+  "version": 1,
+  "provider": "grafana-stack",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-13",
+  "tools": [
+    {
+      "toolSlug": "grafana-stack_health",
+      "name": "health",
+      "title": "Grafana Stack Health",
+      "description": "Report whether the stack answers: its commit, version and database status. The endpoint is public on most stacks, so it proves the host is reachable rather than the token being valid - use get_current_user for that.",
+      "toolkitId": "grafana-stack",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Grafana Stack Health",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-stack_get_current_user",
+      "name": "get_current_user",
+      "title": "Get Grafana Signed-In User",
+      "description": "Show the user or service account the stored token authenticates as, with the orgs and teams it belongs to. Use it to confirm which stack and identity the credential resolves to before acting on a dashboard.",
+      "toolkitId": "grafana-stack",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Grafana Signed-In User",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-stack_search",
+      "name": "search",
+      "title": "Search Grafana Dashboards And Folders",
+      "description": "Find dashboards and folders by text, tag or UID, with paging and ordering. Use it to resolve a dashboard UID before get_dashboard; list_folders walks the folder tree instead. The stack sorts alphabetically by default.",
+      "toolkitId": "grafana-stack",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "dashboard_uids": {
+            "description": "Return only the dashboards with these UIDs. Sent as a comma-separated list.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "deleted": {
+            "description": "Include dashboards that are in the trash.",
+            "type": "boolean"
+          },
+          "folder_uids": {
+            "description": "Return only the dashboards inside these folder UIDs. Sent as a comma-separated list.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "limit": {
+            "description": "Maximum number of results to return.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "page": {
+            "description": "Offset page number, for use with limit.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "permission": {
+            "description": "Return only the dashboards the caller may edit, or only those it may view. The stack defaults to view.",
+            "enum": [
+              "Edit",
+              "View"
+            ],
+            "type": "string"
+          },
+          "query": {
+            "description": "Text matched against dashboard and folder titles.",
+            "type": "string"
+          },
+          "sort": {
+            "description": "Order the results alphabetically, ascending or descending.",
+            "enum": [
+              "alpha-asc",
+              "alpha-desc"
+            ],
+            "type": "string"
+          },
+          "starred": {
+            "description": "Return only the dashboards starred by the signed-in user.",
+            "type": "boolean"
+          },
+          "tag": {
+            "description": "Return only the dashboards carrying all of these tags.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": {
+            "description": "Return only folders, or only dashboards.",
+            "enum": [
+              "dash-folder",
+              "dash-db"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Search Grafana Dashboards And Folders",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-stack_get_dashboard",
+      "name": "get_dashboard",
+      "title": "Get Grafana Dashboard",
+      "description": "Read one dashboard in full: panels, the query behind each panel, thresholds, template variables and the folder it lives in. Use it after search to read a dashboard's configuration; the response is the whole dashboard document.",
+      "toolkitId": "grafana-stack",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "uid": {
+            "description": "The dashboard UID, as returned by search.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "uid"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Grafana Dashboard",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-stack_list_datasources",
+      "name": "list_datasources",
+      "title": "List Grafana Data Sources",
+      "description": "List the stack's data sources with their UID, type and URL, which is where the UIDs check_datasource_health needs come from. Secret fields are reported as flags, never as values.",
+      "toolkitId": "grafana-stack",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Grafana Data Sources",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-stack_check_datasource_health",
+      "name": "check_datasource_health",
+      "title": "Check Grafana Data Source Health",
+      "description": "Ask the stack to run a health check against one data source and report its status and message. Use it when a panel is empty or an alert cannot evaluate; list_datasources gives the UID.",
+      "toolkitId": "grafana-stack",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "uid": {
+            "description": "The data source UID, as returned by list_datasources.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "uid"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Check Grafana Data Source Health",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-stack_list_folders",
+      "name": "list_folders",
+      "title": "List Grafana Folders",
+      "description": "List the folders that organise dashboards, with their UID and parent, one page at a time. Use it to walk the tree; search filters by title instead. The stack returns the first 1000 folders by default.",
+      "toolkitId": "grafana-stack",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "description": "Maximum number of folders to return.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "page": {
+            "description": "Offset page number, for use with limit.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "parent_uid": {
+            "description": "Return only the folders directly inside this folder UID.",
+            "type": "string"
+          },
+          "permission": {
+            "description": "Return only the folders the caller may edit, or only those it may view.",
+            "enum": [
+              "Edit",
+              "View"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Grafana Folders",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-stack_list_alert_rules",
+      "name": "list_alert_rules",
+      "title": "List Grafana Alert Rules",
+      "description": "List the alert rules the stack provisions, with their condition, evaluation interval, labels and health. Use it to answer which alerts exist; list_contact_points answers where they are delivered.",
+      "toolkitId": "grafana-stack",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Grafana Alert Rules",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-stack_list_annotations",
+      "name": "list_annotations",
+      "title": "List Grafana Annotations",
+      "description": "List the annotations in a time window - deploys, incidents and manual notes - so they can be lined up against a gap in the data. Both ends of the window are epoch milliseconds.",
+      "toolkitId": "grafana-stack",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "dashboard_uid": {
+            "description": "Return only the annotations attached to this dashboard UID.",
+            "type": "string"
+          },
+          "from": {
+            "description": "Start of the window, in epoch milliseconds.",
+            "type": "integer"
+          },
+          "limit": {
+            "description": "Maximum number of annotations to return.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "match_any": {
+            "description": "Match any of the given tags instead of all of them.",
+            "type": "boolean"
+          },
+          "tags": {
+            "description": "Return only the annotations carrying these tags.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "to": {
+            "description": "End of the window, in epoch milliseconds.",
+            "type": "integer"
+          },
+          "type": {
+            "description": "Return only annotations created by alerts, or only the manual ones.",
+            "enum": [
+              "alert",
+              "annotation"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Grafana Annotations",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-stack_list_contact_points",
+      "name": "list_contact_points",
+      "title": "List Grafana Contact Points",
+      "description": "List where the stack sends notifications - email, Slack, webhooks - with their UID and type. Use it when an alert should have reached someone and did not; list_mute_timings covers the schedules that silence them.",
+      "toolkitId": "grafana-stack",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "description": "Return only the contact point with this name.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Grafana Contact Points",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-stack_list_mute_timings",
+      "name": "list_mute_timings",
+      "title": "List Grafana Mute Timings",
+      "description": "List the mute timings that silence notifications on a schedule. Use it when an alert should have fired and no notification arrived; list_contact_points shows the delivery targets themselves.",
+      "toolkitId": "grafana-stack",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Grafana Mute Timings",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-stack_list_dashboard_tags",
+      "name": "list_dashboard_tags",
+      "title": "List Grafana Dashboard Tags",
+      "description": "List every tag used across the stack's dashboards and how many dashboards carry each one. Use it to discover the vocabulary before filtering with search.",
+      "toolkitId": "grafana-stack",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Grafana Dashboard Tags",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-stack_search_teams",
+      "name": "search_teams",
+      "title": "Search Grafana Teams",
+      "description": "Search the stack's teams by name or text, with paging. Use it to find who owns a dashboard or who to notify about an incident. The stack returns the first 1000 teams by default.",
+      "toolkitId": "grafana-stack",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "description": "Return only the teams whose name matches exactly.",
+            "type": "string"
+          },
+          "page": {
+            "description": "Page number to return.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "per_page": {
+            "description": "Number of teams per page.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "query": {
+            "description": "Text matched against team names and emails.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Search Grafana Teams",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-stack_list_org_users",
+      "name": "list_org_users",
+      "title": "List Grafana Organization Users",
+      "description": "List the users in the stack's current organization, optionally filtered by login or email. Use it to resolve who owns a dashboard or who was on shift during an incident.",
+      "toolkitId": "grafana-stack",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "description": "Maximum number of users to return.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "query": {
+            "description": "Text matched against the users' login and email.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Grafana Organization Users",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "grafana-stack_list_library_elements",
+      "name": "list_library_elements",
+      "title": "List Grafana Library Elements",
+      "description": "List the shared library panels and variables, optionally filtered by name and folder, with paging. Use it to find a panel that several dashboards reference before reading each dashboard in full.",
+      "toolkitId": "grafana-stack",
+      "version": "v1",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "folder_filter": {
+            "description": "Return only the elements whose folder name contains this text.",
+            "type": "string"
+          },
+          "page": {
+            "description": "Page number to return.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "per_page": {
+            "description": "Number of elements per page. The stack returns 100 by default.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "search_string": {
+            "description": "Text matched against the elements' name and description.",
+            "type": "string"
+          },
+          "sort_direction": {
+            "description": "Order the results by name, ascending or descending.",
+            "enum": [
+              "alpha-asc",
+              "alpha-desc"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Grafana Library Elements",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

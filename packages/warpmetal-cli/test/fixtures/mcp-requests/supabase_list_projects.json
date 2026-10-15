@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://api.supabase.com/v1/projects?limit=1&offset=1&search=sample_search&sort=name_asc&statuses=sample_statuses&organization_slug=sample_organization_slug",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

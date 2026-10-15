@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/radar/entities/locations?limit=1&offset=1&location=sample_location&region=sample_region&subregion=sample_subregion&continent=AF&format=JSON",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/logs/explorer/datasets",
+  "body": {
+    "dataset": "sample_dataset",
+    "fields": [],
+    "filter": "sample_filter",
+    "filter_attack_traffic": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

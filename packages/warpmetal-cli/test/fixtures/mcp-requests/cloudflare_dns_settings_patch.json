@@ -1,0 +1,19 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/dns_settings",
+  "body": {
+    "flatten_all_cnames": true,
+    "foundation_dns": true,
+    "internal_dns": {},
+    "multi_provider": true,
+    "ns_ttl": 1,
+    "secondary_overrides": true,
+    "soa": {},
+    "zone_mode": "standard",
+    "nameservers": {}
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "version": 1,
+  "provider": "hubspot",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "hubspot_crm_contacts_list",
+      "name": "crm_contacts_list",
+      "title": "Retrieve contacts",
+      "description": "Retrieve all contacts, using query parameters to specify the information that gets returned. Use when the task is to retrieve contacts across multiple crm contacts; choose a get tool when a specific record is already known.",
+      "toolkitId": "hubspot",
+      "version": "v11",
+      "inputSchema": {
+        "properties": {
+          "after": {
+            "description": "The paging cursor token of the last successfully read resource will be returned as the `paging.next.after` JSON property of a paged response containing more results.",
+            "type": "string"
+          },
+          "archived": {
+            "default": false,
+            "description": "Whether to return only results that have been archived.",
+            "type": "boolean"
+          },
+          "associations": {
+            "description": "A comma separated list of object types to retrieve associated IDs for. If any of the specified associations do not exist, they will be ignored.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "limit": {
+            "default": 10,
+            "description": "The maximum number of results to display per page.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "properties": {
+            "description": "A comma separated list of the properties to be returned in the response. If any of the specified properties are not present on the requested object(s), they will be ignored.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "properties_with_history": {
+            "description": "A comma separated list of the properties to be returned along with their history of previous values. If any of the specified properties are not present on the requested object(s), they will be ignored. Usage of this parameter will reduce the maximum number of contacts that can be read by a single request.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Retrieve contacts",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "hubspot_crm_contacts_create",
+      "name": "crm_contacts_create",
+      "title": "Create a contact",
+      "description": "Create a contact in HubSpot. Use when the task is to create a contact; choose an update tool to change an existing record instead.",
+      "toolkitId": "hubspot",
+      "version": "v11",
+      "inputSchema": {
+        "properties": {
+          "associations": {
+            "items": {
+              "properties": {
+                "to": {
+                  "description": "Contains the Id of a Public Object",
+                  "properties": {
+                    "id": {
+                      "description": "The unique ID of the object.",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object"
+                },
+                "types": {
+                  "items": {
+                    "description": "Defines the type, direction, and details of the relationship between two CRM objects.",
+                    "properties": {
+                      "associationCategory": {
+                        "description": "The category of the association, such as \"HUBSPOT_DEFINED\".",
+                        "enum": [
+                          "HUBSPOT_DEFINED",
+                          "INTEGRATOR_DEFINED",
+                          "USER_DEFINED",
+                          "WORK"
+                        ],
+                        "type": "string"
+                      },
+                      "associationTypeId": {
+                        "description": "The ID representing the specific type of association.",
+                        "format": "int32",
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "associationCategory",
+                      "associationTypeId"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "to",
+                "types"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "properties": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Key-value pairs for setting properties for the new object.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "properties"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create a contact",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "hubspot_crm_deals_list",
+      "name": "crm_deals_list",
+      "title": "List",
+      "description": "List in HubSpot. Use when the task is to list across multiple crm deals; choose a get tool when a specific record is already known.",
+      "toolkitId": "hubspot",
+      "version": "v11",
+      "inputSchema": {
+        "properties": {
+          "after": {
+            "description": "The paging cursor token of the last successfully read resource will be returned as the `paging.next.after` JSON property of a paged response containing more results.",
+            "type": "string"
+          },
+          "archived": {
+            "default": false,
+            "description": "Whether to return only results that have been archived.",
+            "type": "boolean"
+          },
+          "associations": {
+            "description": "A comma separated list of object types to retrieve associated IDs for. If any of the specified associations do not exist, they will be ignored.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "limit": {
+            "default": 10,
+            "description": "The maximum number of results to display per page.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "properties": {
+            "description": "A comma separated list of the properties to be returned in the response. If any of the specified properties are not present on the requested object(s), they will be ignored.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "properties_with_history": {
+            "description": "A comma separated list of the properties to be returned along with their history of previous values. If any of the specified properties are not present on the requested object(s), they will be ignored. Usage of this parameter will reduce the maximum number of objects that can be read by a single request.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

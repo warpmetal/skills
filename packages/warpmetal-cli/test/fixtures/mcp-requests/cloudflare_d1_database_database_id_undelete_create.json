@@ -1,0 +1,11 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/d1/database/sample_database_id/undelete",
+  "body": {
+    "new_name": "sample_new_name"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/zerotrust/routes/hostname/sample_hostname_route_id",
+  "body": {
+    "comment": "sample_comment",
+    "hostname": "sample_hostname",
+    "tunnel_id": "sample_tunnel_id"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,516 @@
+{
+  "version": 1,
+  "provider": "square",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "square_list_payments",
+      "name": "list_payments",
+      "title": "List Payments",
+      "description": "Tool to list payments by location and time range to enable reconciliation and net sales reporting from Square POS. Use when you need to retrieve payment records for reporting, analytics, or reconciliation purposes.",
+      "toolkitId": "square",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "begin_time": {
+            "description": "Indicates the start of the time range to retrieve payments for, in RFC 3339 format.\nThe range is determined using the `created_at` field for each Payment.\nInclusive. Default: The current time minus one year.",
+            "type": "string"
+          },
+          "card_brand": {
+            "description": "The brand of the payment card (for example, VISA).",
+            "type": "string"
+          },
+          "cursor": {
+            "description": "A pagination cursor returned by a previous call to this endpoint.\nProvide this cursor to retrieve the next set of results for the original query.\n\nFor more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).",
+            "type": "string"
+          },
+          "end_time": {
+            "description": "Indicates the end of the time range to retrieve payments for, in RFC 3339 format.  The\nrange is determined using the `created_at` field for each Payment.\n\nDefault: The current time.",
+            "type": "string"
+          },
+          "is_offline_payment": {
+            "description": "Whether the payment was taken offline or not.",
+            "type": "boolean"
+          },
+          "last_4": {
+            "description": "The last four digits of a payment card.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "The maximum number of results to be returned in a single page.\nIt is possible to receive fewer results than the specified limit on a given page.\n\nThe default value of 100 is also the maximum allowed value. If the provided value is \ngreater than 100, it is ignored and the default value is used instead.\n\nDefault: `100`",
+            "type": "integer"
+          },
+          "location_id": {
+            "description": "Limit results to the location supplied. By default, results are returned\nfor the default (main) location associated with the seller.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "type": "string"
+          },
+          "offline_begin_time": {
+            "description": "Indicates the start of the time range for which to retrieve offline payments, in RFC 3339\nformat for timestamps. The range is determined using the\n`offline_payment_details.client_created_at` field for each Payment. If set, payments without a\nvalue set in `offline_payment_details.client_created_at` will not be returned.\n\nDefault: The current time.",
+            "type": "string"
+          },
+          "offline_end_time": {
+            "description": "Indicates the end of the time range for which to retrieve offline payments, in RFC 3339\nformat for timestamps. The range is determined using the\n`offline_payment_details.client_created_at` field for each Payment. If set, payments without a\nvalue set in `offline_payment_details.client_created_at` will not be returned.\n\nDefault: The current time.",
+            "type": "string"
+          },
+          "sort_field": {
+            "description": "The field used to sort results by. The default is `CREATED_AT`.",
+            "enum": [
+              "CREATED_AT",
+              "OFFLINE_CREATED_AT",
+              "UPDATED_AT"
+            ],
+            "type": "string"
+          },
+          "sort_order": {
+            "description": "The order in which results are listed by `ListPaymentsRequest.sort_field`:\n- `ASC` - Oldest to newest.\n- `DESC` - Newest to oldest (default).",
+            "type": "string"
+          },
+          "total": {
+            "description": "The exact amount in the `total_money` for a payment.",
+            "type": "integer"
+          },
+          "updated_at_begin_time": {
+            "description": "Indicates the start of the time range to retrieve payments for, in RFC 3339 format.  The\nrange is determined using the `updated_at` field for each Payment.",
+            "type": "string"
+          },
+          "updated_at_end_time": {
+            "description": "Indicates the end of the time range to retrieve payments for, in RFC 3339 format.  The\nrange is determined using the `updated_at` field for each Payment.",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Payments",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "square_create_payment",
+      "name": "create_payment",
+      "title": "Create Payment",
+      "description": "Create a Square payment. Use when adding a new record, rather than modifying an existing one.",
+      "toolkitId": "square",
+      "version": "v14",
+      "inputSchema": {
+        "properties": {
+          "accept_partial_authorization": {
+            "description": "If set to `true` and charging a Square Gift Card, a payment might be returned with\n`amount_money` equal to less than what was requested. For example, a request for $20 when charging\na Square Gift Card with a balance of $5 results in an APPROVED payment of $5. You might choose\nto prompt the buyer for an additional payment to cover the remainder or cancel the Gift Card\npayment. This field cannot be `true` when `autocomplete = true`.\n\nFor more information, see\n[Partial amount with Square Gift Cards](https://developer.squareup.com/docs/payments-api/take-payments#partial-payment-gift-card).\n\nDefault: false",
+            "type": "boolean"
+          },
+          "amount_money": {
+            "description": "Represents an amount of money. `Money` fields can be signed or unsigned.\nFields that do not explicitly define whether they are signed or unsigned are\nconsidered unsigned and can only hold positive amounts. For signed fields, the\nsign of the value indicates the purpose of the money transfer. See\n[Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts)\nfor more information.",
+            "properties": {
+              "amount": {
+                "description": "The amount of money, in the smallest denomination of the currency\nindicated by `currency`. For example, when `currency` is `USD`, `amount` is\nin cents. Monetary amounts can be positive or negative. See the specific\nfield description to determine the meaning of the sign in a particular case.",
+                "type": "integer"
+              },
+              "currency": {
+                "description": "The type of currency, in __ISO 4217 format__. For example, the currency code for US dollars is `USD`.\n\nSee [Currency](entity:Currency) for possible values.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "app_fee_allocations": {
+            "description": "Details pertaining to recipients of the application fee. The sum of the amounts in the\napp_fee_allocations must equal the app_fee_money amount, if present. If populated, an\nallocation must be present for every party that expects to receive a portion of the application\nfee, including the application developer.",
+            "items": {
+              "additionalProperties": true,
+              "description": "Stub for dangling official OpenAPI $ref AppFeeAllocation (schema absent from published api.json).",
+              "properties": {},
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "app_fee_money": {
+            "description": "Represents an amount of money. `Money` fields can be signed or unsigned.\nFields that do not explicitly define whether they are signed or unsigned are\nconsidered unsigned and can only hold positive amounts. For signed fields, the\nsign of the value indicates the purpose of the money transfer. See\n[Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts)\nfor more information.",
+            "properties": {
+              "amount": {
+                "description": "The amount of money, in the smallest denomination of the currency\nindicated by `currency`. For example, when `currency` is `USD`, `amount` is\nin cents. Monetary amounts can be positive or negative. See the specific\nfield description to determine the meaning of the sign in a particular case.",
+                "type": "integer"
+              },
+              "currency": {
+                "description": "The type of currency, in __ISO 4217 format__. For example, the currency code for US dollars is `USD`.\n\nSee [Currency](entity:Currency) for possible values.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "autocomplete": {
+            "description": "If set to `true`, this payment will be completed when possible. If\nset to `false`, this payment is held in an approved state until either\nexplicitly completed (captured) or canceled (voided). For more information, see\n[Delayed capture](https://developer.squareup.com/docs/payments-api/take-payments/card-payments#delayed-capture-of-a-card-payment).\n\nDefault: true",
+            "type": "boolean"
+          },
+          "billing_address": {
+            "description": "Represents a postal address in a country. \nFor more information, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+            "properties": {
+              "address_line_1": {
+                "description": "The first line of the address.\n\nFields that start with `address_line` provide the address's most specific\ndetails, like street number, street name, and building name. They do *not*\nprovide less specific details like city, state/province, or country (these\ndetails are provided in other fields).",
+                "type": "string"
+              },
+              "address_line_2": {
+                "description": "The second line of the address, if any.",
+                "type": "string"
+              },
+              "address_line_3": {
+                "description": "The third line of the address, if any.",
+                "type": "string"
+              },
+              "administrative_district_level_1": {
+                "description": "A civil entity within the address's country. In the US, this\nis the state. For a full list of field meanings by country, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+                "type": "string"
+              },
+              "administrative_district_level_2": {
+                "description": "A civil entity within the address's `administrative_district_level_1`.\nIn the US, this is the county.",
+                "type": "string"
+              },
+              "administrative_district_level_3": {
+                "description": "A civil entity within the address's `administrative_district_level_2`,\nif any.",
+                "type": "string"
+              },
+              "country": {
+                "description": "Indicates the country associated with another entity, such as a business.\nValues are in [ISO 3166-1-alpha-2 format](http://www.iso.org/iso/home/standards/country_codes.htm).",
+                "type": "string"
+              },
+              "first_name": {
+                "description": "Optional first name when it's representing recipient.",
+                "type": "string"
+              },
+              "last_name": {
+                "description": "Optional last name when it's representing recipient.",
+                "type": "string"
+              },
+              "locality": {
+                "description": "The city or town of the address. For a full list of field meanings by country, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+                "type": "string"
+              },
+              "postal_code": {
+                "description": "The address's postal code. For a full list of field meanings by country, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+                "type": "string"
+              },
+              "sublocality": {
+                "description": "A civil region within the address's `locality`, if any.",
+                "type": "string"
+              },
+              "sublocality_2": {
+                "description": "A civil region within the address's `sublocality`, if any.",
+                "type": "string"
+              },
+              "sublocality_3": {
+                "description": "A civil region within the address's `sublocality_2`, if any.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "buyer_email_address": {
+            "description": "The buyer's email address.",
+            "type": "string"
+          },
+          "buyer_phone_number": {
+            "description": "The buyer's phone number.\nMust follow the following format:\n1. A leading + symbol (followed by a country code)\n2. The phone number can contain spaces and the special characters `(` , `)` , `-` , and `.`.\nAlphabetical characters aren't allowed.\n3. The phone number must contain between 9 and 16 digits.",
+            "type": "string"
+          },
+          "cash_details": {
+            "description": "Stores details about a cash payment. Contains only non-confidential information. For more information, see \n[Take Cash Payments](https://developer.squareup.com/docs/payments-api/take-payments/cash-payments).",
+            "properties": {
+              "buyer_supplied_money": {
+                "description": "Represents an amount of money. `Money` fields can be signed or unsigned.\nFields that do not explicitly define whether they are signed or unsigned are\nconsidered unsigned and can only hold positive amounts. For signed fields, the\nsign of the value indicates the purpose of the money transfer. See\n[Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts)\nfor more information.",
+                "properties": {
+                  "amount": {
+                    "description": "The amount of money, in the smallest denomination of the currency\nindicated by `currency`. For example, when `currency` is `USD`, `amount` is\nin cents. Monetary amounts can be positive or negative. See the specific\nfield description to determine the meaning of the sign in a particular case.",
+                    "type": "integer"
+                  },
+                  "currency": {
+                    "description": "The type of currency, in __ISO 4217 format__. For example, the currency\ncode for US dollars is `USD`.\n\nSee [Currency](entity:Currency) for possible values.\nSee [Currency](#type-currency) for possible values",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "change_back_money": {
+                "description": "Represents an amount of money. `Money` fields can be signed or unsigned.\nFields that do not explicitly define whether they are signed or unsigned are\nconsidered unsigned and can only hold positive amounts. For signed fields, the\nsign of the value indicates the purpose of the money transfer. See\n[Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts)\nfor more information.",
+                "properties": {
+                  "amount": {
+                    "description": "The amount of money, in the smallest denomination of the currency\nindicated by `currency`. For example, when `currency` is `USD`, `amount` is\nin cents. Monetary amounts can be positive or negative. See the specific\nfield description to determine the meaning of the sign in a particular case.",
+                    "type": "integer"
+                  },
+                  "currency": {
+                    "description": "The type of currency, in __ISO 4217 format__. For example, the currency\ncode for US dollars is `USD`.\n\nSee [Currency](entity:Currency) for possible values.\nSee [Currency](#type-currency) for possible values",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "required": [
+              "buyer_supplied_money"
+            ],
+            "type": "object"
+          },
+          "customer_id": {
+            "description": "The [Customer](entity:Customer) ID of the customer associated with the payment.\n\nThis is required if the `source_id` refers to a card on file created using the Cards API.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "type": "string"
+          },
+          "delay_action": {
+            "description": "The action to be applied to the payment when the `delay_duration` has elapsed. The action must be\nCANCEL or COMPLETE. For more information, see\n[Time Threshold](https://developer.squareup.com/docs/payments-api/take-payments/card-payments/delayed-capture#time-threshold).\n\nDefault: CANCEL",
+            "type": "string"
+          },
+          "delay_duration": {
+            "description": "The duration of time after the payment's creation when Square automatically\neither completes or cancels the payment depending on the `delay_action` field value.\nFor more information, see\n[Time threshold](https://developer.squareup.com/docs/payments-api/take-payments/card-payments/delayed-capture#time-threshold).\n\nThis parameter should be specified as a time duration, in RFC 3339 format.\n\nNote: This feature is only supported for card payments. This parameter can only be set for a delayed\ncapture payment (`autocomplete=false`).\n\nDefault:\n\n- Card-present payments: \"PT36H\" (36 hours) from the creation time.\n- Card-not-present payments: \"P7D\" (7 days) from the creation time.",
+            "type": "string"
+          },
+          "external_details": {
+            "description": "Stores details about an external payment. Contains only non-confidential information.\nFor more information, see \n[Take External Payments](https://developer.squareup.com/docs/payments-api/take-payments/external-payments).",
+            "properties": {
+              "source": {
+                "description": "A description of the external payment source. For example, \n\"Food Delivery Service\".",
+                "type": "string"
+              },
+              "source_fee_money": {
+                "description": "Represents an amount of money. `Money` fields can be signed or unsigned.\nFields that do not explicitly define whether they are signed or unsigned are\nconsidered unsigned and can only hold positive amounts. For signed fields, the\nsign of the value indicates the purpose of the money transfer. See\n[Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts)\nfor more information.",
+                "properties": {
+                  "amount": {
+                    "description": "The amount of money, in the smallest denomination of the currency\nindicated by `currency`. For example, when `currency` is `USD`, `amount` is\nin cents. Monetary amounts can be positive or negative. See the specific\nfield description to determine the meaning of the sign in a particular case.",
+                    "type": "integer"
+                  },
+                  "currency": {
+                    "description": "The type of currency, in __ISO 4217 format__. For example, the currency\ncode for US dollars is `USD`.\n\nSee [Currency](entity:Currency) for possible values.\nSee [Currency](#type-currency) for possible values",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "source_id": {
+                "description": "An ID to associate the payment to its originating source.",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_:-]*(?:\\.[A-Za-z0-9_:-]+)*$",
+                "type": "string"
+              },
+              "type": {
+                "description": "The type of external payment the seller received. It can be one of the following:\n- CHECK - Paid using a physical check.\n- BANK_TRANSFER - Paid using external bank transfer.\n- OTHER\\_GIFT\\_CARD - Paid using a non-Square gift card.\n- CRYPTO - Paid using a crypto currency.\n- SQUARE_CASH - Paid using Square Cash App.\n- SOCIAL - Paid using peer-to-peer payment applications.\n- EXTERNAL - A third-party application gathered this payment outside of Square.\n- EMONEY - Paid using an E-money provider.\n- CARD - A credit or debit card that Square does not support.\n- STORED_BALANCE - Use for house accounts, store credit, and so forth.\n- FOOD_VOUCHER - Restaurant voucher provided by employers to employees to pay for meals\n- OTHER - A type not listed here.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "source"
+            ],
+            "type": "object"
+          },
+          "idempotency_key": {
+            "description": "A unique string that identifies this `CreatePayment` request. Keys can be any valid string\nbut must be unique for every `CreatePayment` request.\n\nNote: The number of allowed characters might be less than the stated maximum, if multi-byte\ncharacters are used.\n\nFor more information, see [Idempotency](https://developer.squareup.com/docs/working-with-apis/idempotency).",
+            "maxLength": 192,
+            "minLength": 1,
+            "type": "string"
+          },
+          "location_id": {
+            "description": "The location ID to associate with the payment. If not specified, the [main location](https://developer.squareup.com/docs/locations-api#about-the-main-location) is\nused.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "type": "string"
+          },
+          "note": {
+            "description": "An optional note to be entered by the developer when creating a payment.",
+            "type": "string"
+          },
+          "order_id": {
+            "description": "Associates a previously created order with this payment.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "type": "string"
+          },
+          "reference_id": {
+            "description": "A user-defined ID to associate with the payment.\n\nYou can use this field to associate the payment to an entity in an external system\n(for example, you might specify an order ID that is generated by a third-party shopping cart).",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "type": "string"
+          },
+          "shipping_address": {
+            "description": "Represents a postal address in a country. \nFor more information, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+            "properties": {
+              "address_line_1": {
+                "description": "The first line of the address.\n\nFields that start with `address_line` provide the address's most specific\ndetails, like street number, street name, and building name. They do *not*\nprovide less specific details like city, state/province, or country (these\ndetails are provided in other fields).",
+                "type": "string"
+              },
+              "address_line_2": {
+                "description": "The second line of the address, if any.",
+                "type": "string"
+              },
+              "address_line_3": {
+                "description": "The third line of the address, if any.",
+                "type": "string"
+              },
+              "administrative_district_level_1": {
+                "description": "A civil entity within the address's country. In the US, this\nis the state. For a full list of field meanings by country, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+                "type": "string"
+              },
+              "administrative_district_level_2": {
+                "description": "A civil entity within the address's `administrative_district_level_1`.\nIn the US, this is the county.",
+                "type": "string"
+              },
+              "administrative_district_level_3": {
+                "description": "A civil entity within the address's `administrative_district_level_2`,\nif any.",
+                "type": "string"
+              },
+              "country": {
+                "description": "Indicates the country associated with another entity, such as a business.\nValues are in [ISO 3166-1-alpha-2 format](http://www.iso.org/iso/home/standards/country_codes.htm).",
+                "type": "string"
+              },
+              "first_name": {
+                "description": "Optional first name when it's representing recipient.",
+                "type": "string"
+              },
+              "last_name": {
+                "description": "Optional last name when it's representing recipient.",
+                "type": "string"
+              },
+              "locality": {
+                "description": "The city or town of the address. For a full list of field meanings by country, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+                "type": "string"
+              },
+              "postal_code": {
+                "description": "The address's postal code. For a full list of field meanings by country, see [Working with Addresses](https://developer.squareup.com/docs/build-basics/working-with-addresses).",
+                "type": "string"
+              },
+              "sublocality": {
+                "description": "A civil region within the address's `locality`, if any.",
+                "type": "string"
+              },
+              "sublocality_2": {
+                "description": "A civil region within the address's `sublocality`, if any.",
+                "type": "string"
+              },
+              "sublocality_3": {
+                "description": "A civil region within the address's `sublocality_2`, if any.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "source_id": {
+            "description": "The ID for the source of funds for this payment.\nThis could be a payment token generated by the Web Payments SDK for any of its\n[supported methods](https://developer.squareup.com/docs/web-payments/overview#explore-payment-methods),\nincluding cards, bank transfers, Afterpay or Cash App Pay. If recording a payment\nthat the seller received outside of Square, specify either \"CASH\" or \"EXTERNAL\".\nFor more information, see\n[Take Payments](https://developer.squareup.com/docs/payments-api/take-payments).",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_:-]*(?:\\.[A-Za-z0-9_:-]+)*$",
+            "type": "string"
+          },
+          "statement_description_identifier": {
+            "description": "Optional additional payment information to include on the customer's card statement\nas part of the statement description. This can be, for example, an invoice number, ticket number,\nor short description that uniquely identifies the purchase.\n\nNote that the `statement_description_identifier` might get truncated on the statement description\nto fit the required information including the Square identifier (SQ *) and name of the\nseller taking the payment.",
+            "type": "string"
+          },
+          "team_member_id": {
+            "description": "An optional [TeamMember](entity:TeamMember) ID to associate with\nthis payment.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "type": "string"
+          },
+          "tip_money": {
+            "description": "Represents an amount of money. `Money` fields can be signed or unsigned.\nFields that do not explicitly define whether they are signed or unsigned are\nconsidered unsigned and can only hold positive amounts. For signed fields, the\nsign of the value indicates the purpose of the money transfer. See\n[Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts)\nfor more information.",
+            "properties": {
+              "amount": {
+                "description": "The amount of money, in the smallest denomination of the currency\nindicated by `currency`. For example, when `currency` is `USD`, `amount` is\nin cents. Monetary amounts can be positive or negative. See the specific\nfield description to determine the meaning of the sign in a particular case.",
+                "type": "integer"
+              },
+              "currency": {
+                "description": "The type of currency, in __ISO 4217 format__. For example, the currency code for US dollars is `USD`.\n\nSee [Currency](entity:Currency) for possible values.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "verification_token": {
+            "description": "An identifying token generated by [payments.verifyBuyer()](https://developer.squareup.com/reference/sdks/web/payments/objects/Payments#Payments.verifyBuyer).\nVerification tokens encapsulate customer device information and 3-D Secure\nchallenge results to indicate that Square has verified the buyer identity.\n\nFor more information, see [SCA Overview](https://developer.squareup.com/docs/sca-overview).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_id",
+          "idempotency_key"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Create Payment",
+        "readOnlyHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      }
+    },
+    {
+      "toolSlug": "square_list_customers",
+      "name": "list_customers",
+      "title": "List Customers",
+      "description": "Tool to retrieve customer profiles associated with a Square account. Use when you need to list customers for CRM, reporting, or customer management purposes. Only returns profiles with public information (given_name, family_name, company_name, email_address, or phone_number).",
+      "toolkitId": "square",
+      "version": "v1",
+      "inputSchema": {
+        "properties": {
+          "count": {
+            "description": "Indicates whether to return the total count of customers in the `count` field of the response.\n\nThe default value is `false`.",
+            "type": "boolean"
+          },
+          "cursor": {
+            "description": "A pagination cursor returned by a previous call to this endpoint.\nProvide this cursor to retrieve the next set of results for your original query.\n\nFor more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).",
+            "type": "string"
+          },
+          "limit": {
+            "description": "The maximum number of results to return in a single page. This limit is advisory. The response might contain more or fewer results.\nIf the specified limit is less than 1 or greater than 100, Square returns a `400 VALUE_TOO_LOW` or `400 VALUE_TOO_HIGH` error. The default value is 100.\n\nFor more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).",
+            "type": "integer"
+          },
+          "sort_field": {
+            "description": "Specifies customer attributes as the sort key to customer profiles returned from a search.",
+            "enum": [
+              "DEFAULT",
+              "CREATED_AT"
+            ],
+            "type": "string"
+          },
+          "sort_order": {
+            "description": "The order (e.g., chronological or alphabetical) in which results from a request are returned.",
+            "enum": [
+              "DESC",
+              "ASC"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Customers",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

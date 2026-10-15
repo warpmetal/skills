@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/access/logs/access_requests?limit=1&direction=desc&since=sample_since&until=sample_until&page=1&per_page=1&email=sample_email&email_exact=true&user_id=sample_user_id&allowedOp=eq&country_codeOp=eq&app_typeOp=eq&app_uidOp=eq&ray_idOp=eq&emailOp=eq&idpOp=eq&non_identityOp=eq&user_idOp=eq&fields=sample_fields",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/gateway/rules",
+  "body": {
+    "action": "on",
+    "description": "sample_description",
+    "device_posture": "sample_device_posture",
+    "enabled": true,
+    "expiration": {},
+    "filters": [],
+    "identity": "sample_identity",
+    "name": "sample_name",
+    "precedence": 1,
+    "rule_settings": {},
+    "schedule": {},
+    "traffic": "sample_traffic"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

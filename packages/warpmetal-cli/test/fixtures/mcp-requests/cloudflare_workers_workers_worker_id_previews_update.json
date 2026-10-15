@@ -1,0 +1,21 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/workers/sample_worker_id/previews/sample_preview_id",
+  "body": {
+    "created_on": "sample_created_on",
+    "deployed_on": "sample_deployed_on",
+    "id": "sample_id",
+    "logpush": true,
+    "name": "sample_name",
+    "observability": {},
+    "slug": "sample_slug",
+    "tags": [],
+    "tail_consumers": [],
+    "updated_on": "sample_updated_on",
+    "urls": []
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/access/custom_pages",
+  "body": {
+    "app_count": 1,
+    "contract_version": 1,
+    "created_at": "sample_created_at",
+    "custom_html": "sample_custom_html",
+    "name": "sample_name",
+    "type": "identity_denied",
+    "uid": "sample_uid",
+    "updated_at": "sample_updated_at"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

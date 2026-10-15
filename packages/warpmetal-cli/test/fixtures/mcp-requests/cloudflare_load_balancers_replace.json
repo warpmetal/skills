@@ -1,0 +1,29 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/load_balancers/sample_load_balancer_id",
+  "body": {
+    "adaptive_routing": {},
+    "country_pools": {},
+    "default_pools": [],
+    "description": "sample_description",
+    "enabled": true,
+    "fallback_pool": "sample_fallback_pool",
+    "location_strategy": {},
+    "name": "sample_name",
+    "networks": [],
+    "pop_pools": {},
+    "proxied": true,
+    "random_steering": {},
+    "region_pools": {},
+    "rules": [],
+    "session_affinity": "none",
+    "session_affinity_attributes": {},
+    "session_affinity_ttl": 1,
+    "steering_policy": "off",
+    "ttl": 1
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

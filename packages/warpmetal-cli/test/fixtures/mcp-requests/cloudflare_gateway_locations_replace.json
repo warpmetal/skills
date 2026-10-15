@@ -1,0 +1,18 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/gateway/locations/sample_location_id",
+  "body": {
+    "client_default": true,
+    "dns64_enabled": true,
+    "dns_destination_ips_id": "sample_dns_destination_ips_id",
+    "ecs_support": true,
+    "endpoints": {},
+    "max_ttl": {},
+    "name": "sample_name",
+    "networks": []
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

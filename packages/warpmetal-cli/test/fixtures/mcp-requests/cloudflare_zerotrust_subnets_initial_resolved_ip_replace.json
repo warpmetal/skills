@@ -1,0 +1,13 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/zerotrust/subnets/initial_resolved_ip/v4",
+  "body": {
+    "comment": "sample_comment",
+    "name": "sample_name",
+    "network": "sample_network"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

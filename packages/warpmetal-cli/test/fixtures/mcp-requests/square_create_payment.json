@@ -1,0 +1,35 @@
+{
+  "method": "POST",
+  "url": "https://connect.squareup.com/v2/payments",
+  "body": {
+    "accept_partial_authorization": true,
+    "amount_money": {},
+    "app_fee_allocations": [],
+    "app_fee_money": {},
+    "autocomplete": true,
+    "billing_address": {},
+    "buyer_email_address": "sample_buyer_email_address",
+    "buyer_phone_number": "sample_buyer_phone_number",
+    "cash_details": {},
+    "customer_id": "sample_customer_id",
+    "delay_action": "sample_delay_action",
+    "delay_duration": "sample_delay_duration",
+    "external_details": {},
+    "idempotency_key": "sample_idempotency_key",
+    "location_id": "sample_location_id",
+    "note": "sample_note",
+    "order_id": "sample_order_id",
+    "reference_id": "sample_reference_id",
+    "shipping_address": {},
+    "source_id": "sample_source_id",
+    "statement_description_identifier": "sample_statement_description_identifier",
+    "team_member_id": "sample_team_member_id",
+    "tip_money": {},
+    "verification_token": "sample_verification_token"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json",
+    "Square-Version": "2024-01-18"
+  }
+}

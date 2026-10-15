@@ -1,0 +1,12 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/firewall/access_rules/rules/sample_rule_id",
+  "body": {
+    "mode": "block",
+    "notes": "sample_notes"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

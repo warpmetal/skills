@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.cloudflare.com/client/v4/radar/traffic_anomalies?limit=1&offset=1&dateRange=sample_date_range&dateStart=sample_date_start&dateEnd=sample_date_end&status=VERIFIED&dataSource=ALL&asn=1&location=sample_location&origin=sample_origin&format=JSON&",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

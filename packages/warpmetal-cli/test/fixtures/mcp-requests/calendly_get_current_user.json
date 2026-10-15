@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://api.calendly.com/users/me",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

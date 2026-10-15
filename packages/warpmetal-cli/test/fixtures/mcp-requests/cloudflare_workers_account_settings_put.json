@@ -1,0 +1,12 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/account-settings",
+  "body": {
+    "default_usage_model": "sample_default_usage_model",
+    "green_compute": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

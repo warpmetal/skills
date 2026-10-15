@@ -1,0 +1,13 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/cache/origin_cloud_regions",
+  "body": {
+    "ip": "sample_ip",
+    "region": "sample_region",
+    "vendor": "aws"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

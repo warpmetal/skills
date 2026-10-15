@@ -1,0 +1,9 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workflows/sample_workflow_name/instances/sample_instance_id/events/sample_event_type",
+  "body": {},
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

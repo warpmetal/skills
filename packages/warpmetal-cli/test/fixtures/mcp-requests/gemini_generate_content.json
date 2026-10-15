@@ -1,0 +1,17 @@
+{
+  "method": "POST",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/sample_model:generateContent?key=__TOKEN__",
+  "body": {
+    "cachedContent": "sample_cachedContent",
+    "contents": [],
+    "generationConfig": {},
+    "model": "sample_model",
+    "safetySettings": [],
+    "systemInstruction": {},
+    "toolConfig": {},
+    "tools": []
+  },
+  "headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/logpush/jobs",
+  "body": {
+    "dataset": "access_requests",
+    "destination_conf": "sample_destination_conf",
+    "enabled": true,
+    "filter": "sample_filter",
+    "filter_attack_traffic": true,
+    "frequency": "high",
+    "kind": "",
+    "logpull_options": "sample_logpull_options",
+    "max_upload_bytes": 1,
+    "max_upload_interval_seconds": 1,
+    "max_upload_records": 1,
+    "name": "sample_name",
+    "output_options": {},
+    "ownership_challenge": "sample_ownership_challenge"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.pagerduty.com/services?include=escalation_policies&limit=1&name=sample_name&offset=1&query=sample_query&sort_by=name&time_zone=sample_time_zone&total=true",
+  "headers": {
+    "Authorization": "Token token=__TOKEN__",
+    "Accept": "application/vnd.pagerduty+json;version=2"
+  }
+}

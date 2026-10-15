@@ -1,0 +1,33 @@
+{
+  "jira": {
+    "jiraBase": "https://acme.atlassian.net",
+    "jiraEmail": "ops@acme.test"
+  },
+  "confluence": {
+    "confluenceBase": "https://acme.atlassian.net",
+    "confluenceEmail": "ops@acme.test"
+  },
+  "shopify": {
+    "shop": "acme.myshopify.com"
+  },
+  "snowflake": {
+    "snowflakeBase": "https://acme.snowflakecomputing.com",
+    "warehouse": "COMPUTE_WH"
+  },
+  "posthog": {
+    "posthogBase": "https://us.posthog.com"
+  },
+  "mailchimp": {
+    "mailchimpDc": "us1"
+  },
+  "pagerduty": {
+    "pagerdutyEmail": "ops@acme.test"
+  },
+  "zendesk": {
+    "zendeskSubdomain": "acme",
+    "zendeskEmail": "ops@acme.test"
+  },
+  "grafana-stack": {
+    "grafanaStack": "acme"
+  }
+}

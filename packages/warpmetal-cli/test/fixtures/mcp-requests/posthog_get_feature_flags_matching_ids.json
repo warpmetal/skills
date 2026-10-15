@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://us.posthog.com/api/projects/sample_project_id/feature_flags/matching_ids/",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

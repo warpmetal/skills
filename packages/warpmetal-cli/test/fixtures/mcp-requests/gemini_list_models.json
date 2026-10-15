@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models?key=__TOKEN__&pageSize=1&pageToken=sample_page_token",
+  "headers": {}
+}

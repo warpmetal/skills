@@ -1,0 +1,16 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/email/routing/rules/catch_all",
+  "body": {
+    "actions": [],
+    "enabled": true,
+    "matchers": [],
+    "name": "sample_name",
+    "owner_worker_tag": "sample_owner_worker_tag",
+    "source": "api"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

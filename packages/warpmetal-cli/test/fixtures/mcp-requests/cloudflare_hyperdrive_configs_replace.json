@@ -1,0 +1,19 @@
+{
+  "method": "PUT",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/hyperdrive/configs/sample_hyperdrive_id",
+  "body": {
+    "caching": {},
+    "created_on": "sample_created_on",
+    "id": "sample_id",
+    "modified_on": "sample_modified_on",
+    "mtls": {},
+    "name": "sample_name",
+    "origin": {},
+    "origin_connection_limit": 1,
+    "restarted_on": "sample_restarted_on"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

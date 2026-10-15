@@ -1,0 +1,32 @@
+{
+  "method": "POST",
+  "url": "https://gitlab.com/api/v4/projects/sample_project_id/issues",
+  "body": {
+    "add_labels": [],
+    "assignee_id": 1,
+    "assignee_ids": [],
+    "confidential": true,
+    "created_at": "sample_created_at",
+    "description": "sample_description",
+    "discussion_locked": true,
+    "discussion_to_resolve": "sample_discussion_to_resolve",
+    "due_date": "sample_due_date",
+    "epic_id": 1,
+    "epic_iid": 1,
+    "iid": 1,
+    "issue_type": "issue",
+    "labels": [],
+    "merge_request_to_resolve_discussions_of": 1,
+    "milestone": "sample_milestone",
+    "milestone_id": 1,
+    "remove_labels": [],
+    "severity": "unknown",
+    "start_date": "sample_start_date",
+    "title": "sample_title",
+    "weight": 1
+  },
+  "headers": {
+    "PRIVATE-TOKEN": "__TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

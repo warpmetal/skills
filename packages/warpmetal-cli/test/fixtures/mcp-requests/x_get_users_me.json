@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://api.x.com/2/users/me?expansions=sample_expansions&tweet.fields=sample_post_fields&user.fields=sample_user_fields",
+  "headers": {
+    "Authorization": "Bearer __TOKEN__"
+  }
+}

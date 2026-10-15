@@ -32,11 +32,11 @@ not own:
 One vault, one API. There is no call that returns the whole vault, so a command
 cannot leak every secret by spreading an object it was handed.
 
-| Backend    | When                         | What it protects                                                                 |
-| ---------- | ---------------------------- | -------------------------------------------------------------------------------- |
+| Backend    | When                         | What it protects                                                                                                                  |
+| ---------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `remote`   | `WARPMETAL_VAULT_URL` is set | Everything, centrally. The value never touches local disk; the server holds the ciphertext and enforces compare-and-set per name. |
-| `keychain` | `@napi-rs/keyring` present   | Everything. No key material is written to the config directory.                   |
-| `file`     | everywhere else (default)    | The vault at rest: backups, copied dotfiles, a stray commit. Not a local attacker who can read the config directory. |
+| `keychain` | `@napi-rs/keyring` present   | Everything. No key material is written to the config directory.                                                                   |
+| `file`     | everywhere else (default)    | The vault at rest: backups, copied dotfiles, a stray commit. Not a local attacker who can read the config directory.              |
 
 The file backend is AES-256-GCM with a scrypt-derived key (`N=2^15, r=8, p=1`).
 The key comes from `WARPMETAL_VAULT_PASSPHRASE`, or from `env/vault.key` created
@@ -87,14 +87,14 @@ serializer is exactly how a secret ends up in a log aggregator.
 
 ## Exit codes
 
-| Code | Meaning                                                     |
-| ---- | ----------------------------------------------------------- |
-| 0    | Reported. Includes `DEGRADED`, which is an honest answer.    |
-| 2    | Usage or configuration error.                                |
-| 3    | Something is missing first (no such secret).                 |
-| 4    | Needs provider authentication.                               |
-| 5    | The provider rejected the action, or the apply failed.       |
-| 6    | Integrity: corrupt or unsupported vault, unsupported platform.|
+| Code | Meaning                                                        |
+| ---- | -------------------------------------------------------------- |
+| 0    | Reported. Includes `DEGRADED`, which is an honest answer.      |
+| 2    | Usage or configuration error.                                  |
+| 3    | Something is missing first (no such secret).                   |
+| 4    | Needs provider authentication.                                 |
+| 5    | The provider rejected the action, or the apply failed.         |
+| 6    | Integrity: corrupt or unsupported vault, unsupported platform. |
 
 `warpmetal env status`, `env list`, `env doctor`, `env plan` and
 `integration status` report names and outcomes only, which is why they are safe
@@ -107,9 +107,16 @@ auth modes it accepts, the secrets it reads, its capabilities, the external
 tools it prefers, what its scopes can and cannot enforce, the files it writes, a
 verification command, a redacted error map, and how confident revocation can be.
 
-Today the catalog covers three families: DNS (`cloudflare`), notifications
-(`slack`, `email`, `discord`), and read-only platform probes (`github`, `vercel`,
-`sentry`, `stripe`).
+Today the catalog has two kinds of entry: hand-written adapters for the original
+families — DNS (`cloudflare`), notifications (`slack`, `email`, `discord`) and
+platform probes (`github`, `vercel`, `sentry`, `stripe`) — and generated
+token-status adapters for the providers behind the MCP tool surface (GitLab,
+Notion, Jira, Confluence, Linear, Supabase, Figma, Shopify, HubSpot, Asana,
+Dropbox, Airtable, Intercom, Snowflake, Datadog, PagerDuty, Exa, Perplexity,
+Calendly, ClickUp, PostHog, Mixpanel, CircleCI, Mailchimp, X, Square, OpenAI,
+Gemini, Anthropic Admin, Grafana Cloud, Monday.com, OneSignal, Amplitude,
+Zendesk). The provider verbs that back the MCP tools are dispatched through
+`--args-stdin`/`--args-json`; the generated adapters implement `status` only.
 
 Two rules hold for every adapter:
 
@@ -134,9 +141,55 @@ API and the exit-code mapping — is in
 npm install
 npm test        # tsc + node:test, no network
 npm run typecheck
+npm run probe   # opt-in, needs network: sentinel-token route probe
 ```
 
 The suite is network-free by construction: the fetch function, the process
 runner and the credential backend are all injected. A secret-canary test proves
 a stored value never appears in any diagnostic, plan, list, error or `--json`
-document, and that it *does* appear on the one sanctioned stream.
+document, and that it _does_ appear on the one sanctioned stream.
+
+`npm run probe` is the one network-bound check, and it is deliberately outside
+`npm test`. It builds each of the 1271 provider requests from the reviewed sample
+args, swaps the token for a sentinel and sends it: a real route answers 401/403
+(auth required), 400/422 or 2xx, while a route the provider does not serve answers
+404/405. A per-host control request to a bogus path marks auth-first and
+website/SPA hosts as `weakSignal`, so they are not mistaken for a missing route.
+`test/provider-contract.test.ts` (against `test/fixtures/provider-contracts.json`)
+pins the same requests to their documented host, method and auth offline, so the
+vendor contract fails a red build without the network.
+
+### Verifying the Grafana stack tools without a credential
+
+An account-scoped provider cannot be probed through the sample context: the
+tenant is invented and does not resolve. The Grafana stack tools therefore have three
+layers, all usable with no token, and each one covers what the others cannot:
+
+```bash
+# 1. Offline, part of `npm test`: every builder against the published operation.
+#    This is the only layer that can catch a query parameter the API does not
+#    declare, because Grafana ignores an unknown one instead of rejecting it.
+npm test --prefix packages/warpmetal-cli   # test/grafana-stack-params.test.ts
+
+# 2. Real routes (needs network): does the service serve each path?
+GRAFANA_STACK_PROBE_HOST=https://play.grafana.org npm run probe:grafana-stack
+
+# 3. Real calls with real ids (needs network): does the response have the shape
+#    the tool promises, and do the two path-id tools chain end to end?
+GRAFANA_STACK_E2E_HOST=https://play.grafana.org npm run e2e:grafana-stack
+```
+
+Point both variables at `https://<slug>.grafana.net` to verify the stack the
+tools actually target. Nothing reads a credential: the probe's sentinel goes in
+the `Authorization` header, so the target answers as the anonymous viewer - 200
+for what it exposes publicly, 401/403 for what it does not, and both prove the
+route exists. `scripts/gen-grafana-stack-params.mjs` regenerates the distilled
+spec fixture from the full `api-merged.json`, which is scratch and is not
+committed - download it first and delete it afterwards, since the committed
+fixture is what `npm test` reads:
+
+```bash
+curl -o api-merged.json https://raw.githubusercontent.com/grafana/grafana/main/public/api-merged.json
+npm run gen:grafana-stack-params --prefix packages/warpmetal-cli
+rm api-merged.json
+```

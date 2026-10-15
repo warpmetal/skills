@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "provider": "amplitude",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-05",
+  "tools": [
+    {
+      "toolSlug": "amplitude_get_flags",
+      "name": "get_flags",
+      "title": "Get Amplitude Experiment Flags",
+      "description": "Get Amplitude feature-flag and experiment configurations for local evaluation, optionally filtered by flag key.",
+      "toolkitId": "amplitude",
+      "version": "v4",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "flag_keys": {
+            "description": "Optional comma-separated flag keys; omit to return all flags associated with the deployment key",
+            "maxLength": 4096,
+            "minLength": 1,
+            "pattern": "^[^,\\s]+(?:,[^,\\s]+)*$",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "outputSchema": {
+        "items": {
+          "additionalProperties": true,
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "metadata": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "segments": {
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "variants": {
+              "additionalProperties": true,
+              "type": "object"
+            }
+          },
+          "required": [
+            "key"
+          ],
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "annotations": {
+        "title": "Get Amplitude Experiment Flags",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

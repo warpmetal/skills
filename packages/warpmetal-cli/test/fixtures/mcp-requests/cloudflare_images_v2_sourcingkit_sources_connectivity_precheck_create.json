@@ -1,0 +1,15 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/images/v2/sourcingkit/sources/connectivity-precheck",
+  "body": {
+    "account": "sample_account",
+    "bucket": "sample_bucket",
+    "region": "sample_region",
+    "secret": {},
+    "vendor": "s3"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

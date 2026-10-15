@@ -1,0 +1,14 @@
+{
+  "method": "POST",
+  "url": "https://api.cloudflare.com/client/v4/accounts/sample_account_id/workers/observability/destinations",
+  "body": {
+    "configuration": {},
+    "enabled": true,
+    "name": "sample_name",
+    "skipPreflightCheck": true
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

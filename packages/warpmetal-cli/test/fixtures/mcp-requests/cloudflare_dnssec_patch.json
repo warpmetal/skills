@@ -1,0 +1,14 @@
+{
+  "method": "PATCH",
+  "url": "https://api.cloudflare.com/client/v4/zones/sample_zone_id/dnssec",
+  "body": {
+    "dnssec_multi_signer": true,
+    "dnssec_presigned": true,
+    "dnssec_use_nsec3": true,
+    "status": "active"
+  },
+  "headers": {
+    "Authorization": "Bearer __TOKEN__",
+    "Content-Type": "application/json"
+  }
+}
