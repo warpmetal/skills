@@ -1,5 +1,5 @@
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { readFile, realpath } from "node:fs/promises";
+import { isAbsolute, join, relative, sep } from "node:path";
 
 import { SkillError } from "./errors.js";
 import { sha256Hex, type LoadedRegistry, type RegistrySkill } from "./registry.js";
@@ -172,6 +172,39 @@ function verifyBytes(skill: RegistrySkill, file: string, bytes: Uint8Array, expe
   }
 }
 
+/**
+ * Resolves `candidate` and proves it is inside `rootDir`.
+ *
+ * `normalizeSkillFilePath` is a lexical check, and a lexical check does not
+ * survive a link: a symlink (or a Windows junction) inside the registry points
+ * anywhere, and the checksum cannot help because whoever controls the manifest
+ * also knows the digest of the file it points at. So the comparison is between
+ * resolved paths, not written ones.
+ *
+ * Returns `null` when either path does not resolve, which the caller reports as
+ * a missing file - the distinction between "absent" and "outside" matters, so
+ * escaping throws instead of collapsing into the same answer.
+ */
+async function resolveInsideRoot(rootDir: string, candidate: string): Promise<string | null> {
+  let realRoot: string;
+  let realCandidate: string;
+  try {
+    [realRoot, realCandidate] = await Promise.all([realpath(rootDir), realpath(candidate)]);
+  } catch {
+    return null;
+  }
+  const offset = relative(realRoot, realCandidate);
+  // `..foo` is a legitimate file name, so only a whole `..` segment counts as an
+  // escape; `relative` already normalises the separators for the platform.
+  if (offset === "" || offset === ".." || offset.startsWith(`..${sep}`) || isAbsolute(offset)) {
+    throw new SkillError(
+      "traversal_rejected",
+      "the resolved path leaves the registry root",
+    );
+  }
+  return realCandidate;
+}
+
 export async function readSkillFile(
   loaded: LoadedRegistry,
   name: string,
@@ -185,10 +218,16 @@ export async function readSkillFile(
   }
 
   if (loaded.rootDir !== null) {
-    const path = join(loaded.rootDir, skill.path, ...normalized.split("/"));
+    const resolved = await resolveInsideRoot(
+      loaded.rootDir,
+      join(loaded.rootDir, skill.path, ...normalized.split("/")),
+    );
+    if (resolved === null) {
+      throw new SkillError("not_found", `file is missing on disk: ${name}/${normalized}`);
+    }
     let bytes: Buffer;
     try {
-      bytes = await readFile(path);
+      bytes = await readFile(resolved);
     } catch {
       throw new SkillError("not_found", `file is missing on disk: ${name}/${normalized}`);
     }
