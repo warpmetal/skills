@@ -106,6 +106,9 @@ TARGET_ROOT="${TARGET_ROOT_OVERRIDE:-${MIGRATION_TARGET_ROOT:-${SITE_ROOT}}}"
 [[ -n "${TARGET_HOST}" ]] || fail_with 5 STOPPED "No target host: pass --target or set migration.target_host"
 migration_require_alias "${SOURCE_HOST}" "source"
 migration_require_alias "${TARGET_HOST}" "target"
+for h in "${SOURCE_HOST}" "${TARGET_HOST}"; do
+    HS_ERR="$(ssh_handshake "${h}")" || fail_with 3 STOPPED "Cannot reach ${h}: $(printf '%s' "${HS_ERR}" | tail -2 | tr '\n' ' ')"
+done
 
 journal_init "migrate-site" "${CLIENT}" "${MANIFEST}"
 
@@ -197,8 +200,8 @@ if [[ "${SKIP_FILES}" == "false" ]]; then
     else
         step EXECUTING "Bulk file sync (tar stream over SSH)"
         set +e
-        ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "tar -C '${SITE_ROOT}/shared' -czf - ." 2>/dev/null \
-            | ssh "${SSH_OPTS[@]}" "${TARGET_SSH}" "mkdir -p '${TARGET_ROOT}/shared' && tar --no-same-owner -C '${TARGET_ROOT}/shared' -xzf -" 2>&1
+        ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "tar -C $(remote_quote "${SITE_ROOT}/shared") -czf - ." 2>/dev/null \
+            | ssh "${SSH_OPTS[@]}" "${TARGET_SSH}" "mkdir -p $(remote_quote "${TARGET_ROOT}/shared") && tar --no-same-owner -C $(remote_quote "${TARGET_ROOT}/shared") -xzf -" 2>&1
         FILES_RC=$?
         set -e
         journal_log "EXECUTING" "Bulk tar stream" "ssh source tar -czf - | ssh target tar -xzf -" "${FILES_RC}" 0 "" "EXECUTING" "EXECUTING"
@@ -215,24 +218,30 @@ fi
 if [[ "${SKIP_DATABASE}" == "false" ]]; then
     step EXECUTING "Streaming the database dump"
 
-    DUMP_SCRIPT="set -a; . '${SITE_ROOT}/shared/.env'; set +a
+    DUMP_SCRIPT="set -a; . $(remote_quote "${SITE_ROOT}/shared/.env"); set +a
 export MYSQL_PWD=\"\$DB_PASSWORD\"
 exec mysqldump --single-transaction --routines --triggers --events --quick -u \"\$DB_USERNAME\" \"\$DB_DATABASE\""
 
-    LOAD_SCRIPT="set -a; . '${TARGET_ROOT}/shared/.env'; set +a
+    LOAD_SCRIPT="set -a; . $(remote_quote "${TARGET_ROOT}/shared/.env"); set +a
 export MYSQL_PWD=\"\$DB_PASSWORD\"
 exec mysql -u \"\$DB_USERNAME\" \"\$DB_DATABASE\""
 
     set +e
-    ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "${DUMP_SCRIPT}" 2>/dev/null \
+    DUMP_ERR="$(mktemp)"
+    ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "${DUMP_SCRIPT}" 2>"${DUMP_ERR}" \
         | ssh "${SSH_OPTS[@]}" "${TARGET_SSH}" "${LOAD_SCRIPT}" 2>&1
-    DB_RC=$?
+    pipe_rc=("${PIPESTATUS[@]}")
+    DUMP_RC="${pipe_rc[0]:-0}"
+    LOAD_RC="${pipe_rc[1]:-0}"
+    DUMP_ERR_TEXT="$(tail -5 "${DUMP_ERR}" 2>/dev/null | tr '\n' ' ')"
+    rm -f "${DUMP_ERR}"
+    DB_RC=$(( DUMP_RC != 0 ? DUMP_RC : LOAD_RC ))
     set -e
 
     journal_log "EXECUTING" "Database stream" "mysqldump | mysql" "${DB_RC}" 0 "" "EXECUTING" "EXECUTING"
 
     if [[ "${DB_RC}" -ne 0 ]]; then
-        fail_with 4 FAILED "The database stream failed (exit ${DB_RC}). Confirm that ${TARGET_ROOT}/shared/.env exists on ${TARGET_HOST} and its credentials work."
+        fail_with 4 FAILED "The database stream failed (dump exit ${DUMP_RC}, load exit ${LOAD_RC}).${DUMP_ERR_TEXT:+ Dump error: ${DUMP_ERR_TEXT}} Confirm that ${TARGET_ROOT}/shared/.env exists on ${TARGET_HOST} and its credentials work."
     fi
     step EXECUTING "Database synced"
     migration_state_set "${CLIENT}" "synced_db" "mode=${MODE}"
@@ -245,8 +254,8 @@ ROW_DELTA=""
 if [[ "${SKIP_DATABASE}" == "false" ]]; then
     step VERIFYING "Comparing the users table row count between hosts"
     set +e
-    SOURCE_ROWS="$(ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "set -a; . '${SITE_ROOT}/shared/.env'; set +a; export MYSQL_PWD=\"\$DB_PASSWORD\"; mysql -N -B -u \"\$DB_USERNAME\" \"\$DB_DATABASE\" -e 'SELECT COUNT(*) FROM users;' 2>/dev/null" 2>/dev/null | tail -1 | tr -d '[:space:]')"
-    TARGET_ROWS="$(ssh "${SSH_OPTS[@]}" "${TARGET_SSH}" "set -a; . '${TARGET_ROOT}/shared/.env'; set +a; export MYSQL_PWD=\"\$DB_PASSWORD\"; mysql -N -B -u \"\$DB_USERNAME\" \"\$DB_DATABASE\" -e 'SELECT COUNT(*) FROM users;' 2>/dev/null" 2>/dev/null | tail -1 | tr -d '[:space:]')"
+    SOURCE_ROWS="$(ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "set -a; . $(remote_quote "${SITE_ROOT}/shared/.env"); set +a; export MYSQL_PWD=\"\$DB_PASSWORD\"; mysql -N -B -u \"\$DB_USERNAME\" \"\$DB_DATABASE\" -e 'SELECT COUNT(*) FROM users;' 2>/dev/null" 2>/dev/null | tail -1 | tr -d '[:space:]')"
+    TARGET_ROWS="$(ssh "${SSH_OPTS[@]}" "${TARGET_SSH}" "set -a; . $(remote_quote "${TARGET_ROOT}/shared/.env"); set +a; export MYSQL_PWD=\"\$DB_PASSWORD\"; mysql -N -B -u \"\$DB_USERNAME\" \"\$DB_DATABASE\" -e 'SELECT COUNT(*) FROM users;' 2>/dev/null" 2>/dev/null | tail -1 | tr -d '[:space:]')"
     set -e
 
     if [[ "${SOURCE_ROWS}" =~ ^[0-9]+$ && "${TARGET_ROWS}" =~ ^[0-9]+$ ]]; then

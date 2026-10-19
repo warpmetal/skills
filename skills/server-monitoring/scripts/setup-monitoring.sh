@@ -109,7 +109,7 @@ journal_init "server-monitoring" "${CLIENT}" "${MANIFEST}"
 # violated, so there is nothing to re-check afterwards.
 step OBSERVING "Checking that the monitor is external to the monitored host"
 monitoring_require_external_host "${HOST}" "${MONITORING_HOST}"
-step OBSERVING "Monitor host '${MONITORING_HOST}' is external to '${HOST}'"
+step OBSERVING "Monitor host ${MONITORING_HOST} is external to ${HOST}"
 if [[ -z "${PAGE_CHANNEL}" ]]; then
     result_warn "monitoring.page_channel is not set; page-tier alerts have nowhere to go"
 fi
@@ -292,10 +292,10 @@ if [[ "${SKIP_NETDATA}" == "false" ]]; then
             fi
         fi
         sudo mkdir -p /etc/netdata/health.d
-        sudo tee '${NETDATA_DROPIN}' >/dev/null <<'NETDATA_FILE'
+        sudo tee $(remote_quote "${NETDATA_DROPIN}") >/dev/null <<'NETDATA_FILE'
 ${NETDATA_CONTENT}
 NETDATA_FILE
-        sudo chmod 0644 '${NETDATA_DROPIN}'
+        sudo chmod 0644 $(remote_quote "${NETDATA_DROPIN}")
         sudo systemctl restart netdata 2>/dev/null || true
         systemctl is-active netdata 2>/dev/null || echo unknown
     " 2>&1)"

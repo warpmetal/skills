@@ -226,7 +226,7 @@ REMOTE
 step OBSERVING "Collecting from ${SOURCE_HOST} over a single SSH session"
 set +e
 COLLECT_OUT="$(printf '%s' "${REMOTE_SCRIPT}" | ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" \
-    "SITE_ROOT='${SITE_ROOT}' bash -s" 2>&1)"
+    "SITE_ROOT=$(remote_quote "${SITE_ROOT}") bash -s" 2>&1)"
 COLLECT_RC=$?
 set -e
 

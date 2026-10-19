@@ -69,3 +69,27 @@ ssh_alias_known() {
     resolved="$(ssh_resolve_hostname "${alias}")"
     [[ -n "${resolved}" && "${resolved}" != "${alias}" ]] || ssh -G "${alias}" >/dev/null 2>&1
 }
+
+# remote_quote <value> — emit the value single-quoted, with embedded single
+# quotes escaped, ready to interpolate into a remote command string.
+#
+# The output includes the surrounding quotes, so a call site that wrote
+# `'${SITE_ROOT}/current'` becomes `$(remote_quote "${SITE_ROOT}/current")`.
+# The transform is the canonical close-escape-reopen (`'` -> `'\''`), done with
+# a parameter expansion rather than sed so it is exactly one process and cannot
+# be confused by a backslash in the value.
+remote_quote() {
+    local value="${1-}"
+    printf "'%s'" "${value//\'/\'\\\'\'}"
+}
+
+# ssh_handshake <alias> — connect and run `true`, so a mutating script's
+# preflight discovers a changed host key, an unreachable host, or a rejected
+# key before it touches anything. It reuses SSH_OPTS
+# (StrictHostKeyChecking=yes), so the policy is exactly the one the real command
+# that follows will apply. Read-only diagnostics must not call this: a triage has
+# to keep working while the host is down.
+ssh_handshake() {
+    local alias="$1"
+    ssh "${SSH_OPTS[@]}" "${alias}" true 2>&1
+}

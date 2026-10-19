@@ -157,7 +157,7 @@ if [[ "${UNITS_TOTAL}" =~ ^[0-9]+$ && "${UNITS_TOTAL}" -ge "${QUEUE_WORKERS}" ]]
     record "worker_units_installed" "PASS" "info" "${UNITS_TOTAL} unit(s), desired ${QUEUE_WORKERS}"
 else
     record "worker_units_installed" "FAIL" "high" \
-        "${UNITS_TOTAL:-0} worker unit(s) match '${WORKER_UNIT}', the manifest asks for ${QUEUE_WORKERS}" \
+        "${UNITS_TOTAL:-0} worker unit(s) match ${WORKER_UNIT}, the manifest asks for ${QUEUE_WORKERS}" \
         "bash scripts/setup-workers.sh --client ${CLIENT} --workers ${QUEUE_WORKERS} --confirm \"CONFIRM SETUP\""
 fi
 
@@ -168,7 +168,7 @@ if [[ "${UNITS_ACTIVE}" =~ ^[0-9]+$ && "${UNITS_ACTIVE}" -ge "${QUEUE_WORKERS}" 
 else
     record "workers_running" "FAIL" "high" \
         "only ${UNITS_ACTIVE:-0} of ${QUEUE_WORKERS} worker(s) active" \
-        "systemctl --failed; journalctl -u '${WORKER_UNIT}*' -n 50 --no-pager"
+        "systemctl --failed; journalctl -u $(remote_quote "${WORKER_UNIT}*") -n 50 --no-pager"
 fi
 
 # 3. Stale code

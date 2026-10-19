@@ -106,7 +106,7 @@ else
         done
         for f in /etc/nginx/sites-available/* /etc/nginx/conf.d/*.conf; do
             [ -f \"\$f\" ] || continue
-            if grep -qi '${CLIENT}' \"\$f\" 2>/dev/null; then
+            if grep -qi $(remote_quote "${CLIENT}") \"\$f\" 2>/dev/null; then
                 echo \"\$f\"
                 break
             fi
@@ -120,7 +120,7 @@ if [[ -z "${VHOST_PATH}" ]]; then
 fi
 
 step OBSERVING "Vhost: ${VHOST_PATH}"
-try_rsh "cat '${VHOST_PATH}'"
+try_rsh "cat $(remote_quote "${VHOST_PATH}")"
 CURRENT_CONFIG="${REMOTE_OUT}"
 
 if [[ -z "${CURRENT_CONFIG}" ]]; then
@@ -191,7 +191,7 @@ require_confirm "CONFIRM NGINX CHANGE" "NGINX CHANGE" "Modify ${VHOST_PATH} on $
 # ── Back up, then apply ───────────────────────────────────────────────────────
 BACKUP_PATH="${VHOST_PATH}.agency-$(date -u +%Y%m%d%H%M%S).bak"
 step EXECUTING "Backing up ${VHOST_PATH} to ${BACKUP_PATH}"
-try_rsh "cp -p '${VHOST_PATH}' '${BACKUP_PATH}'"
+try_rsh "cp -p $(remote_quote "${VHOST_PATH}") $(remote_quote "${BACKUP_PATH}")"
 if [[ "${REMOTE_RC}" -ne 0 ]]; then
     fail_with 14 FAILED "Could not back up ${VHOST_PATH}: ${REMOTE_OUT}"
 fi
@@ -202,9 +202,9 @@ for issue in "${ISSUES[@]}"; do
     case "${issue}" in
         cert_pem_used)
             step EXECUTING "Switching ssl_certificate to fullchain.pem"
-            try_rsh "sed -i 's|ssl_certificate[[:space:]]\\+[^;]*cert\\.pem|ssl_certificate /etc/letsencrypt/live/${DOMAIN}/fullchain.pem|g' '${VHOST_PATH}'"
+            try_rsh "sed -i 's|ssl_certificate[[:space:]]\\+[^;]*cert\\.pem|ssl_certificate /etc/letsencrypt/live/${DOMAIN}/fullchain.pem|g' $(remote_quote "${VHOST_PATH}")"
             if [[ "${REMOTE_RC}" -ne 0 ]]; then
-                try_rsh "cp -p '${BACKUP_PATH}' '${VHOST_PATH}'" || true
+                try_rsh "cp -p $(remote_quote "${BACKUP_PATH}") $(remote_quote "${VHOST_PATH}")" || true
                 fail_with 14 FAILED "Could not update ssl_certificate; ${VHOST_PATH} was restored from the backup."
             fi
             APPLIED+=("cert_pem_used")
@@ -232,7 +232,7 @@ NGINX_TEST="${REMOTE_OUT}"
 if printf '%s' "${NGINX_TEST}" | grep -qiE 'test failed|syntax error'; then
     step FAILED "nginx -t failed; restoring ${VHOST_PATH} and NOT reloading"
     printf '%s\n' "${NGINX_TEST}" >&2
-    try_rsh "cp -p '${BACKUP_PATH}' '${VHOST_PATH}'" || true
+    try_rsh "cp -p $(remote_quote "${BACKUP_PATH}") $(remote_quote "${VHOST_PATH}")" || true
 
     result_add_string "action" "fix-nginx"
     result_add_string "domain" "${DOMAIN}"

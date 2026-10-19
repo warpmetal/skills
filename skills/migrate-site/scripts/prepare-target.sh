@@ -99,6 +99,9 @@ TARGET_ROOT="${TARGET_ROOT_OVERRIDE:-${MIGRATION_TARGET_ROOT:-${SITE_ROOT}}}"
 [[ -n "${TARGET_HOST}" ]] || fail_with 5 STOPPED "No target host: pass --target or set migration.target_host"
 migration_require_alias "${SOURCE_HOST}" "source"
 migration_require_alias "${TARGET_HOST}" "target"
+for h in "${SOURCE_HOST}" "${TARGET_HOST}"; do
+    HS_ERR="$(ssh_handshake "${h}")" || fail_with 3 STOPPED "Cannot reach ${h}: $(printf '%s' "${HS_ERR}" | tail -2 | tr '\n' ' ')"
+done
 
 journal_init "migrate-site" "${CLIENT}" "${MANIFEST}"
 
@@ -111,7 +114,7 @@ migration_require_phase "${CLIENT}" "inventory" "The inventory phase" 12
 step OBSERVING "Prepare ${TARGET_HOST} for ${CLIENT} (target root ${TARGET_ROOT})"
 
 set +e
-SOURCE_ENV_RAW="$(ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "cat '${SITE_ROOT}/shared/.env' 2>/dev/null")"
+SOURCE_ENV_RAW="$(ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "cat $(remote_quote "${SITE_ROOT}/shared/.env") 2>/dev/null")"
 SOURCE_ENV_RC=$?
 set -e
 if [[ "${SOURCE_ENV_RC}" -ne 0 ]]; then
@@ -205,10 +208,10 @@ step EXECUTING "Creating the directory tree under ${TARGET_ROOT}"
 set +e
 TREE_OUT="$(ssh "${SSH_OPTS[@]}" "${TARGET_SSH}" "
     set -e
-    mkdir -p '${TARGET_ROOT}/shared/storage' '${TARGET_ROOT}/shared/public/uploads' '${TARGET_ROOT}/releases'
-    chown -R '${DEPLOY_USER}:${DEPLOY_USER}' '${TARGET_ROOT}' 2>/dev/null || true
-    chmod 0755 '${TARGET_ROOT}' '${TARGET_ROOT}/shared'
-    stat -c '%n %U:%G' '${TARGET_ROOT}' '${TARGET_ROOT}/shared' 2>/dev/null || true
+    mkdir -p $(remote_quote "${TARGET_ROOT}/shared/storage") $(remote_quote "${TARGET_ROOT}/shared/public/uploads") $(remote_quote "${TARGET_ROOT}/releases")
+    chown -R $(remote_quote "${DEPLOY_USER}:${DEPLOY_USER}") $(remote_quote "${TARGET_ROOT}") 2>/dev/null || true
+    chmod 0755 $(remote_quote "${TARGET_ROOT}") $(remote_quote "${TARGET_ROOT}/shared")
+    stat -c '%n %U:%G' $(remote_quote "${TARGET_ROOT}") $(remote_quote "${TARGET_ROOT}/shared") 2>/dev/null || true
 ")"
 TREE_RC=$?
 set -e
@@ -253,7 +256,7 @@ fi
 step EXECUTING "Writing the target .env from the source (mode 0600)"
 set +e
 printf '%s\n' "${SOURCE_ENV_RAW}" | ssh "${SSH_OPTS[@]}" "${TARGET_SSH}" \
-    "umask 077 && cat > '${TARGET_ROOT}/shared/.env' && chmod 0600 '${TARGET_ROOT}/shared/.env'" >/dev/null 2>&1
+    "umask 077 && cat > $(remote_quote "${TARGET_ROOT}/shared/.env") && chmod 0600 $(remote_quote "${TARGET_ROOT}/shared/.env")" >/dev/null 2>&1
 ENV_RC=$?
 set -e
 [[ "${ENV_RC}" -eq 0 ]] || result_warn "Could not seed ${TARGET_ROOT}/shared/.env on the target"

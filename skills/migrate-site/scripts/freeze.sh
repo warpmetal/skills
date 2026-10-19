@@ -98,6 +98,7 @@ SOURCE_HOST="${SOURCE_OVERRIDE:-${MIGRATION_SOURCE_HOST:-${HOST}}}"
 TARGET_HOST="${MIGRATION_TARGET_HOST}"
 
 migration_require_alias "${SOURCE_HOST}" "source"
+HS_ERR="$(ssh_handshake "${SOURCE_HOST}")" || fail_with 3 STOPPED "Cannot reach ${SOURCE_HOST}: $(printf '%s' "${HS_ERR}" | tail -2 | tr '\n' ' ')"
 
 journal_init "migrate-site" "${CLIENT}" "${MANIFEST}"
 
@@ -191,9 +192,9 @@ if [[ "${DISABLE_CRON}" == "true" ]]; then
     CRON_OUT="$(ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "
         set -e
         sudo systemctl disable --now cron 2>/dev/null || sudo systemctl disable --now crond 2>/dev/null || true
-        mkdir -p '${SITE_ROOT}/.migration'
+        mkdir -p $(remote_quote "${SITE_ROOT}/.migration")
         for u in root www-data nginx; do
-            crontab -l -u \"\$u\" 2>/dev/null > '${SITE_ROOT}/.migration/cron-\$u.bak' || true
+            crontab -l -u \"\$u\" 2>/dev/null > $(remote_quote "${SITE_ROOT}/.migration")/cron-\$u.bak || true
         done
         sudo systemctl list-timers --no-pager 2>/dev/null | head -5 || true
         systemctl is-active cron 2>/dev/null || systemctl is-active crond 2>/dev/null || echo inactive
@@ -216,7 +217,7 @@ fi
 # ── Verify no active writers ──────────────────────────────────────────────────
 step VERIFYING "Checking the source for active database writers"
 set +e
-WRITERS="$(ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "set -a; . '${SITE_ROOT}/shared/.env' 2>/dev/null; set +a; export MYSQL_PWD=\"\$DB_PASSWORD\"; mysql -N -B -u \"\$DB_USERNAME\" \"\$DB_DATABASE\" -e \"SELECT COUNT(*) FROM information_schema.PROCESSLIST WHERE COMMAND <> 'Sleep' AND USER <> 'system user';\" 2>/dev/null" 2>/dev/null | tail -1 | tr -d '[:space:]')"
+WRITERS="$(ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "set -a; . $(remote_quote "${SITE_ROOT}/shared/.env") 2>/dev/null; set +a; export MYSQL_PWD=\"\$DB_PASSWORD\"; mysql -N -B -u \"\$DB_USERNAME\" \"\$DB_DATABASE\" -e \"SELECT COUNT(*) FROM information_schema.PROCESSLIST WHERE COMMAND <> 'Sleep' AND USER <> 'system user';\" 2>/dev/null" 2>/dev/null | tail -1 | tr -d '[:space:]')"
 set -e
 
 if [[ "${WRITERS}" =~ ^[0-9]+$ ]]; then

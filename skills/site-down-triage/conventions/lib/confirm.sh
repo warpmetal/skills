@@ -110,3 +110,28 @@ require_confirms() {
     emit_result "CONFIRMATION_REQUIRED"
     exit 11
 }
+
+# require_gate_now <string> [context]
+#
+# Re-validates a gate immediately before a mutation, after require_confirm (or
+# require_confirms) already approved it up front. The two checks catch different
+# things: the up-front one asks the operator, this one proves the mutating step
+# is not reachable through a code path that skipped it. It is deliberately
+# lighter than require_confirm - the operator has approved once, so this does not
+# re-print the full help block - but it fails closed with the same exit code.
+require_gate_now() {
+    local expected="$1"
+    local context="${2:-}"
+    if confirm_has "${expected}"; then
+        journal_log "CONFIRMING" "Gate re-verified immediately before mutation: ${expected}" "confirmation flags" 0 0 "" "CONFIRMING" "EXECUTING"
+        return 0
+    fi
+
+    printf 'ERROR: refusing to mutate: gate "%s" was not approved in this run\n' "${expected}" >&2
+    [[ -n "${context}" ]] && printf '%s\n' "${context}" >&2
+    journal_log "CONFIRMING" "Gate missing immediately before mutation: ${expected}" "confirmation flags" 11 0 "" "CONFIRMING" "STOPPED"
+    result_add_string "reason" "approval_required"
+    result_add_string "confirm_string" "${expected}"
+    emit_result "CONFIRMATION_REQUIRED"
+    exit 11
+}

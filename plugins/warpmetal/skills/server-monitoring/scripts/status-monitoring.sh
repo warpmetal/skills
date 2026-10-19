@@ -167,7 +167,7 @@ if [[ -n "${MONITORING_HOST}" ]]; then
     set -e
     if [[ "${EXT_RC}" -eq 0 ]]; then
         EXTERNAL="yes"
-        step OBSERVING "Monitor host '${MONITORING_HOST}' is external to '${HOST}'"
+        step OBSERVING "Monitor host ${MONITORING_HOST} is external to ${HOST}"
     else
         EXTERNAL="no"
         result_error "The monitoring host is the same as the monitored host (${HOST}). A monitor on the box it watches reports nothing when that box dies."

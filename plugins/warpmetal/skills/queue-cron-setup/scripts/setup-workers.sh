@@ -107,8 +107,8 @@ set +e
 RUNTIME_OUT="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" "
     echo \"php_bin=\$(command -v php || true)\"
     echo \"node_bin=\$(command -v node || true)\"
-    echo \"current=\$(readlink -f '${SITE_ROOT}/current' 2>/dev/null || true)\"
-    echo \"worker_user=\$(id -u '${QUEUE_WORKER_USER}' >/dev/null 2>&1 && echo yes || echo no)\"
+    echo \"current=\$(readlink -f $(remote_quote "${SITE_ROOT}/current") 2>/dev/null || true)\"
+    echo \"worker_user=\$(id -u $(remote_quote "${QUEUE_WORKER_USER}") >/dev/null 2>&1 && echo yes || echo no)\"
 " 2>&1)"
 RUNTIME_RC=$?
 set -e
@@ -132,7 +132,7 @@ case "${STACK}" in
         ;;
 esac
 if [[ "${WORKER_USER_EXISTS}" != "yes" ]]; then
-    fail_with 5 STOPPED "User '${QUEUE_WORKER_USER}' does not exist on ${HOST}. Set queue.worker_user in the manifest."
+    fail_with 5 STOPPED "User ${QUEUE_WORKER_USER} does not exist on ${HOST}. Set queue.worker_user in the manifest."
 fi
 [[ -n "${CURRENT_DIR}" ]] || result_warn "${SITE_ROOT}/current does not resolve yet; workers will not start until a release is activated"
 
@@ -207,12 +207,12 @@ WATCHDOG_CONTENT="$(cat <<WATCHDOG
 #!/usr/bin/env bash
 # Managed by queue-cron-setup for ${CLIENT}. Do not edit by hand.
 set -uo pipefail
-SITE_ROOT='${SITE_ROOT}'
-LOG_DIR='${QUEUE_LOG_DIR}'
-MAX_FAILED='${QUEUE_FAILED_JOBS_MAX}'
-MAX_AGE_MINUTES='${QUEUE_OLDEST_JOB_MAX_MINUTES}'
-HEALTHCHECK='${QUEUE_HEALTHCHECK}'
-WEBHOOK='${QUEUE_ALERT_WEBHOOK:-}'
+SITE_ROOT=$(remote_quote "${SITE_ROOT}")
+LOG_DIR=$(remote_quote "${QUEUE_LOG_DIR}")
+MAX_FAILED=$(remote_quote "${QUEUE_FAILED_JOBS_MAX}")
+MAX_AGE_MINUTES=$(remote_quote "${QUEUE_OLDEST_JOB_MAX_MINUTES}")
+HEALTHCHECK=$(remote_quote "${QUEUE_HEALTHCHECK}")
+WEBHOOK=$(remote_quote "${QUEUE_ALERT_WEBHOOK:-}")
 
 log() { printf '%s %s\n' "\$(date -u +%Y-%m-%dT%H:%M:%SZ)" "\$*" >> "\${LOG_DIR}/queue-alerts.log"; }
 notify() {
@@ -286,7 +286,7 @@ require_confirm "CONFIRM SETUP" "SETUP" "Install worker units, the scheduler cro
 # ── Helper for privileged writes over stdin ───────────────────────────────────
 remote_write() {  # <remote_path> <mode> <content>
     printf '%s' "${3}" | ssh "${SSH_OPTS[@]}" "${SSH_DEST}" \
-        "umask 022 && sudo mkdir -p \"\$(dirname '${1}')\" && sudo tee '${1}' >/dev/null && sudo chmod ${2} '${1}' && echo written"
+        "umask 022 && sudo mkdir -p \"\$(dirname $(remote_quote "${1}"))\" && sudo tee $(remote_quote "${1}") >/dev/null && sudo chmod $(remote_quote "${2}") $(remote_quote "${1}") && echo written"
 }
 
 CREATED=()
@@ -311,7 +311,7 @@ ENABLE_OUT="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" "
     sudo systemctl daemon-reload
     i=1
     while [ \$i -le ${WORKERS} ]; do
-        sudo systemctl enable --now '${WORKER_UNIT}@'\$i'.service'
+        sudo systemctl enable --now $(remote_quote "${WORKER_UNIT}@")\$i'.service'
         i=\$((i + 1))
     done
 " 2>&1)"
@@ -329,13 +329,13 @@ set +e
 CRON_OUT="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" "
     set -e
     existing=\$(sudo crontab -l 2>/dev/null || true)
-    filtered=\$(printf '%s\n' \"\$existing\" | grep -vF '${SITE_ROOT}' | grep -vF '${CLIENT}-queue' || true)
+    filtered=\$(printf '%s\n' \"\$existing\" | grep -vF $(remote_quote "${SITE_ROOT}") | grep -vF $(remote_quote "${CLIENT}-queue") || true)
     {
         printf '%s\n' \"\$filtered\" | sed '/^[[:space:]]*\$/d'
-        printf '%s\n' '${CRON_LINE}'
+        printf '%s\n' $(remote_quote "${CRON_LINE}")
     } | sudo crontab -
-    sudo mkdir -p '${QUEUE_LOG_DIR}'
-    sudo chown '${QUEUE_WORKER_USER}:${QUEUE_WORKER_USER}' '${QUEUE_LOG_DIR}'
+    sudo mkdir -p $(remote_quote "${QUEUE_LOG_DIR}")
+    sudo chown $(remote_quote "${QUEUE_WORKER_USER}:${QUEUE_WORKER_USER}") $(remote_quote "${QUEUE_LOG_DIR}")
     sudo crontab -l | grep -c 'schedule:run\\|scheduler.js'
 " 2>&1)"
 CRON_RC=$?
@@ -399,9 +399,9 @@ sleep 5
 
 set +e
 VERIFY_OUT="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" "
-    active=\$(systemctl list-units --type=service --state=active --no-pager 2>/dev/null | grep -c '${WORKER_UNIT}@' || true)
+    active=\$(systemctl list-units --type=service --state=active --no-pager 2>/dev/null | grep -c $(remote_quote "${WORKER_UNIT}@") || true)
     echo \"active=\$active\"
-    systemctl list-units --type=service --no-pager 2>/dev/null | grep '${WORKER_UNIT}@' || true
+    systemctl list-units --type=service --no-pager 2>/dev/null | grep $(remote_quote "${WORKER_UNIT}@") || true
 " 2>&1)"
 set -e
 printf '%s\n' "${VERIFY_OUT}" >&2

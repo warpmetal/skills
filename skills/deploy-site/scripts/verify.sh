@@ -105,7 +105,7 @@ record_check() {
 step VERIFYING "Post-deployment verification for ${CLIENT}"
 
 # 1. current symlink resolves
-try_rsh "readlink -f '${SITE_ROOT}/current' 2>/dev/null || true"
+try_rsh "readlink -f $(remote_quote "${SITE_ROOT}/current") 2>/dev/null || true"
 CURRENT_TARGET="$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')"
 if [[ -n "${CURRENT_TARGET}" && "${CURRENT_TARGET}" == "${RELEASES_DIR}/"* ]]; then
     record_check "current_symlink" "true" "${CURRENT_TARGET}"
@@ -118,7 +118,7 @@ if [[ -z "${RELEASE_ID}" ]]; then
 fi
 
 # 2. Release directory exists
-try_rsh "[ -d '${RELEASES_DIR}/${RELEASE_ID}' ] && echo yes || echo no"
+try_rsh "[ -d $(remote_quote "${RELEASES_DIR}/${RELEASE_ID}") ] && echo yes || echo no"
 if [[ "$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')" == "yes" ]]; then
     record_check "release_directory" "true" "${RELEASE_ID}"
 else
@@ -127,7 +127,7 @@ fi
 
 # 3. Shared path symlinks
 for path in .env storage; do
-    try_rsh "[ -L '${RELEASES_DIR}/${RELEASE_ID}/${path}' ] && echo yes || echo no"
+    try_rsh "[ -L $(remote_quote "${RELEASES_DIR}/${RELEASE_ID}/${path}") ] && echo yes || echo no"
     if [[ "$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')" == "yes" ]]; then
         record_check "shared_${path#.}" "true" "symlinked"
     else
@@ -146,7 +146,7 @@ fi
 # 5. Runtime is active
 case "${STACK}" in
     laravel|wordpress) try_rsh "systemctl is-active php*-fpm 2>/dev/null || echo unknown" ;;
-    node)              try_rsh "systemctl is-active '${APP_UNIT}' 2>/dev/null || echo unknown" ;;
+    node)              try_rsh "systemctl is-active $(remote_quote "${APP_UNIT}") 2>/dev/null || echo unknown" ;;
     static)            try_rsh "systemctl is-active nginx 2>/dev/null || echo unknown" ;;
 esac
 RUNTIME_STATUS="$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')"
@@ -155,14 +155,14 @@ RUNTIME_STATUS="$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')"
     || record_check "runtime" "false" "${RUNTIME_STATUS:-unknown}"
 
 # 6. Deployment lock is free
-try_rsh "flock -n '${LOCKFILE}' true 2>/dev/null && echo free || echo held"
+try_rsh "flock -n $(remote_quote "${LOCKFILE}") true 2>/dev/null && echo free || echo held"
 LOCK_STATE="$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')"
 [[ "${LOCK_STATE}" == "free" ]] \
     && record_check "deploy_lock" "true" "free" \
     || record_check "deploy_lock" "false" "a deployment may still be running"
 
 # 7. Git mirror HEAD
-try_rsh "git --git-dir='${MIRROR_DIR}' rev-parse --short HEAD 2>/dev/null || echo none"
+try_rsh "git --git-dir=$(remote_quote "${MIRROR_DIR}") rev-parse --short HEAD 2>/dev/null || echo none"
 MIRROR_HEAD="$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')"
 record_check "git_mirror" "true" "${MIRROR_HEAD}"
 

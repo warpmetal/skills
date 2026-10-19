@@ -14,6 +14,16 @@
  *
  *   node packages/skills-mcp/scripts/gen-readme-index.mjs
  *   node packages/skills-mcp/scripts/gen-readme-index.mjs --check
+ *
+ * `--check` runs in `check:providers-offline`, i.e. on every pull request. It did
+ * not before, and the block was therefore only compared by the two scheduled drift
+ * jobs: a PR could merge a README whose tool table no longer matched the catalog
+ * that ships beside it.
+ *
+ * Only the block between the markers is generated. The summary totals that appear
+ * in the prose above it (1377 tools, 43 providers, 1331 provider tools) are written
+ * by hand and are *not* checked here; the block is authoritative when they
+ * disagree. Deriving them too is recorded under "Pending" in ROADMAP.md.
  */
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";

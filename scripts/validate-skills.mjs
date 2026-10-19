@@ -35,6 +35,44 @@ const INLINE_ENGINE_CALLS = [
   { name: "inline `warpmetal env secret`", regex: /warpmetal\s+env\s+secret\b/ },
 ];
 
+/**
+ * Variables that flow into a *remote shell command* and never into a local
+ * message or a SQL string. A single quote immediately before `${VAR}` is the
+ * interpolation-injection signature: the value was written on the assumption
+ * that a `'` cannot appear in it, and one does. `conventions/lib/ssh.sh`
+ * provides `remote_quote` for exactly this, so the fixed form is
+ * `$(remote_quote "${VAR}")`.
+ *
+ * The list is deliberately narrower than "every variable": `HOST`, `CLIENT`,
+ * `STACK` and `PHP` also decorate local messages, and the `DB_*`/`SQL_PW`
+ * values sit inside SQL string literals where the single quote is SQL syntax,
+ * not shell. Those are covered by the migration and the `remote_quote`
+ * self-test rather than by this regex, so the gate stays sound.
+ */
+const REMOTE_SHELL_VARS = [
+  "SITE_ROOT", "DOMAIN", "TARGET_ROOT", "TARGET_HOST", "SOURCE_HOST", "TARGET_SSH",
+  "SOURCE_SSH", "REPO_URL", "BACKUP_REPO", "HEALTH_URL", "WORKER_UNIT", "APP_UNIT",
+  "DEPLOY_USER", "QUEUE_WORKER_USER", "QUEUE_LOG_DIR", "QUEUE_HEALTHCHECK",
+  "QUEUE_ALERT_WEBHOOK", "MONITORING_HOST", "MIGRATION_TARGET_ROOT",
+  "MIGRATION_MAIL_RELAY", "RELEASES_DIR", "RELEASE_DIR", "MIRROR_DIR", "SHARED_DIR",
+  "TARGET_DIR", "TARGET_REF", "BRANCH", "ENV_FILE", "PASS_FILE", "CF_CREDS_PATH",
+  "VHOST_PATH", "BACKUP_PATH", "SNAPSHOT", "SCRATCH_DIR",
+];
+
+const BARE_REMOTE_INTERPOLATION = new RegExp(
+  `'\\$\\{(?:${REMOTE_SHELL_VARS.join("|")})\\}`,
+);
+
+/** 1-based line numbers of bare single-quoted interpolations of the list above. */
+export function bareRemoteInterpolations(text) {
+  const lines = [];
+  const split = text.split(/\r?\n/);
+  for (let index = 0; index < split.length; index += 1) {
+    if (BARE_REMOTE_INTERPOLATION.test(split[index])) lines.push(index + 1);
+  }
+  return lines;
+}
+
 async function listFiles(directory, predicate, into = []) {
   let entries;
   try {
@@ -113,6 +151,97 @@ export async function readProviderCatalog(root) {
     };
   }
   return { providers: [...new Set([...literal, ...generated])], capabilities, problem: null };
+}
+
+/**
+ * The gate strings the shared contract declares, read from the authoritative
+ * table in `conventions/approvals.md`.
+ *
+ * That table says "A gate string that is not here does not exist", and until
+ * this check existed nothing enforced it: `CONFIRM NOTIFY` shipped in
+ * `server-monitoring/scripts/test-alert.sh` without ever being listed, so the
+ * sentence was an aspiration. The table being unreadable, or yielding no gates
+ * at all, is a failure rather than an empty allowlist - a refactor that renamed
+ * the heading must not turn this into a check that passes everything.
+ */
+export async function readApprovalGates(root) {
+  const path = join(root, "conventions/approvals.md");
+  const source = await readIfExists(path);
+  if (source === null) {
+    return { gates: [], problem: `missing approval table: ${relative(root, path)}` };
+  }
+  const start = source.indexOf("## Gate Table");
+  const end = start === -1 ? -1 : source.indexOf("\n---", start);
+  if (start === -1 || end === -1) {
+    return { gates: [], problem: "could not locate the gate table in conventions/approvals.md" };
+  }
+  const block = source.slice(start, end);
+  const gates = [...block.matchAll(/`(CONFIRM [^`]+)`/g)].map((match) => normalizeGate(match[1]));
+  if (gates.length === 0) {
+    return { gates: [], problem: "the gate table declares no gate" };
+  }
+  return { gates: [...new Set(gates)], problem: null };
+}
+
+/**
+ * Reduces a gate to the part that must match.
+ *
+ * The same gate is spelled two ways: a script writes the interpolated form
+ * (`CONFIRM RESTORE ${CLIENT}`) and the table writes the placeholder form
+ * (`CONFIRM RESTORE <client>`). Both reduce to `CONFIRM RESTORE`, which is what
+ * identifies the gate; the placeholder is the argument, not the gate.
+ */
+export function normalizeGate(value) {
+  return value
+    .replace(/\$\{[A-Z0-9_]+\}/g, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * Joins backslash continuations so a call whose gate sits on the next line is
+ * still read as one statement, and blanks full-line comments.
+ */
+function logicalLines(text) {
+  const out = [];
+  let current = "";
+  for (const raw of text.split("\n")) {
+    const line = raw.trimStart().startsWith("#") ? "" : raw;
+    current = current === "" ? line : `${current} ${line.trim()}`;
+    if (/\\\s*$/.test(raw)) continue;
+    out.push(current);
+    current = "";
+  }
+  if (current !== "") out.push(current);
+  return out;
+}
+
+/**
+ * Gate literals a skill script *declares*, in either quote style.
+ *
+ * Only the two places a gate is declared count: an argument to one of the gate
+ * helpers, and a `GATES=(...)`/`GATES+=(...)` array, which is what the helpers
+ * are ultimately called with. A gate merely *mentioned* - `verify-workers.sh`
+ * prints the exact re-run command for a missing gate, so those literals appear
+ * in a remediation message - is a reference to a gate that already exists, and
+ * failing on it would push authors to stop quoting the command an operator
+ * needs. Those messages are covered the other way round: the gate they name has
+ * to exist, and the check that reads the declarations proves it does.
+ */
+export function gateLiteralsIn(text) {
+  const declares = /(?:^|[^A-Za-z_])(?:require_confirm|require_confirms|require_gate_now|integration_run_mutating)\b/;
+  const gateArray = /^[A-Za-z_]*GATES[A-Za-z_]*\+?=\(/;
+  const found = new Set();
+  for (const line of logicalLines(text)) {
+    const trimmed = line.trimStart();
+    if (!declares.test(line) && !gateArray.test(trimmed)) continue;
+    for (const match of line.matchAll(/(["'])(CONFIRM [^"'\n]*)\1/g)) {
+      const gate = normalizeGate(match[2]);
+      if (gate.length > 0) found.add(gate);
+    }
+  }
+  return found;
 }
 
 export async function collectSkillPolicyFailures({ root }) {
@@ -247,6 +376,48 @@ export async function collectSkillPolicyFailures({ root }) {
       }
       if (declared.length === 0) {
         failures.push(`skills/${skill}/skill.json integrations is present but empty; remove the field instead`);
+      }
+    }
+  }
+
+  // 5. Every gate a script passes must exist in the authoritative table.
+  //    `conventions/approvals.md` claims to be closed ("a gate string that is
+  //    not here does not exist"), and a gate the operator is asked to type for
+  //    an operation the table does not describe is how a mutating step gets
+  //    reviewed as something else.
+  const approvals = await readApprovalGates(root);
+  if (approvals.problem !== null) {
+    failures.push(`approval gate table is unreadable: ${approvals.problem}`);
+  } else {
+    for (const skill of skillNames) {
+      const scriptDir = join(skillsRoot, skill, "scripts");
+      for (const path of await listFiles(scriptDir, (name) => name.endsWith(".sh"))) {
+        const relativePath = relative(root, path);
+        const text = await readFile(path, "utf8");
+        for (const gate of gateLiteralsIn(text)) {
+          if (!approvals.gates.includes(gate)) {
+            failures.push(
+              `${relativePath} uses the gate "${gate}", which is not in the conventions/approvals.md gate table`,
+            );
+          }
+        }
+      }
+    }
+  }
+
+  // 6. A value that reaches a remote shell command must never be interpolated
+  //    bare inside single quotes: an embedded single quote breaks out of the
+  //    literal and the rest of the value becomes command. `remote_quote` is the
+  //    one sanctioned spelling.
+  for (const skill of skillNames) {
+    const scriptDir = join(skillsRoot, skill, "scripts");
+    for (const path of await listFiles(scriptDir, (name) => name.endsWith(".sh"))) {
+      const relativePath = relative(root, path);
+      const text = await readFile(path, "utf8");
+      for (const line of bareRemoteInterpolations(text)) {
+        failures.push(
+          `${relativePath}:${String(line)} interpolates a value inside single quotes; use $(remote_quote "…")`,
+        );
       }
     }
   }

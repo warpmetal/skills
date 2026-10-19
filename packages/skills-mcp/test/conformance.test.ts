@@ -599,8 +599,8 @@ describe("2. command whitelist", () => {
 
 describe("3. redaction", () => {
   const PEM =
-    "-----BEGIN OPENSSH PRIVATE KEY-----\nZmFrZWtleW1hdGVyaWFs\n-----END OPENSSH PRIVATE KEY-----";
-  const GITHUB_TOKEN = "ghp_0123456789abcdefghijklmnopqrstuvwx";
+    "-----BEGIN OPENSSH PRIVATE KEY-----\nZmFrZWtleW1hdGVyaWFs\n-----END OPENSSH PRIVATE KEY-----"; // secret-scan:allow redaction fixture
+  const GITHUB_TOKEN = "ghp_0123456789abcdefghijklmnopqrstuvwx"; // secret-scan:allow redaction fixture
   const BEARER_URL = "https://checkout.example.com/c/expiring-bearer-capability";
 
   it("redacts secrets by key name, by bearer path and by value shape", () => {

@@ -77,6 +77,22 @@ function validateFrontmatter(label, name, content) {
   if (frontmatterField(block, "description") === undefined) {
     throw new Error(`${label}/${name}/SKILL.md is missing a description`);
   }
+  // Every skill is opt-in. conventions/safety.md forbids letting an agent
+  // auto-invoke a skill, and the rule is enforced here rather than only in
+  // scripts/validate-skills.mjs because this one runs for both registries (the
+  // public one and internal-skills/) and fails the build rather than the
+  // verification pass. There is no escape hatch on purpose: a skill that should
+  // be model-invocable is a policy change with its own review, not a field.
+  //
+  // The match is on the raw line, not through `frontmatterField`, because that
+  // helper strips surrounding quotes: `"true"` is a YAML string, and a host is
+  // not obliged to read a string as consent for the one field that decides
+  // whether an agent may run a mutating skill unasked.
+  if (!/^disable-model-invocation:[ \t]*true[ \t]*\r?$/m.test(block)) {
+    throw new Error(
+      `${label}/${name}/SKILL.md must declare "disable-model-invocation: true" unquoted (see conventions/safety.md)`,
+    );
+  }
 }
 
 /**

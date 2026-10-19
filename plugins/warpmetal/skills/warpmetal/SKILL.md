@@ -1,5 +1,6 @@
 ---
 name: warpmetal
+disable-model-invocation: true
 description: Safely purchase, renew, and manage WarpMetal VPS servers and Agent Runtime sandboxes with the official warpmetal CLI and x402api Agent Wallet. Use when a shell-capable agent needs live VPS discovery, hostname-based SSH identity creation, x402 payment or refill handling, bounded autonomous renewal, human lifecycle notifications, ordering, provisioning, server management, optional runtime installation, sandbox creation, per-agent SSH access, revocation, or deletion.
 ---
 

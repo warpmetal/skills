@@ -321,8 +321,8 @@ if [[ "${T_DISK}" =~ ^[0-9]+$ ]]; then
 fi
 
 # ── 6. Queue depth and database parity ────────────────────────────────────────
-TARGET_TABLES="$(rsys "${TARGET_SSH}" "set -a; . '${SITE_ROOT}/shared/.env' 2>/dev/null; set +a; export MYSQL_PWD=\"\$DB_PASSWORD\"; mysql -N -B -u \"\$DB_USERNAME\" \"\$DB_DATABASE\" -e \"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE();\" 2>/dev/null" | tail -1 | tr -d '[:space:]')"
-SOURCE_TABLES="$(rsys "${SOURCE_SSH}" "set -a; . '${SITE_ROOT}/shared/.env' 2>/dev/null; set +a; export MYSQL_PWD=\"\$DB_PASSWORD\"; mysql -N -B -u \"\$DB_USERNAME\" \"\$DB_DATABASE\" -e \"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE();\" 2>/dev/null" | tail -1 | tr -d '[:space:]')"
+TARGET_TABLES="$(rsys "${TARGET_SSH}" "set -a; . $(remote_quote "${SITE_ROOT}/shared/.env") 2>/dev/null; set +a; export MYSQL_PWD=\"\$DB_PASSWORD\"; mysql -N -B -u \"\$DB_USERNAME\" \"\$DB_DATABASE\" -e \"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE();\" 2>/dev/null" | tail -1 | tr -d '[:space:]')"
+SOURCE_TABLES="$(rsys "${SOURCE_SSH}" "set -a; . $(remote_quote "${SITE_ROOT}/shared/.env") 2>/dev/null; set +a; export MYSQL_PWD=\"\$DB_PASSWORD\"; mysql -N -B -u \"\$DB_USERNAME\" \"\$DB_DATABASE\" -e \"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE();\" 2>/dev/null" | tail -1 | tr -d '[:space:]')"
 
 if [[ "${TARGET_TABLES}" =~ ^[0-9]+$ && "${SOURCE_TABLES}" =~ ^[0-9]+$ ]]; then
     if [[ "${TARGET_TABLES}" -eq "${SOURCE_TABLES}" ]]; then
@@ -334,7 +334,7 @@ else
     record_check "db_table_parity" "db_table_parity" "warn" "could not count tables on both hosts"
 fi
 
-OLDEST_JOB="$(rsys "${TARGET_SSH}" "set -a; . '${SITE_ROOT}/shared/.env' 2>/dev/null; set +a; export MYSQL_PWD=\"\$DB_PASSWORD\"; mysql -N -B -u \"\$DB_USERNAME\" \"\$DB_DATABASE\" -e \"SELECT TIMESTAMPDIFF(MINUTE, MIN(available_at), UNIX_TIMESTAMP()) FROM jobs;\" 2>/dev/null" | tail -1 | tr -d '[:space:]')"
+OLDEST_JOB="$(rsys "${TARGET_SSH}" "set -a; . $(remote_quote "${SITE_ROOT}/shared/.env") 2>/dev/null; set +a; export MYSQL_PWD=\"\$DB_PASSWORD\"; mysql -N -B -u \"\$DB_USERNAME\" \"\$DB_DATABASE\" -e \"SELECT TIMESTAMPDIFF(MINUTE, MIN(available_at), UNIX_TIMESTAMP()) FROM jobs;\" 2>/dev/null" | tail -1 | tr -d '[:space:]')"
 if [[ "${OLDEST_JOB}" =~ ^[0-9]+$ ]]; then
     if [[ "${OLDEST_JOB}" -le 5 ]]; then
         record_check "queue_draining" "queue_draining" "pass" "oldest job is ${OLDEST_JOB} min old"
