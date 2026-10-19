@@ -136,6 +136,82 @@ test("cached manifest is served stale when the catalog is unreachable", async ()
   }
 });
 
+test("noFallback refuses a stale cache when the catalog is unreachable", async () => {
+  const fixture = await makeRegistryFixture();
+  const bundledFixture = await makeRegistryFixture({ registryVersion: "9.9.9" });
+  const cache = await mkdtemp(join(tmpdir(), "skills-mcp-cache-"));
+  const staticServer = await startStaticServer(fixture.dir);
+  const registryUrl = `${staticServer.url}/registry.json`;
+  try {
+    await loadRegistry({ registry: registryUrl, cacheDir: cache });
+    await closeServer(staticServer.server);
+
+    // Both the cache and the bundled snapshot are available, but noFallback must
+    // not serve either of them stale.
+    await assert.rejects(
+      () =>
+        loadRegistry({
+          registry: registryUrl,
+          cacheDir: cache,
+          bundledRoot: bundledFixture.dir,
+          noFallback: true,
+        }),
+      (error: unknown) => (error as { code?: string }).code === "registry_unavailable",
+    );
+  } finally {
+    await closeServer(staticServer.server).catch(() => undefined);
+    await rm(cache, { recursive: true, force: true });
+    await fixture.cleanup();
+    await bundledFixture.cleanup();
+  }
+});
+
+test("noFallback loads a fresh registry when the catalog answers", async () => {
+  const fixture = await makeRegistryFixture();
+  const cache = await mkdtemp(join(tmpdir(), "skills-mcp-cache-"));
+  const staticServer = await startStaticServer(fixture.dir);
+  try {
+    const loaded = await loadRegistry({
+      registry: `${staticServer.url}/registry.json`,
+      cacheDir: cache,
+      noFallback: true,
+    });
+    assert.equal(loaded.source, "remote");
+    assert.equal(loaded.stale, false);
+  } finally {
+    await closeServer(staticServer.server);
+    await rm(cache, { recursive: true, force: true });
+    await fixture.cleanup();
+  }
+});
+
+test("noFallback does not weaken the fail-closed credential path", async () => {
+  const fixture = await makeRegistryFixture();
+  const cache = await mkdtemp(join(tmpdir(), "skills-mcp-cache-"));
+  const staticServer = await startStaticServer(fixture.dir, { requireToken: "s3cret-token" });
+  const registryUrl = `${staticServer.url}/registry.json`;
+  const previousToken = process.env.WARPMETAL_SKILLS_REGISTRY_TOKEN;
+  delete process.env.WARPMETAL_SKILLS_REGISTRY_TOKEN;
+  try {
+    await assert.rejects(
+      () =>
+        loadRegistry({
+          registry: registryUrl,
+          cacheDir: cache,
+          registryToken: "wrong-token",
+          noFallback: true,
+        }),
+      (error: unknown) => (error as { code?: string }).code === "registry_unauthorized",
+    );
+  } finally {
+    if (previousToken === undefined) delete process.env.WARPMETAL_SKILLS_REGISTRY_TOKEN;
+    else process.env.WARPMETAL_SKILLS_REGISTRY_TOKEN = previousToken;
+    await closeServer(staticServer.server);
+    await rm(cache, { recursive: true, force: true });
+    await fixture.cleanup();
+  }
+});
+
 test("a failed cache write does not fail a successful fetch", async () => {
   const fixture = await makeRegistryFixture();
   const cacheRoot = await mkdtemp(join(tmpdir(), "skills-mcp-cachefile-"));

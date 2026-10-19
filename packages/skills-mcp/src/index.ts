@@ -52,6 +52,7 @@ async function main(): Promise<void> {
     tag: options.tag,
     cacheDir: options.cacheDir,
     offline: options.offline,
+    noFallback: options.noFallback,
     registryToken,
   });
 

@@ -6,6 +6,7 @@ export interface CliOptions {
   cacheDir?: string;
   registryTokenFile?: string;
   offline: boolean;
+  noFallback: boolean;
   http: boolean;
   port: number;
   host: string;
@@ -25,11 +26,12 @@ const VALUE_FLAGS = new Set([
   "--host",
 ]);
 
-const BOOLEAN_FLAGS = new Set(["--http", "--offline", "--help", "-h", "--version", "-V"]);
+const BOOLEAN_FLAGS = new Set(["--http", "--offline", "--no-fallback", "--help", "-h", "--version", "-V"]);
 
 export function parseArguments(argv: string[]): CliOptions {
   const options: CliOptions = {
     offline: false,
+    noFallback: false,
     http: false,
     port: numberFromEnv("PORT", DEFAULT_PORT),
     host: process.env.WARPMETAL_SKILLS_HOST ?? DEFAULT_HOST,
@@ -80,6 +82,9 @@ export function parseArguments(argv: string[]): CliOptions {
         case "--offline":
           options.offline = true;
           break;
+        case "--no-fallback":
+          options.noFallback = true;
+          break;
         case "--help":
         case "-h":
           options.help = true;
@@ -102,6 +107,12 @@ export function parseArguments(argv: string[]): CliOptions {
   }
   if (options.offline && (options.registry || options.tag)) {
     throw new SkillError("invalid_request", "--offline cannot be combined with --registry or --tag");
+  }
+  if (options.offline && options.noFallback) {
+    throw new SkillError(
+      "invalid_request",
+      "--no-fallback cannot be combined with --offline (offline serves a stale cache by definition)",
+    );
   }
 
   return options;
@@ -132,6 +143,7 @@ Options:
   --registry <url|path>  Load registry.json from a URL or local directory
   --tag <version>        Pin a registry tag from the catalog host (default: latest)
   --offline              Never fetch; use the cached or bundled registry
+  --no-fallback          Fail instead of serving a stale cached/bundled registry
   --http                 Serve Streamable HTTP instead of stdio
   --host <address>       HTTP bind address (default ${DEFAULT_HOST})
   --port <number>        HTTP port (default ${DEFAULT_PORT})

@@ -54,6 +54,14 @@ export interface LoadOptions {
   cacheDir?: string;
   offline?: boolean;
   /**
+   * Fail instead of serving a stale registry. When true, a remote registry that
+   * cannot be fetched never falls back to the cache or the bundled snapshot:
+   * `loadRegistry` throws `registry_unavailable` rather than returning a
+   * `LoadedRegistry` with `stale: true`. Local loads (`--registry <path>`) have
+   * no fallback, so the flag has no effect on them.
+   */
+  noFallback?: boolean;
+  /**
    * Root directory of the bundled snapshot served when both the network and
    * the cache are unavailable. Defaults to the packaged `snapshot/`; tests
    * inject their own fixture so the fallback stays hermetic.
@@ -266,6 +274,7 @@ async function loadRemoteRegistry(
   offline: boolean,
   token: string | undefined,
   fallback: () => Promise<LoadedRegistry>,
+  noFallback: boolean,
 ): Promise<LoadedRegistry> {
   const key = remoteCacheKey(url, token);
   const cacheFile = join(cacheDir, `${key}.json`);
@@ -332,12 +341,30 @@ async function loadRemoteRegistry(
       };
     } catch (error) {
       if (error instanceof SkillError && error.code === "registry_unauthorized") throw error;
+      // `--no-fallback` turns "serve stale" into a hard failure. A rejected
+      // credential (above) already fails closed, so this only covers the
+      // reachability/parse failures that would otherwise degrade silently.
+      if (noFallback) {
+        throw new SkillError(
+          "registry_unavailable",
+          `${url}: unreachable and --no-fallback forbids a stale registry: ${(error as Error).message}`,
+        );
+      }
       if (cachedText !== undefined) return fromCache(true, `offline fallback: ${(error as Error).message}`);
       const bundled = await fallback();
       return { ...bundled, stale: true };
     }
   }
 
+  // Offline mode is "serve the cache or bundled snapshot" by definition, so it is
+  // the one place the CLI must reject the `--no-fallback` combination before it
+  // gets here. Defensively, if both are set at the API level, fail closed.
+  if (noFallback) {
+    throw new SkillError(
+      "registry_unavailable",
+      `${url}: offline and --no-fallback forbids a stale registry`,
+    );
+  }
   if (cachedText !== undefined) return fromCache(true, "offline mode");
   const bundled = await fallback();
   return { ...bundled, stale: true };
@@ -353,7 +380,7 @@ export async function loadRegistry(options: LoadOptions = {}): Promise<LoadedReg
 
   if (registry) {
     if (/^https?:\/\//i.test(registry)) {
-      return loadRemoteRegistry(registry, cacheDir, options.offline === true, token, bundled);
+      return loadRemoteRegistry(registry, cacheDir, options.offline === true, token, bundled, options.noFallback === true);
     }
     return loadLocalRegistry(resolve(registry), "local");
   }
@@ -367,6 +394,7 @@ export async function loadRegistry(options: LoadOptions = {}): Promise<LoadedReg
     options.offline === true,
     token,
     bundled,
+    options.noFallback === true,
   );
 }
 
