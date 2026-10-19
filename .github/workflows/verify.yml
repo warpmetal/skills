@@ -13,9 +13,9 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
           cache: npm
@@ -48,6 +48,12 @@ jobs:
       - name: Validate skill conventions and integration policies
         run: npm run validate:skills
 
+      # The registry tooling generates every channel and is what `git diff
+      # --exit-code` below leans on, so its own rules get a suite rather than
+      # only being exercised through the artifacts they produce.
+      - name: Test the registry tooling
+        run: npm run test:scripts
+
       - name: Test MCP server
         run: npm test
 
@@ -67,6 +73,12 @@ jobs:
         run: |
           npm --prefix packages/warpmetal-cli run check:plane-offline
           npm --prefix packages/skills-mcp run check:providers-offline
+
+      # A workflow that references an action by tag runs whatever the tag points
+      # at on the day it runs; a full commit SHA is immutable. This fails any
+      # `uses: owner/repo@tag` so a future `@v4` cannot slip back in.
+      - name: Verify GitHub Actions are pinned to commit SHAs
+        run: npm run check:action-pins
 
       - name: Integration library self-test
         run: bash tools/check-all.sh
