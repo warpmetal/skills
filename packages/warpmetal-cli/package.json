@@ -30,6 +30,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --import tsx --test test/*.test.ts",
     "probe": "node --import tsx scripts/probe-mcp-routes.mjs",
+    "probe:record": "node --import tsx scripts/probe-mcp-routes.mjs --record test/fixtures/probe-verdicts.json",
     "probe:plane": "node --import tsx scripts/plane/probe.mjs",
     "gen:cloudflare-inventory": "node --import tsx scripts/gen-cloudflare-inventory.mjs",
     "gen:cloudflare-routes": "node --import tsx scripts/gen-cloudflare-routes.mjs",

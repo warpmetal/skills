@@ -1,0 +1,77 @@
+# Drift check for the provider tool routes, from the credential-free probe.
+#
+# The offline half (`check:experimental` in `check:providers-offline`, run on
+# every pull request by `verify.yml`) proves the derived `experimental` marker is
+# in sync with the committed verdict record. This job is the live half: it runs
+# `npm run probe` against every provider with a sentinel token, records the
+# per-tool verdict, and re-derives the marker. A route the provider does not
+# serve answers 404/405; a real route answers 401/403, 400/422 or 2xx.
+#
+# Scheduled, never on a pull request, for the same reason the `live` job in
+# `mcp.yml` is: the answer is the providers' own live truth, it moves on their
+# schedule, and a provider outage must not be able to block a merge.
+#
+# The host, method and auth header are already pinned offline by
+# `provider-contract.test.ts`; the path is the one thing only a live request can
+# prove. The probe cannot tell a provider deprecating a route from our builder
+# regressing one, so a changed verdict is reported for review rather than turned
+# into a hard failure: adopting the new surface is a wave, exactly as in
+# `spec-drift.yml`.
+name: probe-drift
+
+on:
+  schedule:
+    # 07:00 UTC daily, after the Cloudflare and Plane drift checks.
+    - cron: "0 7 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    name: Provider routes against the live providers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: packages/warpmetal-cli/package-lock.json
+
+      - name: Install integration engine
+        run: npm ci --prefix packages/warpmetal-cli
+
+      # `probe:record` sends every request with a sentinel token and writes the
+      # stable, sorted verdict record the marker generator reads. It has no side
+      # effects and needs no credential. A crash here is a defect, so it is a
+      # normal (fail-on-error) step rather than a reportable drift.
+      - name: Record the live verdicts
+        run: npm --prefix packages/warpmetal-cli run probe:record
+
+      - name: Re-derive the experimental marker
+        run: node packages/skills-mcp/scripts/gen-experimental.mjs
+
+      # The whole point of the schedule is that this step can tell a stale record
+      # from a live change. A moved verdict is reported for review and committed
+      # as a wave; it never fails the job, because the probe cannot distinguish a
+      # provider deprecation from a builder regression.
+      - name: Report the drift
+        run: |
+          if git diff --quiet; then
+            echo "The probe verdicts and the derived experimental marker match the committed record." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git --no-pager diff --stat
+          {
+            echo "### The live provider route surface moved"
+            echo
+            echo "The credential-free probe recorded different per-tool verdicts, so the derived \`experimental\` marker changed. Review the diff and commit it as a wave."
+            echo
+            echo '```'
+            git --no-pager diff --stat
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "::warning::The probe verdicts changed; review the derived experimental marker and commit it as a wave."
