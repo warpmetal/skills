@@ -79,8 +79,13 @@ It must not appear in:
 - `--json` output. Every document is passed through a redactor that strips both
   keys that look like credentials and any registered secret value.
 - plans, status, `doctor` or the journal. Those report names and outcomes only.
-- error messages. Provider failures are projected onto a prepared `errorMap`,
-  never reproduced from the response body.
+- error messages. A provider failure is reported as a bounded sentence built from the
+  HTTP status and the provider's own name — it is not reproduced from the response
+  body. The one exception is the remote vault, which includes a short, bounded
+  fragment of the server's `error` field, because that is the only way an operator
+  can tell a rejected secret name from a rejected session. The `errorMap` a provider
+  publishes in `integration list --json` is metadata for callers; it is not the
+  mechanism that builds these messages.
 
 `env secret NAME --stdout --json` is a usage error, not a convenience: a JSON
 serializer is exactly how a secret ends up in a log aggregator.
@@ -142,6 +147,7 @@ npm install
 npm test        # tsc + node:test, no network
 npm run typecheck
 npm run probe   # opt-in, needs network: sentinel-token route probe
+npm run probe:record   # probe and write test/fixtures/probe-verdicts.json (the committed record)
 ```
 
 The suite is network-free by construction: the fetch function, the process
@@ -158,6 +164,12 @@ website/SPA hosts as `weakSignal`, so they are not mistaken for a missing route.
 `test/provider-contract.test.ts` (against `test/fixtures/provider-contracts.json`)
 pins the same requests to their documented host, method and auth offline, so the
 vendor contract fails a red build without the network.
+
+`npm run probe:record` writes the stable, sorted per-tool verdicts to the
+committed `test/fixtures/probe-verdicts.json` fixture. That record is what
+`packages/skills-mcp/scripts/gen-experimental.mjs` reads to derive the
+`experimental` marker, and the scheduled `probe-drift.yml` workflow refreshes it
+daily and reports when the live route surface moves.
 
 ### Verifying the Grafana stack tools without a credential
 

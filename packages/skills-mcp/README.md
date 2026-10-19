@@ -4,8 +4,8 @@ Unified MCP (Model Context Protocol) server for WarpMetal. One package, one host
 
 - **Content** — discovers and reads WarpMetal Agent Skills from the registry manifest
   (`registry.json`) with checksum verification and the `skill://` URI semantics the hosts already use.
-- **CLI** — exposes the `warpmetal` command-line tool as 43 typed tools: 16 read-only, 3 task tools,
-  and 12 plan/apply pairs, six of which guard the verbs that cannot be taken back.
+- **CLI** — exposes the `warpmetal` command-line tool as 43 typed tools: 15 read-only, 4 task tools,
+  and 12 plan/apply pairs, five of which guard the verbs that cannot be taken back.
 - **Providers (43 providers, one catalog file each)** — 1331 WarpMetal-backed provider tools (GitHub / GitLab / Notion / Stripe / Jira / Confluence / Linear / Supabase / Cloudflare / Vercel / Figma / Shopify / HubSpot / Asana / Dropbox / Discord / Airtable / Intercom / Snowflake / Sentry / Datadog / PagerDuty / Exa / Perplexity / Resend / Calendly / ClickUp / PostHog / Mixpanel / CircleCI / Mailchimp / X / Square / OpenAI / Gemini / Anthropic Admin / Grafana Cloud / Grafana Stack / Monday.com / OneSignal / Amplitude / Zendesk / Plane)
   registered only on the `full` (stdio) profile; calls run `warpmetal integration <provider> <verb>` with secrets from the WarpMetal vault. No DigitalOcean dependency.
 
@@ -28,7 +28,7 @@ wave it is 1377 tools, and
 there is no per-provider or per-wave selector on purpose. A third axis would turn a security
 boundary into a configuration surface with its own failure modes, and two clients could then
 disagree about what exists. The names are stable and grouped by provider, so a client that finds
-1,317 tools in `tools/list` is expected to filter them itself.
+1377 tools in `tools/list` is expected to filter them itself.
 
 ## Requirements
 
@@ -117,12 +117,6 @@ Cloudflare's record is the reviewed one:
 operation of the API - the filter that dropped it or the tool that shipped for it - grouped by
 the wave it was reviewed in.
 
-Plane publishes no OpenAPI document, so its two records are the pin and the map:
-[`docs/plane-mcp-inventory.md`](../../docs/plane-mcp-inventory.md) says what the pinned release of
-Plane's own MCP server declares and why each action we left out was left out, and
-[`docs/plane-endpoint-map.md`](../../docs/plane-endpoint-map.md) gives every shipped tool its
-request and the vendor call site that request was read from.
-
 | Wave | Tools | Status | Scope |
 | ---- | ----- | ------ | ----- |
 | `w1` | 45 | reviewed | Zonas, DNS, ajustes de zona, cache y tokens de identidad |
@@ -132,6 +126,12 @@ request and the vendor call site that request was read from.
 | `w5` | 316 | reviewed | Radar y el resto de colecciones de cuenta con valor operativo |
 
 <!-- provider-index:end -->
+
+Plane publishes no OpenAPI document, so its two records are the pin and the map:
+[`docs/plane-mcp-inventory.md`](../../docs/plane-mcp-inventory.md) says what the pinned release of
+Plane's own MCP server declares and why each action we left out was left out, and
+[`docs/plane-endpoint-map.md`](../../docs/plane-endpoint-map.md) gives every shipped tool its
+request and the vendor call site that request was read from.
 
 Setup:
 
@@ -254,7 +254,8 @@ without a token:
    401/403 (auth required), 400/422 (reachable) or 2xx (public). It also sends a control request to a
    bogus path on each host, so auth-first hosts and website/SPA hosts that resolve a slug before
    authenticating are marked `weakSignal` rather than reported as a missing route. The same logic
-   runs as `MCP_PROBE=1 npm test`.
+   runs as `MCP_PROBE=1 npm test`, and `npm run probe:record` writes the per-tool verdicts to the
+   committed `probe-verdicts.json` fixture that the scheduled `probe-drift.yml` workflow refreshes.
 
 ### Response shape
 
@@ -267,7 +268,15 @@ and never `{ "0": ..., "1": ... }`.
 ### Experimental tools
 
 Tools whose request shape could not be confirmed against the live API are registered with an
-`[experimental: request shape not verified against the live API]` prefix on their description:
+`[experimental: request shape not verified against the live API]` prefix on their description.
+
+The set is derived, not hand-edited: `scripts/gen-experimental.mjs` marks as experimental every tool
+the credential-free route probe proved does not exist (`invalid-route` and not `weakSignal`), plus a
+small reasoned override list for routes that exist but whose credential mode this server does not
+support (`scripts/experimental-overrides.json`). The probe verdicts are recorded into
+`packages/warpmetal-cli/test/fixtures/probe-verdicts.json` by the scheduled `probe-drift.yml`
+workflow, and `check:experimental` (part of `check:providers-offline`) fails a pull request that
+edits the derived list by hand.
 
 - `x_create_posts` — X rejects app-only bearer tokens on the write endpoint; publishing needs an
   OAuth 2.0 token with user context, which this server does not collect yet.
