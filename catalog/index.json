@@ -2,7 +2,7 @@
   "skills": [
     {
       "name": "backup-restore",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "files": [
         "backup-restore.md",
         "conventions/approvals.md",
@@ -36,7 +36,7 @@
     },
     {
       "name": "deploy-site",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "files": [
         "conventions/approvals.md",
         "conventions/client-manifest.md",
@@ -72,7 +72,7 @@
     },
     {
       "name": "migrate-site",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "files": [
         "conventions/approvals.md",
         "conventions/client-manifest.md",
@@ -110,7 +110,7 @@
     },
     {
       "name": "queue-cron-setup",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "files": [
         "conventions/approvals.md",
         "conventions/client-manifest.md",
@@ -143,7 +143,7 @@
     },
     {
       "name": "server-monitoring",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "files": [
         "conventions/approvals.md",
         "conventions/client-manifest.md",
@@ -175,7 +175,7 @@
     },
     {
       "name": "site-down-triage",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "files": [
         "conventions/approvals.md",
         "conventions/client-manifest.md",
@@ -207,7 +207,7 @@
     },
     {
       "name": "ssl-dns-fix",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "files": [
         "conventions/approvals.md",
         "conventions/client-manifest.md",
@@ -239,7 +239,7 @@
     },
     {
       "name": "warpmetal",
-      "version": "0.8.12",
+      "version": "0.8.13",
       "files": [
         "agents/openai.yaml",
         "references/cli-reference.md",

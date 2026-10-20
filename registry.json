@@ -4,7 +4,7 @@
   "skills": [
     {
       "name": "backup-restore",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Set up restic-based backups for a client site and verify they actually work via a restore drill. Covers database dumps, user uploads, configs, and cron/systemd units. Enforces key escrow, offsite storage, and a dead-man's switch before declaring setup complete. Use when setting up backups, testing restores, or recovering from data loss.",
       "path": "skills/backup-restore",
       "roles": [
@@ -28,7 +28,7 @@
       "files": [
         {
           "path": "conventions/approvals.md",
-          "sha256": "b21e81fec0d861d92b98b028b24d3c337ed14e60d32fd263a97d815049cb0d25"
+          "sha256": "bf7a25e07342469484c54e483702386e3fc8320c609a2029718cdda06cb001b3"
         },
         {
           "path": "conventions/client-manifest.md",
@@ -40,11 +40,11 @@
         },
         {
           "path": "conventions/lib/bootstrap.sh",
-          "sha256": "3a09ab128030fb8ff5e440a4f1df82b8d8d5c1cd70c976670bae7590714998ca"
+          "sha256": "d9771b225cbef2e7934ac79b0b2ed10e3d01d1ad2d0cd43b85e6a3c5791a61d1"
         },
         {
           "path": "conventions/lib/confirm.sh",
-          "sha256": "08a5db55452d90aa41b28b1c39444fce0679a4b864b33f2896f0c820997d34e1"
+          "sha256": "031189077c6bc918338e32dd580b71903038a60d6094dac17fb5e730a656ad53"
         },
         {
           "path": "conventions/lib/integration.sh",
@@ -52,11 +52,11 @@
         },
         {
           "path": "conventions/lib/journal.sh",
-          "sha256": "2a870e115763b6aec7051fd82c83c62c62561b2b9e1bfd8ff4e23ea02d7352d4"
+          "sha256": "ba13156c7d6e4bfd06ae0a8f17de437e9ae6a5762e8eb9424dcffac1f5b48dce"
         },
         {
           "path": "conventions/lib/manifest.sh",
-          "sha256": "9eafefd24d1c9656be37220b7b330b969bbe44d83704c8e44303f43275b92857"
+          "sha256": "23d8ef10a6ecb3a56dd2b15d106d5bad03c4191ce67789911f5c6792f04ebe0b"
         },
         {
           "path": "conventions/lib/migration.sh",
@@ -64,7 +64,7 @@
         },
         {
           "path": "conventions/lib/monitoring.sh",
-          "sha256": "8f041fb89d488bed8e4e9ceb5f9ca5839fc5a61c361fcbcffae71d6a61f15ecb"
+          "sha256": "4b10017b51cca2e57a5eaf11bf5dc37d4cabbd715370a4091497dd865cc324d8"
         },
         {
           "path": "conventions/lib/output.sh",
@@ -72,11 +72,11 @@
         },
         {
           "path": "conventions/lib/queue.sh",
-          "sha256": "1f8cba20f5088d4a68c8da65b8dbf96d155f69a4c107d3680ec47e422bcae5e0"
+          "sha256": "a0e2c4c97d115fdb07fc5d1e794d7fc017588b911ef5ba0f754cc7fc1f374014"
         },
         {
           "path": "conventions/lib/ssh.sh",
-          "sha256": "43a5fa8c812dbd3b5f300c488b7df52396b15bf0d72249d524d3a85125caa1bf"
+          "sha256": "1d9f9f402d6c0280dae8d10d6bb1e6e0b8c425f037a6d66f3fee7da60ff396e2"
         },
         {
           "path": "conventions/logging.md",
@@ -120,19 +120,19 @@
         },
         {
           "path": "scripts/drill-restore.sh",
-          "sha256": "af876b3ac72d58e5bceb2f70a7506d95c5dcc4286a07b18aeca9d4fb26e09a6f"
+          "sha256": "63bc6ac5a38159fa6355feb20cdc1aee085e7718f40bc326009acf548262a71e"
         },
         {
           "path": "scripts/restore.sh",
-          "sha256": "a66825976b7fb851791dba9f9e5b016cf1744269685cb9b9fa07dd63ae76797c"
+          "sha256": "0a01ded85602fe2a7a17b6482d343f0ef4a4d4bddef81115b3ae320a9918b931"
         },
         {
           "path": "scripts/run-backup.sh",
-          "sha256": "43e37bbf551b7c9ffeff9daeb2be1390dfe223271e07e9d1ecae02545c1053e8"
+          "sha256": "094806e691940131fa1f8b7b2dbb84b14002f507148100bec39654944765bcde"
         },
         {
           "path": "scripts/setup-backup.sh",
-          "sha256": "6ea946ae0adde9b064e4941cf2b67d11c3529f098a1a071dcf3156386bc46bc3"
+          "sha256": "3761fbd6dae4604215e3eba55313ff9b9a321e021afb54efeeeeb1f1888973f2"
         },
         {
           "path": "SKILL.md",
@@ -142,7 +142,7 @@
     },
     {
       "name": "deploy-site",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Deploy a client site to production via zero-downtime Git-based workflow. Loads the client manifest, validates configuration, creates an isolated release, runs migrations, and activates atomically with automatic rollback on health failure. Use when deploying code to production, rolling back a broken release, or pushing a branch to a client's server.",
       "path": "skills/deploy-site",
       "roles": [
@@ -170,7 +170,7 @@
       "files": [
         {
           "path": "conventions/approvals.md",
-          "sha256": "b21e81fec0d861d92b98b028b24d3c337ed14e60d32fd263a97d815049cb0d25"
+          "sha256": "bf7a25e07342469484c54e483702386e3fc8320c609a2029718cdda06cb001b3"
         },
         {
           "path": "conventions/client-manifest.md",
@@ -182,11 +182,11 @@
         },
         {
           "path": "conventions/lib/bootstrap.sh",
-          "sha256": "3a09ab128030fb8ff5e440a4f1df82b8d8d5c1cd70c976670bae7590714998ca"
+          "sha256": "d9771b225cbef2e7934ac79b0b2ed10e3d01d1ad2d0cd43b85e6a3c5791a61d1"
         },
         {
           "path": "conventions/lib/confirm.sh",
-          "sha256": "08a5db55452d90aa41b28b1c39444fce0679a4b864b33f2896f0c820997d34e1"
+          "sha256": "031189077c6bc918338e32dd580b71903038a60d6094dac17fb5e730a656ad53"
         },
         {
           "path": "conventions/lib/integration.sh",
@@ -194,11 +194,11 @@
         },
         {
           "path": "conventions/lib/journal.sh",
-          "sha256": "2a870e115763b6aec7051fd82c83c62c62561b2b9e1bfd8ff4e23ea02d7352d4"
+          "sha256": "ba13156c7d6e4bfd06ae0a8f17de437e9ae6a5762e8eb9424dcffac1f5b48dce"
         },
         {
           "path": "conventions/lib/manifest.sh",
-          "sha256": "9eafefd24d1c9656be37220b7b330b969bbe44d83704c8e44303f43275b92857"
+          "sha256": "23d8ef10a6ecb3a56dd2b15d106d5bad03c4191ce67789911f5c6792f04ebe0b"
         },
         {
           "path": "conventions/lib/migration.sh",
@@ -206,7 +206,7 @@
         },
         {
           "path": "conventions/lib/monitoring.sh",
-          "sha256": "8f041fb89d488bed8e4e9ceb5f9ca5839fc5a61c361fcbcffae71d6a61f15ecb"
+          "sha256": "4b10017b51cca2e57a5eaf11bf5dc37d4cabbd715370a4091497dd865cc324d8"
         },
         {
           "path": "conventions/lib/output.sh",
@@ -214,11 +214,11 @@
         },
         {
           "path": "conventions/lib/queue.sh",
-          "sha256": "1f8cba20f5088d4a68c8da65b8dbf96d155f69a4c107d3680ec47e422bcae5e0"
+          "sha256": "a0e2c4c97d115fdb07fc5d1e794d7fc017588b911ef5ba0f754cc7fc1f374014"
         },
         {
           "path": "conventions/lib/ssh.sh",
-          "sha256": "43a5fa8c812dbd3b5f300c488b7df52396b15bf0d72249d524d3a85125caa1bf"
+          "sha256": "1d9f9f402d6c0280dae8d10d6bb1e6e0b8c425f037a6d66f3fee7da60ff396e2"
         },
         {
           "path": "conventions/logging.md",
@@ -266,7 +266,7 @@
         },
         {
           "path": "scripts/deploy.sh",
-          "sha256": "79ea4bffef7cf2f390eb0d59b59a7c205a243d910e870169ad26bd21a67b3a1a"
+          "sha256": "45c74b117d6ca66196d8da687f5e963f7742c0fc31a7f042493084a693ee5b9e"
         },
         {
           "path": "scripts/health-check.sh",
@@ -274,15 +274,15 @@
         },
         {
           "path": "scripts/inspect.sh",
-          "sha256": "c6ad430756f6cbd2b189f490a9c210e3a50d0e6420e043df54f403572952d9a5"
+          "sha256": "b9015c0e86c23613193343401ac3083ac1f1df4e151b9882e96f591524c9f74e"
         },
         {
           "path": "scripts/rollback.sh",
-          "sha256": "3c8edde08abea9011d8e8b38bd524392213a104f0555b0c8c85f38647bc5a072"
+          "sha256": "42f7b75682f0dc57cd7a356530291b3d11d9a41f3de810e602de6c89b8e9dbec"
         },
         {
           "path": "scripts/verify.sh",
-          "sha256": "7b3c5332b69da5c956360d857a3ff268d1a94979b9f6685d4ecd8709bdd964a3"
+          "sha256": "51409ed19ae3f6f24d457650a127862530b788b771a0af16165943dc5dc364a8"
         },
         {
           "path": "SKILL.md",
@@ -292,7 +292,7 @@
     },
     {
       "name": "migrate-site",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Move a client site between hosts in eight controlled phases: inventory, prepare target, lower TTL, first sync, freeze, cutover, verify, and decommission. Handles PHP/Laravel, WordPress, Node, and static sites. Use when moving a client off cPanel, consolidating sites onto a new server, or migrating between hosting providers.",
       "path": "skills/migrate-site",
       "roles": [
@@ -320,7 +320,7 @@
       "files": [
         {
           "path": "conventions/approvals.md",
-          "sha256": "b21e81fec0d861d92b98b028b24d3c337ed14e60d32fd263a97d815049cb0d25"
+          "sha256": "bf7a25e07342469484c54e483702386e3fc8320c609a2029718cdda06cb001b3"
         },
         {
           "path": "conventions/client-manifest.md",
@@ -332,11 +332,11 @@
         },
         {
           "path": "conventions/lib/bootstrap.sh",
-          "sha256": "3a09ab128030fb8ff5e440a4f1df82b8d8d5c1cd70c976670bae7590714998ca"
+          "sha256": "d9771b225cbef2e7934ac79b0b2ed10e3d01d1ad2d0cd43b85e6a3c5791a61d1"
         },
         {
           "path": "conventions/lib/confirm.sh",
-          "sha256": "08a5db55452d90aa41b28b1c39444fce0679a4b864b33f2896f0c820997d34e1"
+          "sha256": "031189077c6bc918338e32dd580b71903038a60d6094dac17fb5e730a656ad53"
         },
         {
           "path": "conventions/lib/integration.sh",
@@ -344,11 +344,11 @@
         },
         {
           "path": "conventions/lib/journal.sh",
-          "sha256": "2a870e115763b6aec7051fd82c83c62c62561b2b9e1bfd8ff4e23ea02d7352d4"
+          "sha256": "ba13156c7d6e4bfd06ae0a8f17de437e9ae6a5762e8eb9424dcffac1f5b48dce"
         },
         {
           "path": "conventions/lib/manifest.sh",
-          "sha256": "9eafefd24d1c9656be37220b7b330b969bbe44d83704c8e44303f43275b92857"
+          "sha256": "23d8ef10a6ecb3a56dd2b15d106d5bad03c4191ce67789911f5c6792f04ebe0b"
         },
         {
           "path": "conventions/lib/migration.sh",
@@ -356,7 +356,7 @@
         },
         {
           "path": "conventions/lib/monitoring.sh",
-          "sha256": "8f041fb89d488bed8e4e9ceb5f9ca5839fc5a61c361fcbcffae71d6a61f15ecb"
+          "sha256": "4b10017b51cca2e57a5eaf11bf5dc37d4cabbd715370a4091497dd865cc324d8"
         },
         {
           "path": "conventions/lib/output.sh",
@@ -364,11 +364,11 @@
         },
         {
           "path": "conventions/lib/queue.sh",
-          "sha256": "1f8cba20f5088d4a68c8da65b8dbf96d155f69a4c107d3680ec47e422bcae5e0"
+          "sha256": "a0e2c4c97d115fdb07fc5d1e794d7fc017588b911ef5ba0f754cc7fc1f374014"
         },
         {
           "path": "conventions/lib/ssh.sh",
-          "sha256": "43a5fa8c812dbd3b5f300c488b7df52396b15bf0d72249d524d3a85125caa1bf"
+          "sha256": "1d9f9f402d6c0280dae8d10d6bb1e6e0b8c425f037a6d66f3fee7da60ff396e2"
         },
         {
           "path": "conventions/logging.md",
@@ -416,31 +416,31 @@
         },
         {
           "path": "scripts/cutover.sh",
-          "sha256": "a0975af9224d7e637c4f698f6c8bf3159b3199d592475b3cf9fe68947a84ef6f"
+          "sha256": "4423aaf62fd46ebaf7ae7c83d0789322aa4890799faa475be3d334faca71f6af"
         },
         {
           "path": "scripts/decommission.sh",
-          "sha256": "53e91ef9bf212a9b525c500157b5d73b32ca161273145788469b0b1fb1847103"
+          "sha256": "83412334c4c5e605b693bc70e6c63ba3412cbe7052186fa46faf4283c7ce6bb6"
         },
         {
           "path": "scripts/freeze.sh",
-          "sha256": "d8c1527674ef94127d906e3e9bd8d0a70bad21739b09274881fd1ca8d8ea0d28"
+          "sha256": "8a228ba9b4edb5ebbe9035de2425b61bff14f39418041d354144e515859636b8"
         },
         {
           "path": "scripts/inventory.sh",
-          "sha256": "f23993550f16ccf35d87e8b3ae544b5c9841ca7b5bf0712d7c1b4e9c315aeda2"
+          "sha256": "6b587c8e3c44dc66ab8b5838e310d9b038ba619e8da6d6a370e05c26854613b8"
         },
         {
           "path": "scripts/prepare-target.sh",
-          "sha256": "840ad50b0fe794007edaca0df7a96437d13f2948b507c01444bd4f3906d54b17"
+          "sha256": "8823513b9440e4802062899b350550c335c11820c92caad5ae12c3b11d838bd3"
         },
         {
           "path": "scripts/sync.sh",
-          "sha256": "af7f0fd1a9de888c38277ffd9197943e9616cae0840ad492f56aade07c937b89"
+          "sha256": "92be2aa8997bb01f1f122b580e2f2957d5539f37ef35e8bd0991e3b0a9756f56"
         },
         {
           "path": "scripts/verify.sh",
-          "sha256": "eec4096533ed79a15aabb944abdaf5575012d6132c556b0b62dde62ee9e382a1"
+          "sha256": "0908c5fe8fb72b7fababc2ac08b86fbcdbfef900f788f6b1d63e50360d492c50"
         },
         {
           "path": "SKILL.md",
@@ -450,7 +450,7 @@
     },
     {
       "name": "queue-cron-setup",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Configure and verify queue workers and scheduled tasks for a client site. Sets up Laravel/Node workers under systemd with proper restart semantics, wires exactly one cron entry for the scheduler, and alerts on silent failures. Use when queue jobs aren't running, setting up workers for a new site, or scheduled tasks have stopped firing.",
       "path": "skills/queue-cron-setup",
       "roles": [
@@ -474,7 +474,7 @@
       "files": [
         {
           "path": "conventions/approvals.md",
-          "sha256": "b21e81fec0d861d92b98b028b24d3c337ed14e60d32fd263a97d815049cb0d25"
+          "sha256": "bf7a25e07342469484c54e483702386e3fc8320c609a2029718cdda06cb001b3"
         },
         {
           "path": "conventions/client-manifest.md",
@@ -486,11 +486,11 @@
         },
         {
           "path": "conventions/lib/bootstrap.sh",
-          "sha256": "3a09ab128030fb8ff5e440a4f1df82b8d8d5c1cd70c976670bae7590714998ca"
+          "sha256": "d9771b225cbef2e7934ac79b0b2ed10e3d01d1ad2d0cd43b85e6a3c5791a61d1"
         },
         {
           "path": "conventions/lib/confirm.sh",
-          "sha256": "08a5db55452d90aa41b28b1c39444fce0679a4b864b33f2896f0c820997d34e1"
+          "sha256": "031189077c6bc918338e32dd580b71903038a60d6094dac17fb5e730a656ad53"
         },
         {
           "path": "conventions/lib/integration.sh",
@@ -498,11 +498,11 @@
         },
         {
           "path": "conventions/lib/journal.sh",
-          "sha256": "2a870e115763b6aec7051fd82c83c62c62561b2b9e1bfd8ff4e23ea02d7352d4"
+          "sha256": "ba13156c7d6e4bfd06ae0a8f17de437e9ae6a5762e8eb9424dcffac1f5b48dce"
         },
         {
           "path": "conventions/lib/manifest.sh",
-          "sha256": "9eafefd24d1c9656be37220b7b330b969bbe44d83704c8e44303f43275b92857"
+          "sha256": "23d8ef10a6ecb3a56dd2b15d106d5bad03c4191ce67789911f5c6792f04ebe0b"
         },
         {
           "path": "conventions/lib/migration.sh",
@@ -510,7 +510,7 @@
         },
         {
           "path": "conventions/lib/monitoring.sh",
-          "sha256": "8f041fb89d488bed8e4e9ceb5f9ca5839fc5a61c361fcbcffae71d6a61f15ecb"
+          "sha256": "4b10017b51cca2e57a5eaf11bf5dc37d4cabbd715370a4091497dd865cc324d8"
         },
         {
           "path": "conventions/lib/output.sh",
@@ -518,11 +518,11 @@
         },
         {
           "path": "conventions/lib/queue.sh",
-          "sha256": "1f8cba20f5088d4a68c8da65b8dbf96d155f69a4c107d3680ec47e422bcae5e0"
+          "sha256": "a0e2c4c97d115fdb07fc5d1e794d7fc017588b911ef5ba0f754cc7fc1f374014"
         },
         {
           "path": "conventions/lib/ssh.sh",
-          "sha256": "43a5fa8c812dbd3b5f300c488b7df52396b15bf0d72249d524d3a85125caa1bf"
+          "sha256": "1d9f9f402d6c0280dae8d10d6bb1e6e0b8c425f037a6d66f3fee7da60ff396e2"
         },
         {
           "path": "conventions/logging.md",
@@ -566,15 +566,15 @@
         },
         {
           "path": "scripts/restart-workers.sh",
-          "sha256": "fd0dafc0605e3d0c83fd7ff06683b1668eb06f64722f28606fde39262d256d0f"
+          "sha256": "c932fcebe506dc131f633c41fc9ea2c5ccbbb59689f98c840677f7e59100d86c"
         },
         {
           "path": "scripts/setup-workers.sh",
-          "sha256": "0f8c5bc485b8033875796c43d75d74592d5feb2ce5d6a166dd81fe000dad0640"
+          "sha256": "4cd9e785bf66216502c850678d758dfd0bc620baa6b2c0b23532b918df984baf"
         },
         {
           "path": "scripts/verify-workers.sh",
-          "sha256": "cf484e3831951f7cc95b017ed6d887101daea601dccc9c4560c9b4019b650226"
+          "sha256": "439485feeb5e9cb877eed47fd7dc21490648385c01aee7fc971e886db536513d"
         },
         {
           "path": "SKILL.md",
@@ -584,7 +584,7 @@
     },
     {
       "name": "server-monitoring",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Set up and manage alerting for client servers using Uptime Kuma (external checks) and Netdata (per-host detail). Tuned thresholds to catch real problems without alert fatigue. Two severity tiers: immediate page and daily digest. Closes the loop by handing off to the right skill when an alert fires. Use when setting up monitoring for a new client or when alerts are miscalibrated.",
       "path": "skills/server-monitoring",
       "roles": [
@@ -614,7 +614,7 @@
       "files": [
         {
           "path": "conventions/approvals.md",
-          "sha256": "b21e81fec0d861d92b98b028b24d3c337ed14e60d32fd263a97d815049cb0d25"
+          "sha256": "bf7a25e07342469484c54e483702386e3fc8320c609a2029718cdda06cb001b3"
         },
         {
           "path": "conventions/client-manifest.md",
@@ -626,11 +626,11 @@
         },
         {
           "path": "conventions/lib/bootstrap.sh",
-          "sha256": "3a09ab128030fb8ff5e440a4f1df82b8d8d5c1cd70c976670bae7590714998ca"
+          "sha256": "d9771b225cbef2e7934ac79b0b2ed10e3d01d1ad2d0cd43b85e6a3c5791a61d1"
         },
         {
           "path": "conventions/lib/confirm.sh",
-          "sha256": "08a5db55452d90aa41b28b1c39444fce0679a4b864b33f2896f0c820997d34e1"
+          "sha256": "031189077c6bc918338e32dd580b71903038a60d6094dac17fb5e730a656ad53"
         },
         {
           "path": "conventions/lib/integration.sh",
@@ -638,11 +638,11 @@
         },
         {
           "path": "conventions/lib/journal.sh",
-          "sha256": "2a870e115763b6aec7051fd82c83c62c62561b2b9e1bfd8ff4e23ea02d7352d4"
+          "sha256": "ba13156c7d6e4bfd06ae0a8f17de437e9ae6a5762e8eb9424dcffac1f5b48dce"
         },
         {
           "path": "conventions/lib/manifest.sh",
-          "sha256": "9eafefd24d1c9656be37220b7b330b969bbe44d83704c8e44303f43275b92857"
+          "sha256": "23d8ef10a6ecb3a56dd2b15d106d5bad03c4191ce67789911f5c6792f04ebe0b"
         },
         {
           "path": "conventions/lib/migration.sh",
@@ -650,7 +650,7 @@
         },
         {
           "path": "conventions/lib/monitoring.sh",
-          "sha256": "8f041fb89d488bed8e4e9ceb5f9ca5839fc5a61c361fcbcffae71d6a61f15ecb"
+          "sha256": "4b10017b51cca2e57a5eaf11bf5dc37d4cabbd715370a4091497dd865cc324d8"
         },
         {
           "path": "conventions/lib/output.sh",
@@ -658,11 +658,11 @@
         },
         {
           "path": "conventions/lib/queue.sh",
-          "sha256": "1f8cba20f5088d4a68c8da65b8dbf96d155f69a4c107d3680ec47e422bcae5e0"
+          "sha256": "a0e2c4c97d115fdb07fc5d1e794d7fc017588b911ef5ba0f754cc7fc1f374014"
         },
         {
           "path": "conventions/lib/ssh.sh",
-          "sha256": "43a5fa8c812dbd3b5f300c488b7df52396b15bf0d72249d524d3a85125caa1bf"
+          "sha256": "1d9f9f402d6c0280dae8d10d6bb1e6e0b8c425f037a6d66f3fee7da60ff396e2"
         },
         {
           "path": "conventions/logging.md",
@@ -702,11 +702,11 @@
         },
         {
           "path": "scripts/setup-monitoring.sh",
-          "sha256": "5a13243d47c8436f629ff3b7faa40e67b058e13bfb4bfb9e72825e7a93af6625"
+          "sha256": "446b040c21022b4ae576d70c0619a249e09f302711c872e3c77673c478a033d0"
         },
         {
           "path": "scripts/status-monitoring.sh",
-          "sha256": "d0ba0d98ecd299d16e8a8f9a6adde35f50f522f5cf8119d1ad61ddeeed3a19ce"
+          "sha256": "3637ce57f1f345faa28689c25b8afc06dc2bd5310a6faf8e14efee857e666489"
         },
         {
           "path": "scripts/test-alert.sh",
@@ -720,7 +720,7 @@
     },
     {
       "name": "site-down-triage",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Diagnose a downed or slow client site with a read-only layered ladder (scope → reachability → DNS → TLS → web → runtime → resources → database → logs → recent change). Stops at the first broken layer, preserves evidence, and proposes a minimal fix without restarting anything. Use when a site is down, returning 502, timing out, or the client reports slowness.",
       "path": "skills/site-down-triage",
       "roles": [
@@ -748,7 +748,7 @@
       "files": [
         {
           "path": "conventions/approvals.md",
-          "sha256": "b21e81fec0d861d92b98b028b24d3c337ed14e60d32fd263a97d815049cb0d25"
+          "sha256": "bf7a25e07342469484c54e483702386e3fc8320c609a2029718cdda06cb001b3"
         },
         {
           "path": "conventions/client-manifest.md",
@@ -760,11 +760,11 @@
         },
         {
           "path": "conventions/lib/bootstrap.sh",
-          "sha256": "3a09ab128030fb8ff5e440a4f1df82b8d8d5c1cd70c976670bae7590714998ca"
+          "sha256": "d9771b225cbef2e7934ac79b0b2ed10e3d01d1ad2d0cd43b85e6a3c5791a61d1"
         },
         {
           "path": "conventions/lib/confirm.sh",
-          "sha256": "08a5db55452d90aa41b28b1c39444fce0679a4b864b33f2896f0c820997d34e1"
+          "sha256": "031189077c6bc918338e32dd580b71903038a60d6094dac17fb5e730a656ad53"
         },
         {
           "path": "conventions/lib/integration.sh",
@@ -772,11 +772,11 @@
         },
         {
           "path": "conventions/lib/journal.sh",
-          "sha256": "2a870e115763b6aec7051fd82c83c62c62561b2b9e1bfd8ff4e23ea02d7352d4"
+          "sha256": "ba13156c7d6e4bfd06ae0a8f17de437e9ae6a5762e8eb9424dcffac1f5b48dce"
         },
         {
           "path": "conventions/lib/manifest.sh",
-          "sha256": "9eafefd24d1c9656be37220b7b330b969bbe44d83704c8e44303f43275b92857"
+          "sha256": "23d8ef10a6ecb3a56dd2b15d106d5bad03c4191ce67789911f5c6792f04ebe0b"
         },
         {
           "path": "conventions/lib/migration.sh",
@@ -784,7 +784,7 @@
         },
         {
           "path": "conventions/lib/monitoring.sh",
-          "sha256": "8f041fb89d488bed8e4e9ceb5f9ca5839fc5a61c361fcbcffae71d6a61f15ecb"
+          "sha256": "4b10017b51cca2e57a5eaf11bf5dc37d4cabbd715370a4091497dd865cc324d8"
         },
         {
           "path": "conventions/lib/output.sh",
@@ -792,11 +792,11 @@
         },
         {
           "path": "conventions/lib/queue.sh",
-          "sha256": "1f8cba20f5088d4a68c8da65b8dbf96d155f69a4c107d3680ec47e422bcae5e0"
+          "sha256": "a0e2c4c97d115fdb07fc5d1e794d7fc017588b911ef5ba0f754cc7fc1f374014"
         },
         {
           "path": "conventions/lib/ssh.sh",
-          "sha256": "43a5fa8c812dbd3b5f300c488b7df52396b15bf0d72249d524d3a85125caa1bf"
+          "sha256": "1d9f9f402d6c0280dae8d10d6bb1e6e0b8c425f037a6d66f3fee7da60ff396e2"
         },
         {
           "path": "conventions/logging.md",
@@ -836,7 +836,7 @@
         },
         {
           "path": "scripts/collect-remote.sh",
-          "sha256": "a6fd6892953a284545ade83ed5120eff07180a226b12f21afbe5dba8ca71ca93"
+          "sha256": "28b8161ccae3e9e09696386581c5a79e1137bed10392a8b652f3e2a3b507421b"
         },
         {
           "path": "scripts/format-report.sh",
@@ -844,7 +844,7 @@
         },
         {
           "path": "scripts/triage.sh",
-          "sha256": "e27c050db93855d6ccb4b66e7b716a7c1e9feca421cebb91186b74c62086c1eb"
+          "sha256": "241487f9cac333acc690d2b867c721052a5f85f15b125583605d7abe7f67a520"
         },
         {
           "path": "SKILL.md",
@@ -854,7 +854,7 @@
     },
     {
       "name": "ssl-dns-fix",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Diagnose and fix TLS certificate and DNS problems for a client site. Localizes the failure to one of three layers (resolution → issuance → serving) before attempting any fix. Always runs certbot --dry-run before a real attempt. Use when a cert didn't renew, the site shows \"not secure\", DNS changes haven't propagated, or the site has mixed content warnings.",
       "path": "skills/ssl-dns-fix",
       "roles": [
@@ -882,7 +882,7 @@
       "files": [
         {
           "path": "conventions/approvals.md",
-          "sha256": "b21e81fec0d861d92b98b028b24d3c337ed14e60d32fd263a97d815049cb0d25"
+          "sha256": "bf7a25e07342469484c54e483702386e3fc8320c609a2029718cdda06cb001b3"
         },
         {
           "path": "conventions/client-manifest.md",
@@ -894,11 +894,11 @@
         },
         {
           "path": "conventions/lib/bootstrap.sh",
-          "sha256": "3a09ab128030fb8ff5e440a4f1df82b8d8d5c1cd70c976670bae7590714998ca"
+          "sha256": "d9771b225cbef2e7934ac79b0b2ed10e3d01d1ad2d0cd43b85e6a3c5791a61d1"
         },
         {
           "path": "conventions/lib/confirm.sh",
-          "sha256": "08a5db55452d90aa41b28b1c39444fce0679a4b864b33f2896f0c820997d34e1"
+          "sha256": "031189077c6bc918338e32dd580b71903038a60d6094dac17fb5e730a656ad53"
         },
         {
           "path": "conventions/lib/integration.sh",
@@ -906,11 +906,11 @@
         },
         {
           "path": "conventions/lib/journal.sh",
-          "sha256": "2a870e115763b6aec7051fd82c83c62c62561b2b9e1bfd8ff4e23ea02d7352d4"
+          "sha256": "ba13156c7d6e4bfd06ae0a8f17de437e9ae6a5762e8eb9424dcffac1f5b48dce"
         },
         {
           "path": "conventions/lib/manifest.sh",
-          "sha256": "9eafefd24d1c9656be37220b7b330b969bbe44d83704c8e44303f43275b92857"
+          "sha256": "23d8ef10a6ecb3a56dd2b15d106d5bad03c4191ce67789911f5c6792f04ebe0b"
         },
         {
           "path": "conventions/lib/migration.sh",
@@ -918,7 +918,7 @@
         },
         {
           "path": "conventions/lib/monitoring.sh",
-          "sha256": "8f041fb89d488bed8e4e9ceb5f9ca5839fc5a61c361fcbcffae71d6a61f15ecb"
+          "sha256": "4b10017b51cca2e57a5eaf11bf5dc37d4cabbd715370a4091497dd865cc324d8"
         },
         {
           "path": "conventions/lib/output.sh",
@@ -926,11 +926,11 @@
         },
         {
           "path": "conventions/lib/queue.sh",
-          "sha256": "1f8cba20f5088d4a68c8da65b8dbf96d155f69a4c107d3680ec47e422bcae5e0"
+          "sha256": "a0e2c4c97d115fdb07fc5d1e794d7fc017588b911ef5ba0f754cc7fc1f374014"
         },
         {
           "path": "conventions/lib/ssh.sh",
-          "sha256": "43a5fa8c812dbd3b5f300c488b7df52396b15bf0d72249d524d3a85125caa1bf"
+          "sha256": "1d9f9f402d6c0280dae8d10d6bb1e6e0b8c425f037a6d66f3fee7da60ff396e2"
         },
         {
           "path": "conventions/logging.md",
@@ -974,11 +974,11 @@
         },
         {
           "path": "scripts/fix-cert.sh",
-          "sha256": "335a4278a27d71310fa08d147906333b46aaa2d04045d9d21ae559485ac692af"
+          "sha256": "bf530496d2acb34d0c1363b14fa13ce114b04495b8ae07c3d71927af2adf5762"
         },
         {
           "path": "scripts/fix-nginx.sh",
-          "sha256": "4905fe605d63933d6ce232d6433e55ad7acf3f4f2bf99a6eb1c3de2fabef99f9"
+          "sha256": "5c20ed3f2c016d6a7d155f8544967572d2cbc4ab6cd8f4a618363fe563dd6baa"
         },
         {
           "path": "SKILL.md",
@@ -988,7 +988,7 @@
     },
     {
       "name": "warpmetal",
-      "version": "0.8.12",
+      "version": "0.8.13",
       "description": "Safely purchase, renew, and manage WarpMetal VPS servers and Agent Runtime sandboxes with the official warpmetal CLI and x402api Agent Wallet. Use when a shell-capable agent needs live VPS discovery, hostname-based SSH identity creation, x402 payment or refill handling, bounded autonomous renewal, human lifecycle notifications, ordering, provisioning, server management, optional runtime installation, sandbox creation, per-agent SSH access, revocation, or deletion.",
       "path": "skills/warpmetal",
       "roles": [
@@ -1042,7 +1042,7 @@
         },
         {
           "path": "SKILL.md",
-          "sha256": "6089077ee2119dc356d4499b6e9590e8ee8f08ebc4ee82b206d82183902e4d83"
+          "sha256": "97836418c850565690fcd9a120481b9e33875dfd5809fe02b67280972d6a15c9"
         }
       ]
     },

@@ -21,10 +21,10 @@ queue_collect_facts() {
     local remote
     remote="$(cat <<REMOTE
 set -uo pipefail
-SITE_ROOT='${site_root}'
-STACK='${stack}'
-UNIT_PREFIX='${unit_prefix}'
-LOG_DIR='${log_dir}'
+SITE_ROOT=$(remote_quote "${site_root}")
+STACK=$(remote_quote "${stack}")
+UNIT_PREFIX=$(remote_quote "${unit_prefix}")
+LOG_DIR=$(remote_quote "${log_dir}")
 
 emit() { printf '%s=%s\n' "\$1" "\$2"; }
 

@@ -22,8 +22,9 @@
 #   result_init, result_add_string, result_add_raw, result_add_string_array,
 #   result_warn, result_error, emit_result
 #   journal_init, journal_log, journal_run, journal_sanitize, journal_path
-#   ssh_run, ssh_user_run, ssh_script, ssh_target, scp_put, ssh_resolve_hostname
+#   ssh_run, ssh_user_run, ssh_script, ssh_target, scp_put, ssh_resolve_hostname, remote_quote, ssh_handshake
 #   require_confirm
+#   require_gate_now
 #   manifest_load, manifest_get, manifest_require, manifest_validate, manifest_validate_ssh,
 #   manifest_integration, manifest_integration_keys, manifest_integrations,
 #   manifest_integration_declared, manifest_integration_secret

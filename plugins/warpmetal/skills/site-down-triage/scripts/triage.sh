@@ -283,13 +283,16 @@ if [[ "${need_remote}" -eq 1 ]]; then
     step OBSERVING "Collecting remote layers 4-9 over a single SSH session"
     set +e
     COLLECT_OUT="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" \
-        "CLIENT='${CLIENT}' SITE_ROOT='${SITE_ROOT}' STACK='${STACK}' SINCE='${SINCE}' PHP_VERSION='${PHP}' bash -s" \
+        "CLIENT=$(remote_quote "${CLIENT}") SITE_ROOT=$(remote_quote "${SITE_ROOT}") STACK=$(remote_quote "${STACK}") SINCE=$(remote_quote "${SINCE}") PHP_VERSION=$(remote_quote "${PHP}") bash -s" \
         < "${COLLECTOR}" 2>&1)"
     ssh_rc=$?
     set -e
 
     if [[ "${ssh_rc}" -ne 0 && -z "${COLLECT_OUT}" ]]; then
         fail_with 3 STOPPED "SSH collection failed (exit ${ssh_rc})"
+    fi
+    if ! printf '%s' "${COLLECT_OUT}" | grep -q '===== COLLECT_DONE client='; then
+        result_warn "The remote collector did not reach COLLECT_DONE; some layers may be missing, so the diagnoses below are based on partial evidence"
     fi
 
     REMOTE_OUT="${COLLECT_OUT}"
@@ -369,8 +372,8 @@ if [[ "${need_remote}" -eq 1 ]]; then
     if in_range 7; then
         step OBSERVING "Layer 7: database"
         db_sec="$(printf '%s' "${REMOTE_OUT}" | sed -n '/===== LAYER_7/,/===== LAYER_8/p')"
-        if printf '%s' "${db_sec}" | grep -qi 'too many connections\|max_connections'; then
-            diagnose_layer 7 database "max_connections / too many connections" \
+        if printf '%s' "${db_sec}" | grep -qi 'too many connections'; then
+            diagnose_layer 7 database "too many connections" \
                 "Database connection pool exhausted" \
                 "PROCESSLIST evidence is in the journal when available. Propose remediation after approval." \
                 "Connection leak or a traffic spike." \

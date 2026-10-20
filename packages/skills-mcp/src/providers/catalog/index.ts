@@ -36,6 +36,7 @@ import onesignalJson from "./onesignal.json" with { type: "json" };
 import openaiJson from "./openai.json" with { type: "json" };
 import pagerdutyJson from "./pagerduty.json" with { type: "json" };
 import perplexityJson from "./perplexity.json" with { type: "json" };
+import planeJson from "./plane.json" with { type: "json" };
 import posthogJson from "./posthog.json" with { type: "json" };
 import resendJson from "./resend.json" with { type: "json" };
 import sentryJson from "./sentry.json" with { type: "json" };
@@ -82,6 +83,7 @@ export const CATALOG_FILES = [
   openaiJson,
   pagerdutyJson,
   perplexityJson,
+  planeJson,
   posthogJson,
   resendJson,
   sentryJson,

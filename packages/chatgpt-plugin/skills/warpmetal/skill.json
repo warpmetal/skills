@@ -1,0 +1,9 @@
+{
+  "name": "warpmetal",
+  "version": "0.8.13",
+  "description": "Manage and observe WarpMetal VPS servers and Agent Runtime sandboxes with the official warpmetal CLI. Payments, purchases, wallet funding and renewals are out of scope for this plugin.",
+  "roles": ["operator"],
+  "hosts": ["codex", "claude", "opencode", "cursor", "dsh", "agents", "mcp"],
+  "minimumWarpmetalCli": "0.8.1",
+  "tags": ["warpmetal", "vps", "sandbox", "ssh"]
+}

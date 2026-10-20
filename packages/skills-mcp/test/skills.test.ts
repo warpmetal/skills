@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { writeFile } from "node:fs/promises";
+import { mkdtemp, rm, symlink, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
@@ -102,6 +103,43 @@ test("readSkillFile detects on-disk tampering", async () => {
     );
   } finally {
     await fixture.cleanup();
+  }
+});
+
+test("readSkillFile refuses a directory link that leaves the registry root", async (t) => {
+  // A lexical check does not survive a link. `references/` is replaced with a
+  // link to a directory outside the registry holding a byte-identical copy of
+  // the listed file, so the checksum still matches and only the resolved-path
+  // comparison can stop the read.
+  const fixture = await makeRegistryFixture();
+  const outside = await mkdtemp(join(tmpdir(), "skills-outside-"));
+  const referencesDir = join(fixture.dir, "skills", "demo", "references");
+  let linked = false;
+  try {
+    await writeFile(join(outside, "notes.md"), "# Notes\n\nSupporting notes.\n", "utf8");
+    await rm(referencesDir, { recursive: true, force: true });
+    try {
+      // A junction needs no privilege on Windows; a plain symlink does, so the
+      // test names the reason it skipped rather than reporting a pass it did
+      // not earn.
+      await symlink(outside, referencesDir, process.platform === "win32" ? "junction" : "dir");
+      linked = true;
+    } catch (error) {
+      t.skip(`cannot create a directory link here: ${(error as Error).message}`);
+      return;
+    }
+
+    const loaded = await loadRegistry({ registry: fixture.dir });
+    await assert.rejects(
+      () => readSkillFile(loaded, "demo", "references/notes.md"),
+      (error: unknown) => (error as { code?: string }).code === "traversal_rejected",
+    );
+  } finally {
+    // Unlink before cleaning up: `fixture.cleanup()` must never walk through the
+    // link into the directory this test created outside the registry.
+    if (linked) await rm(referencesDir, { recursive: true, force: true });
+    await fixture.cleanup();
+    await rm(outside, { recursive: true, force: true });
   }
 });
 

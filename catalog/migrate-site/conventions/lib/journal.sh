@@ -71,18 +71,24 @@ journal_log() {
 }
 
 # Strip secrets from anything before it reaches the journal.
+#
+# The last rule is the broad one: any `KEY=value` line (with an optional
+# `export `) is an environment-file assignment, and `logging.md` promises those
+# are redacted as `***ENV FILE REDACTED***`. It is deliberately broad - it also
+# redacts a benign `key=value` line - because a journal is an audit log and
+# over-redaction there is always the safe direction; the parsed values were
+# extracted before this sanitizer ever ran.
 journal_sanitize() {
     sed \
         -e 's/password=[^ ]*/password=***REDACTED***/gi' \
         -e 's/token=[^ ]*/token=***REDACTED***/gi' \
+        -e 's/key=[^ ]*/key=***REDACTED***/gi' \
         -e 's/secret=[^ ]*/secret=***REDACTED***/gi' \
         -e 's/Authorization: Bearer [^ ]*/Authorization: Bearer ***REDACTED***/gi' \
         -e 's/ssh-rsa AAAA[^ ]*/ssh-rsa ***REDACTED***/gi' \
         -e 's/ssh-ed25519 AAAA[^ ]*/ssh-ed25519 ***REDACTED***/gi' \
         -e 's/-----BEGIN [A-Z ]*PRIVATE KEY-----/***PRIVATE KEY REDACTED***/gi' \
-        -e 's/^\(export \)\?[A-Z_]*_PASSWORD=.*/\1***REDACTED***/gi' \
-        -e 's/^\(export \)\?[A-Z_]*_TOKEN=.*/\1***REDACTED***/gi' \
-        -e 's/^\(export \)\?[A-Z_]*_SECRET=.*/\1***REDACTED***/gi'
+        -e 's/^\(export \)\?[A-Za-z_][A-Za-z0-9_]*=.*/\1***ENV FILE REDACTED***/gi'
 }
 
 # Run a command, capture output/exit code/duration, log it sanitized, echo the output.

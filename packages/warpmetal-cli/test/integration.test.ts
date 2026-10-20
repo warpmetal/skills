@@ -276,7 +276,7 @@ describe("slack adapter", () => {
   });
 
   it("verifies a bot token with auth.test", async () => {
-    const { store } = await memoryStore({ "slack.token": "xoxb-token-value-123456" });
+    const { store } = await memoryStore({ "slack.token": "xoxb-token-value-123456" }); // secret-scan:allow redaction fixture
     const { fetchFn, calls } = stubFetch(() => ({ status: 200, body: { ok: true, team: "acme", user: "bot" } }));
     const result = await run(["integration", "status", "slack", "--json"], store, { fetchFn });
 
@@ -286,7 +286,7 @@ describe("slack adapter", () => {
   });
 
   it("gates notify and sends nothing without the confirmation", async () => {
-    const { store } = await memoryStore({ "slack.token": "xoxb-token-value-123456" });
+    const { store } = await memoryStore({ "slack.token": "xoxb-token-value-123456" }); // secret-scan:allow redaction fixture
     const { fetchFn, calls } = stubFetch(() => ({ status: 200, body: { ok: true } }));
 
     const blocked = await run(["integration", "slack", "notify", "--channel", "#ops", "--text", "hello"], store, { fetchFn });

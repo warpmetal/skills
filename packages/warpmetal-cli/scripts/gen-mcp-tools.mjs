@@ -1,11 +1,21 @@
 /**
  * Generates mcp-tools/catalog.ts from skills-mcp provider catalog + HTTP route table.
+ *
+ *   node --import tsx scripts/gen-mcp-tools.mjs            # write
+ *   node --import tsx scripts/gen-mcp-tools.mjs --check    # prove the committed file
+ *
+ * `--check` compares the catalog it would write against the one that is committed
+ * without creating or writing anything, then exits 1 with a `re-run:` line. The
+ * route table the runtime dispatches through is derived from two generated files
+ * plus the provider catalogs, so a stale `catalog.ts` is a runtime that serves a
+ * different surface than the one the repository reviews.
  */
 import { readFileSync, readdirSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { CLOUDFLARE_ROUTES } from "./cloudflare/routes.generated.mjs";
+import { PLANE_ROUTES, PLANE_VALIDATORS } from "./plane/routes.generated.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, "..", "..", "..");
@@ -67,6 +77,7 @@ const SECRETS = {
   onesignal: "onesignal.token",
   amplitude: "amplitude.token",
   zendesk: "zendesk.token",
+  plane: "plane.token",
 };
 
 /**
@@ -184,6 +195,11 @@ const ROUTES = {
   // spec, so this file does not carry them by hand behind the generator's back:
   //   node packages/warpmetal-cli/scripts/gen-cloudflare-routes.mjs
   ...CLOUDFLARE_ROUTES,
+
+  // Plane's routes are generated from the reviewed allowlist and the endpoint
+  // table, the same way:
+  //   node packages/warpmetal-cli/scripts/gen-plane-routes.mjs
+  ...PLANE_ROUTES,
 
   // Vercel's list endpoint is /v10/projects (v9 is for per-project ops) and its
   // query params are camelCase while the MCP schema is snake_case.
@@ -455,6 +471,10 @@ const ROUTES = {
  * reason they are not.
  */
 const VALIDATORS = {
+  // Plane's argument checks are generated from the reviewed endpoint table: a
+  // tool whose vendor action forks on an argument ships one branch and refuses
+  // the other with a named reason, and that refusal is the table's `requireArgs`.
+  ...PLANE_VALIDATORS,
   // Zendesk needs a requester, and the tool models it two ways: a top-level
   // `requester_id`, or a `requester` object built from `requester_email`. The
   // schema cannot say "one of the two", so the pair is checked here rather than
@@ -505,7 +525,7 @@ const entries = tools.map((t) => {
 });
 
 const outDir = join(here, "..", "src/integration/mcp-tools");
-mkdirSync(outDir, { recursive: true });
+const outFile = join(outDir, "catalog.ts");
 
 const helpers = `function qs(params: Record<string, unknown>): string {
   const search = new URLSearchParams();
@@ -561,6 +581,25 @@ function pf(value: unknown): string {
 function cfHeaders(): Record<string, string> {
   return {
     Authorization: "Bearer __TOKEN__",
+    "Content-Type": "application/json",
+  };
+}
+
+/**
+ * Plane's API origin and version prefix, which every generated route starts with.
+ * The origin is the one scripts/plane/endpoints.mjs exports, and the contract test
+ * checks it against test/fixtures/provider-contracts.json.
+ */
+const API_BASE = "https://api.plane.so/api/v1";
+
+/**
+ * Plane's API-key auth, the scheme the pinned SDK sends: an X-Api-Key header,
+ * plus a JSON content type, because every write this surface performs is a JSON
+ * body.
+ */
+function planeHeaders(): Record<string, string> {
+  return {
+    "x-api-key": "__TOKEN__",
     "Content-Type": "application/json",
   };
 }
@@ -658,5 +697,25 @@ export function mcpProviderNames(): readonly string[] {
 }
 `;
 
-writeFileSync(join(outDir, "catalog.ts"), catalogBody);
+// `--check` compares instead of writing, and it does not create the directory
+// either: a gate that mutates the checkout cannot be trusted to report what is
+// committed. `readFileSync` failing is the missing-file case, not an error.
+if (process.argv.includes("--check")) {
+  let current = null;
+  try {
+    current = readFileSync(outFile, "utf8");
+  } catch {
+    current = null;
+  }
+  if (current !== catalogBody) {
+    console.error(`${outFile} is out of date`);
+    console.error("re-run: node packages/warpmetal-cli/scripts/gen-mcp-tools.mjs");
+    process.exit(1);
+  }
+  console.log(`the ${entries.length} mcp tool defs are up to date`);
+  process.exit(0);
+}
+
+mkdirSync(outDir, { recursive: true });
+writeFileSync(outFile, catalogBody);
 console.log("wrote", entries.length, "mcp tool defs");

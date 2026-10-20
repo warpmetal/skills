@@ -16,7 +16,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { invalidRoutes, probeAll, summarize } from "../scripts/probe-mcp-routes.mjs";
+import { invalidRoutes, probeAll, summarize, verdictRecord } from "../scripts/probe-mcp-routes.mjs";
 
 test("per-customer hosts are classified instead of probed", async () => {
   // A fetch that always throws: nothing here may leave the process, and a row
@@ -65,3 +65,35 @@ test(
     assert.ok(summary["public"] > 0 || summary["auth-required"] > 0, "probe made no requests");
   },
 );
+
+test("verdictRecord is the stable, sorted slice the marker generator reads", () => {
+  const record = verdictRecord([
+    {
+      toolSlug: "z_tool",
+      verdict: "invalid-route",
+      weakSignal: false,
+      provider: "z",
+      method: "GET",
+      host: "z.example",
+      status: 404,
+      hostControl: "invalid-route",
+    },
+    {
+      toolSlug: "a_tool",
+      verdict: "auth-required",
+      weakSignal: false,
+      provider: "a",
+      method: "GET",
+      host: "a.example",
+      status: 401,
+      hostControl: "auth-required",
+    },
+  ]);
+  assert.deepEqual(record, {
+    version: 1,
+    rows: [
+      { toolSlug: "a_tool", verdict: "auth-required", weakSignal: false },
+      { toolSlug: "z_tool", verdict: "invalid-route", weakSignal: false },
+    ],
+  });
+});

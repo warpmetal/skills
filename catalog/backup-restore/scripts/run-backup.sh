@@ -14,6 +14,7 @@
 # Exit codes: 0=success, 1=backup failed, 2=prune failed
 
 set -euo pipefail
+umask 077
 
 # Refuse to run as an unsubstituted template.
 if grep -q '{{[A-Z_]*}}' "$0" 2>/dev/null; then
@@ -49,7 +50,11 @@ log() { echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) $*" | tee -a "$LOG_FILE"; }
 log "=== Backup started: $CLIENT ==="
 
 DB_DUMP_DIR="/tmp/backup-dumps-${CLIENT}"
-mkdir -p "$DB_DUMP_DIR"
+mkdir -m 700 -p "$DB_DUMP_DIR"
+# The dump and the crontab copy are transient and sensitive: remove them on every
+# exit path, and the 0700 directory plus umask 077 above means a crash cannot
+# leave them readable by another local user.
+trap 'rm -rf "${DB_DUMP_DIR}"' EXIT
 
 if command -v mysqldump &>/dev/null && [[ -f "$SITE_ROOT/shared/.env" ]]; then
     DB_NAME=$(grep -m1 "^DB_DATABASE=" "$SITE_ROOT/shared/.env" | cut -d= -f2 | tr -d '"' || true)

@@ -13,9 +13,9 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
           cache: npm
@@ -48,14 +48,49 @@ jobs:
       - name: Validate skill conventions and integration policies
         run: npm run validate:skills
 
+      # The registry tooling generates every channel and is what `git diff
+      # --exit-code` below leans on, so its own rules get a suite rather than
+      # only being exercised through the artifacts they produce.
+      - name: Test the registry tooling
+        run: npm run test:scripts
+
       - name: Test MCP server
         run: npm test
 
       - name: Test integration engine
         run: npm --prefix packages/warpmetal-cli test
 
+      # The offline half of the provider guard. Everything these checks compare
+      # is derived from files that are committed - the route table, the two
+      # generated documents, the allowlist, the provider catalog, the tool
+      # catalog and the request fixtures - so a hand-edit or a forgotten
+      # generator fails here with a `re-run:` line and nothing to interpret.
+      # The two pin fetches (`check:plane-inventory`, `check:plane-sdk`) read the
+      # vendor's release instead, so they stay out of this gate and run in
+      # `plane-drift.yml` on a schedule: a vendor outage must not be able to
+      # block a merge.
+      - name: Verify the pinned provider surface
+        run: |
+          npm --prefix packages/warpmetal-cli run check:plane-offline
+          npm --prefix packages/skills-mcp run check:providers-offline
+
+      # A workflow that references an action by tag runs whatever the tag points
+      # at on the day it runs; a full commit SHA is immutable. This fails any
+      # `uses: owner/repo@tag` so a future `@v4` cannot slip back in.
+      - name: Verify GitHub Actions are pinned to commit SHAs
+        run: npm run check:action-pins
+
       - name: Integration library self-test
         run: bash tools/check-all.sh
+
+      # The ChatGPT plugin is a generated, dependency-bearing artifact and is not
+      # committed; build and validate it here so the drift check still covers its
+      # inputs (the generator, the scoped skill and the marketplace entry).
+      - name: Build the ChatGPT plugin
+        run: npm run build:chatgpt-plugin
+
+      - name: Verify the ChatGPT plugin
+        run: npm run check:chatgpt-plugin
 
       - name: Drift check
         run: git diff --exit-code

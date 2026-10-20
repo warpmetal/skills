@@ -86,7 +86,7 @@ LOCAL_INI_PATH=""
 
 _fixcert_remote_cleanup() {
     if [[ -n "${REMOTE_CREDS}" && -n "${REMOTE_CREDS_HOST}" ]]; then
-        ssh "${SSH_OPTS[@]}" "${REMOTE_CREDS_HOST}" "rm -f -- '${REMOTE_CREDS}'" >/dev/null 2>&1 || true
+        ssh "${SSH_OPTS[@]}" "${REMOTE_CREDS_HOST}" "rm -f -- $(remote_quote "${REMOTE_CREDS}")" >/dev/null 2>&1 || true
     fi
     REMOTE_CREDS=""
     REMOTE_CREDS_HOST=""
@@ -196,7 +196,7 @@ if ! printf '%s' "${REMOTE_OUT}" | grep -q 'CERTBOT=yes'; then
     fail_with 5 STOPPED "certbot is not installed on ${HOST}. Install it first (see references/cert-issuance.md); this script will not install packages for you."
 fi
 
-try_rsh "if certbot certificates --cert-name '${DOMAIN}' 2>/dev/null | grep -q 'Certificate Name: ${DOMAIN}'; then echo CERT_STATE=present; else echo CERT_STATE=absent; fi"
+try_rsh "if certbot certificates --cert-name $(remote_quote "${DOMAIN}") 2>/dev/null | grep -q $(remote_quote "Certificate Name: ${DOMAIN}"); then echo CERT_STATE=present; else echo CERT_STATE=absent; fi"
 CERT_STATE="$(printf '%s' "${REMOTE_OUT}" | sed -n 's/^CERT_STATE=//p' | tail -1)"
 
 case "${CERT_STATE}" in
@@ -279,7 +279,7 @@ if [[ "${CHALLENGE}" == "dns-cloudflare" ]]; then
     # own umask 077 is stricter than scp, which would leave the file readable
     # while the copy is in flight.
     set +e
-    REMOTE_OUT="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" "cat > '${CF_CREDS_PATH}' && chmod 600 '${CF_CREDS_PATH}' && stat -c '%a' '${CF_CREDS_PATH}'" <"${LOCAL_INI}" 2>&1)"
+    REMOTE_OUT="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" "cat > $(remote_quote "${CF_CREDS_PATH}") && chmod 600 $(remote_quote "${CF_CREDS_PATH}") && stat -c '%a' $(remote_quote "${CF_CREDS_PATH}")" <"${LOCAL_INI}" 2>&1)"
     REMOTE_RC=$?
     set -e
     if [[ "${REMOTE_RC}" -ne 0 || "${REMOTE_OUT//[^0-9]/}" != "600" ]]; then
@@ -291,10 +291,10 @@ fi
 # ── Dry run (always) ──────────────────────────────────────────────────────────
 if [[ "${CHALLENGE}" == "dns-cloudflare" ]]; then
     step EXECUTING "Running certbot certonly --dry-run (staging; no quota consumed)"
-    try_rsh "certbot certonly --non-interactive --agree-tos --dry-run --dns-cloudflare --dns-cloudflare-credentials '${CF_CREDS_PATH}' -d '${DOMAIN}' 2>&1"
+    try_rsh "certbot certonly --non-interactive --agree-tos --dry-run --dns-cloudflare --dns-cloudflare-credentials $(remote_quote "${CF_CREDS_PATH}") -d $(remote_quote "${DOMAIN}") 2>&1"
 else
     step EXECUTING "Running certbot renew --dry-run (staging; no quota consumed)"
-    try_rsh "certbot renew --dry-run --cert-name '${DOMAIN}' 2>&1"
+    try_rsh "certbot renew --dry-run --cert-name $(remote_quote "${DOMAIN}") 2>&1"
 fi
 DRY_OUT="${REMOTE_OUT}"
 
@@ -328,10 +328,10 @@ require_confirm "CONFIRM CERT ISSUE" "CERT ISSUE" "Issue or renew the certificat
 # ── Real run ──────────────────────────────────────────────────────────────────
 if [[ "${CHALLENGE}" == "dns-cloudflare" ]]; then
     step EXECUTING "Running certbot certonly --dns-cloudflare"
-    try_rsh "certbot certonly --non-interactive --agree-tos --dns-cloudflare --dns-cloudflare-credentials '${CF_CREDS_PATH}' -d '${DOMAIN}' 2>&1"
+    try_rsh "certbot certonly --non-interactive --agree-tos --dns-cloudflare --dns-cloudflare-credentials $(remote_quote "${CF_CREDS_PATH}") -d $(remote_quote "${DOMAIN}") 2>&1"
 else
     step EXECUTING "Running certbot renew"
-    try_rsh "certbot renew --cert-name '${DOMAIN}' 2>&1"
+    try_rsh "certbot renew --cert-name $(remote_quote "${DOMAIN}") 2>&1"
 fi
 RENEW_OUT="${REMOTE_OUT}"
 
@@ -343,7 +343,7 @@ journal_log "EXECUTING" "certbot ${CERT_MODE}" "certbot ${CERT_MODE} for ${DOMAI
 # in which it is still on the server.
 if [[ -n "${CF_CREDS_PATH}" ]]; then
     _fixcert_remote_cleanup
-    try_rsh "test -e '${CF_CREDS_PATH}' && echo CREDS_REMOVED=no || echo CREDS_REMOVED=yes"
+    try_rsh "test -e $(remote_quote "${CF_CREDS_PATH}") && echo CREDS_REMOVED=no || echo CREDS_REMOVED=yes"
     if ! printf '%s' "${REMOTE_OUT}" | grep -q 'CREDS_REMOVED=yes'; then
         result_warn "The staged Cloudflare credential at ${CF_CREDS_PATH} on ${HOST} could not be removed; delete it by hand"
     else

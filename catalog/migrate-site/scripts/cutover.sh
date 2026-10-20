@@ -114,6 +114,9 @@ TARGET_HOST="${TARGET_OVERRIDE:-${MIGRATION_TARGET_HOST}}"
 
 migration_require_alias "${SOURCE_HOST}" "source"
 migration_require_alias "${TARGET_HOST}" "target"
+for h in "${SOURCE_HOST}" "${TARGET_HOST}"; do
+    HS_ERR="$(ssh_handshake "${h}")" || fail_with 3 STOPPED "Cannot reach ${h}: $(printf '%s' "${HS_ERR}" | tail -2 | tr '\n' ' ')"
+done
 
 journal_init "migrate-site" "${CLIENT}" "${MANIFEST}"
 
@@ -174,13 +177,17 @@ step OBSERVING "DNS: ${DOMAIN} currently -> ${CURRENT_IP:-unknown} (TTL ${CURREN
     printf '  Required A:    %s\n' "${TARGET_IP}"
     printf '  DNS change:    %s\n' "$([[ "${DNS_CHANGES_NEEDED}" == "true" ]] && printf 'yes' || printf 'not needed')"
     printf '  Applied by:    %s\n' "${DNS_APPLIED_BY}"
+    if [[ "${DNS_MODE}" == "command" ]]; then
+        printf '  DNS command:   %s\n' "${DNS_COMMAND}"
+    fi
     if [[ "${DNS_MODE}" == "integration" ]]; then
         printf '  Zone:          %s%s\n' "${CF_ZONE_ID}" "${CF_ACCOUNT:+ (account ${CF_ACCOUNT})}"
         printf '  Record TTL:    %s\n' "${CF_TTL}"
     fi
     printf '  Source stays:  up, serving a maintenance page\n'
     printf '  Gate required: CONFIRM CUTOVER'
-    [[ "${DNS_MODE}" != "manual" && "${DNS_CHANGES_NEEDED}" == "true" ]] && printf ', CONFIRM DNS CHANGE'
+    [[ "${DNS_MODE}" == "command" && "${DNS_CHANGES_NEEDED}" == "true" ]] && printf ', CONFIRM DNS CHANGE, CONFIRM DNS COMMAND'
+    [[ "${DNS_MODE}" == "integration" && "${DNS_CHANGES_NEEDED}" == "true" ]] && printf ', CONFIRM DNS CHANGE'
     printf '\n\n'
 } >&2
 
@@ -207,11 +214,11 @@ if [[ "${SKIP_PREFLIGHT}" == "false" ]]; then
     set +e
     PREFLIGHT_OUT="$(ssh "${SSH_OPTS[@]}" "${TARGET_SSH}" "
         set +e
-        code=\$(curl -s -o /dev/null -w '%{http_code}' --resolve '${DOMAIN}:443:127.0.0.1' --max-time 20 'https://${DOMAIN}/')
+        code=\$(curl -s -o /dev/null -w '%{http_code}' --resolve $(remote_quote "${DOMAIN}:443:127.0.0.1") --max-time 20 $(remote_quote "https://${DOMAIN}/"))
         echo \"fqdn_status=\$code\"
-        app=\$(curl -s -o /dev/null -w '%{http_code}' --resolve '${DOMAIN}:443:127.0.0.1' --max-time 20 'https://${DOMAIN}${HEALTH_URL}')
+        app=\$(curl -s -o /dev/null -w '%{http_code}' --resolve $(remote_quote "${DOMAIN}:443:127.0.0.1") --max-time 20 $(remote_quote "https://${DOMAIN}${HEALTH_URL}"))
         echo \"health_status=\$app\"
-        echo \"db_tables=\$(set -a; . '${SITE_ROOT}/shared/.env' 2>/dev/null; set +a; export MYSQL_PWD=\"\$DB_PASSWORD\"; mysql -N -B -u \"\$DB_USERNAME\" \"\$DB_DATABASE\" -e 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE();' 2>/dev/null)\"
+        echo \"db_tables=\$(set -a; . $(remote_quote "${SITE_ROOT}/shared/.env") 2>/dev/null; set +a; export MYSQL_PWD=\"\$DB_PASSWORD\"; mysql -N -B -u \"\$DB_USERNAME\" \"\$DB_DATABASE\" -e 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE();' 2>/dev/null)\"
     " 2>&1)"
     set -e
     printf '%s\n' "${PREFLIGHT_OUT}" >&2
@@ -243,10 +250,12 @@ DNS_APPLIED=false
 if [[ "${DNS_CHANGES_NEEDED}" == "true" ]]; then
     case "${DNS_MODE}" in
         command)
-            step CONFIRMING "Checking approval gate for the DNS change"
+            step CONFIRMING "Checking approval gates for the DNS change"
             require_confirm "CONFIRM DNS CHANGE" "DNS CHANGE" "Change the A record for ${DOMAIN} from ${CURRENT_IP:-unknown} to ${TARGET_IP}."
+            require_confirm "CONFIRM DNS COMMAND" "DNS COMMAND" "Run this exact shell command: ${DNS_COMMAND}"
 
             step EXECUTING "Applying the DNS change"
+            step EXECUTING "Command: ${DNS_COMMAND}"
             set +e
             DNS_OUT="$(DOMAIN="${DOMAIN}" TARGET_IP="${TARGET_IP}" CLIENT="${CLIENT}" bash -c "${DNS_COMMAND}" 2>&1)"
             DNS_RC=$?

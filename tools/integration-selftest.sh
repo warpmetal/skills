@@ -369,6 +369,105 @@ else
     ok "integration_declared rejects an undeclared provider"
 fi
 
+# --- 12. remote_quote: a value survives the round-trip -------------------------
+#
+# The migration replaces '${VAR}' in remote command strings with
+# $(remote_quote "${VAR}"). The property that matters is that when the remote
+# shell parses the produced token it yields exactly the original value, no
+# matter what the value carries.
+
+roundtrip_remote_quote() {
+    local original="$1"
+    local quoted
+    quoted="$(remote_quote "${original}")"
+    bash -c "printf '%s' ${quoted}"
+}
+
+expect_eq "$(roundtrip_remote_quote 'plain')" "plain" "remote_quote round-trips a plain value"
+expect_eq "$(roundtrip_remote_quote "o'brien")" "o'brien" "remote_quote round-trips a single quote"
+expect_eq "$(roundtrip_remote_quote 'has space')" "has space" "remote_quote round-trips a space"
+expect_eq "$(roundtrip_remote_quote 'semi;colon')" "semi;colon" "remote_quote round-trips a semicolon"
+expect_eq "$(roundtrip_remote_quote '$(id -u)')" '$(id -u)' "remote_quote round-trips a command substitution"
+expect_eq "$(roundtrip_remote_quote 'glob*star')" "glob*star" "remote_quote round-trips a glob"
+expect_eq "$(roundtrip_remote_quote 'back`tick')" 'back`tick' "remote_quote round-trips a backtick"
+expect_eq "$(roundtrip_remote_quote '')" "" "remote_quote round-trips the empty string"
+expect_eq "$(remote_quote 'a b')" "'a b'" "remote_quote wraps the value in single quotes"
+
+# --- 13. require_gate_now: the mutation-time re-check --------------------------
+#
+# require_confirm approves up front; require_gate_now proves a mutating step is
+# not reachable through a code path that skipped it. Same strictness, same exit.
+
+result_init "integration-selftest" "selftest"
+CONFIRM_VALUES=()
+confirm_add "CONFIRM DEPLOY"
+if require_gate_now "CONFIRM DEPLOY" "context"; then
+    ok "require_gate_now passes when the gate is approved"
+else
+    bad "require_gate_now must pass when the gate is approved"
+fi
+
+set +e
+CONFIRM_VALUES=()
+( require_gate_now "CONFIRM DEPLOY" "context" ) >/dev/null 2>&1
+rc=$?
+set -e
+if [[ "${rc}" -eq 11 ]]; then
+    ok "require_gate_now exits 11 when the gate was never approved"
+else
+    bad "require_gate_now must exit 11 when the gate was never approved (got ${rc})"
+fi
+
+# --- 14. journal_sanitize: the `key=` and env-file rules ----------------------
+#
+# logging.md promises `key=...` and whole `KEY=value` lines are redacted. The
+# broad env-line rule is checked too, because a journal must over-redact rather
+# than leak.
+
+expect_eq "$(printf '%s\n' '--key=abc123' | journal_sanitize)" "--key=***REDACTED***" "journal_sanitize redacts key= in a flag"
+expect_eq "$(printf '%s\n' 'api_key=abc123' | journal_sanitize)" "***ENV FILE REDACTED***" "a KEY= line is redacted whole (the env rule wins)"
+expect_eq "$(printf 'APP_KEY=base64:secret' | journal_sanitize)" "***ENV FILE REDACTED***" "journal_sanitize redacts a KEY=value line"
+expect_eq "$(printf 'export DB_PASSWORD=sekrit' | journal_sanitize)" "export ***ENV FILE REDACTED***" "journal_sanitize keeps the export keyword"
+expect_eq "$(printf 'plain text line' | journal_sanitize)" "plain text line" "journal_sanitize leaves prose alone"
+expect_eq "$(printf 'Authorization: Bearer tok123' | journal_sanitize)" "Authorization: Bearer ***REDACTED***" "journal_sanitize redacts a bearer token"
+
+# --- 15. ssh_handshake: a mutating preflight fails before mutating -------------
+set +e
+ssh_handshake "no-such-alias-for-selftest" >/dev/null 2>&1
+HS_RC=$?
+set -e
+if [[ "${HS_RC}" -ne 0 ]]; then
+    ok "ssh_handshake fails on an unreachable host"
+else
+    bad "ssh_handshake must fail on an unreachable host"
+fi
+
+# --- 16. manifest secret scan: references pass, credentials fail ---------------
+MANIFEST_DUMP="$(printf '%s\n' \
+    $'backup.repo\ts3:https://s3.amazonaws.com/bucket' \
+    $'integrations.github.secret\tgithub.token' \
+    $'host\tacme-prod')"
+set +e
+( _manifest_scan_secrets ) >/dev/null 2>&1
+SCAN_RC=$?
+set -e
+if [[ "${SCAN_RC}" -eq 0 ]]; then
+    ok "manifest secret scan passes a clean manifest"
+else
+    bad "a clean manifest must pass the secret scan (rc ${SCAN_RC})"
+fi
+
+MANIFEST_DUMP="$(printf '%s\n' $'backup.repo\tghp_0123456789abcdefghijklmnopqrstuvwx')"
+set +e
+( _manifest_scan_secrets ) >/dev/null 2>&1
+SCAN_RC=$?
+set -e
+if [[ "${SCAN_RC}" -eq 5 ]]; then
+    ok "manifest secret scan rejects a credential"
+else
+    bad "a credential in the manifest must exit 5 (rc ${SCAN_RC})"
+fi
+
 printf '\nintegration-selftest: %d passed, %d failed\n' "${PASS}" "${FAIL}"
 if [[ "${FAIL}" -gt 0 ]]; then
     exit 1

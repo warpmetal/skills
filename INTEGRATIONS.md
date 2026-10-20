@@ -118,6 +118,21 @@ Two verb families are shared so a skill does not learn a vendor vocabulary per
 provider: `notify` for every messaging provider and `dns-list` / `dns-upsert` for
 every DNS provider. The platform providers are read-only and therefore ungated.
 
+Beyond those legacy adapters, the engine also carries the **MCP provider surface**:
+one `integration <provider> <verb>` route per catalog tool (43 providers, 1331 tools),
+with the reviewed set per provider and the request each tool builds documented in the
+skills MCP package. Plane is the newest of them and the one with the least to read: it
+publishes no API document, so its surface is pinned from the vendor's own MCP server
+source, its credential is an API key in the `x-api-key` header plus the workspace slug
+in `plane.workspace_slug`, and its reads are documented in
+`docs/plane-mcp-inventory.md` and `docs/plane-endpoint-map.md`. The pin itself is
+`packages/warpmetal-cli/scripts/plane/inventory.json` (the vendor's tag, one digest per
+file) plus `sdk.json` (the published `plane-sdk`), and it is guarded in two halves: the
+checks that compare committed artifacts (`check:plane-offline`,
+`check:providers-offline`) gate every pull request, while the two that must read the
+vendor's release run in `.github/workflows/plane-drift.yml` on a schedule, because a
+vendor outage must not be able to block a merge.
+
 ### Direct examples
 
 ```bash

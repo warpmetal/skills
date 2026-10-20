@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "slugs": [
+    "x_create_posts"
+  ],
+  "reasons": {
+    "x_create_posts": "X rejects app-only bearer tokens on the write endpoint; publishing needs an OAuth 2.0 token with user context, which this server does not collect yet."
+  }
+}

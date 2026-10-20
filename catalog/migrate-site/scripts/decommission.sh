@@ -97,6 +97,7 @@ SOURCE_HOST="${SOURCE_OVERRIDE:-${MIGRATION_SOURCE_HOST:-${HOST}}}"
 TARGET_HOST="${MIGRATION_TARGET_HOST}"
 
 migration_require_alias "${SOURCE_HOST}" "source"
+HS_ERR="$(ssh_handshake "${SOURCE_HOST}")" || fail_with 3 STOPPED "Cannot reach ${SOURCE_HOST}: $(printf '%s' "${HS_ERR}" | tail -2 | tr '\n' ' ')"
 
 journal_init "migrate-site" "${CLIENT}" "${MANIFEST}"
 
@@ -161,9 +162,9 @@ if [[ -n "${BACKUP_REPO}" ]]; then
     set +e
     SNAP_OUT="$(ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "
         set -e
-        export RESTIC_REPOSITORY='${BACKUP_REPO}'
+        export RESTIC_REPOSITORY=$(remote_quote "${BACKUP_REPO}")
         command -v restic >/dev/null 2>&1 || { echo 'restic is not installed'; exit 1; }
-        restic backup '${SITE_ROOT}' --tag 'pre-decommission-${CLIENT}-$(date +%Y%m%d)' --json 2>&1 | tail -1
+        restic backup $(remote_quote "${SITE_ROOT}") --tag $(remote_quote "pre-decommission-${CLIENT}-$(date +%Y%m%d)") --json 2>&1 | tail -1
     " 2>&1)"
     SNAP_RC=$?
     set -e
@@ -181,12 +182,13 @@ fi
 
 # ── Tear down ─────────────────────────────────────────────────────────────────
 step EXECUTING "Removing the vhost, drop-in, and units on ${SOURCE_HOST}"
+require_gate_now "CONFIRM DECOMMISSION" "Tear down the vhost and units on ${SOURCE_HOST}."
 set +e
 TEARDOWN_OUT="$(ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "
     set +e
     had_error=0
 
-    for f in '/etc/nginx/sites-enabled/${DOMAIN}' '/etc/nginx/sites-enabled/${CLIENT}' '/etc/nginx/conf.d/agency-maintenance-${DOMAIN}.conf'; do
+    for f in $(remote_quote "/etc/nginx/sites-enabled/${DOMAIN}") $(remote_quote "/etc/nginx/sites-enabled/${CLIENT}") $(remote_quote "/etc/nginx/conf.d/agency-maintenance-${DOMAIN}.conf"); do
         if [ -e \"\$f\" ]; then
             echo \"removing \$f\"
             sudo rm -f \"\$f\" || had_error=1
@@ -194,7 +196,7 @@ TEARDOWN_OUT="$(ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "
     done
     sudo nginx -t >/dev/null 2>&1 && sudo systemctl reload nginx || had_error=1
 
-    units=\$(systemctl list-unit-files --no-pager 2>/dev/null | awk -v c='${CLIENT}' '\$1 ~ \"^\" c \"-\" {print \$1}')
+    units=\$(systemctl list-unit-files --no-pager 2>/dev/null | awk -v c=$(remote_quote "${CLIENT}") '\$1 ~ \"^\" c \"-\" {print \$1}')
     for u in \$units; do
         echo \"disabling \$u\"
         sudo systemctl disable --now \"\$u\" 2>/dev/null || true
@@ -218,7 +220,7 @@ if [[ "${KEEP_DATABASE}" == "false" ]]; then
     step EXECUTING "Dropping the database user on ${SOURCE_HOST}"
     set +e
     DBUSER_OUT="$(ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "
-        set -a; . '${SITE_ROOT}/shared/.env' 2>/dev/null; set +a
+        set -a; . $(remote_quote "${SITE_ROOT}/shared/.env") 2>/dev/null; set +a
         printf 'DROP USER IF EXISTS \x27%s\x27@\x27localhost\x27;\n' \"\$DB_USERNAME\" | sudo mysql --protocol=socket
     " 2>&1)"
     DBUSER_RC=$?
@@ -238,10 +240,11 @@ SITE_ROOT_REMOVED=false
 if [[ "${PRUNE_SITE_ROOT}" == "true" ]]; then
     step CONFIRMING "Checking approval gate for site root deletion"
     require_confirm "CONFIRM PRUNE" "PRUNE" "Permanently delete ${SITE_ROOT} on ${SOURCE_HOST}."
+    require_gate_now "CONFIRM PRUNE" "Permanently delete ${SITE_ROOT} on ${SOURCE_HOST}."
 
     step EXECUTING "Deleting ${SITE_ROOT} on ${SOURCE_HOST}"
     set +e
-    PRUNE_OUT="$(ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "sudo rm -rf '${SITE_ROOT}' && echo removed" 2>&1)"
+    PRUNE_OUT="$(ssh "${SSH_OPTS[@]}" "${SOURCE_SSH}" "sudo rm -rf $(remote_quote "${SITE_ROOT}") && echo removed" 2>&1)"
     PRUNE_RC=$?
     set -e
     journal_log "EXECUTING" "Delete the site root" "rm -rf ${SITE_ROOT}" "${PRUNE_RC}" 0 \

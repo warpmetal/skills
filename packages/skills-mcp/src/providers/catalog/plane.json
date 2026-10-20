@@ -1,0 +1,2322 @@
+{
+  "version": 1,
+  "provider": "plane",
+  "source": "warpmetal-providers",
+  "extractedAt": "2026-10-08",
+  "inventory": {
+    "repository": "https://github.com/makeplane/plane-mcp-server",
+    "tag": "v0.3.4",
+    "license": "MIT",
+    "actions": 207,
+    "tools": 30
+  },
+  "sdk": "plane-sdk==0.3.1",
+  "origin": "https://api.plane.so",
+  "tools": [
+    {
+      "toolSlug": "plane_customer_list",
+      "name": "customer_list",
+      "title": "List Customers",
+      "description": "The customer directory: the way in to customers, their requests and their linked work items. GET /workspaces/{workspace}/customers.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "query": {
+            "type": "string",
+            "description": "Query parameter. query."
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Customers",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_customer_retrieve",
+      "name": "customer_retrieve",
+      "title": "Get Customers",
+      "description": "One customer by id, for the detail a listing narrows to. GET /workspaces/{workspace}/customers/{customer_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Path parameter. customer_id."
+          }
+        },
+        "required": [
+          "customer_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Customers",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_customer_list_workitems",
+      "name": "customer_list_workitems",
+      "title": "List Customers (work items)",
+      "description": "The work items filed against a customer, which is how customer work is actually tracked. GET /workspaces/{workspace}/customers/{customer_id}/issues. The work items linked to one customer; the vendor reaches it through its work-item resource.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Path parameter. customer_id."
+          },
+          "customer_request_id": {
+            "type": "string",
+            "description": "Query parameter. customer_request_id."
+          },
+          "search": {
+            "type": "string",
+            "description": "Query parameter. search."
+          }
+        },
+        "required": [
+          "customer_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Customers (work items)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_customer_property_list",
+      "name": "customer_property_list",
+      "title": "List Customer Properties",
+      "description": "The workspace's customer property definitions, needed to read any customer's values. GET /workspaces/{workspace}/customer-properties.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Customer Properties",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_customer_property_retrieve",
+      "name": "customer_property_retrieve",
+      "title": "Get Customer Properties",
+      "description": "One property definition, including the options a value has to come from. GET /workspaces/{workspace}/customer-properties/{property_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "property_id": {
+            "type": "string",
+            "description": "Path parameter. property_id."
+          }
+        },
+        "required": [
+          "property_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Customer Properties",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_customer_request_list",
+      "name": "customer_request_list",
+      "title": "List Customer Requests",
+      "description": "The requests a customer has raised: the queue that customer work starts from. GET /workspaces/{workspace}/customers/{customer_id}/requests.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "customer_id": {
+            "type": "string",
+            "description": "Path parameter. customer_id."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "query": {
+            "type": "string",
+            "description": "Query parameter. query."
+          }
+        },
+        "required": [
+          "customer_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Customer Requests",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_customer_request_retrieve",
+      "name": "customer_request_retrieve",
+      "title": "Get Customer Requests",
+      "description": "One request, with the link and description a listing leaves out. GET /workspaces/{workspace}/customers/{customer_id}/requests/{request_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Path parameter. customer_id."
+          },
+          "request_id": {
+            "type": "string",
+            "description": "Path parameter. request_id."
+          }
+        },
+        "required": [
+          "customer_id",
+          "request_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Customer Requests",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_cycle_retrieve",
+      "name": "cycle_retrieve",
+      "title": "Get Cycles",
+      "description": "One cycle, whose dates and ownership the project's schedule is read from. GET /workspaces/{workspace}/projects/{project_id}/cycles/{cycle_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cycle_id": {
+            "type": "string",
+            "description": "Path parameter. cycle_id."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "cycle_id",
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Cycles",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_cycle_list_workitems",
+      "name": "cycle_list_workitems",
+      "title": "List Cycles (work items)",
+      "description": "What is planned into a cycle: the reading that answers whether a sprint is on track. GET /workspaces/{workspace}/projects/{project_id}/cycles/{cycle_id}/cycle-issues. Work items filed in the cycle; the general work-item listing is a separate tool. `pql` is Plane's own query language for filtering and grouping.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "cycle_id": {
+            "type": "string",
+            "description": "Path parameter. cycle_id."
+          },
+          "expand": {
+            "type": "string",
+            "description": "Query parameter. expand."
+          },
+          "fields": {
+            "type": "string",
+            "description": "Query parameter. fields."
+          },
+          "order_by": {
+            "type": "string",
+            "description": "Query parameter. order_by."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "pql": {
+            "type": "string",
+            "description": "Query parameter. pql (Plane Query Language)."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "cycle_id",
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Cycles (work items)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_initiative_list",
+      "name": "initiative_list",
+      "title": "List Initiatives",
+      "description": "The workspace's initiatives, the level above projects that outcomes are reported at. GET /workspaces/{workspace}/initiatives. The vendor's own note: returns every initiative; this endpoint does not paginate.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Initiatives",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_initiative_retrieve",
+      "name": "initiative_retrieve",
+      "title": "Get Initiatives",
+      "description": "One initiative, with the state and lead a listing does not carry. GET /workspaces/{workspace}/initiatives/{initiative_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "initiative_id": {
+            "type": "string",
+            "description": "Path parameter. initiative_id."
+          }
+        },
+        "required": [
+          "initiative_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Initiatives",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_intake_list",
+      "name": "intake_list",
+      "title": "List Intake Queue",
+      "description": "A project's intake queue: work proposed from outside the project, before it is accepted. GET /workspaces/{workspace}/projects/{project_id}/intake-issues.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Intake Queue",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_intake_retrieve",
+      "name": "intake_retrieve",
+      "title": "Get Intake Queue",
+      "description": "One intake item, which a triage decision is made on. GET /workspaces/{workspace}/projects/{project_id}/intake-issues/{workitem_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          },
+          "workitem_id": {
+            "type": "string",
+            "description": "Path parameter. workitem_id."
+          }
+        },
+        "required": [
+          "project_id",
+          "workitem_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Intake Queue",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_label_list",
+      "name": "label_list",
+      "title": "List Labels",
+      "description": "A project's labels, the vocabulary its work items are filtered by. GET /workspaces/{workspace}/projects/{project_id}/labels.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Labels",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_label_retrieve",
+      "name": "label_retrieve",
+      "title": "Get Labels",
+      "description": "One label by id, for the parent and colour a listing flattens. GET /workspaces/{workspace}/projects/{project_id}/labels/{label_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "label_id": {
+            "type": "string",
+            "description": "Path parameter. label_id."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "label_id",
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Labels",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_member_me",
+      "name": "member_me",
+      "title": "Who Am I",
+      "description": "Who the stored token belongs to: the identity a write is attributed to. GET /users/me. The vendor's own note: the authenticated user. Answers for the token itself, so it names no workspace in its path.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Who Am I",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_member_list_workspace",
+      "name": "member_list_workspace",
+      "title": "List Members and Roles (workspace)",
+      "description": "The workspace's members, which is how a UUID in any other response is turned into a person. GET /workspaces/{workspace}/members-lite. The vendor's own note: name filters match case-insensitively and combine with AND.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "display_name": {
+            "type": "string",
+            "description": "Query parameter. display_name."
+          },
+          "email": {
+            "type": "string",
+            "description": "Query parameter. email."
+          },
+          "first_name": {
+            "type": "string",
+            "description": "Query parameter. first_name."
+          },
+          "is_active": {
+            "type": "boolean",
+            "description": "Query parameter. is_active."
+          },
+          "is_bot": {
+            "type": "boolean",
+            "description": "Query parameter. is_bot."
+          },
+          "last_name": {
+            "type": "string",
+            "description": "Query parameter. last_name."
+          },
+          "order_by": {
+            "type": "string",
+            "description": "Query parameter. order_by."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "role_slug": {
+            "type": "string",
+            "description": "Query parameter. role_slug."
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Members and Roles (workspace)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_member_list_project",
+      "name": "member_list_project",
+      "title": "List Members and Roles (project)",
+      "description": "A project's members, for the people a work item can be assigned to. GET /workspaces/{workspace}/projects/{project_id}/project-members.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Members and Roles (project)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_member_list_roles",
+      "name": "member_list_roles",
+      "title": "List Members and Roles (role catalogue)",
+      "description": "The role catalogue, whose slugs are the values the member listing filters on. GET /workspaces/{workspace}/roles. `namespace` selects the workspace or the project role catalogue.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "namespace": {
+            "type": "string",
+            "description": "Query parameter. namespace."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Members and Roles (role catalogue)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_milestone_list",
+      "name": "milestone_list",
+      "title": "List Milestones",
+      "description": "A project's milestones with their target dates: the readings a delivery date is checked against. GET /workspaces/{workspace}/projects/{project_id}/milestones.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Milestones",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_milestone_retrieve",
+      "name": "milestone_retrieve",
+      "title": "Get Milestones",
+      "description": "One milestone by id, for the fields a listing truncates. GET /workspaces/{workspace}/projects/{project_id}/milestones/{milestone_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "milestone_id": {
+            "type": "string",
+            "description": "Path parameter. milestone_id."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "milestone_id",
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Milestones",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_milestone_list_workitems",
+      "name": "milestone_list_workitems",
+      "title": "List Milestones (work items)",
+      "description": "What is filed under a milestone: the progress behind its target date. GET /workspaces/{workspace}/projects/{project_id}/milestones/{milestone_id}/work-items.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "milestone_id": {
+            "type": "string",
+            "description": "Path parameter. milestone_id."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "milestone_id",
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Milestones (work items)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_module_retrieve",
+      "name": "module_retrieve",
+      "title": "Get Modules",
+      "description": "One module, whose status and members make it a workstream rather than a label. GET /workspaces/{workspace}/projects/{project_id}/modules/{module_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "module_id": {
+            "type": "string",
+            "description": "Path parameter. module_id."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "module_id",
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Modules",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_module_list_workitems",
+      "name": "module_list_workitems",
+      "title": "List Modules (work items)",
+      "description": "What a module contains, for reading scope without loading the whole project. GET /workspaces/{workspace}/projects/{project_id}/modules/{module_id}/module-issues. `pql` is Plane's own query language for filtering and grouping.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "expand": {
+            "type": "string",
+            "description": "Query parameter. expand."
+          },
+          "fields": {
+            "type": "string",
+            "description": "Query parameter. fields."
+          },
+          "module_id": {
+            "type": "string",
+            "description": "Path parameter. module_id."
+          },
+          "order_by": {
+            "type": "string",
+            "description": "Query parameter. order_by."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "pql": {
+            "type": "string",
+            "description": "Query parameter. pql (Plane Query Language)."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "module_id",
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Modules (work items)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_page_list_workitem_pages",
+      "name": "page_list_workitem_pages",
+      "title": "List Pages (pages)",
+      "description": "The pages attached to one work item: the notes that travel with it. GET /workspaces/{workspace}/projects/{project_id}/work-items/{workitem_id}/pages.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          },
+          "workitem_id": {
+            "type": "string",
+            "description": "Path parameter. workitem_id."
+          }
+        },
+        "required": [
+          "project_id",
+          "workitem_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Pages (pages)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_project_list",
+      "name": "project_list",
+      "title": "List Projects",
+      "description": "The project directory. It reads Plane's compact listing, which is what the vendor's own tools browse with. GET /workspaces/{workspace}/projects-lite. The vendor's own note: trimmed fields; use retrieve for full detail. The compact project listing the vendor's own tools read.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "order_by": {
+            "type": "string",
+            "description": "Query parameter. order_by."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Projects",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_project_retrieve",
+      "name": "project_retrieve",
+      "title": "Get Projects",
+      "description": "One project, for the identifier and defaults every other call is scoped by. GET /workspaces/{workspace}/projects/{project_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Projects",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_project_worklog_summary",
+      "name": "project_worklog_summary",
+      "title": "Read Projects (worklog summary)",
+      "description": "Total logged time per project, which no work-item listing aggregates. GET /workspaces/{workspace}/projects/{project_id}/total-worklogs.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Read Projects (worklog summary)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_project_get_features",
+      "name": "project_get_features",
+      "title": "Get Projects (features)",
+      "description": "Which features a project has switched on, the state `project.update-features` would change. GET /workspaces/{workspace}/projects/{project_id}/features.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Projects (features)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_project_estimate_retrieve",
+      "name": "project_estimate_retrieve",
+      "title": "Get Project Estimates",
+      "description": "A project's estimate: the scale that gives its points meaning. GET /workspaces/{workspace}/projects/{project_id}/estimates. The vendor's own note: a project has at most one estimate. A project has at most one estimate, so this reads a singleton rather than a list.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Project Estimates",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_project_estimate_list_points",
+      "name": "project_estimate_list_points",
+      "title": "List Project Estimates (points)",
+      "description": "The points of that estimate, which is what a work item's point value refers to. GET /workspaces/{workspace}/projects/{project_id}/estimates/{estimate_id}/estimate-points.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "estimate_id": {
+            "type": "string",
+            "description": "Path parameter. estimate_id."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "estimate_id",
+          "project_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Project Estimates (points)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_release_list",
+      "name": "release_list",
+      "title": "List Releases",
+      "description": "The workspace's releases, the container work items are shipped in. GET /workspaces/{workspace}/releases.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Releases",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_release_retrieve",
+      "name": "release_retrieve",
+      "title": "Get Releases",
+      "description": "One release, with the dates and lead a listing leaves out. GET /workspaces/{workspace}/releases/{release_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "release_id": {
+            "type": "string",
+            "description": "Path parameter. release_id."
+          }
+        },
+        "required": [
+          "release_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Releases",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_release_get_changelog",
+      "name": "release_get_changelog",
+      "title": "Get Releases (changelog)",
+      "description": "The release notes: read before editing them, because Plane creates the changelog empty on first read. GET /workspaces/{workspace}/releases/{release_id}/changelog. A release has one changelog; Plane creates it empty on first read.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "release_id": {
+            "type": "string",
+            "description": "Path parameter. release_id."
+          }
+        },
+        "required": [
+          "release_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Releases (changelog)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_release_list_workitems",
+      "name": "release_list_workitems",
+      "title": "List Releases (work items)",
+      "description": "What a release carries, which is the question a release page exists to answer. GET /workspaces/{workspace}/releases/{release_id}/work-items.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "release_id": {
+            "type": "string",
+            "description": "Path parameter. release_id."
+          }
+        },
+        "required": [
+          "release_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Releases (work items)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_release_tag_list",
+      "name": "release_tag_list",
+      "title": "List Release Tags",
+      "description": "The release tags a release can be pinned to: version identifiers, not git refs. GET /workspaces/{workspace}/releases/tags.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Release Tags",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_release_tag_retrieve",
+      "name": "release_tag_retrieve",
+      "title": "Get Release Tags",
+      "description": "One tag by id, for the commit hash a listing does not show. GET /workspaces/{workspace}/releases/tags/{tag_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "tag_id": {
+            "type": "string",
+            "description": "Path parameter. tag_id."
+          }
+        },
+        "required": [
+          "tag_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Release Tags",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_state_list",
+      "name": "state_list",
+      "title": "List Workflow States",
+      "description": "A project's workflow states, which every work item's `state` argument has to name. GET /workspaces/{workspace}/projects/{project_id}/states. The vendor's own note: workspace scope when project_id is omitted. The states of one project; the workspace-wide catalogue is not exposed. `project_id` is required: this tool is the project-scoped branch of the vendor's action, and the branch without it is not exposed.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Workflow States",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_state_retrieve",
+      "name": "state_retrieve",
+      "title": "Get Workflow States",
+      "description": "One state by id: its group tells a reader whether a work item counts as started or done. GET /workspaces/{workspace}/projects/{project_id}/states/{state_id}. `project_id` is required: this tool is the project-scoped branch of the vendor's action, and the branch without it is not exposed.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          },
+          "state_id": {
+            "type": "string",
+            "description": "Path parameter. state_id."
+          }
+        },
+        "required": [
+          "state_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Workflow States",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_work_log_list",
+      "name": "work_log_list",
+      "title": "List Work Logs",
+      "description": "Time logged against one work item, the records the project summary is computed from. GET /workspaces/{workspace}/projects/{project_id}/work-items/{workitem_id}/worklogs.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          },
+          "workitem_id": {
+            "type": "string",
+            "description": "Path parameter. workitem_id."
+          }
+        },
+        "required": [
+          "project_id",
+          "workitem_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Work Logs",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_workitem_retrieve",
+      "name": "workitem_retrieve",
+      "title": "Get Work Items",
+      "description": "One work item by UUID, with the optional expansions a search result does not carry. GET /workspaces/{workspace}/projects/{project_id}/work-items/{workitem_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "expand": {
+            "type": "string",
+            "description": "Query parameter. expand."
+          },
+          "external_id": {
+            "type": "string",
+            "description": "Query parameter. external_id."
+          },
+          "external_source": {
+            "type": "string",
+            "description": "Query parameter. external_source."
+          },
+          "fields": {
+            "type": "string",
+            "description": "Query parameter. fields."
+          },
+          "order_by": {
+            "type": "string",
+            "description": "Query parameter. order_by."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          },
+          "workitem_id": {
+            "type": "string",
+            "description": "Path parameter. workitem_id."
+          }
+        },
+        "required": [
+          "project_id",
+          "workitem_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Work Items",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_workitem_retrieve_by_identifier",
+      "name": "workitem_retrieve_by_identifier",
+      "title": "Get Work Items (by identifier)",
+      "description": "One work item by its human key (PROJECT-123), which is how people refer to work in a conversation. GET /workspaces/{workspace}/work-items/{workitem_identifier}. The vendor's own note: identifier is PROJECT-N, e.g. ENG-42. `workitem_identifier` is the human key (PROJECT-123), not a UUID.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "expand": {
+            "type": "string",
+            "description": "Query parameter. expand."
+          },
+          "external_id": {
+            "type": "string",
+            "description": "Query parameter. external_id."
+          },
+          "external_source": {
+            "type": "string",
+            "description": "Query parameter. external_source."
+          },
+          "fields": {
+            "type": "string",
+            "description": "Query parameter. fields."
+          },
+          "order_by": {
+            "type": "string",
+            "description": "Query parameter. order_by."
+          },
+          "workitem_identifier": {
+            "type": "string",
+            "description": "Path parameter. workitem_identifier."
+          }
+        },
+        "required": [
+          "workitem_identifier"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Work Items (by identifier)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_workitem_search",
+      "name": "workitem_search",
+      "title": "Search Work Items",
+      "description": "Workspace-wide work-item search: the only read that crosses projects. GET /workspaces/{workspace}/work-items/search.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "expand": {
+            "type": "string",
+            "description": "Query parameter. expand."
+          },
+          "external_id": {
+            "type": "string",
+            "description": "Query parameter. external_id."
+          },
+          "external_source": {
+            "type": "string",
+            "description": "Query parameter. external_source."
+          },
+          "fields": {
+            "type": "string",
+            "description": "Query parameter. fields."
+          },
+          "order_by": {
+            "type": "string",
+            "description": "Query parameter. order_by."
+          },
+          "query": {
+            "type": "string",
+            "description": "Query parameter. query."
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Search Work Items",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_workitem_activity_list",
+      "name": "workitem_activity_list",
+      "title": "List Work Item Activity",
+      "description": "A work item's history, which says who changed what and when. GET /workspaces/{workspace}/projects/{project_id}/work-items/{workitem_id}/activities.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          },
+          "workitem_id": {
+            "type": "string",
+            "description": "Path parameter. workitem_id."
+          }
+        },
+        "required": [
+          "project_id",
+          "workitem_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Work Item Activity",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_workitem_attachment_list",
+      "name": "workitem_attachment_list",
+      "title": "List Work Item Attachments",
+      "description": "The attachments on a work item, for the evidence a description only points at. GET /workspaces/{workspace}/projects/{project_id}/work-items/{workitem_id}/attachments.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          },
+          "workitem_id": {
+            "type": "string",
+            "description": "Path parameter. workitem_id."
+          }
+        },
+        "required": [
+          "project_id",
+          "workitem_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Work Item Attachments",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_workitem_comment_list",
+      "name": "workitem_comment_list",
+      "title": "List Work Item Comments",
+      "description": "A work item's comments, which is where the decisions about it actually live. GET /workspaces/{workspace}/projects/{project_id}/work-items/{workitem_id}/comments.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          },
+          "workitem_id": {
+            "type": "string",
+            "description": "Path parameter. workitem_id."
+          }
+        },
+        "required": [
+          "project_id",
+          "workitem_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Work Item Comments",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_workitem_comment_retrieve",
+      "name": "workitem_comment_retrieve",
+      "title": "Get Work Item Comments",
+      "description": "One comment by id, so a reply can quote it without fetching the whole thread. GET /workspaces/{workspace}/projects/{project_id}/work-items/{workitem_id}/comments/{comment_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "comment_id": {
+            "type": "string",
+            "description": "Path parameter. comment_id."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          },
+          "workitem_id": {
+            "type": "string",
+            "description": "Path parameter. workitem_id."
+          }
+        },
+        "required": [
+          "comment_id",
+          "project_id",
+          "workitem_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Work Item Comments",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_workitem_link_list",
+      "name": "workitem_link_list",
+      "title": "List Work Item Links",
+      "description": "The links hanging off a work item: pull requests, documents, dashboards. GET /workspaces/{workspace}/projects/{project_id}/work-items/{workitem_id}/links.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          },
+          "workitem_id": {
+            "type": "string",
+            "description": "Path parameter. workitem_id."
+          }
+        },
+        "required": [
+          "project_id",
+          "workitem_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Work Item Links",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_workitem_link_retrieve",
+      "name": "workitem_link_retrieve",
+      "title": "Get Work Item Links",
+      "description": "One link by id, for the metadata Plane stores beside the URL. GET /workspaces/{workspace}/projects/{project_id}/work-items/{workitem_id}/links/{link_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "link_id": {
+            "type": "string",
+            "description": "Path parameter. link_id."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          },
+          "workitem_id": {
+            "type": "string",
+            "description": "Path parameter. workitem_id."
+          }
+        },
+        "required": [
+          "link_id",
+          "project_id",
+          "workitem_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Work Item Links",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_workitem_property_retrieve_option",
+      "name": "workitem_property_retrieve_option",
+      "title": "Get Work Item Properties (option)",
+      "description": "One option of a project property, which is the value set a work item can be given. GET /workspaces/{workspace}/projects/{project_id}/work-item-properties/{property_id}/options/{option_id}. The options of one project's property; the workspace-wide catalogue is not exposed. `project_id` is required: this tool is the project-scoped branch of the vendor's action, and the branch without it is not exposed.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "option_id": {
+            "type": "string",
+            "description": "Path parameter. option_id."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          },
+          "property_id": {
+            "type": "string",
+            "description": "Path parameter. property_id."
+          }
+        },
+        "required": [
+          "option_id",
+          "property_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Work Item Properties (option)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_workitem_property_get_value",
+      "name": "workitem_property_get_value",
+      "title": "Get Work Item Properties (value)",
+      "description": "One custom property value on one work item: the fields Plane does not model natively. GET /workspaces/{workspace}/projects/{project_id}/work-items/{workitem_id}/work-item-properties/{property_id}/values.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          },
+          "property_id": {
+            "type": "string",
+            "description": "Path parameter. property_id."
+          },
+          "workitem_id": {
+            "type": "string",
+            "description": "Path parameter. workitem_id."
+          }
+        },
+        "required": [
+          "project_id",
+          "property_id",
+          "workitem_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Work Item Properties (value)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_workitem_type_list",
+      "name": "workitem_type_list",
+      "title": "List Work Item Types",
+      "description": "A project's work-item types, which are the values `type_id` accepts and the scope a property is read at. GET /workspaces/{workspace}/projects/{project_id}/work-item-types. The vendor's own note: workspace scope when project_id is omitted. The types of one project; the workspace-wide type catalogue is not exposed. `project_id` is required: this tool is the project-scoped branch of the vendor's action, and the branch without it is not exposed.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Work Item Types",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_workitem_type_retrieve",
+      "name": "workitem_type_retrieve",
+      "title": "Get Work Item Types",
+      "description": "One work-item type, whose properties decide what a work item of that type carries. GET /workspaces/{workspace}/projects/{project_id}/work-item-types/{workitem_type_id}. `project_id` is required: this tool is the project-scoped branch of the vendor's action, and the branch without it is not exposed.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          },
+          "workitem_type_id": {
+            "type": "string",
+            "description": "Path parameter. workitem_type_id."
+          }
+        },
+        "required": [
+          "workitem_type_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Work Item Types",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_workspace_get_features",
+      "name": "workspace_get_features",
+      "title": "Get Workspace Settings (features)",
+      "description": "Which workspace features are on, so a caller can tell a missing feature from a missing permission. GET /workspaces/{workspace}/features. The vendor's own note: feature flags for the current workspace. Which workspace features are switched on.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Workspace Settings (features)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_template_list",
+      "name": "template_list",
+      "title": "List Templates",
+      "description": "The templates a project creates pages or work items from: the shapes a team has agreed on. GET /workspaces/{workspace}/projects/{project_id}/workitems/templates | /workspaces/{workspace}/projects/{project_id}/pages/templates. One project's templates of the `kind` asked for; the workspace catalogue is not exposed. `kind` chooses the endpoint: workitem or page. `project_id` is required: this tool is the project-scoped branch of the vendor's action, and the branch without it is not exposed.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string",
+            "description": "Chooses the endpoint. kind."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Path parameter. project_id."
+          }
+        },
+        "required": [
+          "kind"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Templates",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_collection_list",
+      "name": "collection_list",
+      "title": "List Page Collections",
+      "description": "The wiki collections in the workspace, which is how pages are grouped and shared. GET /workspaces/{workspace}/collections.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Page Collections",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_collection_retrieve",
+      "name": "collection_retrieve",
+      "title": "Get Page Collections",
+      "description": "One collection by id, with the access level its pages inherit. GET /workspaces/{workspace}/collections/{collection_id}.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "collection_id": {
+            "type": "string",
+            "description": "Path parameter. collection_id."
+          }
+        },
+        "required": [
+          "collection_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Get Page Collections",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_collection_list_pages",
+      "name": "collection_list_pages",
+      "title": "List Page Collections (pages)",
+      "description": "The pages in a collection, including the nesting a search result flattens. GET /workspaces/{workspace}/collections/{collection_id}/pages.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "collection_id": {
+            "type": "string",
+            "description": "Path parameter. collection_id."
+          },
+          "cursor": {
+            "type": "string",
+            "description": "Query parameter. cursor."
+          },
+          "parent_id": {
+            "type": "string",
+            "description": "Query parameter. parent_id."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Query parameter. per_page."
+          },
+          "search": {
+            "type": "string",
+            "description": "Query parameter. search."
+          }
+        },
+        "required": [
+          "collection_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Page Collections (pages)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_collection_search_pages",
+      "name": "collection_search_pages",
+      "title": "Search Page Collections",
+      "description": "Search inside one collection, which the page listing cannot express. GET /workspaces/{workspace}/collections/{collection_id}/pages-search. The vendor's own note: pages not yet in this collection, to pick ids for add_pages.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "collection_id": {
+            "type": "string",
+            "description": "Path parameter. collection_id."
+          },
+          "search": {
+            "type": "string",
+            "description": "Query parameter. search."
+          }
+        },
+        "required": [
+          "collection_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Search Page Collections",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "toolSlug": "plane_collection_list_members",
+      "name": "collection_list_members",
+      "title": "List Page Collections (members)",
+      "description": "Who a collection is shared with, and at what access level. GET /workspaces/{workspace}/collections/{collection_id}/members.",
+      "toolkitId": "plane",
+      "version": "v1-read",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "collection_id": {
+            "type": "string",
+            "description": "Path parameter. collection_id."
+          }
+        },
+        "required": [
+          "collection_id"
+        ],
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "annotations": {
+        "title": "List Page Collections (members)",
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      }
+    }
+  ]
+}

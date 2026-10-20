@@ -67,6 +67,17 @@ async function buildContext(
       await read("pagerduty.email", "pagerdutyEmail");
       ctx.pagerdutyEmail = ctx.pagerdutyEmail ?? context.env["PAGERDUTY_EMAIL"] ?? "";
       break;
+    case "plane": {
+      // Plane is per-workspace: the slug names the workspace in every path, so a
+      // value carrying `/`, `..` or a query string would move the request - and the
+      // stored API key with it - to a different resource. `planeWorkspaceSlug`
+      // reduces the shapes an operator can paste and refuses everything else.
+      await read("plane.workspace_slug", "planeWorkspace");
+      ctx.planeWorkspace = planeWorkspaceSlug(
+        ctx.planeWorkspace ?? context.env["PLANE_WORKSPACE_SLUG"] ?? "",
+      );
+      break;
+    }
     case "zendesk": {
       // Zendesk is per-tenant: every request goes to <subdomain>.zendesk.com.
       // A bare label is expected, but an operator who pastes the full host or
@@ -186,6 +197,38 @@ function encodeForm(form: Record<string, unknown>): string {
 }
 
 /**
+ * The workspace label in a stored `plane.workspace_slug`, or "" when the value is
+ * not one of the shapes an operator can paste.
+ *
+ * The slug names the workspace in every path, so a value carrying `/`, `..` or a
+ * query string would move the request - and the stored API key with it - to a
+ * different resource. Plane labels are DNS-label shaped, so a bare label is taken
+ * as it is and the two URL shapes Plane prints are reduced to their label:
+ * `https://app.plane.so/<slug>/` and
+ * `https://api.plane.so/api/v1/workspaces/<slug>/`. Everything else is refused -
+ * including a deep app link (`https://app.plane.so/<slug>/issues/`), whose other
+ * segments do not name the workspace. The reductions are anchored per segment
+ * rather than done with a blind string replace, because a replace would splice
+ * the neighbours of a stray `workspaces/` together into a label that passes the
+ * shape check: `a/workspaces/b` must be refused, not read as `ab`.
+ */
+function planeWorkspaceSlug(raw: string): string {
+  const segments = raw
+    .trim()
+    .replace(/^[a-z][a-z0-9+.-]*:\/\//i, "")
+    .replace(/[?#].*$/, "")
+    .split("/")
+    .filter((part) => part !== "");
+  // A pasted value may carry the host. A host is the only leading segment that can
+  // hold a "." or a ":", and a host with no path leaves no label behind.
+  if (segments.length > 1 && /[.:]/.test(segments[0] ?? "")) segments.shift();
+  if (segments[0] === "api" && segments[1] === "v1") segments.splice(0, 2);
+  if (segments[0] === "workspaces") segments.shift();
+  const label = segments.length === 1 ? (segments[0] ?? "") : "";
+  return /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/i.test(label) ? label : "";
+}
+
+/**
  * Normalises a provider body into the `data` object the envelope carries.
  *
  * The provider's root is not always an object. When it is an array, spreading
@@ -208,6 +251,22 @@ function wrapProviderData(
   }
   return { raw: text, toolSlug: def.toolSlug };
 }
+
+/**
+ * Providers that refuse an unusable credential with 403 rather than 401.
+ *
+ * A 403 usually means "the credential is fine, the scope is not", and the hint
+ * below says so. Plane is not that: measured against the live API
+ * (`scripts/plane/probe.mjs`), a key it does not recognise is refused with
+ * `403 {"detail":"Given API token is not valid"}`, while the 403 it sends for a
+ * missing permission carries a different body. Reading the first as a scope
+ * problem sends the operator to grant a permission instead of reissuing the key,
+ * so the body - not the status alone - decides, and only for a provider whose body
+ * was measured.
+ */
+const CREDENTIAL_REFUSED_ON_403: Readonly<Record<string, readonly string[]>> = {
+  plane: ["API token is not valid"],
+};
 
 export async function executeMcpTool(
   def: McpToolDef,
@@ -260,6 +319,14 @@ export async function executeMcpTool(
       def.provider,
       def.verb,
       "No pagerduty.email in the store (the API requires a From header).",
+    );
+  }
+  if (def.provider === "plane" && !ctx.planeWorkspace) {
+    return needsAuth(
+      def.provider,
+      def.verb,
+      "No valid plane.workspace_slug in the store (the workspace's slug, as it appears in " +
+        "https://app.plane.so/<slug>/). Run `warpmetal env store set plane.workspace_slug`.",
     );
   }
   if (def.provider === "zendesk" && !ctx.zendeskSubdomain) {
@@ -346,7 +413,17 @@ export async function executeMcpTool(
   if (response.status === 403) {
     // A 403 is not a rejected credential: the token is valid but the provider
     // scoped it too narrowly. Reporting it as "rejected" sends the operator to
-    // rotate a working token instead of granting the missing scope.
+    // rotate a working token instead of granting the missing scope. A provider
+    // that breaks that rule answers with a body that says so, and only then is the
+    // credential treated as refused.
+    const authRefused = CREDENTIAL_REFUSED_ON_403[def.provider] ?? [];
+    if (authRefused.some((marker) => response.text.includes(marker))) {
+      return needsAuth(
+        def.provider,
+        def.verb,
+        `${def.provider} rejected the stored credential (HTTP 403); it is invalid, expired or revoked.`,
+      );
+    }
     return needsAuth(
       def.provider,
       def.verb,

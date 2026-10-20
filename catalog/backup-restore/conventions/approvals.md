@@ -89,11 +89,13 @@ mutating step that is not here must not exist.
 | Change nginx config | `CONFIRM NGINX CHANGE` | `ssl-dns-fix/scripts/fix-nginx.sh` | Writing the vhost |
 | Issue or renew a certificate | `CONFIRM CERT ISSUE` | `ssl-dns-fix/scripts/fix-cert.sh` | The real `certbot` run |
 | Change DNS records | `CONFIRM DNS CHANGE` | `migrate-site/scripts/cutover.sh` | Applying the record diff |
+| Run the operator's own DNS command | `CONFIRM DNS COMMAND` | `migrate-site/scripts/cutover.sh` | The `--dns-command` shell |
 | Disable source cron | `CONFIRM DISABLE CRON` | `migrate-site/scripts/freeze.sh` | Disabling the source crontab |
 | Prune snapshots | `CONFIRM PRUNE` | `backup-restore/scripts/setup-backup.sh` | Retention pruning |
 | Install workers and cron | `CONFIRM SETUP` | `queue-cron-setup/scripts/setup-workers.sh` | Writing units and crontab |
 | Restart workers gracefully | `CONFIRM RESTART` | `queue-cron-setup/scripts/restart-workers.sh` | `queue:restart` |
 | Configure monitoring | `CONFIRM MONITORING SETUP` | `server-monitoring/scripts/setup-monitoring.sh` | Adding checks |
+| Post a test notification | `CONFIRM NOTIFY` | `server-monitoring/scripts/test-alert.sh` | Sending the message |
 | Initialise backups | `CONFIRM BACKUP SETUP` | `backup-restore/scripts/setup-backup.sh` | Repo init and cron install |
 | Restore to scratch | `CONFIRM RESTORE` | `backup-restore/scripts/restore.sh` | Restoring |
 | Restore over live data | `CONFIRM RESTORE <client>` | `backup-restore/scripts/restore.sh` | Overwriting live data |

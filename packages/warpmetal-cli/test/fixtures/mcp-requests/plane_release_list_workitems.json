@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.plane.so/api/v1/workspaces/acme/releases/sample_release_id/work-items/?cursor=sample_cursor&per_page=1",
+  "headers": {
+    "x-api-key": "__TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

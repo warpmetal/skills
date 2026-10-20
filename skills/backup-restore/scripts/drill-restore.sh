@@ -217,7 +217,7 @@ REMOTE
 step EXECUTING "Running the drill on ${HOST}"
 set +e
 DRILL_OUT="$(printf '%s' "${REMOTE_SCRIPT}" | ssh "${SSH_OPTS[@]}" "${SSH_DEST}" \
-    "CLIENT='${CLIENT}' SITE_ROOT='${SITE_ROOT}' SCRATCH_DIR='${SCRATCH_DIR}' TEMP_DB='${TEMP_DB}' SNAPSHOT='${SNAPSHOT}' REPO='${REPO}' PASS_FILE='${PASS_FILE}' ENV_FILE='${ENV_FILE}' KEEP_SCRATCH='${KEEP_SCRATCH}' bash -s" 2>&1)"
+    "CLIENT=$(remote_quote "${CLIENT}") SITE_ROOT=$(remote_quote "${SITE_ROOT}") SCRATCH_DIR=$(remote_quote "${SCRATCH_DIR}") TEMP_DB=$(remote_quote "${TEMP_DB}") SNAPSHOT=$(remote_quote "${SNAPSHOT}") REPO=$(remote_quote "${REPO}") PASS_FILE=$(remote_quote "${PASS_FILE}") ENV_FILE=$(remote_quote "${ENV_FILE}") KEEP_SCRATCH=$(remote_quote "${KEEP_SCRATCH}") bash -s" 2>&1)"
 DRILL_RC=$?
 set -e
 

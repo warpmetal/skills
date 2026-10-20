@@ -366,6 +366,30 @@ manifest_require() {
     done
 }
 
+# _manifest_scan_secrets — reject a credential-shaped value in the manifest.
+#
+# `client-manifest.md` promises "no secrets in manifest", and this is the check
+# that makes the promise true. References are fine (`secret = "cloudflare.token"`),
+# so every `integrations.*` key and any `api_key_secret` is a *name*, not a
+# value, and is skipped. The patterns are the unambiguous credential shapes
+# only - keys, tokens, JWTs, a Slack webhook - so a healthcheck URL or a repo
+# URL is not flagged.
+_manifest_scan_secrets() {
+    local line key value
+    while IFS= read -r line; do
+        [[ -n "${line}" ]] || continue
+        key="${line%%$'\t'*}"
+        [[ "${key}" != "${line}" ]] || continue
+        value="${line#*$'\t'}"
+        case "${key}" in
+            integrations.*|*api_key_secret) continue ;;
+        esac
+        if printf '%s' "${value}" | grep -Eq 'AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|sk-[A-Za-z0-9]{20,}|glpat-[A-Za-z0-9_-]{20,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}|hooks\.slack\.com/services/[A-Za-z0-9+/]{8,}'; then
+            _manifest_fail 5 "Manifest field '${key}' looks like a credential; store it in the vault (${MANIFEST:-})"
+        fi
+    done <<< "${MANIFEST_DUMP}"
+}
+
 manifest_validate() {
     local stack
     stack="$(manifest_get stack)"
@@ -388,6 +412,8 @@ manifest_validate() {
     if [[ -n "${site_root}" && "${site_root}" != /* ]]; then
         _manifest_fail 5 "site_root must be an absolute path (got: ${site_root})"
     fi
+
+    _manifest_scan_secrets
 }
 
 # manifest_validate_ssh — the alias must exist in the SSH config.

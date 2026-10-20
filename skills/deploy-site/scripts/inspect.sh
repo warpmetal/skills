@@ -97,7 +97,7 @@ step OBSERVING "SSH connectivity: OK"
 
 # 2. Disk
 step OBSERVING "Checking disk usage"
-try_rsh "df -h '${SITE_ROOT}' 2>/dev/null; echo ---; df -i '${SITE_ROOT}' 2>/dev/null"
+try_rsh "df -h $(remote_quote "${SITE_ROOT}") 2>/dev/null; echo ---; df -i $(remote_quote "${SITE_ROOT}") 2>/dev/null"
 DISK_REPORT="$(printf '%s' "${REMOTE_OUT}")"
 printf '%s\n' "${DISK_REPORT}" >&2
 
@@ -108,13 +108,13 @@ fi
 
 # 3. Current release and rollback target
 step OBSERVING "Inspecting releases"
-try_rsh "readlink -f '${SITE_ROOT}/current' 2>/dev/null || true"
+try_rsh "readlink -f $(remote_quote "${SITE_ROOT}/current") 2>/dev/null || true"
 CURRENT_RELEASE="$(basename "${REMOTE_OUT}" 2>/dev/null || true)"
 
 try_rsh "
-    cd '${RELEASES_DIR}' 2>/dev/null || exit 0
+    cd $(remote_quote "${RELEASES_DIR}") 2>/dev/null || exit 0
     for d in \$(ls -1t); do
-        [ \"\$d\" = '${CURRENT_RELEASE}' ] && continue
+        [ \"\$d\" = $(remote_quote "${CURRENT_RELEASE}") ] && continue
         echo \"\$d\"
         break
     done
@@ -123,7 +123,7 @@ PREVIOUS_RELEASE="$(printf '%s' "${REMOTE_OUT}" | head -1 | tr -d '[:space:]')"
 
 # 4. Shared resources
 step OBSERVING "Checking shared resources"
-try_rsh "[ -f '${SITE_ROOT}/shared/.env' ] && echo present || echo missing"
+try_rsh "[ -f $(remote_quote "${SITE_ROOT}/shared/.env") ] && echo present || echo missing"
 SHARED_ENV="$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')"
 if [[ "${SHARED_ENV}" != "present" ]]; then
     result_warn "Missing ${SITE_ROOT}/shared/.env"
@@ -133,7 +133,7 @@ fi
 step OBSERVING "Checking runtime status"
 case "${STACK}" in
     laravel|wordpress) try_rsh "systemctl is-active php*-fpm 2>/dev/null || echo unknown" ;;
-    node)              try_rsh "systemctl is-active '${APP_UNIT}' 2>/dev/null || echo unknown" ;;
+    node)              try_rsh "systemctl is-active $(remote_quote "${APP_UNIT}") 2>/dev/null || echo unknown" ;;
     static)            try_rsh "systemctl is-active nginx 2>/dev/null || echo unknown" ;;
 esac
 RUNTIME_STATUS="$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')"
@@ -142,20 +142,20 @@ RUNTIME_STATUS="$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')"
 MIGRATION_STATUS="n/a"
 if [[ "${STACK}" == "laravel" ]]; then
     step OBSERVING "Checking pending migrations"
-    try_rsh "cd '${SITE_ROOT}/current' 2>/dev/null && php artisan migrate:status 2>&1 | tail -5 || echo unavailable"
+    try_rsh "cd $(remote_quote "${SITE_ROOT}/current") 2>/dev/null && php artisan migrate:status 2>&1 | tail -5 || echo unavailable"
     MIGRATION_STATUS="$(printf '%s' "${REMOTE_OUT}" | tr '\n' ' ')"
 fi
 
 # 7. Deployment lock
 step OBSERVING "Checking deployment lock"
-try_rsh "flock -n '${LOCKFILE}' true 2>/dev/null && echo free || echo held"
+try_rsh "flock -n $(remote_quote "${LOCKFILE}") true 2>/dev/null && echo free || echo held"
 LOCK_STATE="$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')"
 if [[ "${LOCK_STATE}" == "held" ]]; then
     result_warn "The deployment lock ${LOCKFILE} is currently held"
 fi
 
 # 8. Git mirror
-try_rsh "git --git-dir='${MIRROR_DIR}' rev-parse --short HEAD 2>/dev/null || echo none"
+try_rsh "git --git-dir=$(remote_quote "${MIRROR_DIR}") rev-parse --short HEAD 2>/dev/null || echo none"
 MIRROR_HEAD="$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')"
 
 step OBSERVING "Preflight complete"

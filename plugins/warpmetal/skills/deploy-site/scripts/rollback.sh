@@ -72,6 +72,7 @@ manifest_require host site_root stack
 # Surface dependency gaps in warnings[]: "not verified" must never read as "OK".
 manifest_parser_report
 manifest_validate_ssh
+HS_ERR="$(ssh_handshake "${HOST}")" || fail_with 3 STOPPED "Cannot reach ${HOST}: $(printf '%s' "${HS_ERR}" | tail -2 | tr '\n' ' ')"
 
 journal_init "deploy-site" "${CLIENT}" "${MANIFEST}"
 
@@ -92,7 +93,7 @@ try_rsh() {
 # ── Read-only preflight ───────────────────────────────────────────────────────
 step OBSERVING "Inspecting the active release"
 
-try_rsh "readlink -f '${SITE_ROOT}/current' 2>/dev/null || true"
+try_rsh "readlink -f $(remote_quote "${SITE_ROOT}/current") 2>/dev/null || true"
 CURRENT_TARGET="$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')"
 CURRENT_ID="$(basename "${CURRENT_TARGET}" 2>/dev/null || true)"
 
@@ -101,7 +102,7 @@ if [[ -z "${CURRENT_ID}" || "${CURRENT_TARGET}" != "${RELEASES_DIR}/"* ]]; then
 fi
 
 # Migration marker travels with the release, so it survives reboots and host changes.
-try_rsh "[ -f '${SITE_ROOT}/current/.migrations-ran' ] && echo yes || echo no"
+try_rsh "[ -f $(remote_quote "${SITE_ROOT}/current/.migrations-ran") ] && echo yes || echo no"
 MIGRATIONS_RAN=false
 [[ "$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')" == "yes" ]] && MIGRATIONS_RAN=true
 
@@ -116,16 +117,16 @@ fi
 
 # Pick the target release.
 if [[ -n "${TARGET_RELEASE}" ]]; then
-    try_rsh "[ -d '${RELEASES_DIR}/${TARGET_RELEASE}' ] && echo yes || echo no"
+    try_rsh "[ -d $(remote_quote "${RELEASES_DIR}/${TARGET_RELEASE}") ] && echo yes || echo no"
     if [[ "$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')" != "yes" ]]; then
         fail_with 10 FAILED "Release ${TARGET_RELEASE} does not exist under ${RELEASES_DIR}"
     fi
     PREVIOUS_ID="${TARGET_RELEASE}"
 else
     try_rsh "
-        cd '${RELEASES_DIR}' 2>/dev/null || exit 0
+        cd $(remote_quote "${RELEASES_DIR}") 2>/dev/null || exit 0
         for d in \$(ls -1t); do
-            [ \"\$d\" = '${CURRENT_ID}' ] && continue
+            [ \"\$d\" = $(remote_quote "${CURRENT_ID}") ] && continue
             echo \"\$d\"
             break
         done
@@ -166,8 +167,8 @@ require_confirm "CONFIRM ROLLBACK" "ROLLBACK" "Repointing 'current' from ${CURRE
 # ── Lock ──────────────────────────────────────────────────────────────────────
 step EXECUTING "Acquiring deployment lock"
 exec 9>"${LOCKFILE}"
-if ! flock -n 9; then
-    fail_with 12 STOPPED "Another deployment holds ${LOCKFILE}"
+if ! flock -w 300 9; then
+    fail_with 12 STOPPED "Another deployment still holds ${LOCKFILE} after 5 minutes; investigate it before rolling back"
 fi
 
 release_lock() {
@@ -180,8 +181,8 @@ trap release_lock EXIT
 step EXECUTING "Repointing 'current' to ${PREVIOUS_ID}"
 try_rsh "
     set -e
-    ln -sfn '${RELEASES_DIR}/${PREVIOUS_ID}' '${SITE_ROOT}/current.tmp'
-    mv -Tf '${SITE_ROOT}/current.tmp' '${SITE_ROOT}/current'
+    ln -sfn $(remote_quote "${RELEASES_DIR}/${PREVIOUS_ID}") $(remote_quote "${SITE_ROOT}/current.tmp")
+    mv -Tf $(remote_quote "${SITE_ROOT}/current.tmp") $(remote_quote "${SITE_ROOT}/current")
 "
 if [[ "${REMOTE_RC}" -ne 0 ]]; then
     result_add_string "action" "rollback"
@@ -200,7 +201,7 @@ case "${STACK}" in
         [[ "${REMOTE_RC}" -eq 0 ]] || result_warn "PHP-FPM reload reported an error: ${REMOTE_OUT}"
         ;;
     node)
-        try_rsh "systemctl reload nginx 2>&1; systemctl restart '${APP_UNIT}' 2>&1"
+        try_rsh "systemctl reload nginx 2>&1; systemctl restart $(remote_quote "${APP_UNIT}") 2>&1"
         [[ "${REMOTE_RC}" -eq 0 ]] || result_warn "Node runtime restart reported an error: ${REMOTE_OUT}"
         ;;
     static)
@@ -212,11 +213,11 @@ esac
 # ── Restart workers ───────────────────────────────────────────────────────────
 step EXECUTING "Restarting queue workers"
 if [[ -n "${WORKER_UNIT}" ]]; then
-    try_rsh "systemctl restart '${WORKER_UNIT}'1 2>&1"
+    try_rsh "systemctl restart $(remote_quote "${WORKER_UNIT}1") 2>&1"
     [[ "${REMOTE_RC}" -eq 0 ]] || result_warn "Worker restart reported an error for ${WORKER_UNIT}1: ${REMOTE_OUT}"
 fi
 if [[ "${STACK}" == "laravel" ]]; then
-    try_rsh "cd '${SITE_ROOT}/current' && php artisan queue:restart 2>&1"
+    try_rsh "cd $(remote_quote "${SITE_ROOT}/current") && php artisan queue:restart 2>&1"
     [[ "${REMOTE_RC}" -eq 0 ]] || result_warn "queue:restart reported an error: ${REMOTE_OUT}"
 fi
 

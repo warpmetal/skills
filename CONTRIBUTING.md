@@ -34,11 +34,14 @@ copy drifts, so edit the root and re-run the build.
 
 Scaffold the files with `npm run new:skill -- <kebab-name>`, then fill them in:
 
-1. `skills/<kebab-name>/SKILL.md` with frontmatter:
+1. `skills/<kebab-name>/SKILL.md` with frontmatter. `disable-model-invocation: true`
+   is required by the build for every skill, public or internal: an agent must never
+   auto-invoke a skill that mutates something ([`conventions/safety.md`](conventions/safety.md)).
 
    ```markdown
    ---
    name: <kebab-name>
+   disable-model-invocation: true
    description: One or two sentences that tell the model when to use this skill.
    ---
    ```

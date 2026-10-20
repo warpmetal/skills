@@ -106,7 +106,7 @@ try_rsh() {
 
 # ── Read-only preflight ───────────────────────────────────────────────────────
 step OBSERVING "Listing recent snapshots for ${CLIENT}"
-try_rsh "set -a; [ -f '${ENV_FILE}' ] && . '${ENV_FILE}'; set +a; restic --password-file '${PASS_FILE}' -r '${REPO}' snapshots --last 10 2>&1"
+try_rsh "set -a; [ -f $(remote_quote "${ENV_FILE}") ] && . $(remote_quote "${ENV_FILE}"); set +a; restic --password-file $(remote_quote "${PASS_FILE}") -r $(remote_quote "${REPO}") snapshots --last 10 2>&1"
 SNAPSHOT_LIST="${REMOTE_OUT}"
 printf '%s\n' "${SNAPSHOT_LIST}" >&2
 journal_log "OBSERVING" "Snapshot list" "restic snapshots --last 10" "${REMOTE_RC}" 0 \
@@ -154,9 +154,9 @@ fi
 step EXECUTING "Restoring ${SNAPSHOT} into ${TARGET_DIR}"
 set +e
 RESTORE_OUT="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" "
-    set -a; [ -f '${ENV_FILE}' ] && . '${ENV_FILE}'; set +a
-    mkdir -p '${TARGET_DIR}'
-    restic --password-file '${PASS_FILE}' -r '${REPO}' restore '${SNAPSHOT}' --target '${TARGET_DIR}' 2>&1
+    set -a; [ -f $(remote_quote "${ENV_FILE}") ] && . $(remote_quote "${ENV_FILE}"); set +a
+    mkdir -p $(remote_quote "${TARGET_DIR}")
+    restic --password-file $(remote_quote "${PASS_FILE}") -r $(remote_quote "${REPO}") restore $(remote_quote "${SNAPSHOT}") --target $(remote_quote "${TARGET_DIR}") 2>&1
 ")"
 RESTORE_RC=$?
 set -e
@@ -174,7 +174,7 @@ fi
 
 # ── Verify the restore landed ─────────────────────────────────────────────────
 step VERIFYING "Verifying the restored tree"
-try_rsh "find '${TARGET_DIR}' -mindepth 1 -maxdepth 2 2>/dev/null | head -20"
+try_rsh "find $(remote_quote "${TARGET_DIR}") -mindepth 1 -maxdepth 2 2>/dev/null | head -20"
 RESTORED_ENTRIES="$(printf '%s' "${REMOTE_OUT}" | grep -c . || true)"
 
 if [[ "${RESTORED_ENTRIES}" -eq 0 ]]; then

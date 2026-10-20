@@ -148,7 +148,7 @@ CRON_FILE="/etc/cron.d/${CLIENT}-backup"
 PASS_FILE="/etc/restic/${CLIENT}.password"
 ENV_FILE="/etc/restic/${CLIENT}.env"
 
-try_rsh "restic --password-file '${PASS_FILE}' -r '${REPO}' snapshots --last 1 2>&1 || echo REPO_INIT_NEEDED"
+try_rsh "restic --password-file $(remote_quote "${PASS_FILE}") -r $(remote_quote "${REPO}") snapshots --last 1 2>&1 || echo REPO_INIT_NEEDED"
 REPO_STATE="init_needed"
 if ! printf '%s' "${REMOTE_OUT}" | grep -q 'REPO_INIT_NEEDED\|Is there a repository at\|does not exist'; then
     REPO_STATE="exists"
@@ -211,6 +211,7 @@ fi
 # ── Install restic ────────────────────────────────────────────────────────────
 if [[ "${RESTIC_INSTALLED}" == "false" ]]; then
     step EXECUTING "Installing restic"
+    require_gate_now "CONFIRM BACKUP SETUP" "Install restic and write the backup configuration."
     try_rsh "apt-get install -y restic 2>&1 | tail -5"
     if [[ "${REMOTE_RC}" -ne 0 ]]; then
         fail_with 6 FAILED "Could not install restic on ${HOST}: ${REMOTE_OUT}"
@@ -221,7 +222,7 @@ fi
 step EXECUTING "Writing ${PASS_FILE} (mode 0600)"
 set +e
 printf '%s' "${RESTIC_PASSWORD_VALUE}" | ssh "${SSH_OPTS[@]}" "${SSH_DEST}" \
-    "umask 077 && mkdir -p /etc/restic && cat > '${PASS_FILE}' && chmod 0600 '${PASS_FILE}' && chown root:root '${PASS_FILE}'" >/dev/null 2>&1
+    "umask 077 && mkdir -p /etc/restic && cat > $(remote_quote "${PASS_FILE}") && chmod 0600 $(remote_quote "${PASS_FILE}") && chown root:root $(remote_quote "${PASS_FILE}")" >/dev/null 2>&1
 PW_RC=$?
 set -e
 if [[ "${PW_RC}" -ne 0 ]]; then
@@ -234,7 +235,7 @@ if [[ -n "${ENV_FILE_SRC}" ]]; then
     step EXECUTING "Writing ${ENV_FILE} (mode 0600)"
     set +e
     cat "${ENV_FILE_SRC}" | ssh "${SSH_OPTS[@]}" "${SSH_DEST}" \
-        "umask 077 && mkdir -p /etc/restic && cat > '${ENV_FILE}' && chmod 0600 '${ENV_FILE}'" >/dev/null 2>&1
+        "umask 077 && mkdir -p /etc/restic && cat > $(remote_quote "${ENV_FILE}") && chmod 0600 $(remote_quote "${ENV_FILE}")" >/dev/null 2>&1
     ENV_RC=$?
     set -e
     [[ "${ENV_RC}" -eq 0 ]] || fail_with 14 FAILED "Could not write ${ENV_FILE} on ${HOST}"
@@ -245,7 +246,7 @@ if [[ "${REPO_STATE}" == "init_needed" ]]; then
     step EXECUTING "Initialising the restic repository"
     set +e
     INIT_OUT="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" \
-        "set -a; [ -f '${ENV_FILE}' ] && . '${ENV_FILE}'; set +a; restic --password-file '${PASS_FILE}' -r '${REPO}' init 2>&1")"
+        "set -a; [ -f $(remote_quote "${ENV_FILE}") ] && . $(remote_quote "${ENV_FILE}"); set +a; restic --password-file $(remote_quote "${PASS_FILE}") -r $(remote_quote "${REPO}") init 2>&1")"
     INIT_RC=$?
     set -e
     journal_log "EXECUTING" "restic init" "restic init ${REPO}" "${INIT_RC}" 0 \
@@ -274,14 +275,14 @@ fi
 
 set +e
 printf '%s\n' "${TEMPLATE_BODY}" | ssh "${SSH_OPTS[@]}" "${SSH_DEST}" \
-    "umask 022 && cat > '${BACKUP_SCRIPT}' && chmod 0755 '${BACKUP_SCRIPT}'" >/dev/null 2>&1
+    "umask 022 && cat > $(remote_quote "${BACKUP_SCRIPT}") && chmod 0755 $(remote_quote "${BACKUP_SCRIPT}")" >/dev/null 2>&1
 RENDER_RC=$?
 set -e
 if [[ "${RENDER_RC}" -ne 0 ]]; then
     fail_with 14 FAILED "Could not install ${BACKUP_SCRIPT} on ${HOST}"
 fi
 
-try_rsh "bash -n '${BACKUP_SCRIPT}'"
+try_rsh "bash -n $(remote_quote "${BACKUP_SCRIPT}")"
 if [[ "${REMOTE_RC}" -ne 0 ]]; then
     fail_with 5 STOPPED "${BACKUP_SCRIPT} failed a syntax check on ${HOST}: ${REMOTE_OUT}"
 fi
@@ -295,7 +296,7 @@ ${SCHEDULE} root ${BACKUP_SCRIPT}"
 
 set +e
 printf '%s\n' "${CRON_BODY}" | ssh "${SSH_OPTS[@]}" "${SSH_DEST}" \
-    "umask 022 && cat > '${CRON_FILE}' && chmod 0644 '${CRON_FILE}' && chown root:root '${CRON_FILE}'" >/dev/null 2>&1
+    "umask 022 && cat > $(remote_quote "${CRON_FILE}") && chmod 0644 $(remote_quote "${CRON_FILE}") && chown root:root $(remote_quote "${CRON_FILE}")" >/dev/null 2>&1
 CRON_RC=$?
 set -e
 [[ "${CRON_RC}" -eq 0 ]] || fail_with 14 FAILED "Could not install ${CRON_FILE} on ${HOST}"
@@ -303,7 +304,7 @@ set -e
 # ── First backup ──────────────────────────────────────────────────────────────
 step EXECUTING "Running the first backup"
 set +e
-FIRST_RUN="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" "'${BACKUP_SCRIPT}' 2>&1")"
+FIRST_RUN="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" "$(remote_quote "${BACKUP_SCRIPT}") 2>&1")"
 FIRST_RC=$?
 set -e
 journal_log "EXECUTING" "First backup" "${BACKUP_SCRIPT}" "${FIRST_RC}" 0 \
@@ -313,7 +314,7 @@ SNAPSHOT_ID=""
 if [[ "${FIRST_RC}" -ne 0 ]]; then
     result_warn "The first backup run exited ${FIRST_RC}; review it before relying on the schedule"
 else
-    try_rsh "restic --password-file '${PASS_FILE}' -r '${REPO}' snapshots --last 1 --json 2>/dev/null | tr -d '\n' | sed -n 's/.*\"short_id\":\"\\([^\"]*\\)\".*/\\1/p'"
+    try_rsh "restic --password-file $(remote_quote "${PASS_FILE}") -r $(remote_quote "${REPO}") snapshots --last 1 --json 2>/dev/null | tr -d '\n' | sed -n 's/.*\"short_id\":\"\\([^\"]*\\)\".*/\\1/p'"
     SNAPSHOT_ID="$(printf '%s' "${REMOTE_OUT}" | tail -1 | tr -d '[:space:]')"
 fi
 

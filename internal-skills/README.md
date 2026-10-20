@@ -21,7 +21,7 @@ use a private repository or a private submodule instead.
 ## Layout and build
 
 ```
-internal-skills/<name>/SKILL.md        # frontmatter: name + description
+internal-skills/<name>/SKILL.md        # frontmatter: name, disable-model-invocation, description
 internal-skills/<name>/skill.json      # name, version, description, roles, hosts, tags
 internal-skills/<name>/references/...   # supporting material
 ```

@@ -38,7 +38,7 @@
  * would make every 404 inconclusive. `test/grafana-stack-probe.test.ts` uses
  * both behind GRAFANA_STACK_PROBE_HOST.
  */
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -265,7 +265,44 @@ export function invalidRoutes(rows) {
   return rows.filter((row) => row.verdict === "invalid-route" && !row.weakSignal);
 }
 
+/**
+ * The committed verdict record: the minimal, stable slice of a probe run that
+ * the experimental-marker generator consumes. Sorted by toolSlug so a live
+ * re-run produces byte-identical output unless a verdict actually changed.
+ * `weakSignal` travels with the verdict, so an `invalid-route` on an
+ * auth-first/SPA host (inconclusive) is never mistaken for a missing route.
+ */
+export function verdictRecord(rows) {
+  const sorted = [...rows].sort((a, b) =>
+    a.toolSlug < b.toolSlug ? -1 : a.toolSlug > b.toolSlug ? 1 : 0,
+  );
+  return {
+    version: 1,
+    rows: sorted.map((row) => ({
+      toolSlug: row.toolSlug,
+      verdict: row.verdict,
+      weakSignal: row.weakSignal,
+    })),
+  };
+}
+
 async function main() {
+  // `--record <path>` writes the committed verdict record and returns: recording
+  // is observing, not judging, so an invalid route does not set a failing exit
+  // code here. The scheduled workflow reports drift; this only writes it.
+  const recordIndex = process.argv.indexOf("--record");
+  if (recordIndex !== -1) {
+    const outPath = process.argv[recordIndex + 1];
+    if (!outPath) {
+      console.error("--record needs a path");
+      process.exit(2);
+    }
+    const { rows } = await probeAll();
+    writeFileSync(outPath, `${JSON.stringify(verdictRecord(rows), null, 2)}\n`);
+    console.log(`wrote ${rows.length} probe verdict(s) to ${outPath}`);
+    return;
+  }
+
   const { rows, control } = await probeAll();
   const width = Math.max(...rows.map((row) => row.toolSlug.length));
   for (const row of rows) {

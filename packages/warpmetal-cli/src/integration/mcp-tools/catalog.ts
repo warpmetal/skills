@@ -62,6 +62,25 @@ function cfHeaders(): Record<string, string> {
   };
 }
 
+/**
+ * Plane's API origin and version prefix, which every generated route starts with.
+ * The origin is the one scripts/plane/endpoints.mjs exports, and the contract test
+ * checks it against test/fixtures/provider-contracts.json.
+ */
+const API_BASE = "https://api.plane.so/api/v1";
+
+/**
+ * Plane's API-key auth, the scheme the pinned SDK sends: an X-Api-Key header,
+ * plus a JSON content type, because every write this surface performs is a JSON
+ * body.
+ */
+function planeHeaders(): Record<string, string> {
+  return {
+    "x-api-key": "__TOKEN__",
+    "Content-Type": "application/json",
+  };
+}
+
 function notionHeaders(): Record<string, string> {
   return {
     Authorization: "Bearer __TOKEN__",
@@ -1395,6 +1414,66 @@ const BUILDS: Record<string, BuildFn> = {
   "pagerduty_list_services": ({args}) => ({ method: "GET", url: `https://api.pagerduty.com/services?${qs({ include: args.include, limit: args.limit, name: args.name, offset: args.offset, query: args.query, sort_by: args.sort_by, team_ids: args.team_ids, time_zone: args.time_zone, total: args.total })}`, headers: { Authorization: "Token token=__TOKEN__", Accept: "application/vnd.pagerduty+json;version=2" } }),
   "perplexity_chat_completion": ({args}) => ({ method: "POST", url: "https://api.perplexity.ai/chat/completions", body: args, headers: { Authorization: "Bearer __TOKEN__", "Content-Type": "application/json" } }),
   "perplexity_search": ({args}) => ({ method: "POST", url: "https://api.perplexity.ai/search", body: args, headers: { Authorization: "Bearer __TOKEN__", "Content-Type": "application/json" } }),
+  "plane_customer_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/customers/` + `?${qs({ "query": args.query, "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_customer_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/customers/${pf(args.customer_id)}/`, headers: planeHeaders() }),
+  "plane_customer_list_workitems": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/customers/${pf(args.customer_id)}/issues/` + `?${qs({ "customer_request_id": args.customer_request_id, "search": args.search })}`, headers: planeHeaders() }),
+  "plane_customer_property_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/customer-properties/` + `?${qs({ "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_customer_property_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/customer-properties/${pf(args.property_id)}/`, headers: planeHeaders() }),
+  "plane_customer_request_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/customers/${pf(args.customer_id)}/requests/` + `?${qs({ "query": args.query, "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_customer_request_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/customers/${pf(args.customer_id)}/requests/${pf(args.request_id)}/`, headers: planeHeaders() }),
+  "plane_cycle_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/cycles/${pf(args.cycle_id)}/`, headers: planeHeaders() }),
+  "plane_cycle_list_workitems": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/cycles/${pf(args.cycle_id)}/cycle-issues/` + `?${qs({ "pql": args.pql, "order_by": args.order_by, "cursor": args.cursor, "per_page": args.per_page, "expand": args.expand, "fields": args.fields })}`, headers: planeHeaders() }),
+  "plane_initiative_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/initiatives/`, headers: planeHeaders() }),
+  "plane_initiative_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/initiatives/${pf(args.initiative_id)}/`, headers: planeHeaders() }),
+  "plane_intake_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/intake-issues/` + `?${qs({ "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_intake_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/intake-issues/${pf(args.workitem_id)}/`, headers: planeHeaders() }),
+  "plane_label_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/labels/` + `?${qs({ "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_label_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/labels/${pf(args.label_id)}/`, headers: planeHeaders() }),
+  "plane_member_me": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/users/me/`, headers: planeHeaders() }),
+  "plane_member_list_workspace": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/members-lite/` + `?${qs({ "first_name": args.first_name, "last_name": args.last_name, "email": args.email, "display_name": args.display_name, "role_slug": args.role_slug, "is_active": args.is_active, "is_bot": args.is_bot, "cursor": args.cursor, "per_page": args.per_page, "order_by": args.order_by })}`, headers: planeHeaders() }),
+  "plane_member_list_project": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/project-members/`, headers: planeHeaders() }),
+  "plane_member_list_roles": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/roles/` + `?${qs({ "namespace": args.namespace, "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_milestone_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/milestones/` + `?${qs({ "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_milestone_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/milestones/${pf(args.milestone_id)}/`, headers: planeHeaders() }),
+  "plane_milestone_list_workitems": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/milestones/${pf(args.milestone_id)}/work-items/` + `?${qs({ "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_module_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/modules/${pf(args.module_id)}/`, headers: planeHeaders() }),
+  "plane_module_list_workitems": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/modules/${pf(args.module_id)}/module-issues/` + `?${qs({ "pql": args.pql, "order_by": args.order_by, "cursor": args.cursor, "per_page": args.per_page, "expand": args.expand, "fields": args.fields })}`, headers: planeHeaders() }),
+  "plane_page_list_workitem_pages": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/work-items/${pf(args.workitem_id)}/pages/`, headers: planeHeaders() }),
+  "plane_project_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects-lite/` + `?${qs({ "cursor": args.cursor, "per_page": args.per_page, "order_by": args.order_by })}`, headers: planeHeaders() }),
+  "plane_project_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/`, headers: planeHeaders() }),
+  "plane_project_worklog_summary": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/total-worklogs/`, headers: planeHeaders() }),
+  "plane_project_get_features": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/features/`, headers: planeHeaders() }),
+  "plane_project_estimate_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/estimates/`, headers: planeHeaders() }),
+  "plane_project_estimate_list_points": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/estimates/${pf(args.estimate_id)}/estimate-points/`, headers: planeHeaders() }),
+  "plane_release_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/releases/` + `?${qs({ "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_release_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/releases/${pf(args.release_id)}/`, headers: planeHeaders() }),
+  "plane_release_get_changelog": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/releases/${pf(args.release_id)}/changelog/`, headers: planeHeaders() }),
+  "plane_release_list_workitems": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/releases/${pf(args.release_id)}/work-items/` + `?${qs({ "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_release_tag_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/releases/tags/` + `?${qs({ "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_release_tag_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/releases/tags/${pf(args.tag_id)}/`, headers: planeHeaders() }),
+  "plane_state_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/states/` + `?${qs({ "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_state_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/states/${pf(args.state_id)}/`, headers: planeHeaders() }),
+  "plane_work_log_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/work-items/${pf(args.workitem_id)}/worklogs/` + `?${qs({ "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_workitem_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/work-items/${pf(args.workitem_id)}/` + `?${qs({ "expand": args.expand, "fields": args.fields, "external_id": args.external_id, "external_source": args.external_source, "order_by": args.order_by })}`, headers: planeHeaders() }),
+  "plane_workitem_retrieve_by_identifier": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/work-items/${pf(args.workitem_identifier)}/` + `?${qs({ "expand": args.expand, "fields": args.fields, "external_id": args.external_id, "external_source": args.external_source, "order_by": args.order_by })}`, headers: planeHeaders() }),
+  "plane_workitem_search": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/work-items/search/` + `?${qs({ "query": args.query, "expand": args.expand, "fields": args.fields, "external_id": args.external_id, "external_source": args.external_source, "order_by": args.order_by })}`, headers: planeHeaders() }),
+  "plane_workitem_activity_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/work-items/${pf(args.workitem_id)}/activities/` + `?${qs({ "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_workitem_attachment_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/work-items/${pf(args.workitem_id)}/attachments/`, headers: planeHeaders() }),
+  "plane_workitem_comment_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/work-items/${pf(args.workitem_id)}/comments/` + `?${qs({ "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_workitem_comment_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/work-items/${pf(args.workitem_id)}/comments/${pf(args.comment_id)}/`, headers: planeHeaders() }),
+  "plane_workitem_link_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/work-items/${pf(args.workitem_id)}/links/` + `?${qs({ "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_workitem_link_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/work-items/${pf(args.workitem_id)}/links/${pf(args.link_id)}/`, headers: planeHeaders() }),
+  "plane_workitem_property_retrieve_option": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/work-item-properties/${pf(args.property_id)}/options/${pf(args.option_id)}/`, headers: planeHeaders() }),
+  "plane_workitem_property_get_value": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/work-items/${pf(args.workitem_id)}/work-item-properties/${pf(args.property_id)}/values/`, headers: planeHeaders() }),
+  "plane_workitem_type_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/work-item-types/` + `?${qs({ "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_workitem_type_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/work-item-types/${pf(args.workitem_type_id)}/`, headers: planeHeaders() }),
+  "plane_workspace_get_features": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/features/`, headers: planeHeaders() }),
+  "plane_template_list": ({args, ctx}) => ({ method: "GET", url: (String(args.kind) === "workitem" ? `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/workitems/templates/` : String(args.kind) === "page" ? `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/pages/templates/` : `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/projects/${pf(args.project_id)}/workitems/templates/`), headers: planeHeaders() }),
+  "plane_collection_list": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/collections/`, headers: planeHeaders() }),
+  "plane_collection_retrieve": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/collections/${pf(args.collection_id)}/`, headers: planeHeaders() }),
+  "plane_collection_list_pages": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/collections/${pf(args.collection_id)}/pages/` + `?${qs({ "search": args.search, "parent_id": args.parent_id, "cursor": args.cursor, "per_page": args.per_page })}`, headers: planeHeaders() }),
+  "plane_collection_search_pages": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/collections/${pf(args.collection_id)}/pages-search/` + `?${qs({ "search": args.search })}`, headers: planeHeaders() }),
+  "plane_collection_list_members": ({args, ctx}) => ({ method: "GET", url: `${API_BASE}/workspaces/${pf(ctx.planeWorkspace)}/collections/${pf(args.collection_id)}/members/`, headers: planeHeaders() }),
   "posthog_list_project_dashboards": ({args, ctx}) => ({ method: "GET", url: `${ctx.posthogBase}/api/projects/${args.project_id}/dashboards/?${qs({ limit: args.limit, offset: args.offset })}`, headers: { Authorization: "Bearer __TOKEN__" } }),
   "posthog_get_feature_flags_matching_ids": ({args, ctx}) => ({ method: "GET", url: `${ctx.posthogBase}/api/projects/${args.project_id}/feature_flags/matching_ids/`, headers: { Authorization: "Bearer __TOKEN__" } }),
   "resend_list_emails": ({args}) => ({ method: "GET", url: `https://api.resend.com/emails?${qs({ after: args.after, before: args.before, limit: args.limit })}`, headers: { Authorization: "Bearer __TOKEN__" } }),
@@ -12513,6 +12592,546 @@ export const MCP_TOOL_DEFS: readonly McpToolDef[] = [
     
     secretName: "perplexity.token",
     build: BUILDS["perplexity_search"]!,
+  },
+  {
+    toolSlug: "plane_customer_list",
+    provider: "plane",
+    verb: "customer-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_customer_list"]!,
+  },
+  {
+    toolSlug: "plane_customer_retrieve",
+    provider: "plane",
+    verb: "customer-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_customer_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_customer_list_workitems",
+    provider: "plane",
+    verb: "customer-list-workitems",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_customer_list_workitems"]!,
+  },
+  {
+    toolSlug: "plane_customer_property_list",
+    provider: "plane",
+    verb: "customer-property-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_customer_property_list"]!,
+  },
+  {
+    toolSlug: "plane_customer_property_retrieve",
+    provider: "plane",
+    verb: "customer-property-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_customer_property_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_customer_request_list",
+    provider: "plane",
+    verb: "customer-request-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_customer_request_list"]!,
+  },
+  {
+    toolSlug: "plane_customer_request_retrieve",
+    provider: "plane",
+    verb: "customer-request-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_customer_request_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_cycle_retrieve",
+    provider: "plane",
+    verb: "cycle-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_cycle_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_cycle_list_workitems",
+    provider: "plane",
+    verb: "cycle-list-workitems",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_cycle_list_workitems"]!,
+  },
+  {
+    toolSlug: "plane_initiative_list",
+    provider: "plane",
+    verb: "initiative-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_initiative_list"]!,
+  },
+  {
+    toolSlug: "plane_initiative_retrieve",
+    provider: "plane",
+    verb: "initiative-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_initiative_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_intake_list",
+    provider: "plane",
+    verb: "intake-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_intake_list"]!,
+  },
+  {
+    toolSlug: "plane_intake_retrieve",
+    provider: "plane",
+    verb: "intake-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_intake_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_label_list",
+    provider: "plane",
+    verb: "label-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_label_list"]!,
+  },
+  {
+    toolSlug: "plane_label_retrieve",
+    provider: "plane",
+    verb: "label-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_label_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_member_me",
+    provider: "plane",
+    verb: "member-me",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_member_me"]!,
+  },
+  {
+    toolSlug: "plane_member_list_workspace",
+    provider: "plane",
+    verb: "member-list-workspace",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_member_list_workspace"]!,
+  },
+  {
+    toolSlug: "plane_member_list_project",
+    provider: "plane",
+    verb: "member-list-project",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_member_list_project"]!,
+  },
+  {
+    toolSlug: "plane_member_list_roles",
+    provider: "plane",
+    verb: "member-list-roles",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_member_list_roles"]!,
+  },
+  {
+    toolSlug: "plane_milestone_list",
+    provider: "plane",
+    verb: "milestone-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_milestone_list"]!,
+  },
+  {
+    toolSlug: "plane_milestone_retrieve",
+    provider: "plane",
+    verb: "milestone-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_milestone_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_milestone_list_workitems",
+    provider: "plane",
+    verb: "milestone-list-workitems",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_milestone_list_workitems"]!,
+  },
+  {
+    toolSlug: "plane_module_retrieve",
+    provider: "plane",
+    verb: "module-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_module_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_module_list_workitems",
+    provider: "plane",
+    verb: "module-list-workitems",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_module_list_workitems"]!,
+  },
+  {
+    toolSlug: "plane_page_list_workitem_pages",
+    provider: "plane",
+    verb: "page-list-workitem-pages",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_page_list_workitem_pages"]!,
+  },
+  {
+    toolSlug: "plane_project_list",
+    provider: "plane",
+    verb: "project-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_project_list"]!,
+  },
+  {
+    toolSlug: "plane_project_retrieve",
+    provider: "plane",
+    verb: "project-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_project_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_project_worklog_summary",
+    provider: "plane",
+    verb: "project-worklog-summary",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_project_worklog_summary"]!,
+  },
+  {
+    toolSlug: "plane_project_get_features",
+    provider: "plane",
+    verb: "project-get-features",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_project_get_features"]!,
+  },
+  {
+    toolSlug: "plane_project_estimate_retrieve",
+    provider: "plane",
+    verb: "project-estimate-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_project_estimate_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_project_estimate_list_points",
+    provider: "plane",
+    verb: "project-estimate-list-points",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_project_estimate_list_points"]!,
+  },
+  {
+    toolSlug: "plane_release_list",
+    provider: "plane",
+    verb: "release-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_release_list"]!,
+  },
+  {
+    toolSlug: "plane_release_retrieve",
+    provider: "plane",
+    verb: "release-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_release_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_release_get_changelog",
+    provider: "plane",
+    verb: "release-get-changelog",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_release_get_changelog"]!,
+  },
+  {
+    toolSlug: "plane_release_list_workitems",
+    provider: "plane",
+    verb: "release-list-workitems",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_release_list_workitems"]!,
+  },
+  {
+    toolSlug: "plane_release_tag_list",
+    provider: "plane",
+    verb: "release-tag-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_release_tag_list"]!,
+  },
+  {
+    toolSlug: "plane_release_tag_retrieve",
+    provider: "plane",
+    verb: "release-tag-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_release_tag_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_state_list",
+    provider: "plane",
+    verb: "state-list",
+    mutating: false,
+    validate: (args) => { if (args.project_id === undefined) return "Provide project_id: this tool targets the endpoint that names it, " + "and the branch the vendor picks without it is not exposed by plane_state_list."; return null; },
+    secretName: "plane.token",
+    build: BUILDS["plane_state_list"]!,
+  },
+  {
+    toolSlug: "plane_state_retrieve",
+    provider: "plane",
+    verb: "state-retrieve",
+    mutating: false,
+    validate: (args) => { if (args.project_id === undefined) return "Provide project_id: this tool targets the endpoint that names it, " + "and the branch the vendor picks without it is not exposed by plane_state_retrieve."; return null; },
+    secretName: "plane.token",
+    build: BUILDS["plane_state_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_work_log_list",
+    provider: "plane",
+    verb: "work-log-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_work_log_list"]!,
+  },
+  {
+    toolSlug: "plane_workitem_retrieve",
+    provider: "plane",
+    verb: "workitem-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_workitem_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_workitem_retrieve_by_identifier",
+    provider: "plane",
+    verb: "workitem-retrieve-by-identifier",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_workitem_retrieve_by_identifier"]!,
+  },
+  {
+    toolSlug: "plane_workitem_search",
+    provider: "plane",
+    verb: "workitem-search",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_workitem_search"]!,
+  },
+  {
+    toolSlug: "plane_workitem_activity_list",
+    provider: "plane",
+    verb: "workitem-activity-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_workitem_activity_list"]!,
+  },
+  {
+    toolSlug: "plane_workitem_attachment_list",
+    provider: "plane",
+    verb: "workitem-attachment-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_workitem_attachment_list"]!,
+  },
+  {
+    toolSlug: "plane_workitem_comment_list",
+    provider: "plane",
+    verb: "workitem-comment-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_workitem_comment_list"]!,
+  },
+  {
+    toolSlug: "plane_workitem_comment_retrieve",
+    provider: "plane",
+    verb: "workitem-comment-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_workitem_comment_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_workitem_link_list",
+    provider: "plane",
+    verb: "workitem-link-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_workitem_link_list"]!,
+  },
+  {
+    toolSlug: "plane_workitem_link_retrieve",
+    provider: "plane",
+    verb: "workitem-link-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_workitem_link_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_workitem_property_retrieve_option",
+    provider: "plane",
+    verb: "workitem-property-retrieve-option",
+    mutating: false,
+    validate: (args) => { if (args.project_id === undefined) return "Provide project_id: this tool targets the endpoint that names it, " + "and the branch the vendor picks without it is not exposed by plane_workitem_property_retrieve_option."; return null; },
+    secretName: "plane.token",
+    build: BUILDS["plane_workitem_property_retrieve_option"]!,
+  },
+  {
+    toolSlug: "plane_workitem_property_get_value",
+    provider: "plane",
+    verb: "workitem-property-get-value",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_workitem_property_get_value"]!,
+  },
+  {
+    toolSlug: "plane_workitem_type_list",
+    provider: "plane",
+    verb: "workitem-type-list",
+    mutating: false,
+    validate: (args) => { if (args.project_id === undefined) return "Provide project_id: this tool targets the endpoint that names it, " + "and the branch the vendor picks without it is not exposed by plane_workitem_type_list."; return null; },
+    secretName: "plane.token",
+    build: BUILDS["plane_workitem_type_list"]!,
+  },
+  {
+    toolSlug: "plane_workitem_type_retrieve",
+    provider: "plane",
+    verb: "workitem-type-retrieve",
+    mutating: false,
+    validate: (args) => { if (args.project_id === undefined) return "Provide project_id: this tool targets the endpoint that names it, " + "and the branch the vendor picks without it is not exposed by plane_workitem_type_retrieve."; return null; },
+    secretName: "plane.token",
+    build: BUILDS["plane_workitem_type_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_workspace_get_features",
+    provider: "plane",
+    verb: "workspace-get-features",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_workspace_get_features"]!,
+  },
+  {
+    toolSlug: "plane_template_list",
+    provider: "plane",
+    verb: "template-list",
+    mutating: false,
+    validate: (args) => { if (args.project_id === undefined) return "Provide project_id: this tool targets the endpoint that names it, " + "and the branch the vendor picks without it is not exposed by plane_template_list."; if (!["workitem","page"].includes(String(args.kind))) return "Provide kind as one of workitem, page."; return null; },
+    secretName: "plane.token",
+    build: BUILDS["plane_template_list"]!,
+  },
+  {
+    toolSlug: "plane_collection_list",
+    provider: "plane",
+    verb: "collection-list",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_collection_list"]!,
+  },
+  {
+    toolSlug: "plane_collection_retrieve",
+    provider: "plane",
+    verb: "collection-retrieve",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_collection_retrieve"]!,
+  },
+  {
+    toolSlug: "plane_collection_list_pages",
+    provider: "plane",
+    verb: "collection-list-pages",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_collection_list_pages"]!,
+  },
+  {
+    toolSlug: "plane_collection_search_pages",
+    provider: "plane",
+    verb: "collection-search-pages",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_collection_search_pages"]!,
+  },
+  {
+    toolSlug: "plane_collection_list_members",
+    provider: "plane",
+    verb: "collection-list-members",
+    mutating: false,
+    
+    secretName: "plane.token",
+    build: BUILDS["plane_collection_list_members"]!,
   },
   {
     toolSlug: "posthog_list_project_dashboards",

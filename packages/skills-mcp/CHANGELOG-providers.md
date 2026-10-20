@@ -652,3 +652,115 @@ measured how long calls took, so it now blocks on `Atomics.wait`. And the timeou
 case gave its second call a 200 ms budget, which a loaded Windows runner spends
 on the process spawn alone, so the case was measuring the machine rather than the
 semaphore; it now runs against a 2 s clock.
+
+## Plane: a provider with no spec to read
+
+Plane ships an MCP server of its own and publishes no OpenAPI document (the schema
+endpoint 404s and the documentation host serves its own copy), so the Cloudflare
+pipeline - spec in, tools out - has nothing to read. The equivalent pin is the
+vendor's source: `scripts/plane/fetch-inventory.mjs` downloads
+`makeplane/plane-mcp-server` at a pinned tag, hashes every file, and derives
+`inventory.json` from the `ACTIONS` tuples that package's own conformance test holds
+its descriptions, annotations and argument validation to. `npm run check:plane-inventory`
+re-derives all of it and fails on a moved tag, a moved file or an inventory that was
+edited by hand.
+
+The pin records, for every action, the client member it calls. That is what makes the
+second artifact reviewable: Plane's MCP server calls Plane's official Python SDK
+(`plane-sdk==0.3.1`, the version its own `pyproject.toml` pins), whose resource
+methods carry the REST path and verb as string literals, so
+`scripts/plane/endpoints.mjs` names one call site per tool and the validator refuses an
+entry whose endpoint names any other.
+
+What shipped in the first wave: **60 tools**, every one of them a read, from the 62
+read actions the pin declares as a single request. The 147 actions that did not ship
+are each accounted for in `scripts/plane/allowlist.json` - 44 are more than one
+request in the vendor's own code, 23 are answered by a dispatcher branch they share
+with other actions, 2 issue no request at all, one carries file bytes, and 77 are the
+writes, which are in `pending` until the second wave reviews them. The validator
+refuses a pin that adds an action none of those lists mentions, so a re-pin cannot
+quietly drop surface on the floor.
+
+Two things this provider does differently, because a single tool has to be a single
+endpoint:
+
+- **A fork on an argument ships one branch and refuses the other.** Plane's `state`,
+  `workitem_type`, `template` and property-option actions select a project-scoped
+  collection or a workspace-scoped one by whether `project_id` was given. Each tool
+  ships the project branch and refuses the call without `project_id`, with a reason
+  that names it - and the allowlist entry carries the same fact in a `flowNote`, which
+  the validator requires.
+- **The workspace slug is context, not an argument.** It comes from
+  `plane.workspace_slug` in the vault and appears in no tool's input schema, so no
+  caller can aim a stored key at another workspace. The stored value is reduced to the
+  workspace label one path segment at a time: a bare label,
+  `https://app.plane.so/<slug>/` and
+  `https://api.plane.so/api/v1/workspaces/<slug>/` are accepted, and everything else
+  is refused rather than trimmed - including a deep app link such as
+  `https://app.plane.so/<slug>/issues/`, whose remaining segments do not name the
+  workspace. The first cut of that reducer was a blind string replace, which spliced
+  the neighbours of a stray `workspaces/` together into a label that passed the shape
+  check (`a/workspaces/b` was read as `ab`), and which could never fire for the API
+  URL it was written for, because stripping the origin had already eaten the slash its
+  marker needed. The reduction is anchored per segment now, and both the accepted
+  shapes and the refusals are pinned in `plane.test.ts`.
+
+A third rule earned its place while writing the table: every argument an action
+declares must reach the request exactly once - in the path, the query or the body -
+and the request may name no argument the action does not declare. That is the rule
+that catches a field written under a name the API ignores, which otherwise answers
+200 and changes nothing.
+
+### Cross-checking the table against the service
+
+Everything above compares Plane against the pin, and the pin cannot notice a path that
+is self-consistent but that the service does not serve - the Amplitude bug in
+`scripts/probe-mcp-routes.mjs` shipped through exactly that gap. `scripts/plane/probe.mjs`
+(`npm run probe:plane`) closes it without a credential. Plane's router matches the URL
+pattern first, resolves the tenant second and checks the key last, so every shipped
+pattern answers `Workspace not found.` under a workspace that is well-formed and
+absent, an invented pattern answers `Page not found.`, and the one route that names no
+workspace reaches the key verdict instead. The probe sends a sentinel key, so nothing
+on any account is read or written, and path arguments are substituted with values of
+the shape their segment accepts - a rejected shape looks exactly like a missing route.
+It also asks three controls, one served route and two invented paths, because a 404
+only means "no such route" while the host keeps those two bodies apart: if a control
+stops discriminating, the probe fails as inconclusive rather than passing quietly.
+Against the live service it resolved all 60 shipped routes.
+
+Two things came back from that run and changed the code:
+
+- **Plane refuses a key it does not recognise with 403, not 401**, and says so in the
+  body (`{"detail":"Given API token is not valid"}`). The shared 403 path reads a 403
+  as "the credential is fine, the scope is not", which for Plane would send an operator
+  to grant a scope instead of reissuing the key. `execute.ts` now carries a
+  per-provider list of body markers, and a 403 whose body carries one is reported as a
+  refused credential. A 403 without it keeps the shared reading, and every other
+  provider is untouched.
+- **`plane.test.ts` had been a false green.** Its describe blocks sat inside the body
+  of its own request helper, so no subtest registered and the file passed while testing
+  nothing. It now drives every tool through the dispatcher by the verb a caller types -
+  the request shape, the refusals and the credential verdicts - which is what caught
+  the reducer defect above.
+
+### What proves it
+
+- `plane-inventory.test.ts`: the pin's counts are the tool list's counts, every single
+  request names a call site, and `--check` really compares (a mutated digest and a
+  mutated action are both reported).
+- `plane-allowlist.test.ts`: the rules above, on stubs - evidence, one-request-only,
+  argument completeness, destructive agreement, `flowNote`.
+- `plane.test.ts`: the requests themselves, offline - the workspace in the path, the
+  slug reduced to its label and refused when it is not one, the refusals made before any
+  request is built, the credential verdicts for 401, 403 and Plane's 403 body, and a
+  sweep that drives all 60 tools through the dispatcher by their own verbs.
+- `plane-probe.test.ts`: the route probe, offline - a stub router built from the
+  endpoint table so a builder that drifts from its own entry is named, the
+  sentinel-only requests, and the two ways the probe must fail (a missing route, and
+  controls that stopped discriminating). Behind `PLANE_PROBE=1` it runs the live probe.
+- `plane-catalog.test.ts`: the catalog's arguments and required set are exactly the
+  pin's, the workspace is absent from every schema, and the annotations follow the
+  method.
+- `docs/plane-mcp-inventory.md` and `docs/plane-endpoint-map.md` are generated from
+  the same files, with `--check` to keep them true.
+

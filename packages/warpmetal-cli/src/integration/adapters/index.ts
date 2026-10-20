@@ -69,6 +69,9 @@ const PROBES: Readonly<Record<string, Probe>> = {
     probeUrl: "https://api.anthropic.com/v1/organizations/workspaces",
     authHeader: (t) => ({ "x-api-key": t, "anthropic-version": "2023-06-01" }),
   },
+  // Plane's own validation endpoint, the one its MCP server's header auth provider
+  // checks a key against: `GET /api/v1/users/me/` with the key in `x-api-key`.
+  plane: { probeUrl: "https://api.plane.so/api/v1/users/me/", authHeader: (t) => ({ "x-api-key": t }) },
 };
 
 const GENERATED: readonly Adapter[] = PROVIDERS.filter(

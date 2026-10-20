@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.plane.so/api/v1/workspaces/acme/customers/sample_customer_id/issues/?customer_request_id=sample_customer_request_id&search=sample_search",
+  "headers": {
+    "x-api-key": "__TOKEN__",
+    "Content-Type": "application/json"
+  }
+}

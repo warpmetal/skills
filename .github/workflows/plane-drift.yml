@@ -1,0 +1,187 @@
+# Drift check for the pinned Plane surface.
+#
+# The Plane generators read two vendor artifacts that are not committed: the MCP
+# server source at a pinned tag (`inventory.json` records the tag and a digest per
+# file) and the `plane-sdk` tarball at a pinned version (`sdk.json` records the
+# release and the artifact digest). Nothing else can see what they produce:
+# `npm run build` does not regenerate the inventory, the SDK index, the route
+# table, the provider catalog, the tool catalog, the request fixtures or the two
+# documents, so the `git diff --exit-code` step in `verify.yml` proves nothing
+# about them and a stale generated file lands silently. The half of this that
+# needs no network (`check:plane-offline`, `check:providers-offline`) runs on
+# every pull request; this job is the half that needs the vendor to answer.
+#
+# Scheduled, never on a pull request, for the same reason the `live` job in
+# `mcp.yml` is: the tag and the release are vendor artifacts that move on the
+# vendor's schedule, and a vendor bump must not be able to block a merge.
+#
+# `--check` re-derives the release and refuses one that no longer hashes to what
+# was reviewed, which is why the outcomes are handled differently:
+#
+#   the pins hold        the artifacts are re-derived from the release they came
+#                        from and must come back byte-identical. A diff is our
+#                        own drift and a stopped generator is a defect; both fail
+#                        the job.
+#   the tag moved        a GitHub tag is mutable, so this is the one outcome the
+#                        check cannot call our fault: the job reports it instead
+#                        of failing. Adopting new Plane surface is a wave with its
+#                        own review, not a CI fix.
+#   neither              the check could not complete (a release that vanished, a
+#                        network that refused). It fails, because "unverified" and
+#                        "verified" must not look the same.
+name: plane-drift
+
+on:
+  schedule:
+    # 06:45 UTC daily, fifteen minutes after the Cloudflare drift check.
+    - cron: "45 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: plane-drift-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  plane:
+    name: Plane artifacts against the pinned tag and SDK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            packages/skills-mcp/package-lock.json
+            packages/warpmetal-cli/package-lock.json
+
+      - name: Install integration engine
+        run: npm ci --prefix packages/warpmetal-cli
+
+      - name: Install MCP server
+        run: npm ci --prefix packages/skills-mcp
+
+      # Both checks download the pinned release on a cold runner. There is no
+      # `actions/cache` for `.cache/` on purpose: the cache is what `--offline`
+      # refuses to trust, and a cache miss must not be able to read as a pin that
+      # moved. The exit codes are captured rather than failing the step, because
+      # the report below is what tells the one vendor-side outcome from our own
+      # drift.
+      - name: Verify the pins
+        id: pins
+        run: |
+          LOG="${RUNNER_TEMP}/plane-drift"
+          mkdir -p "${LOG}"
+          echo "LOG=${LOG}" >> "$GITHUB_ENV"
+
+          set +e
+          npm --prefix packages/warpmetal-cli run check:plane-inventory > "${LOG}/inventory.log" 2>&1
+          echo "inventory=$?" >> "$GITHUB_OUTPUT"
+          npm --prefix packages/warpmetal-cli run check:plane-sdk > "${LOG}/sdk.log" 2>&1
+          echo "sdk=$?" >> "$GITHUB_OUTPUT"
+          set -e
+
+          echo "== check:plane-inventory =="
+          tail -n 25 "${LOG}/inventory.log"
+          echo "== check:plane-sdk =="
+          tail -n 25 "${LOG}/sdk.log"
+
+          # The one failure the check itself names as a vendor-side move:
+          # `inventory.json` records the digests the review was made against, and
+          # `fetch-inventory.mjs` says so in those words when the tag has moved.
+          if grep -q "no longer matches inventory.json" "${LOG}/inventory.log"; then
+            echo "tag_moved=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag_moved=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # The documented order (`packages/warpmetal-cli/README.md`, "Verifying the
+      # Plane surface without a token"): the two pins first, then everything
+      # distilled from them. Running them out of order would compare files against
+      # the wrong inputs. A moved tag stops this step at the first Plane generator
+      # - by design - so its failure is captured here and judged in the report
+      # below instead of ending the job.
+      - name: Regenerate every artifact
+        id: regen
+        continue-on-error: true
+        run: |
+          set -e
+          npm --prefix packages/warpmetal-cli run gen:plane-inventory
+          npm --prefix packages/warpmetal-cli run gen:plane-sdk
+          npm --prefix packages/warpmetal-cli run gen:plane-routes
+          npm --prefix packages/skills-mcp run gen:plane-catalog
+          npm --prefix packages/skills-mcp run gen:mapping
+          npm --prefix packages/skills-mcp run gen:catalog-barrel
+          npm --prefix packages/warpmetal-cli run gen:mcp-tools
+          npm --prefix packages/warpmetal-cli run gen:mcp-fixtures
+          npm --prefix packages/warpmetal-cli run gen:plane-docs
+          npm --prefix packages/skills-mcp run gen:readme-index
+
+      # The digests are what let this step tell a stale file from a vendor bump,
+      # so it judges both inputs: whether the release is the reviewed one, and
+      # whether the generators ran at all.
+      - name: Report the drift
+        env:
+          INVENTORY: ${{ steps.pins.outputs.inventory }}
+          SDK: ${{ steps.pins.outputs.sdk }}
+          TAG_MOVED: ${{ steps.pins.outputs.tag_moved }}
+          REGEN: ${{ steps.regen.outcome }}
+        run: |
+          if [ "$INVENTORY" = "0" ] && [ "$SDK" = "0" ]; then
+            if [ "$REGEN" != "success" ]; then
+              echo "::error::A generator failed against the release it was reviewed against, so this is not a vendor change. Read the step above."
+              echo "Generators failed against the pinned release." >> "$GITHUB_STEP_SUMMARY"
+              exit 1
+            fi
+            if git diff --quiet; then
+              echo "Every generated artifact matches the pinned tag and the pinned SDK." >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            git --no-pager diff --stat
+            {
+              echo "### Stale generated artifact"
+              echo
+              echo '```'
+              git --no-pager diff --stat
+              echo '```'
+              echo
+              echo "Regenerating from the pinned tag and SDK, the release these artifacts record, changed them: re-run the generator and commit the result."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::error::A generated artifact is stale: regenerating it from the release it records changed it."
+            exit 1
+          fi
+
+          if [ "$TAG_MOVED" = "true" ]; then
+            echo "::warning::The pinned Plane tag moved (a GitHub tag is mutable); adopting it is a wave, so nothing committed is stale."
+            git --no-pager diff --stat
+            {
+              echo "### The pinned Plane tag moved"
+              echo
+              echo "The tag no longer hashes to the digests recorded in \`inventory.json\`. The review was made against those digests, so the generators stopping at the first Plane file is the designed answer and no committed artifact is stale. Adopting the new surface is a wave: re-pin with \`npm run gen:plane-inventory\` and review the diff."
+              echo
+              echo '```'
+              tail -n 25 "${LOG}/inventory.log"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          # A pin that could not be verified is not a pin that held. Nothing is
+          # claimed about staleness, because that judgement needs the release.
+          echo "::error::A pin check failed without the pinned tag moving, so the pins could not be verified. The logs name the reason."
+          {
+            echo "### A pin could not be verified"
+            echo
+            echo "The tag did not move and the SDK did not change, so this is not a stale artifact: the check did not complete. Read the logs."
+            echo
+            echo '```'
+            tail -n 25 "${LOG}/inventory.log"
+            tail -n 25 "${LOG}/sdk.log"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 1

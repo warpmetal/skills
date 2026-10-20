@@ -106,7 +106,7 @@ BEFORE_ACTIVE="$(queue_fact "${BEFORE}" worker_units_active)"
 BEFORE_STALE="$(queue_fact "${BEFORE}" stale_state)"
 BEFORE_CACHE="$(queue_fact "${BEFORE}" cache_ok)"
 
-CURRENT_DIR="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" "readlink -f '${SITE_ROOT}/current' 2>/dev/null || true" 2>/dev/null | head -1)"
+CURRENT_DIR="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" "readlink -f $(remote_quote "${SITE_ROOT}/current") 2>/dev/null || true" 2>/dev/null | head -1)"
 
 step OBSERVING "Workers active: ${BEFORE_ACTIVE:-0}; PIDs: ${BEFORE_PIDS:-none}"
 step OBSERVING "Stale-code before restart: ${BEFORE_STALE}"
@@ -148,10 +148,10 @@ require_confirm "CONFIRM RESTART" "RESTART" "Send the restart signal to the queu
 SIGNAL=""
 if [[ "${METHOD}" == "artisan" ]]; then
     step EXECUTING "Sending artisan queue:restart (graceful; in-flight jobs finish)"
-    SIGNAL="cd '${SITE_ROOT}/current' && php artisan queue:restart"
+    SIGNAL="cd $(remote_quote "${SITE_ROOT}/current") && php artisan queue:restart"
 else
     step EXECUTING "Restarting worker units through systemd (SIGTERM)"
-    SIGNAL="for u in \$(systemctl list-unit-files --no-pager 2>/dev/null | awk -v p='${WORKER_UNIT}' 'index(\$1, p) == 1 && \$1 ~ /\\.service\$/ {print \$1}'); do sudo systemctl restart \"\$u\"; done"
+    SIGNAL="for u in \$(systemctl list-unit-files --no-pager 2>/dev/null | awk -v p=$(remote_quote "${WORKER_UNIT}") 'index(\$1, p) == 1 && \$1 ~ /\\.service\$/ {print \$1}'); do sudo systemctl restart \"\$u\"; done"
 fi
 
 set +e

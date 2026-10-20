@@ -77,9 +77,17 @@ kuma_resolve_key() {
 # kuma_api <METHOD> <path> [json_body]
 kuma_api() {
     local method="$1" path="$2" body="${3:-}"
-    local cfg body_file out rc
+    local cfg body_file out rc old_umask
+    cfg=""
+    body_file=""
+    # The token is written to the curl config below. Never let a 0644 window
+    # exist between `mktemp` and a later chmod, and remove both files on every
+    # return path - not just the happy one.
+    old_umask="$(umask)"
+    umask 077
+    trap 'rm -f "${cfg}" ${body_file:+"${body_file}"}' RETURN
+
     cfg="$(mktemp)"
-    chmod 600 "${cfg}"
     {
         printf 'silent\nshow-error\nmax-time = 30\n'
         printf 'request = "%s"\n' "${method}"
@@ -89,10 +97,8 @@ kuma_api() {
     } > "${cfg}"
 
     local args=(-K "${cfg}")
-    body_file=""
     if [[ -n "${body}" ]]; then
         body_file="$(mktemp)"
-        chmod 600 "${body_file}"
         printf '%s' "${body}" > "${body_file}"
         args+=(--data-binary "@${body_file}")
     fi
@@ -103,6 +109,8 @@ kuma_api() {
     set -e
 
     rm -f "${cfg}" ${body_file:+"${body_file}"}
+    trap - RETURN
+    umask "${old_umask}"
     printf '%s' "${out}"
     return "${rc}"
 }

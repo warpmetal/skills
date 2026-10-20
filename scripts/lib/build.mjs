@@ -77,6 +77,22 @@ function validateFrontmatter(label, name, content) {
   if (frontmatterField(block, "description") === undefined) {
     throw new Error(`${label}/${name}/SKILL.md is missing a description`);
   }
+  // Every skill is opt-in. conventions/safety.md forbids letting an agent
+  // auto-invoke a skill, and the rule is enforced here rather than only in
+  // scripts/validate-skills.mjs because this one runs for both registries (the
+  // public one and internal-skills/) and fails the build rather than the
+  // verification pass. There is no escape hatch on purpose: a skill that should
+  // be model-invocable is a policy change with its own review, not a field.
+  //
+  // The match is on the raw line, not through `frontmatterField`, because that
+  // helper strips surrounding quotes: `"true"` is a YAML string, and a host is
+  // not obliged to read a string as consent for the one field that decides
+  // whether an agent may run a mutating skill unasked.
+  if (!/^disable-model-invocation:[ \t]*true[ \t]*\r?$/m.test(block)) {
+    throw new Error(
+      `${label}/${name}/SKILL.md must declare "disable-model-invocation: true" unquoted (see conventions/safety.md)`,
+    );
+  }
 }
 
 /**
@@ -211,6 +227,12 @@ export function renderMarketplaceCatalogs(model) {
         policy: { installation: "AVAILABLE", authentication: "ON_INSTALL" },
         category: "Developer Tools",
       },
+      {
+        name: "warpmetal-chatgpt",
+        source: { source: "local", path: "./plugins/warpmetal-chatgpt" },
+        policy: { installation: "AVAILABLE", authentication: "ON_INSTALL" },
+        category: "Developer Tools",
+      },
     ],
   };
   return {
@@ -230,6 +252,50 @@ export function renderPluginManifest(model) {
     repository: REPOSITORY_URL,
     license: "UNLICENSED",
     keywords: ["warpmetal", "agent-skills", "vps"],
+  });
+}
+
+export function renderChatgptPluginManifest({ version }) {
+  return jsonText({
+    $schema: "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+    name: "warpmetal-chatgpt",
+    version,
+    description:
+      "Manage and observe WarpMetal VPS servers and Agent Runtime sandboxes from ChatGPT Desktop.",
+    author: { name: "WarpMetal", url: REPOSITORY_URL },
+    homepage: REPOSITORY_URL,
+    repository: REPOSITORY_URL,
+    license: "UNLICENSED",
+    keywords: ["warpmetal", "vps", "sandbox", "mcp"],
+    extensions: {
+      "com.openai": {
+        interface: {
+          displayName: "WarpMetal",
+          shortDescription: "Manage and observe WarpMetal servers and sandboxes.",
+          longDescription:
+            "Read WarpMetal server, sandbox and task state, and plan server/sandbox changes with explicit approval. Payments are out of scope.",
+          developerName: "WarpMetal",
+          category: "Developer Tools",
+          capabilities: ["Read", "Write"],
+          websiteURL: "https://warpmetal.com",
+          defaultPrompt: ["Use WarpMetal to show my servers and their state."],
+        },
+      },
+    },
+  });
+}
+
+export function renderChatgptMcpJson() {
+  return jsonText({
+    $schema: "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+    mcpServers: {
+      warpmetal: {
+        type: "stdio",
+        command: "node",
+        args: ["${PLUGIN_ROOT}/server/dist/chatgpt.js", "--registry", "${PLUGIN_ROOT}"],
+        cwd: "${PLUGIN_ROOT}",
+      },
+    },
   });
 }
 

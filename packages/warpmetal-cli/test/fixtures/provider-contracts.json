@@ -261,6 +261,12 @@
       "accountScoped": true,
       "methods": ["GET", "POST", "PUT"],
       "auth": { "header": "Authorization", "placeholder": "__BASIC__" }
+    },
+    "plane": {
+      "docUrl": "https://developers.plane.so/api-reference/introduction",
+      "allowedHosts": ["api.plane.so"],
+      "methods": ["GET"],
+      "auth": { "header": "x-api-key", "placeholder": "__TOKEN__" }
     }
   },
   "tools": {

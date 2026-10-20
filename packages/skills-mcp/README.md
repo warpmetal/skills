@@ -4,9 +4,9 @@ Unified MCP (Model Context Protocol) server for WarpMetal. One package, one host
 
 - **Content** — discovers and reads WarpMetal Agent Skills from the registry manifest
   (`registry.json`) with checksum verification and the `skill://` URI semantics the hosts already use.
-- **CLI** — exposes the `warpmetal` command-line tool as 43 typed tools: 16 read-only, 3 task tools,
-  and 12 plan/apply pairs, six of which guard the verbs that cannot be taken back.
-- **Providers (42 providers, one catalog file each)** — 1271 WarpMetal-backed provider tools (GitHub / GitLab / Notion / Stripe / Jira / Confluence / Linear / Supabase / Cloudflare / Vercel / Figma / Shopify / HubSpot / Asana / Dropbox / Discord / Airtable / Intercom / Snowflake / Sentry / Datadog / PagerDuty / Exa / Perplexity / Resend / Calendly / ClickUp / PostHog / Mixpanel / CircleCI / Mailchimp / X / Square / OpenAI / Gemini / Anthropic Admin / Grafana Cloud / Grafana Stack / Monday.com / OneSignal / Amplitude / Zendesk)
+- **CLI** — exposes the `warpmetal` command-line tool as 43 typed tools: 15 read-only, 4 task tools,
+  and 12 plan/apply pairs, five of which guard the verbs that cannot be taken back.
+- **Providers (43 providers, one catalog file each)** — 1331 WarpMetal-backed provider tools (GitHub / GitLab / Notion / Stripe / Jira / Confluence / Linear / Supabase / Cloudflare / Vercel / Figma / Shopify / HubSpot / Asana / Dropbox / Discord / Airtable / Intercom / Snowflake / Sentry / Datadog / PagerDuty / Exa / Perplexity / Resend / Calendly / ClickUp / PostHog / Mixpanel / CircleCI / Mailchimp / X / Square / OpenAI / Gemini / Anthropic Admin / Grafana Cloud / Grafana Stack / Monday.com / OneSignal / Amplitude / Zendesk / Plane)
   registered only on the `full` (stdio) profile; calls run `warpmetal integration <provider> <verb>` with secrets from the WarpMetal vault. No DigitalOcean dependency.
 
 ## Two profiles, split by transport
@@ -16,18 +16,19 @@ boundary, not a configuration preference.
 
 | Profile   | Transport                  | Tools                                             | Why                                                                         |
 | --------- | -------------------------- | ------------------------------------------------- | --------------------------------------------------------------------------- |
-| `full`    | stdio (default)            | **1317** — 3 `skill_*` + 43 `wm_*` + 1271 providers | stdio is a local, operator-controlled channel                               |
+| `full`    | stdio (default)            | **1377** — 3 `skill_*` + 43 `wm_*` + 1331 providers | stdio is a local, operator-controlled channel                               |
 | `content` | Streamable HTTP (`--http`) | **3** — only `skill_*`                            | HTTP has no authentication; `wm_*` and provider tools must not be reachable |
 
 On the `content` profile the `wm_*` and provider tools are _not registered at all_, not
 registered-and-refused: an absent tool cannot be argued with. The `skill://` resources are available
 on both profiles, because reading a skill is a local, read-only operation that exposes no execution.
 
-The `full` surface is deliberately one surface: after the Cloudflare waves it is 1317 tools, and
+The `full` surface is deliberately one surface: after the Cloudflare waves and Plane's first
+wave it is 1377 tools, and
 there is no per-provider or per-wave selector on purpose. A third axis would turn a security
 boundary into a configuration surface with its own failure modes, and two clients could then
 disagree about what exists. The names are stable and grouped by provider, so a client that finds
-1,317 tools in `tools/list` is expected to filter them itself.
+1377 tools in `tools/list` is expected to filter them itself.
 
 ## Requirements
 
@@ -57,7 +58,7 @@ version refuses nothing, because an override or a bare PATH executable is _unkno
 
 <!-- provider-index:begin -->
 
-## Providers (42 providers, 1271 tools)
+## Providers (43 providers, 1331 tools)
 
 Every tool below is registered on the `full` (stdio) profile and calls `warpmetal integration
 <provider> <verb>` with secrets from the WarpMetal vault; the arguments, the endpoint and the
@@ -97,6 +98,7 @@ A provider with more tools than fit on one line points at its file instead of li
 | `openai` | 1 | `list_models` |
 | `pagerduty` | 3 | `list_incidents`, `create_incident`, `list_services` |
 | `perplexity` | 2 | `chat_completion`, `search` |
+| `plane` | 60 | `catalog/plane.json` |
 | `posthog` | 2 | `list_project_dashboards`, `get_feature_flags_matching_ids` |
 | `resend` | 2 | `list_emails`, `create_contact` |
 | `sentry` | 2 | `list_organization_projects`, `list_a_project_s_issues` |
@@ -108,7 +110,7 @@ A provider with more tools than fit on one line points at its file instead of li
 | `vercel` | 3 | `get_projects`, `create_project`, `get_deployments` |
 | `x` | 3 | `create_posts`, `get_users_me`, `search_posts_recent` |
 | `zendesk` | 16 | `catalog/zendesk.json` |
-| **42 providers** | **1271** | `src/providers/catalog/` |
+| **43 providers** | **1331** | `src/providers/catalog/` |
 
 Cloudflare's record is the reviewed one:
 [`docs/cloudflare-api-inventory.md`](../../docs/cloudflare-api-inventory.md) accounts for every
@@ -124,6 +126,12 @@ the wave it was reviewed in.
 | `w5` | 316 | reviewed | Radar y el resto de colecciones de cuenta con valor operativo |
 
 <!-- provider-index:end -->
+
+Plane publishes no OpenAPI document, so its two records are the pin and the map:
+[`docs/plane-mcp-inventory.md`](../../docs/plane-mcp-inventory.md) says what the pinned release of
+Plane's own MCP server declares and why each action we left out was left out, and
+[`docs/plane-endpoint-map.md`](../../docs/plane-endpoint-map.md) gives every shipped tool its
+request and the vendor call site that request was read from.
 
 Setup:
 
@@ -145,7 +153,7 @@ Each provider `tools/call` maps to `warpmetal integration <provider> <verb> --ar
 (and `--confirm <gate>` for mutations). The arguments are written to the CLI's stdin rather than the
 command line, so payloads never appear in `ps` or shell history; `--args-json` remains available for
 manual use. Catalog contracts live in `src/providers/catalog/` - one `<toolkitId>.json` per
-provider (42 files, 1271 tools), aggregated by `src/providers/catalog.ts`. `catalog/index.ts` is
+provider (43 files, 1331 tools), aggregated by `src/providers/catalog.ts`. `catalog/index.ts` is
 generated by `node packages/skills-mcp/scripts/gen-catalog-barrel.mjs`. The MCP never holds
 provider OAuth tokens in process env; they stay in the WarpMetal vault.
 
@@ -239,14 +247,15 @@ Each tool is verified at one of three tiers, and the tier is visible in the repo
 Two credential-free checks back the docs-confirmed tier, so a builder that drifts is caught even
 without a token:
 
-1. `provider-contract.test.ts` builds all 1271 requests from the reviewed sample args and asserts the
+1. `provider-contract.test.ts` builds all 1331 requests from the reviewed sample args and asserts the
    URL host, method and auth header against the hand-authored manifest.
 2. `npm run probe` (in `packages/warpmetal-cli`, opt-in, needs network) sends every request with a
    sentinel token. A route the provider does not serve answers 404/405, while a real route answers
    401/403 (auth required), 400/422 (reachable) or 2xx (public). It also sends a control request to a
    bogus path on each host, so auth-first hosts and website/SPA hosts that resolve a slug before
    authenticating are marked `weakSignal` rather than reported as a missing route. The same logic
-   runs as `MCP_PROBE=1 npm test`.
+   runs as `MCP_PROBE=1 npm test`, and `npm run probe:record` writes the per-tool verdicts to the
+   committed `probe-verdicts.json` fixture that the scheduled `probe-drift.yml` workflow refreshes.
 
 ### Response shape
 
@@ -259,7 +268,15 @@ and never `{ "0": ..., "1": ... }`.
 ### Experimental tools
 
 Tools whose request shape could not be confirmed against the live API are registered with an
-`[experimental: request shape not verified against the live API]` prefix on their description:
+`[experimental: request shape not verified against the live API]` prefix on their description.
+
+The set is derived, not hand-edited: `scripts/gen-experimental.mjs` marks as experimental every tool
+the credential-free route probe proved does not exist (`invalid-route` and not `weakSignal`), plus a
+small reasoned override list for routes that exist but whose credential mode this server does not
+support (`scripts/experimental-overrides.json`). The probe verdicts are recorded into
+`packages/warpmetal-cli/test/fixtures/probe-verdicts.json` by the scheduled `probe-drift.yml`
+workflow, and `check:experimental` (part of `check:providers-offline`) fails a pull request that
+edits the derived list by hand.
 
 - `x_create_posts` — X rejects app-only bearer tokens on the write endpoint; publishing needs an
   OAuth 2.0 token with user context, which this server does not collect yet.
@@ -280,7 +297,7 @@ for what the gate does and does not prove.
 ## Run
 
 ```sh
-# stdio, full profile (1317 tools: 3 skill_* + 43 wm_* + 1271 providers)
+# stdio, full profile (1377 tools: 3 skill_* + 43 wm_* + 1331 providers)
 npx -y @warpmetal/skills-mcp
 
 # Pin a registry tag

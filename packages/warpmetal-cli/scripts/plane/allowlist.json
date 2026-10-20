@@ -1,0 +1,879 @@
+{
+  "version": 1,
+  "note": "The reviewed Plane surface. `tools` is what ships, with the reason it ships; `excluded` is what stays out, with the rule that keeps it out; `pending` is what has not been reviewed yet. Plane publishes no spec, so the pin in scripts/plane/inventory.json is what these decisions are made against and scripts/plane/endpoints.mjs is what they are turned into. Regenerate with npm run gen:plane-routes after a change here.",
+  "inventory": {
+    "tag": "v0.3.4",
+    "actions": 207,
+    "singleRequests": 161
+  },
+  "waves": {
+    "p1": {
+      "status": "reviewed",
+      "note": "Reads: one GET each, no body, so nothing here can change a workspace."
+    },
+    "p2": {
+      "status": "reviewed",
+      "note": "Writes: one request each, every one behind a confirm gate; the destructive ones are argued in destructive.ts as well."
+    }
+  },
+  "tools": [
+    {
+      "toolSlug": "plane_customer_list",
+      "resource": "customer",
+      "action": "list",
+      "wave": "p1",
+      "reason": "The customer directory: the way in to customers, their requests and their linked work items."
+    },
+    {
+      "toolSlug": "plane_customer_retrieve",
+      "resource": "customer",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One customer by id, for the detail a listing narrows to."
+    },
+    {
+      "toolSlug": "plane_customer_list_workitems",
+      "resource": "customer",
+      "action": "list_workitems",
+      "wave": "p1",
+      "reason": "The work items filed against a customer, which is how customer work is actually tracked."
+    },
+    {
+      "toolSlug": "plane_customer_property_list",
+      "resource": "customer_property",
+      "action": "list",
+      "wave": "p1",
+      "reason": "The workspace's customer property definitions, needed to read any customer's values."
+    },
+    {
+      "toolSlug": "plane_customer_property_retrieve",
+      "resource": "customer_property",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One property definition, including the options a value has to come from."
+    },
+    {
+      "toolSlug": "plane_customer_request_list",
+      "resource": "customer_request",
+      "action": "list",
+      "wave": "p1",
+      "reason": "The requests a customer has raised: the queue that customer work starts from."
+    },
+    {
+      "toolSlug": "plane_customer_request_retrieve",
+      "resource": "customer_request",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One request, with the link and description a listing leaves out."
+    },
+    {
+      "toolSlug": "plane_cycle_retrieve",
+      "resource": "cycle",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One cycle, whose dates and ownership the project's schedule is read from."
+    },
+    {
+      "toolSlug": "plane_cycle_list_workitems",
+      "resource": "cycle",
+      "action": "list_workitems",
+      "wave": "p1",
+      "reason": "What is planned into a cycle: the reading that answers whether a sprint is on track."
+    },
+    {
+      "toolSlug": "plane_initiative_list",
+      "resource": "initiative",
+      "action": "list",
+      "wave": "p1",
+      "reason": "The workspace's initiatives, the level above projects that outcomes are reported at."
+    },
+    {
+      "toolSlug": "plane_initiative_retrieve",
+      "resource": "initiative",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One initiative, with the state and lead a listing does not carry."
+    },
+    {
+      "toolSlug": "plane_intake_list",
+      "resource": "intake",
+      "action": "list",
+      "wave": "p1",
+      "reason": "A project's intake queue: work proposed from outside the project, before it is accepted."
+    },
+    {
+      "toolSlug": "plane_intake_retrieve",
+      "resource": "intake",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One intake item, which a triage decision is made on."
+    },
+    {
+      "toolSlug": "plane_label_list",
+      "resource": "label",
+      "action": "list",
+      "wave": "p1",
+      "reason": "A project's labels, the vocabulary its work items are filtered by."
+    },
+    {
+      "toolSlug": "plane_label_retrieve",
+      "resource": "label",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One label by id, for the parent and colour a listing flattens."
+    },
+    {
+      "toolSlug": "plane_member_me",
+      "resource": "member",
+      "action": "me",
+      "wave": "p1",
+      "reason": "Who the stored token belongs to: the identity a write is attributed to."
+    },
+    {
+      "toolSlug": "plane_member_list_workspace",
+      "resource": "member",
+      "action": "list_workspace",
+      "wave": "p1",
+      "reason": "The workspace's members, which is how a UUID in any other response is turned into a person."
+    },
+    {
+      "toolSlug": "plane_member_list_project",
+      "resource": "member",
+      "action": "list_project",
+      "wave": "p1",
+      "reason": "A project's members, for the people a work item can be assigned to."
+    },
+    {
+      "toolSlug": "plane_member_list_roles",
+      "resource": "member",
+      "action": "list_roles",
+      "wave": "p1",
+      "reason": "The role catalogue, whose slugs are the values the member listing filters on."
+    },
+    {
+      "toolSlug": "plane_milestone_list",
+      "resource": "milestone",
+      "action": "list",
+      "wave": "p1",
+      "reason": "A project's milestones with their target dates: the readings a delivery date is checked against."
+    },
+    {
+      "toolSlug": "plane_milestone_retrieve",
+      "resource": "milestone",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One milestone by id, for the fields a listing truncates."
+    },
+    {
+      "toolSlug": "plane_milestone_list_workitems",
+      "resource": "milestone",
+      "action": "list_workitems",
+      "wave": "p1",
+      "reason": "What is filed under a milestone: the progress behind its target date."
+    },
+    {
+      "toolSlug": "plane_module_retrieve",
+      "resource": "module",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One module, whose status and members make it a workstream rather than a label."
+    },
+    {
+      "toolSlug": "plane_module_list_workitems",
+      "resource": "module",
+      "action": "list_workitems",
+      "wave": "p1",
+      "reason": "What a module contains, for reading scope without loading the whole project."
+    },
+    {
+      "toolSlug": "plane_page_list_workitem_pages",
+      "resource": "page",
+      "action": "list_workitem_pages",
+      "wave": "p1",
+      "reason": "The pages attached to one work item: the notes that travel with it."
+    },
+    {
+      "toolSlug": "plane_project_list",
+      "resource": "project",
+      "action": "list",
+      "wave": "p1",
+      "reason": "The project directory. It reads Plane's compact listing, which is what the vendor's own tools browse with."
+    },
+    {
+      "toolSlug": "plane_project_retrieve",
+      "resource": "project",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One project, for the identifier and defaults every other call is scoped by."
+    },
+    {
+      "toolSlug": "plane_project_worklog_summary",
+      "resource": "project",
+      "action": "worklog_summary",
+      "wave": "p1",
+      "reason": "Total logged time per project, which no work-item listing aggregates."
+    },
+    {
+      "toolSlug": "plane_project_get_features",
+      "resource": "project",
+      "action": "get_features",
+      "wave": "p1",
+      "reason": "Which features a project has switched on, the state `project.update-features` would change."
+    },
+    {
+      "toolSlug": "plane_project_estimate_retrieve",
+      "resource": "project_estimate",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "A project's estimate: the scale that gives its points meaning."
+    },
+    {
+      "toolSlug": "plane_project_estimate_list_points",
+      "resource": "project_estimate",
+      "action": "list_points",
+      "wave": "p1",
+      "reason": "The points of that estimate, which is what a work item's point value refers to."
+    },
+    {
+      "toolSlug": "plane_release_list",
+      "resource": "release",
+      "action": "list",
+      "wave": "p1",
+      "reason": "The workspace's releases, the container work items are shipped in."
+    },
+    {
+      "toolSlug": "plane_release_retrieve",
+      "resource": "release",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One release, with the dates and lead a listing leaves out."
+    },
+    {
+      "toolSlug": "plane_release_get_changelog",
+      "resource": "release",
+      "action": "get_changelog",
+      "wave": "p1",
+      "reason": "The release notes: read before editing them, because Plane creates the changelog empty on first read."
+    },
+    {
+      "toolSlug": "plane_release_list_workitems",
+      "resource": "release",
+      "action": "list_workitems",
+      "wave": "p1",
+      "reason": "What a release carries, which is the question a release page exists to answer."
+    },
+    {
+      "toolSlug": "plane_release_tag_list",
+      "resource": "release_tag",
+      "action": "list",
+      "wave": "p1",
+      "reason": "The release tags a release can be pinned to: version identifiers, not git refs."
+    },
+    {
+      "toolSlug": "plane_release_tag_retrieve",
+      "resource": "release_tag",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One tag by id, for the commit hash a listing does not show."
+    },
+    {
+      "toolSlug": "plane_state_list",
+      "resource": "state",
+      "action": "list",
+      "wave": "p1",
+      "reason": "A project's workflow states, which every work item's `state` argument has to name.",
+      "flowNote": "The vendor's action forks on project_id: with it the project's states, without it the workspace catalogue. This tool ships the project branch and refuses a call without project_id, so one tool is still one endpoint."
+    },
+    {
+      "toolSlug": "plane_state_retrieve",
+      "resource": "state",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One state by id: its group tells a reader whether a work item counts as started or done.",
+      "flowNote": "Project-scoped, like state.list: a workspace state id is not accepted, and the refusal names project_id."
+    },
+    {
+      "toolSlug": "plane_work_log_list",
+      "resource": "work_log",
+      "action": "list",
+      "wave": "p1",
+      "reason": "Time logged against one work item, the records the project summary is computed from."
+    },
+    {
+      "toolSlug": "plane_workitem_retrieve",
+      "resource": "workitem",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One work item by UUID, with the optional expansions a search result does not carry."
+    },
+    {
+      "toolSlug": "plane_workitem_retrieve_by_identifier",
+      "resource": "workitem",
+      "action": "retrieve_by_identifier",
+      "wave": "p1",
+      "reason": "One work item by its human key (PROJECT-123), which is how people refer to work in a conversation."
+    },
+    {
+      "toolSlug": "plane_workitem_search",
+      "resource": "workitem",
+      "action": "search",
+      "wave": "p1",
+      "reason": "Workspace-wide work-item search: the only read that crosses projects."
+    },
+    {
+      "toolSlug": "plane_workitem_activity_list",
+      "resource": "workitem_activity",
+      "action": "list",
+      "wave": "p1",
+      "reason": "A work item's history, which says who changed what and when."
+    },
+    {
+      "toolSlug": "plane_workitem_attachment_list",
+      "resource": "workitem_attachment",
+      "action": "list",
+      "wave": "p1",
+      "reason": "The attachments on a work item, for the evidence a description only points at."
+    },
+    {
+      "toolSlug": "plane_workitem_comment_list",
+      "resource": "workitem_comment",
+      "action": "list",
+      "wave": "p1",
+      "reason": "A work item's comments, which is where the decisions about it actually live."
+    },
+    {
+      "toolSlug": "plane_workitem_comment_retrieve",
+      "resource": "workitem_comment",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One comment by id, so a reply can quote it without fetching the whole thread."
+    },
+    {
+      "toolSlug": "plane_workitem_link_list",
+      "resource": "workitem_link",
+      "action": "list",
+      "wave": "p1",
+      "reason": "The links hanging off a work item: pull requests, documents, dashboards."
+    },
+    {
+      "toolSlug": "plane_workitem_link_retrieve",
+      "resource": "workitem_link",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One link by id, for the metadata Plane stores beside the URL."
+    },
+    {
+      "toolSlug": "plane_workitem_property_retrieve_option",
+      "resource": "workitem_property",
+      "action": "retrieve_option",
+      "wave": "p1",
+      "reason": "One option of a project property, which is the value set a work item can be given.",
+      "flowNote": "The vendor forks on project_id between a project's property options and the workspace catalogue. This ships the project branch and refuses a call without project_id."
+    },
+    {
+      "toolSlug": "plane_workitem_property_get_value",
+      "resource": "workitem_property",
+      "action": "get_value",
+      "wave": "p1",
+      "reason": "One custom property value on one work item: the fields Plane does not model natively."
+    },
+    {
+      "toolSlug": "plane_workitem_type_list",
+      "resource": "workitem_type",
+      "action": "list",
+      "wave": "p1",
+      "reason": "A project's work-item types, which are the values `type_id` accepts and the scope a property is read at.",
+      "flowNote": "The vendor forks on project_id between a project's types and the workspace catalogue. This ships the project branch and refuses a call without project_id."
+    },
+    {
+      "toolSlug": "plane_workitem_type_retrieve",
+      "resource": "workitem_type",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One work-item type, whose properties decide what a work item of that type carries.",
+      "flowNote": "Project-scoped, like workitem_type.list; the workspace type catalogue is not exposed."
+    },
+    {
+      "toolSlug": "plane_workspace_get_features",
+      "resource": "workspace",
+      "action": "get_features",
+      "wave": "p1",
+      "reason": "Which workspace features are on, so a caller can tell a missing feature from a missing permission."
+    },
+    {
+      "toolSlug": "plane_template_list",
+      "resource": "template",
+      "action": "list",
+      "wave": "p1",
+      "reason": "The templates a project creates pages or work items from: the shapes a team has agreed on.",
+      "flowNote": "Two forks, both narrowed: project_id selects one project's templates rather than the workspace catalogue, and `kind` selects page or work-item templates. A `kind` of `project` exists only at workspace scope, so it is refused.",
+      "variantNote": "`kind` selects the collection: workitem templates or page templates."
+    },
+    {
+      "toolSlug": "plane_collection_list",
+      "resource": "collection",
+      "action": "list",
+      "wave": "p1",
+      "reason": "The wiki collections in the workspace, which is how pages are grouped and shared."
+    },
+    {
+      "toolSlug": "plane_collection_retrieve",
+      "resource": "collection",
+      "action": "retrieve",
+      "wave": "p1",
+      "reason": "One collection by id, with the access level its pages inherit."
+    },
+    {
+      "toolSlug": "plane_collection_list_pages",
+      "resource": "collection",
+      "action": "list_pages",
+      "wave": "p1",
+      "reason": "The pages in a collection, including the nesting a search result flattens."
+    },
+    {
+      "toolSlug": "plane_collection_search_pages",
+      "resource": "collection",
+      "action": "search_pages",
+      "wave": "p1",
+      "reason": "Search inside one collection, which the page listing cannot express."
+    },
+    {
+      "toolSlug": "plane_collection_list_members",
+      "resource": "collection",
+      "action": "list_members",
+      "wave": "p1",
+      "reason": "Who a collection is shared with, and at what access level."
+    }
+  ],
+  "excluded": [
+    {
+      "id": "customer.manage_workitems",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (work_items.create, work_items.delete), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "customer_property.delete",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (properties.delete), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "customer_property.get_values",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (property_values.list, property_values.retrieve), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "customer_request.delete",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (requests.delete), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "cycle.list",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.cycles.list_archived, client.cycles.list_lite), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "cycle.manage_workitems",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.cycles.add_work_items, client.cycles.remove_work_item), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "cycle.archive",
+      "rule": "more-than-one-request",
+      "why": "The pin records 3 request lines (client.cycles.archive, client.cycles.retrieve, client.cycles.update), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "cycle.unarchive",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (client.cycles.unarchive), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "get_pql_reference.read",
+      "rule": "no-request",
+      "why": "The pin records no request for this action at all: the vendor's tool answers from its own text."
+    },
+    {
+      "id": "initiative.list_projects",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.workspaces.get_features, features.model_dump), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "initiative.add_projects",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.workspaces.get_features, features.model_dump), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "initiative.remove_projects",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.workspaces.get_features, features.model_dump), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "initiative.list_workitems",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.workspaces.get_features, features.model_dump), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "initiative.manage_workitems",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.workspaces.get_features, features.model_dump), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "intake.update",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.intake.update, client.intake.update_status), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "intake.delete",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (client.intake.delete), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "label.delete",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (client.labels.delete), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "member.retrieve_role",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (client.roles.retrieve), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "milestone.manage_workitems",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.milestones.add_work_items, client.milestones.remove_work_items), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "module.list",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.modules.list_archived, client.modules.list_lite), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "module.manage_workitems",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.modules.add_work_items, client.modules.remove_work_item), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "module.unarchive",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (client.modules.unarchive), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "page.list",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.pages.list_project_pages, client.pages.list_workspace_pages), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "page.retrieve",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.pages.retrieve_project_page, client.pages.retrieve_workspace_page), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "page.create",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.pages.create_project_page, client.pages.create_workspace_page), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "page.archive",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (mover), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "page.delete",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (deleter, updater), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "page.set_collection",
+      "rule": "more-than-one-request",
+      "why": "The pin records 3 request lines (client.collections.pages.add, client.collections.pages.update, client.pages.retrieve_workspace_page), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "page.detach_from_workitem",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (client.work_items.pages.delete), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "project.update_features",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (client.projects.update_features), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "project_estimate.delete_point",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (estimates.delete_point), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "release.manage_workitems",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (work_items.create, work_items.delete), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "release_label.list",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (item_labels.list, labels.list), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "release_label.update",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (labels.delete, labels.update), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "release_label.detach",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (item_labels.delete), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "release_tag.delete",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (tags.delete), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "state.delete",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (scope.namespace.delete), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "work_log.delete",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (client.work_items.work_logs.delete), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "workitem.list",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.work_items.list, client.work_items.list_workspace), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem.list_archived",
+      "rule": "more-than-one-request",
+      "why": "The pin records 3 request lines (client.work_items.list, client.work_items.list_archived, client.work_items.list_workspace), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem.count",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.work_items.count_workspace, response.model_dump), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem.manage_assignee",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.work_items.retrieve, client.work_items.update), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem.manage_label",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.work_items.retrieve, client.work_items.update), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_activity.retrieve",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (client.work_items.activities.retrieve), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "workitem_attachment.read",
+      "rule": "more-than-one-request",
+      "why": "The pin records 5 request lines (Image, attrs.get, client.work_items.attachments.get_download_url, client.work_items.attachments.list), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_attachment.download_url",
+      "rule": "more-than-one-request",
+      "why": "The pin records 3 request lines (attrs.get, client.work_items.attachments.get_download_url, client.work_items.attachments.list), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_attachment.upload_from_url",
+      "rule": "multipart-body",
+      "why": "The vendor downloads the URL and uploads the bytes: the SDK's upload is a multipart POST followed by a PATCH, and a JSON tool argument cannot carry file bytes."
+    },
+    {
+      "id": "workitem_attachment.delete",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (client.work_items.attachments.delete), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "workitem_comment.delete",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (client.work_items.comments.delete), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "workitem_link.delete",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (client.work_items.links.delete), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "workitem_property.list",
+      "rule": "more-than-one-request",
+      "why": "The pin records 6 request lines (client.workspace_work_item_properties.list, client.workspace_work_item_types.properties.list, properties.list, properties.list_project, workspace_properties.list), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_property.retrieve",
+      "rule": "more-than-one-request",
+      "why": "The pin records 3 request lines (scope.call, scope.target), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_property.create",
+      "rule": "more-than-one-request",
+      "why": "The pin records 3 request lines (client.workspace_work_item_properties.create, client.workspace_work_item_types.properties.create, scope.call), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_property.update",
+      "rule": "more-than-one-request",
+      "why": "The pin records 3 request lines (scope.call, scope.target), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_property.delete",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (scope.call, scope.target), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_property.manage_type_properties",
+      "rule": "more-than-one-request",
+      "why": "The pin records 4 request lines (client.workspace_work_item_types.properties.create, links.delete, properties.attach_to_type, properties.detach_from_type), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_property.list_options",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (scoped_options.list), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_property.delete_option",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (scoped_options.delete, values.delete), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_property.delete_value",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (scoped_options.delete, values.delete), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_relation.list",
+      "rule": "more-than-one-request",
+      "why": "The pin records 4 request lines (client.work_items.custom_relations.list, client.work_items.dependencies.list, custom.items, dependencies.model_dump), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_relation.create",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.work_items.custom_relations.create, client.work_items.dependencies.create), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_relation.delete",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (remove), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "workitem_relation.list_definitions",
+      "rule": "more-than-one-request",
+      "why": "The pin records 1 request lines (client.work_item_relation_definitions.list), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_relation.update_definition",
+      "rule": "more-than-one-request",
+      "why": "The pin records 2 request lines (client.work_item_relation_definitions.delete, client.work_item_relation_definitions.update), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_type.resolve",
+      "rule": "more-than-one-request",
+      "why": "The pin records 8 request lines (client.projects.get_features, client.projects.update_features, client.work_item_types.create, client.work_item_types.import_to_project, client.work_item_types.list, client.workspace_work_item_types.create, client.workspace_work_item_types.list, project_features.model_dump), so the action is more than one request and cannot be one endpoint."
+    },
+    {
+      "id": "workitem_type.delete",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (types.delete), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "workspace.retrieve",
+      "rule": "no-request",
+      "why": "The pin records no request for this action at all: the vendor's tool answers from its own text."
+    },
+    {
+      "id": "workspace.update_features",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (client.workspaces.update_features), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "template.delete",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (namespace.delete), so the pin cannot attribute one endpoint to it and neither can we."
+    },
+    {
+      "id": "collection.remove_member",
+      "rule": "shared-dispatch-branch",
+      "why": "The dispatcher answers for this action in the branch it shares with others (collections.members.remove), so the pin cannot attribute one endpoint to it and neither can we."
+    }
+  ],
+  "pending": [
+    "customer.create",
+    "customer.update",
+    "customer.delete",
+    "customer_property.create",
+    "customer_property.update",
+    "customer_property.set_values",
+    "customer_request.create",
+    "customer_request.update",
+    "cycle.create",
+    "cycle.update",
+    "cycle.delete",
+    "cycle.transfer_workitems",
+    "cycle.complete",
+    "initiative.create",
+    "initiative.update",
+    "initiative.delete",
+    "intake.create",
+    "label.create",
+    "label.update",
+    "milestone.create",
+    "milestone.update",
+    "milestone.delete",
+    "module.create",
+    "module.update",
+    "module.delete",
+    "module.archive",
+    "page.update",
+    "page.attach_to_workitem",
+    "project.create",
+    "project.update",
+    "project.delete",
+    "project.archive",
+    "project.unarchive",
+    "project_estimate.create",
+    "project_estimate.update",
+    "project_estimate.delete",
+    "project_estimate.link",
+    "project_estimate.create_points",
+    "project_estimate.update_point",
+    "release.create",
+    "release.update",
+    "release.delete",
+    "release.update_changelog",
+    "release_label.create",
+    "release_label.delete",
+    "release_label.attach",
+    "release_tag.create",
+    "release_tag.update",
+    "state.create",
+    "state.update",
+    "work_log.create",
+    "work_log.update",
+    "workitem.create",
+    "workitem.update",
+    "workitem.delete",
+    "workitem.archive",
+    "workitem_comment.create",
+    "workitem_comment.update",
+    "workitem_link.create",
+    "workitem_link.update",
+    "workitem_property.create_option",
+    "workitem_property.update_option",
+    "workitem_property.set_value",
+    "workitem_relation.create_definition",
+    "workitem_relation.delete_definition",
+    "workitem_type.create",
+    "workitem_type.update",
+    "workitem_type.import_to_project",
+    "template.create",
+    "template.update",
+    "collection.create",
+    "collection.update",
+    "collection.delete",
+    "collection.add_pages",
+    "collection.remove_page",
+    "collection.add_member",
+    "collection.update_member"
+  ]
+}

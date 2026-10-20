@@ -2,6 +2,12 @@
 
 Status: design locked 2026-09-21; execution status is tracked in [`ROADMAP.md`](ROADMAP.md).
 Revision: 2026-09-21, revision 2 (adds repo bootstrap, Docker, CI/CD); frozen as a design document.
+
+> **One decision in this document has been superseded.** The plan locked the MCP server as
+> read-only. It is not: it grew the `wm_*` CLI surface and 1,331 provider tools, registered on
+> stdio only. The history, the date, and the reasoning are recorded under
+> [Superseded decisions](ROADMAP.md#superseded-decisions) in `ROADMAP.md`; the statements below that
+> the reversal affects are marked inline. The rest of the document is still the design in force.
 Related plan: [`docs/coding-env-skill-plan.md`](docs/coding-env-skill-plan.md) (the `coding-env` skill and `warpmetal env` CLI).
 Workstream: this repository (`warpmetal/skills`): the skill registry, every generated distribution channel, the `warpmetal` CLI, and the MCP server.
 
@@ -22,6 +28,8 @@ distribution channels that do not exist in this repo yet:
 MCP is a runtime tool protocol, not a package manager: pulling skills over MCP needs the MCP server
 already configured and cannot advertise skills in the system prompt. It is still valuable for
 on-demand discovery, so this plan includes a read-only server alongside the file-based channels.
+(The read-only part is superseded: the server also exposes the CLI and provider surfaces over stdio,
+while the HTTP profile still serves content only. See `ROADMAP.md`.)
 
 Decision: `warpmetal/skills` becomes the single source of truth; the CLI and the MCP server consume
 it; the MCP server is a standalone package released from the same repo.
@@ -35,8 +43,8 @@ Goals:
 - Host-native installs without the WarpMetal CLI: `omp plugin marketplace add warpmetal/skills`,
   Claude marketplace, Codex marketplace.
 - Offline-capable, version-pinned consumption by the `warpmetal` CLI.
-- A read-only skills MCP for on-demand discovery, shipped as an npm package and a multi-arch
-  container image.
+- A skills MCP for on-demand discovery, shipped as an npm package and a multi-arch container image.
+  (Planned as read-only; **superseded** — it also exposes the CLI and provider tools over stdio.)
 - Reproducible releases: GitHub Actions verifies, publishes to npm, pushes GHCR images, and deploys
   the immutable catalog.
 
@@ -54,7 +62,7 @@ server can send to an authenticated catalog (see §8).
 | Repo | `git@github.com:warpmetal/skills.git`; created 2026-09-21, currently empty |
 | Visibility / license | Public; `UNLICENSED` for v1; revisit licensing once skills stabilize |
 | Channels | Ship host-native marketplace + catalog channels from the start |
-| MCP | Build now; standalone package `@warpmetal/skills-mcp`; read-only |
+| MCP | Build now; standalone package `@warpmetal/skills-mcp`. **Superseded:** locked as read-only, and it is not — the CLI and provider tools are registered on stdio, and only the HTTP (`content`) profile serves content alone. |
 | Registry resolution | Dynamic by default: consumers resolve `<catalog>/<tag>/registry.json` (tag defaults to `latest`), revalidate with ETag, fall back to cache, then to a bundled snapshot (marked stale). The CLI ships no registry or skill content; the MCP package and Docker image keep the last-resort bundle. |
 | Skill layout | `skills/<name>/SKILL.md` with references; name = lowercase kebab-case; matches OpenCode/omp/Claude/Codex/DeepSeek Harness discovery |
 | Versioning | Repo semver tags identify immutable releases; each skill carries its own semver, so a one-line fix ships without republishing everything. `name@version` installs arrive later with `releases.json` history. |
@@ -167,7 +175,9 @@ delayed.
   network use, declared tools/roles), CODEOWNERS review before merge.
 - Prompt-injection disclosure: MCP-returned content is untrusted input; document that MCP reads are
   not file-reviewed at install time and recommend version pinning.
-- No auth in the server's own transport (public read-only). Private/team registries are isolated by
+- No auth in the server's own transport. The HTTP profile serves the content tools only; the CLI and
+  provider tools are registered on stdio, which is what keeps the no-auth transport from being a
+  route to a mutation. Private/team registries are isolated by
   running a second instance that loads a second registry (`--registry <path|url>` or
   `WARPMETAL_SKILLS_REGISTRY`), never by a visibility flag inside one registry. The internal skills
   live in this same repository under `internal-skills/`, built by `npm run build:internal` into
@@ -204,7 +214,7 @@ the registry without changing the installed command surface.
 | R2 | Host-native installs | omp, Claude Code, and Codex install a skill from `warpmetal/skills` without the WarpMetal CLI | live host canary |
 | R3 | OpenCode catalog | A pinned catalog URL installs `coding-env` in OpenCode with correct ID and version | host test |
 | R4 | Dynamic resolution with pinning | A registry release is visible without republishing the server or CLI; explicit `--registry`/`--tag` pins a snapshot; every read is checksum-verified | CLI/integration |
-| R5 | MCP read-only | No MCP tool can write files, install, or read outside a skill directory | negative tests |
+| R5 | ~~MCP read-only~~ **Superseded** | The requirement was reversed on purpose: the server exposes mutating surfaces. The replacement acceptance is that a mutating tool cannot run without its named consequence and a single-use token bound to the resolved argv, that the `manual_review` latch is consulted first, and that no `wm_*` or provider tool is registered on the HTTP profile. See [Superseded decisions](ROADMAP.md#superseded-decisions). | negative tests |
 | R6 | Traversal safety | `skill://` and `skill_read` reject absolute/`..`/escaped paths | security tests |
 | R7 | Offline fallback | When the catalog is unreachable the MCP serves the ETag cache, then the bundled snapshot, labeling the result stale | fault test |
 | R8 | Integrity | Tampered skill file fails verification before publish/install | CI |

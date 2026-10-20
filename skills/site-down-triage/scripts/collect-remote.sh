@@ -56,11 +56,19 @@ case "$STACK" in
             systemctl is-active "php${PHP_VERSION}-fpm" 2>/dev/null || true
             systemctl status "php${PHP_VERSION}-fpm" --no-pager -l 2>/dev/null | head -40 || true
         else
-            systemctl is-active 'php*-fpm' 2>/dev/null || true
-            systemctl status 'php*-fpm' --no-pager -l 2>/dev/null | head -40 || true
+            # `is-active`/`status` take an exact unit name, so `php*-fpm` would be
+            # a literal and never match. List the units that do match, then ask
+            # each one individually.
+            fpm_units="$(systemctl list-unit-files 'php*-fpm.service' --no-pager 2>/dev/null | awk '/\.service/{print $1}' || true)"
+            if [[ -z "${fpm_units}" ]]; then
+                echo "php_fpm: no unit matches php*-fpm"
+            fi
+            for u in ${fpm_units}; do
+                echo "php_fpm_unit: ${u} $(systemctl is-active "${u}" 2>/dev/null || echo unknown)"
+            done
         fi
         if command -v journalctl >/dev/null 2>&1; then
-            journalctl --since "$SINCE" -u 'php*-fpm' --no-pager 2>/dev/null | grep -i 'max_children\|ERROR\|FATAL' | tail -30 || true
+            journalctl --since "$SINCE" --no-pager 2>/dev/null | grep -iE 'php[0-9.]*-fpm.*(max_children|ERROR|FATAL)' | tail -30 || true
         fi
         ;;
     node)

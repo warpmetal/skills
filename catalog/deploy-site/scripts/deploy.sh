@@ -88,6 +88,7 @@ manifest_require host site_root domain stack health_url repo_url
 # Surface dependency gaps in warnings[]: "not verified" must never read as "OK".
 manifest_parser_report
 manifest_validate_ssh
+HS_ERR="$(ssh_handshake "${HOST}")" || fail_with 3 STOPPED "Cannot reach ${HOST}: $(printf '%s' "${HS_ERR}" | tail -2 | tr '\n' ' ')"
 
 journal_init "deploy-site" "${CLIENT}" "${MANIFEST}"
 
@@ -178,20 +179,20 @@ if [[ -n "${TARGET_COMMIT}" && ! "${TARGET_COMMIT}" =~ ^[0-9a-fA-F]{7,40}$ ]]; t
     fail_with 5 STOPPED "--commit must be a hexadecimal SHA, got: ${TARGET_COMMIT}"
 fi
 
-try_rsh_stdout "readlink -f '${SITE_ROOT}/current' 2>/dev/null || true"
+try_rsh_stdout "readlink -f $(remote_quote "${SITE_ROOT}/current") 2>/dev/null || true"
 CURRENT_RELEASE_ID="$(basename "${REMOTE_OUT}" 2>/dev/null || true)"
 
 try_rsh_stdout "
-    cd '${RELEASES_DIR}' 2>/dev/null || exit 0
+    cd $(remote_quote "${RELEASES_DIR}") 2>/dev/null || exit 0
     for d in \$(ls -1t); do
-        [ \"\$d\" = '${CURRENT_RELEASE_ID}' ] && continue
+        [ \"\$d\" = $(remote_quote "${CURRENT_RELEASE_ID}") ] && continue
         echo \"\$d\"
         break
     done
 "
 PREVIOUS_RELEASE_ID="$(printf '%s' "${REMOTE_OUT}" | head -1 | tr -d '[:space:]')"
 
-try_rsh_stdout "df -h '${SITE_ROOT}' 2>/dev/null | tail -1 | awk '{print \$5}'"
+try_rsh_stdout "df -h $(remote_quote "${SITE_ROOT}") 2>/dev/null | tail -1 | awk '{print \$5}'"
 DISK_PCT="$(printf '%s' "${REMOTE_OUT}" | tr -d '%[:space:]')"
 if [[ "${DISK_PCT}" =~ ^[0-9]+$ ]] && (( DISK_PCT > 90 )); then
     fail_with 13 STOPPED "Disk usage is ${DISK_PCT}% on ${HOST}; refusing to deploy"
@@ -256,7 +257,7 @@ trap release_lock EXIT
 # Remove a half-built release when the swap never happened.
 discard_release() {
     if [[ "${SWAP_DONE}" == "false" && -n "${RELEASE_DIR}" ]]; then
-        try_rsh "rm -rf '${RELEASE_DIR}'" || true
+        try_rsh "rm -rf $(remote_quote "${RELEASE_DIR}")" || true
         step FAILED "Removed orphan release ${RELEASE_ID}"
     fi
 }
@@ -265,11 +266,11 @@ discard_release() {
 step EXECUTING "Preparing the server-side Git mirror"
 try_rsh "
     set -e
-    if [ ! -d '${MIRROR_DIR}' ]; then
-        git init --bare -q '${MIRROR_DIR}'
+    if [ ! -d $(remote_quote "${MIRROR_DIR}") ]; then
+        git init --bare -q $(remote_quote "${MIRROR_DIR}")
     fi
-    if ! git --git-dir='${MIRROR_DIR}' remote get-url origin >/dev/null 2>&1; then
-        git --git-dir='${MIRROR_DIR}' remote add origin '${REPO_URL}'
+    if ! git --git-dir=$(remote_quote "${MIRROR_DIR}") remote get-url origin >/dev/null 2>&1; then
+        git --git-dir=$(remote_quote "${MIRROR_DIR}") remote add origin $(remote_quote "${REPO_URL}")
     fi
 "
 if [[ "${REMOTE_RC}" -ne 0 ]]; then
@@ -279,14 +280,14 @@ fi
 step EXECUTING "Resolving ${TARGET_REF} to an exact commit"
 try_rsh "
     set -e
-    cd '${MIRROR_DIR}'
-    if printf '%s' '${TARGET_REF}' | grep -Eq '^[0-9a-fA-F]{40}\$'; then
-        git cat-file -e '${TARGET_REF}^{commit}' 2>/dev/null || git fetch -q origin '${TARGET_REF}' 2>/dev/null || true
-        git cat-file -e '${TARGET_REF}^{commit}'
-        git rev-parse '${TARGET_REF}^{commit}'
+    cd $(remote_quote "${MIRROR_DIR}")
+    if printf '%s' $(remote_quote "${TARGET_REF}") | grep -Eq '^[0-9a-fA-F]{40}\$'; then
+        git cat-file -e $(remote_quote "${TARGET_REF}^{commit}") 2>/dev/null || git fetch -q origin $(remote_quote "${TARGET_REF}") 2>/dev/null || true
+        git cat-file -e $(remote_quote "${TARGET_REF}^{commit}")
+        git rev-parse $(remote_quote "${TARGET_REF}^{commit}")
     else
-        git fetch -q origin '${TARGET_REF}' 2>/dev/null || git fetch -q origin 2>/dev/null
-        git rev-parse --verify 'FETCH_HEAD^{commit}' 2>/dev/null || git rev-parse --verify 'origin/${TARGET_REF}^{commit}'
+        git fetch -q origin $(remote_quote "${TARGET_REF}") 2>/dev/null || git fetch -q origin 2>/dev/null
+        git rev-parse --verify 'FETCH_HEAD^{commit}' 2>/dev/null || git rev-parse --verify $(remote_quote "origin/${TARGET_REF}^{commit}")
     fi
 "
 if [[ "${REMOTE_RC}" -ne 0 ]]; then
@@ -307,8 +308,8 @@ step EXECUTING "Deploying ${RESOLVED_SHA} as release ${RELEASE_ID}"
 step EXECUTING "Creating release directory and checking out"
 try_rsh "
     set -e
-    mkdir -p '${RELEASE_DIR}'
-    git --git-dir='${MIRROR_DIR}' --work-tree='${RELEASE_DIR}' checkout -f '${RESOLVED_SHA}' -- .
+    mkdir -p $(remote_quote "${RELEASE_DIR}")
+    git --git-dir=$(remote_quote "${MIRROR_DIR}") --work-tree=$(remote_quote "${RELEASE_DIR}") checkout -f $(remote_quote "${RESOLVED_SHA}") -- .
 "
 if [[ "${REMOTE_RC}" -ne 0 ]]; then
     discard_release
@@ -319,16 +320,16 @@ fi
 step EXECUTING "Linking shared paths"
 try_rsh "
     set -e
-    if [ ! -f '${SHARED_DIR}/.env' ]; then
+    if [ ! -f $(remote_quote "${SHARED_DIR}/.env") ]; then
         echo 'MISSING_SHARED_ENV'
         exit 1
     fi
-    mkdir -p '${SHARED_DIR}/storage'
-    ln -sfn '${SHARED_DIR}/.env' '${RELEASE_DIR}/.env'
-    [ -d '${SHARED_DIR}/storage' ] && ln -sfn '${SHARED_DIR}/storage' '${RELEASE_DIR}/storage' || true
-    if [ -d '${SHARED_DIR}/public/uploads' ]; then
-        mkdir -p '${RELEASE_DIR}/public'
-        ln -sfn '${SHARED_DIR}/public/uploads' '${RELEASE_DIR}/public/uploads'
+    mkdir -p $(remote_quote "${SHARED_DIR}/storage")
+    ln -sfn $(remote_quote "${SHARED_DIR}/.env") $(remote_quote "${RELEASE_DIR}/.env")
+    [ -d $(remote_quote "${SHARED_DIR}/storage") ] && ln -sfn $(remote_quote "${SHARED_DIR}/storage") $(remote_quote "${RELEASE_DIR}/storage") || true
+    if [ -d $(remote_quote "${SHARED_DIR}/public/uploads") ]; then
+        mkdir -p $(remote_quote "${RELEASE_DIR}/public")
+        ln -sfn $(remote_quote "${SHARED_DIR}/public/uploads") $(remote_quote "${RELEASE_DIR}/public/uploads")
     fi
 "
 if [[ "${REMOTE_RC}" -ne 0 ]]; then
@@ -344,14 +345,14 @@ if [[ "${STACK}" == "laravel" || "${STACK}" == "node" ]]; then
     else
         DEP_CMD="(npm ci --omit=dev 2>/dev/null || npm ci)"
     fi
-    try_rsh "cd '${RELEASE_DIR}' && ${DEP_CMD}"
+    try_rsh "cd $(remote_quote "${RELEASE_DIR}") && ${DEP_CMD}"
     if [[ "${REMOTE_RC}" -ne 0 ]]; then
         discard_release
         fail_with 6 FAILED "Dependency install failed: ${REMOTE_OUT}"
     fi
 
     step EXECUTING "Building assets"
-    try_rsh "cd '${RELEASE_DIR}' && npm run build"
+    try_rsh "cd $(remote_quote "${RELEASE_DIR}") && npm run build"
     if [[ "${REMOTE_RC}" -ne 0 ]]; then
         if printf '%s' "${REMOTE_OUT}" | grep -qi 'missing script\|ENOENT.*package.json\|Could not read package.json'; then
             step EXECUTING "No build step present; continuing"
@@ -367,10 +368,11 @@ fi
 # ── Migrations ────────────────────────────────────────────────────────────────
 if [[ "${WILL_MIGRATE}" == "true" ]]; then
     step EXECUTING "Running migrations"
+    require_gate_now "CONFIRM MIGRATIONS" "Run migrations for ${RELEASE_ID} on ${HOST}."
     MIGRATIONS_ATTEMPTED=true
 
     set +e
-    MIGRATION_OUT="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" "cd '${RELEASE_DIR}' && php artisan migrate --force 2>&1")"
+    MIGRATION_OUT="$(ssh "${SSH_OPTS[@]}" "${SSH_DEST}" "cd $(remote_quote "${RELEASE_DIR}") && php artisan migrate --force 2>&1")"
     MIGRATION_RC=$?
     set -e
 
@@ -379,7 +381,7 @@ if [[ "${WILL_MIGRATE}" == "true" ]]; then
 
     if [[ "${MIGRATION_RC}" -ne 0 ]]; then
         step FAILED "Migrations failed (exit ${MIGRATION_RC})"
-        try_rsh "cd '${RELEASE_DIR}' && php artisan migrate:status 2>&1 | tail -20"
+        try_rsh "cd $(remote_quote "${RELEASE_DIR}") && php artisan migrate:status 2>&1 | tail -20"
         printf '%s\n' "${REMOTE_OUT}" >&2
 
         result_add_string "action" "deploy"
@@ -395,13 +397,13 @@ if [[ "${WILL_MIGRATE}" == "true" ]]; then
     fi
     step EXECUTING "Migrations completed"
     # Durable marker so rollback.sh can refuse without a shared /tmp file.
-    try_rsh "touch '${RELEASE_DIR}/.migrations-ran'" || true
+    try_rsh "touch $(remote_quote "${RELEASE_DIR}/.migrations-ran")" || true
 fi
 
 # ── Warm caches ───────────────────────────────────────────────────────────────
 if [[ "${STACK}" == "laravel" ]]; then
     step EXECUTING "Warming caches"
-    try_rsh "cd '${RELEASE_DIR}' && php artisan config:cache && php artisan route:cache && php artisan view:cache"
+    try_rsh "cd $(remote_quote "${RELEASE_DIR}") && php artisan config:cache && php artisan route:cache && php artisan view:cache"
     if [[ "${REMOTE_RC}" -ne 0 ]]; then
         result_warn "Cache warm incomplete: $(printf '%s' "${REMOTE_OUT}" | tr '\n' ' ')"
     fi
@@ -409,10 +411,11 @@ fi
 
 # ── Activate ──────────────────────────────────────────────────────────────────
 step EXECUTING "Atomically activating ${RELEASE_ID}"
+require_gate_now "CONFIRM ACTIVATE" "Repoint 'current' to ${RELEASE_ID}."
 try_rsh "
     set -e
-    ln -sfn '${RELEASE_DIR}' '${SITE_ROOT}/current.tmp'
-    mv -Tf '${SITE_ROOT}/current.tmp' '${SITE_ROOT}/current'
+    ln -sfn $(remote_quote "${RELEASE_DIR}") $(remote_quote "${SITE_ROOT}/current.tmp")
+    mv -Tf $(remote_quote "${SITE_ROOT}/current.tmp") $(remote_quote "${SITE_ROOT}/current")
 "
 if [[ "${REMOTE_RC}" -ne 0 ]]; then
     discard_release
@@ -423,13 +426,14 @@ journal_log "EXECUTING" "Atomic swap" "ln -sfn ... && mv -Tf" 0 0 "${RELEASE_DIR
 
 # ── Reload runtime ────────────────────────────────────────────────────────────
 step EXECUTING "Reloading runtime (${STACK})"
+require_gate_now "CONFIRM RELOAD" "Reload the ${STACK} runtime on ${HOST}."
 case "${STACK}" in
     laravel|wordpress)
         try_rsh "systemctl reload php*-fpm 2>&1 || systemctl reload php-fpm 2>&1"
         [[ "${REMOTE_RC}" -eq 0 ]] || result_warn "PHP-FPM reload reported an error: $(printf '%s' "${REMOTE_OUT}" | tr '\n' ' ')"
         ;;
     node)
-        try_rsh "systemctl reload nginx 2>&1; systemctl restart '${APP_UNIT}' 2>&1"
+        try_rsh "systemctl reload nginx 2>&1; systemctl restart $(remote_quote "${APP_UNIT}") 2>&1"
         [[ "${REMOTE_RC}" -eq 0 ]] || result_warn "Node runtime restart reported an error: $(printf '%s' "${REMOTE_OUT}" | tr '\n' ' ')"
         ;;
     static)
@@ -440,12 +444,13 @@ esac
 
 # ── Restart workers ───────────────────────────────────────────────────────────
 step EXECUTING "Restarting queue workers"
+require_gate_now "CONFIRM RESTART WORKERS" "Restart the queue workers for ${CLIENT}."
 if [[ -n "${WORKER_UNIT}" ]]; then
-    try_rsh "systemctl restart '${WORKER_UNIT}'1 2>&1"
+    try_rsh "systemctl restart $(remote_quote "${WORKER_UNIT}1") 2>&1"
     [[ "${REMOTE_RC}" -eq 0 ]] || result_warn "Worker restart reported an error for ${WORKER_UNIT}1: $(printf '%s' "${REMOTE_OUT}" | tr '\n' ' ')"
 fi
 if [[ "${STACK}" == "laravel" ]]; then
-    try_rsh "cd '${SITE_ROOT}/current' && php artisan queue:restart 2>&1"
+    try_rsh "cd $(remote_quote "${SITE_ROOT}/current") && php artisan queue:restart 2>&1"
     [[ "${REMOTE_RC}" -eq 0 ]] || result_warn "queue:restart reported an error: $(printf '%s' "${REMOTE_OUT}" | tr '\n' ' ')"
 fi
 
@@ -488,8 +493,8 @@ if [[ "${health_failed}" -gt 0 ]]; then
     step ROLLING_BACK "Restoring ${PREVIOUS_RELEASE_ID}"
     try_rsh "
         set -e
-        ln -sfn '${RELEASES_DIR}/${PREVIOUS_RELEASE_ID}' '${SITE_ROOT}/current.tmp'
-        mv -Tf '${SITE_ROOT}/current.tmp' '${SITE_ROOT}/current'
+        ln -sfn $(remote_quote "${RELEASES_DIR}/${PREVIOUS_RELEASE_ID}") $(remote_quote "${SITE_ROOT}/current.tmp")
+        mv -Tf $(remote_quote "${SITE_ROOT}/current.tmp") $(remote_quote "${SITE_ROOT}/current")
     "
     if [[ "${REMOTE_RC}" -ne 0 ]]; then
         result_add_raw "rollback_performed" "false"
@@ -498,7 +503,7 @@ if [[ "${health_failed}" -gt 0 ]]; then
 
     case "${STACK}" in
         laravel|wordpress) try_rsh "systemctl reload php*-fpm 2>/dev/null || true" ;;
-        node)              try_rsh "systemctl restart '${APP_UNIT}' 2>/dev/null || true" ;;
+        node)              try_rsh "systemctl restart $(remote_quote "${APP_UNIT}") 2>/dev/null || true" ;;
         static)            try_rsh "systemctl reload nginx 2>/dev/null || true" ;;
     esac
 
@@ -510,8 +515,9 @@ fi
 
 # ── Prune ─────────────────────────────────────────────────────────────────────
 step EXECUTING "Pruning releases beyond the last ${KEEP_RELEASES}"
+require_gate_now "CONFIRM PRUNE" "Delete releases beyond the last ${KEEP_RELEASES}."
 try_rsh "
-    cd '${RELEASES_DIR}' 2>/dev/null || exit 0
+    cd $(remote_quote "${RELEASES_DIR}") 2>/dev/null || exit 0
     ls -1t | tail -n +$((KEEP_RELEASES + 1)) | while IFS= read -r old; do
         [ -n \"\$old\" ] && rm -rf -- \"\$old\"
     done

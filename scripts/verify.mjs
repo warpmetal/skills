@@ -14,6 +14,7 @@ import {
   renderMarketplaceCatalogs,
   renderPluginManifest,
 } from "./lib/build.mjs";
+import { scanTextForSecrets } from "./lib/secrets.mjs";
 import { collectSkillPolicyFailures } from "./validate-skills.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
@@ -129,21 +130,13 @@ for (const tree of [join(root, "catalog"), join(root, "plugins/warpmetal/skills"
   }
 }
 
-// 5. secret scan over published content.
-const SECRET_PATTERNS = [
-  { name: "aws access key", regex: /AKIA[0-9A-Z]{16}/ },
-  { name: "private key", regex: /-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----/ },
-  { name: "github token", regex: /\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})\b/ },
-  { name: "gitlab token", regex: /\bglpat-[A-Za-z0-9_-]{20,}\b/ },
-  { name: "openai key", regex: /\bsk-[A-Za-z0-9]{20,}\b/ },
-  { name: "slack token", regex: /\bxox[baprs]-[A-Za-z0-9-]{10,}\b/ },
-  // A Slack incoming webhook is a bearer credential in URL form: it is the whole
-  // authorisation to post to a channel, so it belongs in this list.
-  { name: "slack webhook", regex: /hooks\.slack\.com\/services\/[A-Za-z0-9+/]{8,}/ },
-  { name: "cloudflare global key", regex: /\b[0-9a-f]{37}\b/ },
-  { name: "jwt", regex: /\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b/ },
-];
-
+// 5. secret scan over published content and over the packages themselves.
+//
+//    `packages/` is in scope because the packages are published: a credential
+//    committed in a test fixture ships on npm exactly as one in a skill would.
+//    The only exemptions are the fixtures that exist to prove the redactor
+//    works - they are *meant* to contain a key-shaped string - so an exemption
+//    has to say why. See scripts/lib/secrets.mjs.
 const scanRoots = [
   join(root, "skills"),
   join(root, "registry.json"),
@@ -152,7 +145,11 @@ const scanRoots = [
   join(root, ".omp-plugin"),
   join(root, ".claude-plugin"),
   join(root, ".agents"),
+  join(root, "packages"),
 ];
+
+/** Never descend into these: installed dependencies, VCS state, or build output. */
+const SKIP_DIRECTORIES = new Set(["node_modules", ".git", "dist"]);
 
 async function collect(paths) {
   const files = [];
@@ -169,7 +166,7 @@ async function collect(paths) {
     }
     if (!info.isDirectory()) continue;
     for (const entry of await readdir(path, { withFileTypes: true })) {
-      if (entry.name === "node_modules" || entry.name === ".git") continue;
+      if (SKIP_DIRECTORIES.has(entry.name)) continue;
       await collectInto(join(path, entry.name), files);
     }
   }
@@ -184,23 +181,27 @@ async function collectInto(path, files) {
   }
   if (!info.isDirectory()) return;
   for (const entry of await readdir(path, { withFileTypes: true })) {
+    if (SKIP_DIRECTORIES.has(entry.name)) continue;
     await collectInto(join(path, entry.name), files);
   }
 }
 
-for (const file of await collect(scanRoots)) {
+/** Reads one file and records every secret-shaped line in it. */
+async function scanForSecrets(file, found) {
   const buffer = await readFile(file);
-  if (buffer.includes(0)) continue;
-  const text = buffer.toString("utf8");
-  for (const pattern of SECRET_PATTERNS) {
-    if (pattern.regex.test(text)) {
-      failures.push(`possible ${pattern.name} in ${relative(root, file)}`);
-    }
+  if (buffer.includes(0)) return;
+  for (const finding of scanTextForSecrets(buffer.toString("utf8"))) {
+    found.push(`${relative(root, file)}:${String(finding.line)} ${finding.message}`);
   }
 }
 
+for (const file of await collect(scanRoots)) {
+  await scanForSecrets(file, failures);
+}
+
 // 6. skill policies: conventions parity, the resolver block, no inline provider
-//    calls, and declared integrations that actually exist in the engine catalog.
+//    calls, declared integrations that actually exist in the engine catalog, and
+//    gate literals that exist in the authoritative approvals table.
 for (const failure of await collectSkillPolicyFailures({ root })) {
   failures.push(failure);
 }

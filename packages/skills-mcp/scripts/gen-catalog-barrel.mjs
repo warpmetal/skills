@@ -1,7 +1,22 @@
+/**
+ * Generates `src/providers/catalog/index.ts` from the provider catalog files.
+ *
+ *   node packages/skills-mcp/scripts/gen-catalog-barrel.mjs            # write
+ *   node packages/skills-mcp/scripts/gen-catalog-barrel.mjs --check    # prove the committed file
+ *
+ * One import per provider, in file-name order, so adding or removing a
+ * `catalog/<provider>.json` file is the only thing that changes this file.
+ * `--check` compares instead of writing and exits 1 with a `re-run:` line.
+ */
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const dir = "packages/skills-mcp/src/providers/catalog";
+// Resolved from this file rather than the working directory: this is run from CI,
+// from the package and from the repository root.
+const here = dirname(fileURLToPath(import.meta.url));
+const outFile = join(here, "..", "src", "providers", "catalog", "index.ts");
+const dir = join(here, "..", "src", "providers", "catalog");
 const files = readdirSync(dir)
   .filter((f) => f.endsWith(".json"))
   .sort();
@@ -50,5 +65,21 @@ ${entries}
 ] as unknown as ProviderCatalogFile[];
 `;
 
-writeFileSync("packages/skills-mcp/src/providers/catalog/index.ts", body);
+if (process.argv.includes("--check")) {
+  let current = null;
+  try {
+    current = readFileSync(outFile, "utf8");
+  } catch {
+    current = null;
+  }
+  if (current !== body) {
+    console.error(`${outFile} is out of date`);
+    console.error("re-run: node packages/skills-mcp/scripts/gen-catalog-barrel.mjs");
+    process.exit(1);
+  }
+  console.log(`the ${providers.length} provider imports are up to date`);
+  process.exit(0);
+}
+
+writeFileSync(outFile, body);
 console.log("wrote", providers.length, "provider imports");

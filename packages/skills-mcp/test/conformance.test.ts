@@ -599,8 +599,8 @@ describe("2. command whitelist", () => {
 
 describe("3. redaction", () => {
   const PEM =
-    "-----BEGIN OPENSSH PRIVATE KEY-----\nZmFrZWtleW1hdGVyaWFs\n-----END OPENSSH PRIVATE KEY-----";
-  const GITHUB_TOKEN = "ghp_0123456789abcdefghijklmnopqrstuvwx";
+    "-----BEGIN OPENSSH PRIVATE KEY-----\nZmFrZWtleW1hdGVyaWFs\n-----END OPENSSH PRIVATE KEY-----"; // secret-scan:allow redaction fixture
+  const GITHUB_TOKEN = "ghp_0123456789abcdefghijklmnopqrstuvwx"; // secret-scan:allow redaction fixture
   const BEARER_URL = "https://checkout.example.com/c/expiring-bearer-capability";
 
   it("redacts secrets by key name, by bearer path and by value shape", () => {
@@ -816,12 +816,18 @@ describe("4. no HTTP client, no protocol reimplementation", () => {
     }
   });
 
-  it("depends on nothing beyond the SDK and Zod", () => {
+  it("depends on nothing beyond the MCP runtimes, the OpenAI extensions, and Zod", () => {
     const pkg = JSON.parse(readFileSync(PACKAGE_JSON, "utf8")) as {
       dependencies?: Record<string, string>;
     };
+    // The v1 runtime serves `full`/`content`; the v2 runtime plus the OpenAI
+    // extensions serve the ChatGPT surface. Keeping the list closed is the
+    // point: a new entry here is a supply-chain decision, not an implementation
+    // detail, so it has to be made in this test rather than in a PR body.
     assert.deepEqual(Object.keys(pkg.dependencies ?? {}).sort(), [
       "@modelcontextprotocol/sdk",
+      "@modelcontextprotocol/server",
+      "@openai/mcp-extensions",
       "zod",
     ]);
     for (const version of Object.values(pkg.dependencies ?? {})) {

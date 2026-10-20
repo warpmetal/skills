@@ -1,34 +1,16 @@
 #!/usr/bin/env node
-import { readFile } from "node:fs/promises";
-
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
 import { helpText, parseArguments } from "./cli.js";
-import { SkillError, errorMessage } from "./errors.js";
+import { errorMessage } from "./errors.js";
 import { startHttpServer } from "./http.js";
-import { loadRegistry } from "./registry.js";
+import { loadRegistryForCli } from "./load.js";
 import { SERVER_NAME, createSkillsServer } from "./server.js";
 import { createProviderInvokerFromEnv } from "./providers/index.js";
 import { packageVersion } from "./version.js";
 
 function banner(loadedSource: string, registryVersion: string, stale: boolean): string {
   return `${loadedSource}${stale ? ", stale" : ""}, registry ${registryVersion}`;
-}
-
-/**
- * `--registry-token-file` exists so hosts that scrub `*TOKEN*` environment
- * variables can still pass a credential without putting it in the process list
- * or the environment.
- */
-async function readTokenFile(path: string): Promise<string> {
-  try {
-    return await readFile(path, "utf8");
-  } catch (error) {
-    throw new SkillError(
-      "invalid_request",
-      `--registry-token-file: cannot read ${path}: ${(error as Error).message}`,
-    );
-  }
 }
 
 async function main(): Promise<void> {
@@ -43,17 +25,7 @@ async function main(): Promise<void> {
     return;
   }
 
-  const registryToken = options.registryTokenFile
-    ? await readTokenFile(options.registryTokenFile)
-    : undefined;
-
-  const loaded = await loadRegistry({
-    registry: options.registry,
-    tag: options.tag,
-    cacheDir: options.cacheDir,
-    offline: options.offline,
-    registryToken,
-  });
+  const loaded = await loadRegistryForCli(options);
 
   if (options.http) {
     // HTTP is unauthenticated, so it only ever gets the `content` profile: the
@@ -70,20 +42,24 @@ async function main(): Promise<void> {
     return;
   }
 
-  // stdio is a local, operator-controlled channel, so it gets everything.
-  const providers = createProviderInvokerFromEnv();
-  if (!providers.configured) {
+  // stdio is a local, operator-controlled channel, so `full` gets everything.
+  // `chatgpt-local` rides the same channel without the provider tools, so its
+  // invoker is never resolved here either: that profile must stay at 46 tools
+  // whatever the host happens to have installed.
+  const profile = options.profile;
+  const providers = profile === "full" ? createProviderInvokerFromEnv() : null;
+  if (providers !== null && !providers.configured) {
     // The tools still register, but every call answers `provider_unconfigured`.
     // Say so once, loudly, instead of leaving it to the first failed call.
     process.stderr.write(
       `${SERVER_NAME}: provider tools are enabled but @warpmetal/cli could not be resolved; each provider tools/call will answer provider_unconfigured. Install it with \`npm i @warpmetal/cli\` or set WARPMETAL_INTEGRATION_CLI_JS to its entry file.\n`,
     );
   }
-  const server = createSkillsServer(loaded, { profile: "full", providers });
+  const server = createSkillsServer(loaded, { profile, providers });
   const transport = new StdioServerTransport();
   await server.connect(transport);
   process.stderr.write(
-    `${SERVER_NAME} ${packageVersion()} ready (profile full, ${banner(loaded.source, loaded.registry.registryVersion, loaded.stale)})\n`,
+    `${SERVER_NAME} ${packageVersion()} ready (profile ${profile}, ${banner(loaded.source, loaded.registry.registryVersion, loaded.stale)})\n`,
   );
   const shutdown = () => {
     void server.close().finally(() => process.exit(0));

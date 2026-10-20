@@ -2,7 +2,9 @@
 
 Canonical registry for WarpMetal Agent Skills, plus every distribution channel generated from it:
 host-native plugin marketplaces, an OpenCode HTTP catalog, dynamic resolution for the `warpmetal`
-CLI, and the read-only `@warpmetal/skills-mcp` discovery server.
+CLI, and `@warpmetal/skills-mcp`. That last one is two things depending on the transport: a content
+server on both profiles, and — over stdio only — the `warpmetal` CLI surface (43 `wm_*` tools) and
+1,331 WarpMetal-backed provider tools across 43 providers.
 
 **One source of truth:** [`registry.json`](./registry.json) and [`skills/`](./skills). Every
 channel is generated with `npm run build`; CI fails on drift with `npm run verify`.
@@ -41,7 +43,8 @@ npm run build      # sync conventions, regenerate registry.json, catalogs, plugi
 npm run verify     # schema + checksums + drift + secret scan
 npm run build:internal   # regenerate registry.internal.json + snapshot.internal/ (internal skills)
 npm run verify:internal  # schema + checksums + snapshot parity + secret scan + isolation guard
-npm test           # skills-mcp unit and protocol tests
+npm run test:scripts     # the registry tooling's own tests: build rules, gates, schema, secret scan
+npm test           # test:scripts, then the skills-mcp unit and protocol tests
 npm run check      # build + verify + test
 npm run pages      # build the versioned Pages artifact under public/
 
@@ -243,8 +246,16 @@ Content rules are in [CONTRIBUTING.md](./CONTRIBUTING.md).
   install `@warpmetal/cli` when a skill declares an integration.
 - Remaining before publishing: npm scope + trusted publishing, Pages enablement, branch protection,
   and live host validation against omp, Claude Code, Codex, OpenCode, and DeepSeek Harness.
-- Each integration still needs one real-world walkthrough (a deploy, a DNS change, an alert) against
-  a live provider; the offline suites use fixtures and stub providers by design.
+- The 1,331 provider tools are each verified at one of three tiers, and the tier is a fact about the
+  tool rather than a claim about the suite: **live-verified** (exercised against the real API with a
+  credential), **docs-confirmed** (the request shape checked against the provider's published
+  reference and pinned in `provider-contract.test.ts`), and **experimental** (the shape could not be
+  confirmed, and the tool's own description says so). The definitions are in
+  [`packages/skills-mcp/README.md`](./packages/skills-mcp/README.md#how-the-provider-requests-are-verified).
+  Only a handful of providers have had a live run; the rest sit at the docs-confirmed tier and still
+  need one real-world walkthrough, because the offline suites use fixtures and stub providers by
+  design. The `experimental` tier is derived from a scheduled, credential-free route probe
+  ([`probe-drift.yml`](./.github/workflows/probe-drift.yml)) rather than hand-written.
 
 ## License
 
