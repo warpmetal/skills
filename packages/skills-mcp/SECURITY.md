@@ -29,23 +29,38 @@ This server sits between an MCP client and the WarpMetal CLI (including the
 
 ## Transport profiles
 
-The server exposes two surfaces, and which one a client can reach is decided by the
-transport rather than by the caller:
+The server exposes three surfaces, and which one a client can reach is decided by the
+transport plus an explicit profile flag rather than by the caller:
 
-- **`full`** — stdio. The `skill_*` content tools, every `wm_*` CLI tool, and the provider
+- **`full`** — stdio, the default. The `skill_*` content tools, every `wm_*` CLI tool, and the provider
   tools (1377 in total). stdio is a local, operator-controlled channel. Provider calls
   spawn `@warpmetal/cli` `integration` verbs; secrets stay in the WarpMetal vault, not in
   this process environment. Provider arguments are written to the CLI's stdin
   (`--args-stdin`), never to argv, so an argument that carries a value never reaches the
   process list; Atlassian Cloud credentials add a `jira.email` / `confluence.email` vault
   entry that is combined into `Basic base64(email:token)` in-process and redacted from output.
+- **`chatgpt-local`** — stdio, selected with `--profile chatgpt-local`. The `skill_*` content
+  tools plus the 43 `wm_*` CLI tools (46 in total). The provider tools are never registered
+  and the provider invoker is never resolved, so this profile cannot reach a third-party
+  account. It is the ChatGPT desktop integration surface; its tool count is a test
+  condition, not an assumption. The v2 ChatGPT entrypoint (`chatgpt.ts`) serves those
+  same 46 tools plus one read-only MCP App tool, `warpmetal.dashboard`, backed by the
+  `ui://warpmetal/dashboard` resource; that tool reads through the four read tools and
+  returns a projected payload, never reaching the CLI directly. It also advertises
+  `openai/mentions` with an app-only, read-only `search_mentions` tool that returns ids
+  and resource types from local state and the in-memory task registry, never a path, a
+  credential or a description. It also registers one read-only form tool, `wm_pick_server`,
+  that uses legacy elicitation to collect a server id; a selection is not an authorisation,
+  and the tool never applies a change.
 - **`content`** — the Streamable HTTP transport. The `skill_*` tools and the
   `skill://` resources only. The `wm_*` and provider tools are not registered at all on this
   profile, because the HTTP transport has no authentication and those tools can mutate real
   infrastructure / third-party accounts.
 
-A way to reach a `wm_*` or provider tool over HTTP is a vulnerability. A way to make the
-`content` profile serve something outside the loaded registry is one too.
+`--profile` is mutually exclusive with `--http`: `--http` already selects `content`, and
+`chatgpt-local` must never reach a socket. A way to reach a `wm_*` or provider tool over
+HTTP is a vulnerability. A way to make the `content` profile serve something outside the
+loaded registry is one too.
 
 ### Provider mutations: destructive hints and the confirm gate
 

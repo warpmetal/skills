@@ -34,6 +34,7 @@ import {
   ListResourcesRequestSchema,
   McpError,
   ReadResourceRequestSchema,
+  type CallToolResult,
   type ReadResourceResult,
 } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
@@ -80,8 +81,11 @@ export const SERVER_VERSION = packageVersion();
  *    provider tools. stdio only.
  *  - `content`: the `skill_*` tools and the registry resources only. The safe
  *    profile for the unauthenticated HTTP transport (no wm_*, no provider tools).
+ *  - `chatgpt-local`: the content surface plus the 43 `wm_*` CLI tools, without
+ *    the provider tools. stdio only; this is the ChatGPT desktop integration
+ *    surface, and its tool count is a test condition rather than an assumption.
  */
-export type ServerProfile = "full" | "content";
+export type ServerProfile = "full" | "content" | "chatgpt-local";
 
 export interface ServerOptions {
   /** Defaults to `full`. `content` is the HTTP profile. */
@@ -135,14 +139,15 @@ function registryMeta(loaded: LoadedRegistry): {
 }
 
 /**
- * Builds the shared dependencies for the `wm_*` surface. Called only when the
- * `full` profile is selected, so the HTTP server never allocates a latch store
- * or an approval broker it cannot expose.
+ * Builds the shared dependencies for the `wm_*` surface. Called only for the
+ * profiles that expose that surface (`full` and `chatgpt-local`), so the HTTP
+ * `content` server never allocates a latch store or an approval broker it
+ * cannot expose.
  *
  * One directory resolves both the audit log and the latch, so redirecting one
  * redirects the other, and neither can be pointed somewhere the other is not.
  */
-function buildDeps(options: ServerOptions): ServerDeps {
+export function buildDeps(options: ServerOptions): ServerDeps {
   const stateDir = options.auditDir ?? resolveAuditDir();
 
   return {
@@ -155,20 +160,56 @@ function buildDeps(options: ServerOptions): ServerDeps {
   };
 }
 
+const skillListInput = z.strictObject({
+  role: z
+    .string()
+    .min(1)
+    .max(64)
+    .optional()
+    .describe("Filter to skills that declare this role, e.g. planner, builder, reviewer"),
+  host: z
+    .string()
+    .min(1)
+    .max(64)
+    .optional()
+    .describe("Filter to skills that support this agent host, e.g. omp, opencode, codex, claude"),
+});
+
+const skillSearchInput = z.strictObject({
+  query: z.string().min(1).max(256).describe("Substring query, e.g. 'coding environment'"),
+  limit: z.number().int().min(1).max(20).optional().describe("Maximum hits (default 10)"),
+  role: z.string().min(1).max(64).optional(),
+  host: z.string().min(1).max(64).optional(),
+});
+
+const skillReadInput = z.strictObject({
+  name: z.string().min(1).max(64).describe("Skill name, e.g. warpmetal"),
+  file: z
+    .string()
+    .min(1)
+    .max(256)
+    .optional()
+    .describe("Relative file inside the skill; defaults to SKILL.md"),
+});
+
 /**
- * Registers the content surface: the three `skill_*` tools plus the `skill://`
- * resources. Available in both profiles, because reading a skill is a local,
- * read-only operation that exposes no execution.
- *
- * These tools follow the same registration convention as the `wm_*` specs: a
- * strict Zod input schema and an output schema, so an unexpected argument and an
- * unexpected response field are both errors rather than something quietly
- * ignored. `skill_read` is the one exception, and for a real reason: its output
- * *is* the file body, streamed as markdown, so declaring an output schema would
- * force every file to be duplicated into `structuredContent` for no contract the
- * text block does not already carry.
+ * One content tool, transport-agnostic: the config and handler are what the v1
+ * registrar below and the v2 adapter in `chatgpt/register.ts` consume, so the
+ * two cannot describe different tools.
  */
-function registerContentTools(server: McpServer, loaded: LoadedRegistry): void {
+export interface ContentToolRegistration {
+  name: string;
+  config: {
+    title: string;
+    description: string;
+    annotations: { readOnlyHint: true };
+    inputSchema: z.ZodType;
+    outputSchema?: z.ZodType;
+  };
+  handler: (args: unknown) => Promise<CallToolResult>;
+}
+
+export function contentToolRegistrations(loaded: LoadedRegistry): ContentToolRegistration[] {
   /** Mirrors `summarizeSkill`, so a drift in either direction fails validation. */
   const skillSummarySchema = z.strictObject({
     name: z.string(),
@@ -207,109 +248,101 @@ function registerContentTools(server: McpServer, loaded: LoadedRegistry): void {
     ),
   });
 
-  server.registerTool(
-    "skill_list",
+  return [
     {
-      title: "List WarpMetal skills",
-      description:
-        "List every skill in the WarpMetal registry with its version, description, roles, hosts, and files. Optional filters narrow by role or agent host.",
-      annotations: { readOnlyHint: true },
-      inputSchema: z.strictObject({
-        role: z
-          .string()
-          .min(1)
-          .max(64)
-          .optional()
-          .describe("Filter to skills that declare this role, e.g. planner, builder, reviewer"),
-        host: z
-          .string()
-          .min(1)
-          .max(64)
-          .optional()
-          .describe("Filter to skills that support this agent host, e.g. omp, opencode, codex, claude"),
-      }),
-      outputSchema: skillListOutputSchema,
+      name: "skill_list",
+      config: {
+        title: "List WarpMetal skills",
+        description:
+          "List every skill in the WarpMetal registry with its version, description, roles, hosts, and files. Optional filters narrow by role or agent host.",
+        annotations: { readOnlyHint: true },
+        inputSchema: skillListInput,
+        outputSchema: skillListOutputSchema,
+      },
+      handler: async (args: unknown) => {
+        const { role, host } = args as z.infer<typeof skillListInput>;
+        try {
+          const payload = {
+            ...registryMeta(loaded),
+            skills: listSkills(loaded, { role, host }),
+          };
+          return {
+            content: [{ type: "text", text: json(payload) }],
+            structuredContent: payload,
+          };
+        } catch (error) {
+          throw toMcpError(error);
+        }
+      },
     },
-    async (args) => {
-      try {
-        const payload = {
-          ...registryMeta(loaded),
-          skills: listSkills(loaded, { role: args.role, host: args.host }),
-        };
-        return {
-          content: [{ type: "text", text: json(payload) }],
-          structuredContent: payload,
-        };
-      } catch (error) {
-        throw toMcpError(error);
-      }
+    {
+      name: "skill_search",
+      config: {
+        title: "Search WarpMetal skills",
+        description:
+          "Rank WarpMetal skills by name, tag, description, role, and host matches. Use before skill_read to find the right skill for a task.",
+        annotations: { readOnlyHint: true },
+        inputSchema: skillSearchInput,
+        outputSchema: skillSearchOutputSchema,
+      },
+      handler: async (args: unknown) => {
+        const { query, limit, role, host } = args as z.infer<typeof skillSearchInput>;
+        try {
+          const payload = {
+            ...registryMeta(loaded),
+            query,
+            hits: searchSkills(loaded, query, { limit, role, host }),
+          };
+          return {
+            content: [{ type: "text", text: json(payload) }],
+            structuredContent: payload,
+          };
+        } catch (error) {
+          throw toMcpError(error);
+        }
+      },
     },
-  );
+    {
+      name: "skill_read",
+      config: {
+        title: "Read a WarpMetal skill",
+        description:
+          "Read a skill's SKILL.md or a supporting file listed in the registry. The registry checksum is verified before the content is returned.",
+        annotations: { readOnlyHint: true },
+        inputSchema: skillReadInput,
+      },
+      handler: async (args: unknown) => {
+        const { name, file } = args as z.infer<typeof skillReadInput>;
+        try {
+          const content = await readSkillFile(loaded, name, file ?? "SKILL.md");
+          return {
+            content: [{ type: "text", text: content.text }],
+          };
+        } catch (error) {
+          throw toMcpError(error);
+        }
+      },
+    },
+  ];
+}
 
-  server.registerTool(
-    "skill_search",
-    {
-      title: "Search WarpMetal skills",
-      description:
-        "Rank WarpMetal skills by name, tag, description, role, and host matches. Use before skill_read to find the right skill for a task.",
-      annotations: { readOnlyHint: true },
-      inputSchema: z.strictObject({
-        query: z.string().min(1).max(256).describe("Substring query, e.g. 'coding environment'"),
-        limit: z.number().int().min(1).max(20).optional().describe("Maximum hits (default 10)"),
-        role: z.string().min(1).max(64).optional(),
-        host: z.string().min(1).max(64).optional(),
-      }),
-      outputSchema: skillSearchOutputSchema,
-    },
-    async (args) => {
-      try {
-        const payload = {
-          ...registryMeta(loaded),
-          query: args.query,
-          hits: searchSkills(loaded, args.query, {
-            limit: args.limit,
-            role: args.role,
-            host: args.host,
-          }),
-        };
-        return {
-          content: [{ type: "text", text: json(payload) }],
-          structuredContent: payload,
-        };
-      } catch (error) {
-        throw toMcpError(error);
-      }
-    },
-  );
-
-  server.registerTool(
-    "skill_read",
-    {
-      title: "Read a WarpMetal skill",
-      description:
-        "Read a skill's SKILL.md or a supporting file listed in the registry. The registry checksum is verified before the content is returned.",
-      annotations: { readOnlyHint: true },
-      inputSchema: z.strictObject({
-        name: z.string().min(1).max(64).describe("Skill name, e.g. warpmetal"),
-        file: z
-          .string()
-          .min(1)
-          .max(256)
-          .optional()
-          .describe("Relative file inside the skill; defaults to SKILL.md"),
-      }),
-    },
-    async (args) => {
-      try {
-        const content = await readSkillFile(loaded, args.name, args.file ?? "SKILL.md");
-        return {
-          content: [{ type: "text", text: content.text }],
-        };
-      } catch (error) {
-        throw toMcpError(error);
-      }
-    },
-  );
+/**
+ * Registers the content surface on the v1 server: the three `skill_*` tools plus
+ * the `skill://` resources. Available in both profiles, because reading a skill
+ * is a local, read-only operation that exposes no execution.
+ *
+ * These tools follow the same registration convention as the `wm_*` specs: a
+ * strict Zod input schema and an output schema, so an unexpected argument and an
+ * unexpected response field are both errors rather than something quietly
+ * ignored. `skill_read` is the one exception, and for a real reason: its output
+ * *is* the file body, streamed as markdown, so declaring an output schema would
+ * force every file to be duplicated into `structuredContent` for no contract the
+ * text block does not already carry.
+ */
+function registerContentTools(server: McpServer, loaded: LoadedRegistry): void {
+  for (const tool of contentToolRegistrations(loaded)) {
+    server.registerTool(tool.name, tool.config, tool.handler);
+  }
 
   server.server.setRequestHandler(ListResourcesRequestSchema, async () => ({
     resources: loaded.registry.skills.map((skill) => ({
@@ -350,8 +383,9 @@ export function buildServer(options: BuildServerOptions = {}): McpServer {
 /**
  * The unified server used by both transports.
  *
- * `profile: "full"` is what `index.ts` connects to stdio; `profile: "content"`
- * is what the HTTP handler builds per request.
+ * `profile: "full"` is what `index.ts` connects to stdio by default;
+ * `profile: "chatgpt-local"` is that same local channel minus the provider
+ * tools; `profile: "content"` is what the HTTP handler builds per request.
  */
 export function createSkillsServer(
   loaded: LoadedRegistry,
@@ -362,11 +396,16 @@ export function createSkillsServer(
     { capabilities: { tools: {}, resources: {} } },
   );
 
+  const profile = options.profile ?? "full";
+
   registerContentTools(server, loaded);
 
-  if ((options.profile ?? "full") === "full") {
+  if (profile === "full" || profile === "chatgpt-local") {
     registerToolSpecs(server, options.specs ?? ALL_TOOL_SPECS, buildDeps(options));
-    if (options.providers !== null) {
+    // `chatgpt-local` never registers the provider surface, so it also never
+    // resolves the provider invoker: the count stays 46 whatever the host has
+    // installed, and no third-party account can be reached from that profile.
+    if (profile === "full" && options.providers !== null) {
       const invoker = options.providers ?? createProviderInvokerFromEnv();
       registerProviderTools(server, invoker);
     }

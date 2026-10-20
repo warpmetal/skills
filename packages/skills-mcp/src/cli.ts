@@ -1,10 +1,22 @@
 import { SkillError } from "./errors.js";
 
+/**
+ * The stdio profiles a caller can select.
+ *
+ * `content` is deliberately absent: it is the unauthenticated HTTP surface and
+ * is chosen by `--http`, never by a flag. Keeping it out of this union is what
+ * makes a stray profile value a parse error instead of a runtime surprise.
+ */
+export type CliProfile = "full" | "chatgpt-local";
+
+const CLI_PROFILES = new Set<string>(["full", "chatgpt-local"]);
+
 export interface CliOptions {
   registry?: string;
   tag?: string;
   cacheDir?: string;
   registryTokenFile?: string;
+  profile: CliProfile;
   offline: boolean;
   noFallback: boolean;
   http: boolean;
@@ -24,12 +36,14 @@ const VALUE_FLAGS = new Set([
   "--registry-token-file",
   "--port",
   "--host",
+  "--profile",
 ]);
 
 const BOOLEAN_FLAGS = new Set(["--http", "--offline", "--no-fallback", "--help", "-h", "--version", "-V"]);
 
 export function parseArguments(argv: string[]): CliOptions {
   const options: CliOptions = {
+    profile: "full",
     offline: false,
     noFallback: false,
     http: false,
@@ -38,6 +52,10 @@ export function parseArguments(argv: string[]): CliOptions {
     help: false,
     version: false,
   };
+  // Tracked separately because `--profile full --http` must fail exactly like
+  // `--profile chatgpt-local --http`: the contradiction is the flag's presence,
+  // not the value it happens to carry.
+  let profileExplicit = false;
 
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
@@ -67,6 +85,16 @@ export function parseArguments(argv: string[]): CliOptions {
           break;
         case "--host":
           options.host = value;
+          break;
+        case "--profile":
+          if (!CLI_PROFILES.has(value)) {
+            throw new SkillError(
+              "invalid_request",
+              `invalid profile: ${value} (expected full or chatgpt-local)`,
+            );
+          }
+          options.profile = value as CliProfile;
+          profileExplicit = true;
           break;
         default:
           break;
@@ -114,6 +142,11 @@ export function parseArguments(argv: string[]): CliOptions {
       "--no-fallback cannot be combined with --offline (offline serves a stale cache by definition)",
     );
   }
+  if (options.http && profileExplicit) {
+    // `--http` already selects the `content` profile; a `--profile` alongside it
+    // is a contradiction, and `chatgpt-local` must never reach a socket.
+    throw new SkillError("invalid_request", "--profile cannot be combined with --http");
+  }
 
   return options;
 }
@@ -145,6 +178,7 @@ Options:
   --offline              Never fetch; use the cached or bundled registry
   --no-fallback          Fail instead of serving a stale cached/bundled registry
   --http                 Serve Streamable HTTP instead of stdio
+  --profile <name>       stdio profile: full (default) or chatgpt-local (no provider tools)
   --host <address>       HTTP bind address (default ${DEFAULT_HOST})
   --port <number>        HTTP port (default ${DEFAULT_PORT})
   --cache-dir <path>     Override the registry cache directory

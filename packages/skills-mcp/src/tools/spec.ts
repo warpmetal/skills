@@ -1157,29 +1157,46 @@ async function runTaskSpec(
 }
 
 /**
- * Registers one tool. The casts are confined to this boundary: the handler
- * treats arguments as an untyped record because every field has already been
- * validated by the Zod schema, and `extra` is narrowed to the two fields this
- * server actually uses.
+ * The MCP tool metadata every registration path shares. Returned as a fresh
+ * object so one registration's config cannot be mutated through another.
+ */
+export function toolSpecConfig(spec: WmToolSpec) {
+  return {
+    title: spec.title,
+    description: spec.description,
+    inputSchema: spec.input,
+    outputSchema: wmResultSchema,
+    annotations: spec.annotations,
+  };
+}
+
+/**
+ * The handler both registration paths consume. The casts are confined to this
+ * boundary: arguments are an untyped record because every field has already
+ * been validated by the Zod schema, and `extra` is narrowed to the two fields
+ * this server actually uses.
+ */
+export type ToolSpecHandler = (args: unknown, extra: unknown) => Promise<CallToolResult>;
+
+export function toolSpecHandler(spec: WmToolSpec, deps: ServerDeps): ToolSpecHandler {
+  return async (args: unknown, extra: unknown) =>
+    handle(
+      spec,
+      deps,
+      args as Record<string, unknown>,
+      extra as {
+        _meta?: { progressToken?: string | number } | undefined;
+        sendNotification?: (n: unknown) => Promise<void>;
+      },
+    );
+}
+
+/**
+ * Registers one tool on the v1 server. It composes the same config and handler
+ * the v2 adapter in `chatgpt/register.ts` uses, so the two paths cannot drift.
  */
 export function registerToolSpec(server: McpServer, spec: WmToolSpec, deps: ServerDeps): void {
-  server.registerTool(
-    spec.name,
-    {
-      title: spec.title,
-      description: spec.description,
-      inputSchema: spec.input,
-      outputSchema: wmResultSchema,
-      annotations: spec.annotations,
-    },
-    async (args: unknown, extra: unknown) =>
-      handle(
-        spec,
-        deps,
-        args as Record<string, unknown>,
-        extra as { _meta?: { progressToken?: string | number } | undefined; sendNotification?: (n: unknown) => Promise<void> },
-      ),
-  );
+  server.registerTool(spec.name, toolSpecConfig(spec), toolSpecHandler(spec, deps));
 }
 
 export function registerToolSpecs(
