@@ -39,11 +39,15 @@ enabled_tools = [
   "wm_task_list", "wm_task_get", "wm_task_wait",
   "wm_order_status", "wm_operation_get", "wm_runtime_get",
   "wm_sandbox_access_list", "wm_sandbox_access_get", "wm_manual_review_list",
-  "warpmetal.dashboard", "search_mentions"
+  "warpmetal.dashboard", "search_mentions", "wm_pick_server"
   # add specific wm_*_plan / wm_*_apply tools only after you have verified that
   # ChatGPT Desktop asks for confirmation before each apply
 ]
 ```
+
+`wm_server_identity` is deliberately absent: it returns local key paths, which
+should not enter a chat. `wm_server_login` is absent too because it contacts the
+host; add either only if you accept that.
 
 Verify in ChatGPT Desktop that every `*_apply` asks for confirmation before you
 add it. The plugin's internal approval token is a server-side, single-use gate;
