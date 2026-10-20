@@ -227,6 +227,12 @@ export function renderMarketplaceCatalogs(model) {
         policy: { installation: "AVAILABLE", authentication: "ON_INSTALL" },
         category: "Developer Tools",
       },
+      {
+        name: "warpmetal-chatgpt",
+        source: { source: "local", path: "./plugins/warpmetal-chatgpt" },
+        policy: { installation: "AVAILABLE", authentication: "ON_INSTALL" },
+        category: "Developer Tools",
+      },
     ],
   };
   return {
@@ -246,6 +252,50 @@ export function renderPluginManifest(model) {
     repository: REPOSITORY_URL,
     license: "UNLICENSED",
     keywords: ["warpmetal", "agent-skills", "vps"],
+  });
+}
+
+export function renderChatgptPluginManifest({ version }) {
+  return jsonText({
+    $schema: "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+    name: "warpmetal-chatgpt",
+    version,
+    description:
+      "Manage and observe WarpMetal VPS servers and Agent Runtime sandboxes from ChatGPT Desktop.",
+    author: { name: "WarpMetal", url: REPOSITORY_URL },
+    homepage: REPOSITORY_URL,
+    repository: REPOSITORY_URL,
+    license: "UNLICENSED",
+    keywords: ["warpmetal", "vps", "sandbox", "mcp"],
+    extensions: {
+      "com.openai": {
+        interface: {
+          displayName: "WarpMetal",
+          shortDescription: "Manage and observe WarpMetal servers and sandboxes.",
+          longDescription:
+            "Read WarpMetal server, sandbox and task state, and plan server/sandbox changes with explicit approval. Payments are out of scope.",
+          developerName: "WarpMetal",
+          category: "Developer Tools",
+          capabilities: ["Read", "Write"],
+          websiteURL: "https://warpmetal.com",
+          defaultPrompt: ["Use WarpMetal to show my servers and their state."],
+        },
+      },
+    },
+  });
+}
+
+export function renderChatgptMcpJson() {
+  return jsonText({
+    $schema: "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+    mcpServers: {
+      warpmetal: {
+        type: "stdio",
+        command: "node",
+        args: ["${PLUGIN_ROOT}/server/dist/chatgpt.js", "--registry", "${PLUGIN_ROOT}"],
+        cwd: "${PLUGIN_ROOT}",
+      },
+    },
   });
 }
 

@@ -20,6 +20,8 @@
     "check:action-pins": "node scripts/check-action-pins.mjs",
     "test:scripts": "node --test \"scripts/**/*.test.mjs\"",
     "test": "npm run test:scripts && npm --prefix packages/skills-mcp test",
+    "build:chatgpt-plugin": "node scripts/build-chatgpt-plugin.mjs",
+    "check:chatgpt-plugin": "node scripts/verify-chatgpt-plugin.mjs",
     "check": "npm run build && npm run build:internal && npm run verify && npm run verify:internal && npm test",
     "pages": "node scripts/build-pages.mjs",
     "docker:build": "docker build -t ghcr.io/warpmetal/skills-mcp:dev packages/skills-mcp"

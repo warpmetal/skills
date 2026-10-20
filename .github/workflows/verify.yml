@@ -83,6 +83,15 @@ jobs:
       - name: Integration library self-test
         run: bash tools/check-all.sh
 
+      # The ChatGPT plugin is a generated, dependency-bearing artifact and is not
+      # committed; build and validate it here so the drift check still covers its
+      # inputs (the generator, the scoped skill and the marketplace entry).
+      - name: Build the ChatGPT plugin
+        run: npm run build:chatgpt-plugin
+
+      - name: Verify the ChatGPT plugin
+        run: npm run check:chatgpt-plugin
+
       - name: Drift check
         run: git diff --exit-code
 

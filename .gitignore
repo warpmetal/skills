@@ -4,6 +4,9 @@ coverage/
 public/
 packages/skills-mcp/snapshot/
 snapshot.internal/
+# The portable ChatGPT plugin ships production dependencies; it is generated on
+# demand by `npm run build:chatgpt-plugin`, not committed.
+plugins/warpmetal-chatgpt/
 .DS_Store
 *.log
 
