@@ -94,6 +94,10 @@ for (const absent of ["references/payments.md", "references/renewals.md"]) {
 async function walk(dir, out = []) {
   for (const entry of await readdir(dir, { withFileTypes: true })) {
     const path = join(dir, entry.name);
+    // npm's `.bin` entries are symlinks by design on POSIX, and the installed
+    // dependency tree is not this package's own content. Only the files the
+    // generator wrote are in scope for the symlink check.
+    if (entry.name === "node_modules") continue;
     if (entry.isSymbolicLink()) {
       out.push({ path, symlink: true });
       continue;
@@ -114,7 +118,6 @@ for (const file of await walk(pluginRoot)) {
     failures.push(`${rel} is a symlink`);
     continue;
   }
-  if (rel.startsWith("plugins/warpmetal-chatgpt/server/node_modules/")) continue;
   const text = await readFile(file.path, "utf8").catch(() => null);
   if (text === null) continue;
   if (text.includes(checkout)) {
