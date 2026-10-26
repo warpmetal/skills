@@ -115,3 +115,29 @@ jobs:
           done
           curl -fsS http://127.0.0.1:8080/readyz
           docker rm -f skills-mcp
+
+  # The integration engine has Windows-only branches: `chmod` cannot express an
+  # ACL, so `env doctor` reads the real security descriptor with PowerShell, and
+  # binary resolution differs. None of that executes on ubuntu, so this job is
+  # the only place those branches are proven.
+  windows-cli:
+    name: integration engine (windows)
+    runs-on: windows-latest
+    env:
+      # The OS keychain is an optional dependency, so on this runner it is
+      # actually installed. Pinning the backend keeps the suite deterministic.
+      WARPMETAL_DISABLE_KEYCHAIN: "1"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: packages/warpmetal-cli/package-lock.json
+
+      - name: Install integration engine
+        run: npm ci --prefix packages/warpmetal-cli
+
+      - name: Test integration engine
+        run: npm --prefix packages/warpmetal-cli test
