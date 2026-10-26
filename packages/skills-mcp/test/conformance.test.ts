@@ -296,6 +296,16 @@ function toolFlags(spec: (typeof ALL_TOOL_SPECS)[number]): Record<string, unknow
   return schema.properties ?? {};
 }
 
+/**
+ * The regex escapes a provider's schema validator is known to accept. It is a
+ * whitelist rather than a blacklist because `pattern` is shipped verbatim to
+ * every host and every provider: `\r` and `\n` are safe everywhere, `\0` is
+ * valid ECMA-262 and nothing else, and an engine that refuses an escape rejects
+ * the whole request before the model is asked anything. Adding one here is a
+ * decision, not a formality.
+ */
+const PROVIDER_ESCAPES = new Set(["r", "n", "t", "\\", "/", ".", "-"]);
+
 const HEALTH_FIXTURE = {
   anyPaymentReady: true,
   dependencies: {
@@ -511,6 +521,64 @@ describe("1. schema conformance", () => {
       destructive.includes("wm_sandbox_delete_apply") &&
         destructive.includes("wm_server_reload_apply"),
       "the two verbs that erase a disk must advertise destructiveness",
+    );
+  });
+
+  it("advertises only patterns a provider can compile", () => {
+    // `pattern` leaves this process verbatim: the host forwards the tool list to
+    // the model provider, which compiles every pattern with an engine narrower
+    // than ECMA-262. `\0` is valid here and AJV accepts it, yet it made DeepSeek
+    // answer every turn with `Invalid schema for function ...: '^[^\r\n\0]+$' is
+    // not a regex` - a request that never reached the model, so no tool call was
+    // needed to trigger it and retrying could not help. A whitelist, not a
+    // blacklist: adding an escape has to be a decision, because the next engine
+    // that refuses one is the next outage.
+    const advertised = new Map<string, string[]>();
+    for (const spec of ALL_TOOL_SPECS) {
+      const walk = (node: unknown, at: string): void => {
+        if (node === null || typeof node !== "object") {
+          return;
+        }
+        const record = node as Record<string, unknown>;
+        const pattern = record["pattern"];
+        if (typeof pattern === "string") {
+          const where = `${spec.name}${at}`;
+          advertised.set(pattern, [...(advertised.get(pattern) ?? []), where]);
+        }
+        for (const [key, value] of Object.entries(record)) {
+          walk(value, `${at}.${key}`);
+        }
+      };
+      walk(z.toJSONSchema(spec.input, { io: "input" }), "");
+    }
+    assert.ok(advertised.size >= 3, "the surface declares patterns; an empty walk would prove nothing");
+    for (const [pattern, where] of advertised) {
+      for (const match of pattern.matchAll(/\\([\s\S])/g)) {
+        const escape = match[1];
+        assert.ok(
+          escape !== undefined && PROVIDER_ESCAPES.has(escape),
+          `${where.join(", ")}: pattern ${JSON.stringify(pattern)} uses \\${String(escape)}, which providers do not all implement`,
+        );
+      }
+    }
+  });
+
+  it("keeps the NUL check that no longer fits in a pattern", () => {
+    const install = ALL_TOOL_SPECS.find((spec) => spec.name === "wm_runtime_install_apply");
+    assert.ok(install, "wm_runtime_install_apply must exist");
+    const parse = (identity: string) => install.input.safeParse({ serverId: "srv_fixture_01", identity });
+    assert.equal(parse("/root/.ssh/warpmetal").success, true, "an ordinary path must pass");
+    assert.equal(parse("a\nb").success, false, "a path is a single line");
+    assert.equal(parse("a\u0000b").success, false, "a NUL byte must never reach the CLI as an argument");
+    // The escape that broke the provider must not come back through the schema:
+    // what is advertised is narrowed to the portable half of the check.
+    const schema = z.toJSONSchema(install.input, { io: "input" }) as {
+      properties?: Record<string, { pattern?: string }>;
+    };
+    assert.equal(
+      schema.properties?.["identity"]?.pattern,
+      "^[^\\r\\n]+$",
+      "the advertised pattern must stay within what a provider compiles",
     );
   });
 
