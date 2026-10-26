@@ -89,11 +89,11 @@ remoto.
 | La passphrase no está en el vault ni en diagnósticos | `packages/warpmetal-cli/test/key-material.test.ts`, `test/leak.test.ts` |
 | Un hijo no ve la passphrase | `test/leak.test.ts` (spawn real que imprime su entorno) |
 | Sin aceptación no se crea `vault.key` | `test/key-material.test.ts` |
-| Las tools de identidad no devuelven rutas | `warpmetal-mcp/test/conformance.test.ts` |
-| El log de auditoría no lleva rutas ni valores | `warpmetal-mcp/test/conformance.test.ts` |
+| Las tools de identidad no devuelven rutas | `packages/skills-mcp/test/conformance.test.ts` |
+| El log de auditoría no lleva rutas ni valores | `packages/skills-mcp/test/conformance.test.ts` |
 | En Windows se verifica la ACL real, no un `chmod` | `packages/warpmetal-cli/test/win-acl.test.ts` y el job `windows-cli` |
 
-Ejecutar: `npm --prefix packages/warpmetal-cli test` y `npm --prefix ../warpmetal-mcp test`.
+Ejecutar: `npm --prefix packages/warpmetal-cli test` y `npm --prefix packages/skills-mcp test`.
 
 ## Migración para un operador con `vault.key`
 
