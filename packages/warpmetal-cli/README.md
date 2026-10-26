@@ -36,12 +36,18 @@ cannot leak every secret by spreading an object it was handed.
 | ---------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `remote`   | `WARPMETAL_VAULT_URL` is set | Everything, centrally. The value never touches local disk; the server holds the ciphertext and enforces compare-and-set per name. |
 | `keychain` | `@napi-rs/keyring` present   | Everything. No key material is written to the config directory.                                                                   |
-| `file`     | everywhere else (default)    | The vault at rest: backups, copied dotfiles, a stray commit. Not a local attacker who can read the config directory.              |
+| `file`     | everywhere else              | The vault at rest: backups, copied dotfiles, a stray commit. **Not** an attacker who can read the config directory. See [the threat model](https://github.com/warpmetal/skills/blob/main/docs/security/threat-model.md). |
 
-The file backend is AES-256-GCM with a scrypt-derived key (`N=2^15, r=8, p=1`).
-The key comes from `WARPMETAL_VAULT_PASSPHRASE`, or from `env/vault.key` created
-`0600` on first use. Write-then-rename means an interrupted write cannot leave a
-half vault behind.
+`@napi-rs/keyring` ships as an optional dependency, so a normal install uses the OS keychain where
+the platform has one.
+
+The file backend is AES-256-GCM with a scrypt-derived key (`N=2^15, r=8, p=1`). The key comes from
+`WARPMETAL_VAULT_PASSPHRASE` — ideally from an external secret manager — or from `env/vault.key`.
+A key file is **only created** when the operator sets `WARPMETAL_ACCEPT_LOCAL_KEY=1`: without it,
+the first write fails with `key_required` (exit `4`) and names the three ways forward, because a
+default install must not put a vault and its key in the same directory just because it can. Reading
+an existing `vault.key` is always allowed. Write-then-rename means an interrupted write cannot
+leave a half vault behind, and `env destroy` removes the key file even when a passphrase is in use.
 
 The vault lives under `$WARPMETAL_CONFIG_DIR`, `$XDG_CONFIG_HOME/warpmetal` or
 `~/.config/warpmetal`, in `env/`.

@@ -110,6 +110,7 @@ async function dispatch(argv: readonly string[], deps: ResolvedDeps): Promise<nu
         readStdin: deps.readStdin ?? defaultReadStdin,
         isTTY: deps.isTTY ?? process.stdin.isTTY === true,
         platform: deps.platform ?? process.platform,
+        run: deps.run ?? createRunner(),
       });
     }
 

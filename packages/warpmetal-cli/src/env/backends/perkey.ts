@@ -1,5 +1,5 @@
 import { EMPTY_PAYLOAD, StaleWriteError } from "./types.js";
-import type { BackendInfo, PayloadBackend, SecretBackend, VaultPayload } from "./types.js";
+import type { BackendInfo, KeyMaterial, PayloadBackend, SecretBackend, VaultPayload } from "./types.js";
 
 /**
  * Lifts a whole-payload backend onto the per-name contract.
@@ -127,5 +127,9 @@ export class PayloadKeyAdapter implements SecretBackend {
 
   async destroy(): Promise<void> {
     await this.#backend.destroy();
+  }
+
+  keyMaterial(): KeyMaterial | null {
+    return this.#backend.keyMaterial?.() ?? null;
   }
 }

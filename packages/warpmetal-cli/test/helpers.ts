@@ -57,7 +57,10 @@ export async function tempEnv(): Promise<TempEnv> {
   const dir = await mkdtemp(join(tmpdir(), "warpmetal-cli-"));
   return {
     dir,
-    env: { ...process.env, WARPMETAL_CONFIG_DIR: dir },
+    // The local key file is accepted explicitly here, because that is how a
+    // test gets a real on-disk vault. A test that asserts the *refusal* removes
+    // this variable; nothing in production sets it by accident.
+    env: { ...process.env, WARPMETAL_CONFIG_DIR: dir, WARPMETAL_ACCEPT_LOCAL_KEY: "1" },
     cleanup: async () => {
       await rm(dir, { recursive: true, force: true });
     },

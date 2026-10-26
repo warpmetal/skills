@@ -25,6 +25,18 @@ export interface StoreOptions {
   readonly backend?: PayloadBackend | SecretBackend | undefined;
   /** `false` forces the file backend even where a keychain exists. */
   readonly preferKeychain?: boolean | undefined;
+  /**
+   * Test seam: overrides the OS keychain probe.
+   *
+   * Without it the keychain branch is unreachable in a test that has no native
+   * module installed, which is how the backend went untested and unused.
+   */
+  readonly keychainFactory?: (() => Promise<PayloadBackend | null>) | undefined;
+  /**
+   * Explicit acceptance that the file backend may create `vault.key` beside the
+   * vault. Absent means "refuse and explain the three alternatives".
+   */
+  readonly acceptLocalKey?: boolean | undefined;
   readonly passphrase?: string | undefined;
   /** Transport for the remote backend; defaults to `fetch`. */
   readonly vaultHttp?: HttpFn | undefined;
@@ -34,11 +46,18 @@ export interface StoreOptions {
   readonly now?: (() => number) | undefined;
 }
 
+/** Where the key material for a local vault comes from, for `env status`. */
+export type KeySource = "passphrase" | "key-file" | "none" | "keychain" | "remote";
+
 export interface StoreStatus {
   readonly backend: BackendInfo;
   readonly generation: number;
   readonly secretCount: number;
   readonly exists: boolean;
+  /** Honest label: `key-file` is the one that means "the vault and its key are neighbours". */
+  readonly keySource: KeySource;
+  /** True whenever a `vault.key` exists, even if a passphrase is now in use. */
+  readonly keyFilePresent: boolean;
 }
 
 /** A payload backend is the one that persists a whole `VaultPayload` at once. */
@@ -75,13 +94,14 @@ export class CredentialStore {
       );
     }
 
-    const paths = pathsFrom(options.paths, options.env);
+    const env = options.env ?? process.env;
+    const paths = pathsFrom(options.paths, env);
 
     // The remote vault wins over every local backend, and a session problem
     // never falls back: `WARPMETAL_VAULT_URL` is the operator's explicit
     // statement that this vault lives on the server.
     const remote = await resolveRemoteVault({
-      env: options.env ?? process.env,
+      env,
       paths,
       readFile: options.readSessionFile,
       now: options.now,
@@ -90,8 +110,11 @@ export class CredentialStore {
       return new CredentialStore(new RemoteBackend(remote, options.vaultHttp ?? createHttp(fetch)));
     }
 
-    if (options.preferKeychain !== false) {
-      const keychain = await KeychainBackend.tryCreate();
+    if (options.preferKeychain !== false && env["WARPMETAL_DISABLE_KEYCHAIN"] !== "1") {
+      const keychain =
+        options.keychainFactory !== undefined
+          ? await options.keychainFactory()
+          : await KeychainBackend.tryCreate();
       if (keychain !== null) return new CredentialStore(new PayloadKeyAdapter(keychain));
     }
 
@@ -101,7 +124,8 @@ export class CredentialStore {
           vaultFile: paths.vaultFile,
           keyFile: paths.keyFile,
           passphrase: options.passphrase,
-          env: options.env,
+          acceptLocalKey: options.acceptLocalKey,
+          env,
         }),
       ),
     );
@@ -117,11 +141,22 @@ export class CredentialStore {
       this.#backend.list(),
       this.#backend.exists(),
     ]);
+    const material = this.#backend.keyMaterial?.() ?? null;
+    const keySource: KeySource =
+      material !== null
+        ? material.source
+        : this.#backend.kind === "keychain"
+          ? "keychain"
+          : this.#backend.kind === "remote"
+            ? "remote"
+            : "none";
     return {
       backend: this.#backend.info(),
       generation,
       secretCount: names.length,
       exists,
+      keySource,
+      keyFilePresent: material?.keyFilePresent ?? false,
     };
   }
 
