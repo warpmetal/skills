@@ -179,6 +179,15 @@ export interface WmToolSpec {
   /** Status reported on exit 0. Read-only tools observe; they never claim READY. */
   successStatus?: WmStatus;
   summary: (ctx: ToolContext) => string;
+  /**
+   * Optional projection applied to the payload before redaction.
+   *
+   * A tool declares the shape a client actually needs; anything it does not
+   * name - notably local filesystem paths from the CLI - never reaches the
+   * envelope at all, instead of arriving as a redaction placeholder that still
+   * says "there was a path here".
+   */
+  project?: (data: unknown, args: Record<string, unknown>) => unknown;
   nextActions?: (ctx: ToolContext) => WmNextAction[];
   /** Extra warnings derived from the payload. Used to surface degradations. */
   extraWarnings?: (ctx: ToolContext) => string[];
@@ -287,7 +296,9 @@ function buildResult(
   const mapping = mapExitCode(outcome.exitCode);
   const status: WmStatus = outcome.exitCode === 0 ? (spec.successStatus ?? "OBSERVED") : mapping.status;
 
-  const { value: data, redacted } = redact(extractData(spec, outcome));
+  const raw = extractData(spec, outcome);
+  const projected = spec.project === undefined ? raw : safeCall(() => spec.project!(raw, args), raw);
+  const { value: data, redacted } = redact(projected);
 
   const warnings: string[] = [];
   for (const warning of outcome.warnings) {

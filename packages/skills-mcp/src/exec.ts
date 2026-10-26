@@ -26,6 +26,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Semaphore, resolveConcurrencyLimit } from "./limits.js";
+import { childEnv } from "./child-env.js";
 
 import {
   SPAWN_FAILED_EXIT_CODE,
@@ -783,6 +784,9 @@ export function createCliRunner(options: RunnerOptions = {}): Runner {
           shell: false,
           windowsHide: true,
           stdio: ["ignore", "pipe", "pipe"],
+          // Explicit, sanitized environment: an inherited one can carry the
+          // vault passphrase from the host that launched this server.
+          env: childEnv(env),
         });
 
         collect(child.stdout, sink, "stdout");
