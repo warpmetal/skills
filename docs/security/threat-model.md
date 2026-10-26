@@ -70,15 +70,16 @@ remoto.
 
 - Con `keySource: key-file`, A1 gana: quien copia el directorio obtiene cifrado y llave. Es el
   estado que `env doctor` marca en error y que la migración documentada elimina.
-- En Windows los `0600` no se aplican; la protección real es la ACL del perfil del usuario. No hay
-  verificación automática de esa ACL todavía.
+- En Windows los `0600` no se aplican, así que `env doctor` no los finge: lee el descriptor real
+  (SDDL) y avisa si una ACE da lectura amplia. Sigue sin aplicarlo ni corregirlo; verificarlo exige
+  que el operador actúe sobre el `icacls`.
 - Un atacante que controla el mismo usuario con el vault desbloqueado puede leer la memoria del
   proceso y la salida de `env secret --stdout`. Ningún esquema local lo evita.
 - Las rutas siguen viajando en argv de los comandos que las necesitan (`--identity`,
   `--connection-file`). Son visibles con `ps` para el mismo usuario; la mitigación es no
   registrarlas y no ecoarlas, no ocultarlas del sistema operativo.
-- El log de auditoría crea su directorio con el modo por defecto; el archivo es `0600`, pero el
-  nombre del archivo es visible.
+- El nombre del archivo de auditoría es visible para quien pueda listar el directorio; el contenido
+  no, y el directorio se crea en `0700`.
 
 ## Cómo se verifica
 
@@ -90,6 +91,7 @@ remoto.
 | Sin aceptación no se crea `vault.key` | `test/key-material.test.ts` |
 | Las tools de identidad no devuelven rutas | `warpmetal-mcp/test/conformance.test.ts` |
 | El log de auditoría no lleva rutas ni valores | `warpmetal-mcp/test/conformance.test.ts` |
+| En Windows se verifica la ACL real, no un `chmod` | `packages/warpmetal-cli/test/win-acl.test.ts` y el job `windows-cli` |
 
 Ejecutar: `npm --prefix packages/warpmetal-cli test` y `npm --prefix ../warpmetal-mcp test`.
 
