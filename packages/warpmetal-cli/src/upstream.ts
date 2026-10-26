@@ -2,6 +2,7 @@ import { spawn } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 
+import { childEnv } from "./child-env.js";
 import { CliError } from "./errors.js";
 
 /**
@@ -31,7 +32,12 @@ export type InheritSpawn = (command: string, args: readonly string[]) => Promise
 export function defaultInheritSpawn(): InheritSpawn {
   return (command, args) =>
     new Promise<number>((resolve2) => {
-      const child = spawn(command, [...args], { stdio: "inherit", shell: false, windowsHide: true });
+      const child = spawn(command, [...args], {
+        stdio: "inherit",
+        shell: false,
+        windowsHide: true,
+        env: childEnv(),
+      });
       child.on("error", () => resolve2(127));
       child.on("close", (code) => resolve2(code ?? 1));
     });

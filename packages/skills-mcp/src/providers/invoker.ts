@@ -14,6 +14,7 @@ import {
   resolveIntegrationCliTarget,
   type CliTarget,
 } from "../exec.js";
+import { childEnv } from "../child-env.js";
 import { findProviderToolMapping } from "./mapping.js";
 import type { ProviderInvokeError, ProviderInvokeErrorCode, ProviderInvoker } from "./types.js";
 
@@ -100,7 +101,9 @@ export class WarpMetalProviderInvoker implements ProviderInvoker {
     }
 
     try {
-      return await spawnIntegration(target, argv, this.timeoutMs, JSON.stringify(args), this.env);
+      // Same boundary as the wm_* executor: the provider CLI gets a sanitized
+      // copy of the environment, never the one this process inherited.
+      return await spawnIntegration(target, argv, this.timeoutMs, JSON.stringify(args), childEnv(this.env));
     } catch (error) {
       if (isProviderError(error)) throw error;
       throw providerError(

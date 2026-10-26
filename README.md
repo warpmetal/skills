@@ -68,7 +68,7 @@ npm --prefix packages/warpmetal-cli test
 | MCP | `@warpmetal/skills-mcp` (npm + `ghcr.io/warpmetal/skills-mcp`) | MCP host config, see `packages/skills-mcp/README.md` |
 | omp / Claude Code | `.omp-plugin/marketplace.json`, `.claude-plugin/marketplace.json` | `omp plugin marketplace add warpmetal/skills`; Claude marketplace add |
 | Codex / ChatGPT | `.agents/plugins/marketplace.json` | add this repo as a plugin marketplace |
-| DeepSeek Harness | `.agents/skills` / `.dsh/skills` Agent Skills layout; `dsh-mcp-client` for MCP | copy `skills/<name>` into `~/.agents/skills/`, or use the MCP entry below |
+| DeepSeek Harness | `plugins/warpmetal-dsh/` bundle (generated: the MCP rows plus the nine skills) | `npm run build:dsh-plugin`, then `dsh plugin --profile <name> add ./plugins/warpmetal-dsh` |
 | OpenCode | `catalog/index.json` | add the catalog URL to `skills` in `opencode.json` |
 | Any MCP host / local agent | stdio or Streamable HTTP MCP | `npx -y @warpmetal/skills-mcp` |
 | warpmetal CLI | pinned snapshot | `warpmetal skill install <name>` |
@@ -119,6 +119,26 @@ bundles (`<name>/SKILL.md`) or flat `<name>.md` files. Copy or link `skills/<nam
 `~/.agents/skills/` for user scope; that same layout is read by OpenCode, omp, Codex, Cursor, and
 other Agent Skills-compatible hosts.
 
+The installable path is a bundle, which mounts the MCP server and registers those same nine skills
+as a native provider — no copying, and the catalog disappears with the bundle:
+
+```sh
+npm run build:dsh-plugin
+dsh plugin --profile desktop add ./plugins/warpmetal-dsh
+```
+
+The `desktop` profile is reserved by the Electron application, so `dsh --dump-config` refuses it
+(`profile "desktop" is managed exclusively by the Electron application`); the composed rows are
+visible from the app's Plugins page, and other profiles can still be dumped.
+
+The bundle serves the 46-tool `chatgpt-local` surface (the `skill_*` tools and the 43 `wm_*` CLI
+tools) rather than the 1,377-tool `full` one, and its skills stay user-invocable because every
+`SKILL.md` declares `disable-model-invocation: true`. Eight of those tools also replace the host's
+generic tool row with a WarpMetal card, rendered by the bundle's hand-written browser module: the
+result is a view of the session log, so it survives fork, resume and replay.
+`packages/dsh-plugin/README.md` covers the Node requirement, the UI surface, the approval behaviour
+and the troubleshooting.
+
 Any MCP-capable agent — local or hosted — can read the registry through the MCP server instead.
 DeepSeek Harness (`dsh-mcp-client`) entry:
 
@@ -129,6 +149,8 @@ DeepSeek Harness (`dsh-mcp-client`) entry:
     serverName: warpmetal-skills
     transport: stdio
     command: npx
+    # Add '--profile', 'chatgpt-local' for this repository's 46-tool surface;
+    # without it the server serves all 1,377 tools.
     args: ['-y', '@warpmetal/skills-mcp']
 ```
 
@@ -246,6 +268,9 @@ Content rules are in [CONTRIBUTING.md](./CONTRIBUTING.md).
   install `@warpmetal/cli` when a skill declares an integration.
 - Remaining before publishing: npm scope + trusted publishing, Pages enablement, branch protection,
   and live host validation against omp, Claude Code, Codex, OpenCode, and DeepSeek Harness.
+- The DeepSeek Harness bundle (`plugins/warpmetal-dsh`, generated) is built and verified offline by
+  `verify.yml`; installing it into a profile is validated on a scratch profile, and
+  [`packages/dsh-plugin/README.md`](./packages/dsh-plugin/README.md) records the steps.
 - The 1,331 provider tools are each verified at one of three tiers, and the tier is a fact about the
   tool rather than a claim about the suite: **live-verified** (exercised against the real API with a
   credential), **docs-confirmed** (the request shape checked against the provider's published

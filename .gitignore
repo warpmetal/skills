@@ -7,6 +7,9 @@ snapshot.internal/
 # The portable ChatGPT plugin ships production dependencies; it is generated on
 # demand by `npm run build:chatgpt-plugin`, not committed.
 plugins/warpmetal-chatgpt/
+# The DeepSeek Harness bundle embeds the compiled MCP server and its production
+# dependencies; it is generated on demand by `npm run build:dsh-plugin`.
+plugins/warpmetal-dsh/
 .DS_Store
 *.log
 

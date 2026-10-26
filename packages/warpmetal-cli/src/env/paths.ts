@@ -30,10 +30,6 @@ export interface EnvPaths {
    * material: losing it costs a re-authentication, not a secret.
    */
   readonly sessionFile: string;
-  /** Serialized plans written by `env plan`. */
-  readonly plansDir: string;
-  /** Short-lived 0600 shims written by `env secret --file`. */
-  readonly shimsDir: string;
 }
 
 export function resolvePaths(env: NodeJS.ProcessEnv = process.env): EnvPaths {
@@ -53,8 +49,6 @@ export function resolvePaths(env: NodeJS.ProcessEnv = process.env): EnvPaths {
     vaultFile: join(root, "vault.enc"),
     keyFile: join(root, "vault.key"),
     sessionFile: join(base, "session.json"),
-    plansDir: join(root, "plans"),
-    shimsDir: join(root, "shims"),
   };
 }
 

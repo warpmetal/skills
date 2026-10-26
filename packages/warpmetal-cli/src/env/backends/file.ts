@@ -3,7 +3,7 @@ import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync, wri
 import { dirname } from "node:path";
 
 import { CliError } from "../../errors.js";
-import type { BackendInfo, PayloadBackend, VaultPayload } from "./types.js";
+import type { BackendInfo, KeyMaterial, PayloadBackend, VaultPayload } from "./types.js";
 
 /**
  * AES-256-GCM + scrypt backend. The default on every platform, and the only
@@ -22,6 +22,15 @@ export interface FileBackendOptions {
   readonly keyFile: string;
   readonly passphrase?: string | undefined;
   readonly env?: NodeJS.ProcessEnv;
+  /**
+   * Explicit acceptance that a local key file may be created beside the vault.
+   *
+   * Creating it silently is the exact failure the Railway model punishes: the
+   * attacker who reads the config directory gets the ciphertext and its key in
+   * one `cp -r`. Reading an existing key file is always allowed - an install
+   * that already has one must keep working - so only *creation* is gated.
+   */
+  readonly acceptLocalKey?: boolean | undefined;
 }
 
 const ENVELOPE_VERSION = 1;
@@ -160,12 +169,27 @@ export class FileBackend implements PayloadBackend {
     chmodSync(path, 0o600);
   }
 
+  keyMaterial(): KeyMaterial {
+    return {
+      source: this.#keySource(),
+      keyFilePresent: existsSync(this.#options.keyFile),
+    };
+  }
+
   async destroy(): Promise<void> {
     rmSync(this.#options.vaultFile, { force: true });
-    // A leftover key file is dead weight but also a hint; remove both.
-    if (this.#options.passphrase === undefined) {
-      rmSync(this.#options.keyFile, { force: true });
-    }
+    // The key file is never dead weight: it still opens every backup of the
+    // vault it was used with. Removing it is unconditional, including when the
+    // current run used a passphrase and the file predates it.
+    rmSync(this.#options.keyFile, { force: true });
+  }
+
+  /** Which input `#passphrase()` would use, without reading any of them. */
+  #keySource(): "passphrase" | "key-file" | "none" {
+    if (this.#options.passphrase !== undefined && this.#options.passphrase.length > 0) return "passphrase";
+    const fromEnv = this.#options.env?.["WARPMETAL_VAULT_PASSPHRASE"];
+    if (fromEnv !== undefined && fromEnv.length > 0) return "passphrase";
+    return existsSync(this.#options.keyFile) ? "key-file" : "none";
   }
 
   #passphrase(): string {
@@ -182,10 +206,25 @@ export class FileBackend implements PayloadBackend {
       const existing = readFileSync(this.#options.keyFile, "utf8").trim();
       if (existing.length > 0) return existing;
     }
+    if (!this.#acceptsLocalKey()) {
+      // Refusing here is the whole point: a default install must not put the
+      // vault and its key in the same directory just because it can.
+      throw new CliError(
+        "key_required",
+        "No vault key material yet. Choose one path: install the OS keychain (@napi-rs/keyring), " +
+          "export WARPMETAL_VAULT_PASSPHRASE from an external secret manager, or set " +
+          "WARPMETAL_ACCEPT_LOCAL_KEY=1 to accept that vault.key is created beside vault.enc.",
+      );
+    }
     const generated = randomBytes(KEY_BYTES).toString("base64");
     mkdirSync(dirname(this.#options.keyFile), { recursive: true, mode: 0o700 });
     writeFileSync(this.#options.keyFile, `${generated}\n`, { encoding: "utf8", mode: 0o600 });
     chmodSync(this.#options.keyFile, 0o600);
     return generated;
+  }
+
+  #acceptsLocalKey(): boolean {
+    if (this.#options.acceptLocalKey === true) return true;
+    return this.#options.env?.["WARPMETAL_ACCEPT_LOCAL_KEY"] === "1";
   }
 }

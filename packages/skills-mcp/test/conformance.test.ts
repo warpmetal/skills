@@ -8,7 +8,7 @@
  * timeout never consumes an approval.
  */
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { after, describe, it } from "node:test";
@@ -21,6 +21,7 @@ import { z } from "zod";
 import { ApprovalStore } from "../src/approval.js";
 import { idempotencyKeyFor, effectiveArgv } from "../src/approval.js";
 import { appendAudit, redact } from "../src/audit.js";
+import { childEnv } from "../src/child-env.js";
 import { LatchStore } from "../src/latch.js";
 import {
   CLI_COMMANDS,
@@ -296,6 +297,16 @@ function toolFlags(spec: (typeof ALL_TOOL_SPECS)[number]): Record<string, unknow
   return schema.properties ?? {};
 }
 
+/**
+ * The regex escapes a provider's schema validator is known to accept. It is a
+ * whitelist rather than a blacklist because `pattern` is shipped verbatim to
+ * every host and every provider: `\r` and `\n` are safe everywhere, `\0` is
+ * valid ECMA-262 and nothing else, and an engine that refuses an escape rejects
+ * the whole request before the model is asked anything. Adding one here is a
+ * decision, not a formality.
+ */
+const PROVIDER_ESCAPES = new Set(["r", "n", "t", "\\", "/", ".", "-"]);
+
 const HEALTH_FIXTURE = {
   anyPaymentReady: true,
   dependencies: {
@@ -514,6 +525,64 @@ describe("1. schema conformance", () => {
     );
   });
 
+  it("advertises only patterns a provider can compile", () => {
+    // `pattern` leaves this process verbatim: the host forwards the tool list to
+    // the model provider, which compiles every pattern with an engine narrower
+    // than ECMA-262. `\0` is valid here and AJV accepts it, yet it made DeepSeek
+    // answer every turn with `Invalid schema for function ...: '^[^\r\n\0]+$' is
+    // not a regex` - a request that never reached the model, so no tool call was
+    // needed to trigger it and retrying could not help. A whitelist, not a
+    // blacklist: adding an escape has to be a decision, because the next engine
+    // that refuses one is the next outage.
+    const advertised = new Map<string, string[]>();
+    for (const spec of ALL_TOOL_SPECS) {
+      const walk = (node: unknown, at: string): void => {
+        if (node === null || typeof node !== "object") {
+          return;
+        }
+        const record = node as Record<string, unknown>;
+        const pattern = record["pattern"];
+        if (typeof pattern === "string") {
+          const where = `${spec.name}${at}`;
+          advertised.set(pattern, [...(advertised.get(pattern) ?? []), where]);
+        }
+        for (const [key, value] of Object.entries(record)) {
+          walk(value, `${at}.${key}`);
+        }
+      };
+      walk(z.toJSONSchema(spec.input, { io: "input" }), "");
+    }
+    assert.ok(advertised.size >= 3, "the surface declares patterns; an empty walk would prove nothing");
+    for (const [pattern, where] of advertised) {
+      for (const match of pattern.matchAll(/\\([\s\S])/g)) {
+        const escape = match[1];
+        assert.ok(
+          escape !== undefined && PROVIDER_ESCAPES.has(escape),
+          `${where.join(", ")}: pattern ${JSON.stringify(pattern)} uses \\${String(escape)}, which providers do not all implement`,
+        );
+      }
+    }
+  });
+
+  it("keeps the NUL check that no longer fits in a pattern", () => {
+    const install = ALL_TOOL_SPECS.find((spec) => spec.name === "wm_runtime_install_apply");
+    assert.ok(install, "wm_runtime_install_apply must exist");
+    const parse = (identity: string) => install.input.safeParse({ serverId: "srv_fixture_01", identity });
+    assert.equal(parse("/root/.ssh/warpmetal").success, true, "an ordinary path must pass");
+    assert.equal(parse("a\nb").success, false, "a path is a single line");
+    assert.equal(parse("a\u0000b").success, false, "a NUL byte must never reach the CLI as an argument");
+    // The escape that broke the provider must not come back through the schema:
+    // what is advertised is narrowed to the portable half of the check.
+    const schema = z.toJSONSchema(install.input, { io: "input" }) as {
+      properties?: Record<string, { pattern?: string }>;
+    };
+    assert.equal(
+      schema.properties?.["identity"]?.pattern,
+      "^[^\\r\\n]+$",
+      "the advertised pattern must stay within what a provider compiles",
+    );
+  });
+
   it("rejects an unknown argument before it ever reaches the runner", async () => {
     const fake = fakeRunner(STATE_FIXTURE);
     const session = await connect(fake.runner);
@@ -647,11 +716,19 @@ describe("3. redaction", () => {
       "a GitHub token must be reported as a value-level scrub",
     );
 
-    // The rule must stay precise rather than blunt.
+    // The rule must stay precise rather than blunt: a presence boolean and a
+    // timestamp are useful and survive. A filesystem path is not a credential,
+    // but it is a location, and locations are now redacted wholesale - the
+    // public half included, because it names the same home directory as the
+    // private one.
     assert.equal((value as Record<string, unknown>)["credentialStored"], true);
     assert.equal((value as Record<string, unknown>)["accessTokenExpiresAt"], "2026-09-17T01:52:10Z");
     const identities = (value as { identities: Array<Record<string, unknown>> }).identities;
-    assert.equal(identities[0]?.["publicKeyPath"], "C:\\keys\\id_ed25519.pub");
+    assert.equal(identities[0]?.["publicKeyPath"], "[REDACTED:path]");
+    assert.ok(
+      redacted.includes("$.identities[0].publicKeyPath (path)"),
+      "the public key path must be reported as a redacted path",
+    );
 
     // Nothing in redacted[] may be a value.
     for (const entry of redacted) {
@@ -721,6 +798,103 @@ describe("3. redaction", () => {
     } finally {
       await session.close();
     }
+  });
+
+  it("keeps identity paths out of the envelope and the audit log", async () => {
+    // The Railway model: an attacker who reads transcripts, logs or backups
+    // learns locations even when they cannot read key material. Neither channel
+    // may carry a home directory, an `.ssh` path or a key filename.
+    const home = "C:\\Users\\operator\\.ssh\\warpmetal-fixture";
+    const fake = fakeRunner({
+      identity: {
+        keyName: "warpmetal-fixture",
+        privateKeyPath: home,
+        publicKeyPath: `${home}.pub`,
+        sshFingerprint: "SHA256:CCCC",
+      },
+      identities: [
+        {
+          identityId: "idn_fixture_01",
+          keyName: "warpmetal-fixture",
+          privateKeyPath: home,
+          publicKeyPath: `${home}.pub`,
+          sshFingerprint: "SHA256:CCCC",
+          serverId: "srv_fixture_01",
+        },
+      ],
+    });
+    const auditDir = tempDir();
+    const session = await connect(fake.runner, { auditEnabled: true, auditDir });
+    try {
+      const mapping = await call(session.client, "wm_server_identity", { serverId: "srv_fixture_01" });
+      const listing = await call(session.client, "wm_identity_list");
+
+      for (const result of [mapping, listing]) {
+        const channel = result.text + JSON.stringify(result.envelope);
+        assert.ok(!channel.includes("Users"), "a home directory leaked to the client");
+        assert.ok(!channel.includes(".ssh"), "an ssh directory leaked to the client");
+        assert.ok(!channel.includes("warpmetal-fixture.pub"), "a key file name leaked to the client");
+        assert.ok(!/"\w*Path"/.test(channel), "a *Path field is still on the surface");
+      }
+
+      const log = readFileSync(path.join(auditDir, "audit.jsonl"), "utf8");
+      assert.ok(!log.includes("Users"), "the audit log leaked a path");
+      assert.ok(!log.includes(".ssh"), "the audit log leaked an ssh path");
+      assert.ok(!log.includes("SHA256:CCCC"), "the audit log leaked a fingerprint value");
+      // The identifiers a client actually needs still survive.
+      assert.ok(mapping.text.includes("warpmetal-fixture"));
+    } finally {
+      await session.close();
+    }
+  });
+
+  it("creates the audit directory with owner-only permissions", (context) => {
+    if (process.platform === "win32") {
+      context.skip("POSIX modes are not enforced on Windows; the CLI verifies Windows ACLs instead.");
+      return;
+    }
+    // Pre-created wide on purpose: the chmod has to narrow an existing
+    // directory, not only a freshly created one.
+    const dir = path.join(tempDir(), "audit-narrow");
+    mkdirSync(dir, { recursive: true, mode: 0o755 });
+
+    const outcome = appendAudit(
+      {
+        ts: new Date().toISOString(),
+        tool: "wm_health",
+        subcommand: "health",
+        exit_code: 0,
+        status: "OBSERVED",
+        duration_ms: 1,
+        redacted: [],
+        approval: "not_required",
+        consequence: "none",
+        latch: "not_checked",
+      },
+      dir,
+    );
+
+    assert.equal(outcome.ok, true);
+    assert.equal(statSync(dir).mode & 0o077, 0, "the audit directory must not be world-readable");
+  });
+
+  it("strips vault material from the environment a child receives", () => {
+    const sanitized = childEnv(
+      {
+        PATH: "/usr/bin",
+        WARPMETAL_VAULT_PASSPHRASE: "pass",
+        WARPMETAL_VAULT_TOKEN: "token",
+        X402API_WALLET_PASSWORD: "wallet",
+        KEEP: "kept",
+      },
+      { WARPMETAL_VAULT_PASSPHRASE: "resurrected", GITHUB_TOKEN: "gh" },
+    );
+    assert.equal(sanitized["PATH"], "/usr/bin");
+    assert.equal(sanitized["KEEP"], "kept");
+    assert.equal(sanitized["GITHUB_TOKEN"], "gh");
+    assert.equal(sanitized["WARPMETAL_VAULT_PASSPHRASE"], undefined);
+    assert.equal(sanitized["WARPMETAL_VAULT_TOKEN"], undefined);
+    assert.equal(sanitized["X402API_WALLET_PASSWORD"], undefined);
   });
 
   it("reports a failing audit log instead of swallowing it", () => {
@@ -1238,7 +1412,9 @@ describe("7. contract fixtures", () => {
       const result = await call(session.client, "wm_state_list");
       assert.equal(result.envelope["status"], "OBSERVED");
       const data = result.envelope["data"] as Record<string, unknown>;
-      assert.equal(data["stateFile"], STATE_FIXTURE.stateFile);
+      // The state file lives under the operator's home, so it is a location:
+      // the client learns that a state file exists, never where it is.
+      assert.equal(data["stateFile"], "[REDACTED:home-path]");
       assert.equal((data["servers"] as unknown[]).length, 1);
       assert.equal((data["sandboxes"] as unknown[]).length, 1);
       assert.equal((data["runtimes"] as unknown[]).length, 1);
@@ -1246,7 +1422,7 @@ describe("7. contract fixtures", () => {
 
       const identities = data["identities"] as Array<Record<string, unknown>>;
       assert.equal(identities[0]?.["privateKeyPath"], "[REDACTED]");
-      assert.equal(identities[0]?.["publicKeyPath"], "C:\\keys\\warpmetal-fixture.pub");
+      assert.equal(identities[0]?.["publicKeyPath"], "[REDACTED:path]");
       // The private path is a strict prefix of the public one, so the only
       // precise check is on the field itself.
       assert.match(

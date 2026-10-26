@@ -34,15 +34,44 @@ function countOf(value: unknown): number | null {
   return Array.isArray(value) ? value.length : null;
 }
 
+/**
+ * Whether a local private key is installed, without ever echoing where.
+ *
+ * The CLI blanks or omits `privateKeyPath` when the key file is gone, so the
+ * presence of a non-empty value is the whole fact a client needs - and the only
+ * one it gets.
+ */
+function isInstalledKey(value: unknown): boolean {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
 export const inspectTools: readonly WmToolSpec[] = [
   {
     name: "wm_identity_list",
     title: "List WarpMetal SSH identities",
     description:
-      "Lists the SSH identities the CLI manages on this host, with their names and public metadata. Read-only and local. Private key material is never read or returned.",
+      "Lists the SSH identities the CLI manages on this host: key name, bound server and fingerprint. Read-only and local. Private key material is never read or returned, and no local filesystem path is included.",
     input: z.strictObject({}),
     annotations: READ_ONLY_LOCAL,
     cli: "identityList",
+    project: (data) => {
+      const record = asRecord(data);
+      const list = record?.["identities"];
+      if (!Array.isArray(list)) return data;
+      return {
+        identities: list.map((entry) => {
+          const identity = asRecord(entry);
+          if (identity === null) return entry;
+          return {
+            identityId: identity["identityId"] ?? null,
+            keyName: identity["keyName"] ?? null,
+            sshFingerprint: identity["sshFingerprint"] ?? null,
+            serverId: identity["serverId"] ?? null,
+            hasLocalKey: isInstalledKey(identity["privateKeyPath"]),
+          };
+        }),
+      };
+    },
     summary: ({ data }) => {
       const record = asRecord(data);
       const identities = countOf(record?.["identities"]);
@@ -90,11 +119,23 @@ export const inspectTools: readonly WmToolSpec[] = [
     name: "wm_server_identity",
     title: "Get server identity mapping",
     description:
-      "Returns the safe identity mapping for one server: serverId to key name to fingerprint to local paths. Read-only, local. Use this instead of opening the WarpMetal state file.",
+      "Returns the identity bound to one server: key name, SSH fingerprint and whether the local private key is installed. Read-only, local. Local filesystem paths are never returned; use this instead of opening the WarpMetal state file.",
     input: z.strictObject({ serverId: serverIdSchema }),
     annotations: READ_ONLY_LOCAL,
     cli: "serverIdentity",
     flags: { server: "serverId" },
+    project: (data, args) => {
+      // `server identity` wraps the mapping in `identity`. Rebuild the payload
+      // from the fields a client can act on, so a path the CLI adds later - or
+      // renames - cannot reappear here by accident.
+      const record = asRecord(asRecord(data)?.["identity"]) ?? asRecord(data);
+      return {
+        serverId: args["serverId"] ?? record?.["serverId"] ?? null,
+        keyName: record?.["keyName"] ?? null,
+        sshFingerprint: record?.["sshFingerprint"] ?? null,
+        hasLocalKey: isInstalledKey(record?.["privateKeyPath"]),
+      };
+    },
     summary: ({ data }) => {
       // `server identity` wraps the mapping in `identity`.
       const record = asRecord(asRecord(data)?.["identity"]) ?? asRecord(data);
@@ -115,7 +156,7 @@ export const inspectTools: readonly WmToolSpec[] = [
     name: "wm_server_login",
     title: "Prove SSH key possession",
     description:
-      "Proves possession of the installed SSH key for one server without reading it. Read-only with respect to server state, but it does contact the host. Pass identity only as a filesystem path; this server never opens it.",
+      "Proves possession of the installed SSH key for one server without reading it. Read-only with respect to server state, but it does contact the host. Pass identity only as a filesystem path; this server never opens it and never echoes the path back.",
     input: z.strictObject({
       serverId: serverIdSchema,
       identity: pathOnlySchema.optional(),

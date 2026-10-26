@@ -38,6 +38,24 @@ export interface BackendInfo {
  * `load()` returns `null` for "the vault does not exist yet", which is not an
  * error: a first write must not require an existing file.
  */
+/**
+ * Where the file backend's key material currently comes from.
+ *
+ * Reported by `env status` and checked by `env doctor`, because the difference
+ * between `key-file` and everything else is the difference between "an attacker
+ * who reads this directory owns the vault" and "they do not".
+ */
+export interface KeyMaterial {
+  readonly source: "passphrase" | "key-file" | "none";
+  /** True when a `vault.key` exists beside the vault, whatever it is used for. */
+  readonly keyFilePresent: boolean;
+}
+
+/**
+ * `file` and `keychain` both persist one sealed blob, but only the file
+ * backend has key material on disk. The optional method keeps that knowledge
+ * from leaking into the other backends' contracts.
+ */
 export interface PayloadBackend {
   readonly kind: "file" | "keychain";
   info(): BackendInfo;
@@ -45,6 +63,8 @@ export interface PayloadBackend {
   save(payload: VaultPayload): Promise<void>;
   /** Removes the payload and any local key material for the file backend. */
   destroy(): Promise<void>;
+  /** The file backend's key state; absent for backends with no local key. */
+  keyMaterial?(): KeyMaterial;
 }
 
 /**
@@ -96,6 +116,8 @@ export interface SecretBackend {
    */
   deletePrefix(prefix: string): Promise<readonly string[]>;
   destroy(): Promise<void>;
+  /** Forwarded from the payload backend; `null` when there is no local key. */
+  keyMaterial?(): KeyMaterial | null;
 }
 
 /**

@@ -415,6 +415,21 @@ Purchase and renewal tools, `sandbox connect`, the credential-writing commands (
 `access remove-ssh`, key rotation) and `agent install` have no entry in the command registry, so this
 server cannot reach them even by mistake.
 
+### Schema portability
+
+Tool `pattern`s are forwarded verbatim to the host and then to the model provider, whose schema
+validator compiles them with an engine narrower than ECMA-262. `\0` is valid JSON Schema and passes
+AJV, but DeepSeek refuses the whole request over it —
+`Invalid schema for function 'mcp__warpmetal__wm_runtime_install_apply': '^[^\r\n\0]+$' is not a
+regex` — before the model runs and before any tool is called, so every turn fails while that tool is
+in the list.
+
+The advertised patterns therefore stay inside the escape set that `test/conformance.test.ts` pins as
+`PROVIDER_ESCAPES`. A check that needs anything else — the NUL byte a path must not contain, for
+instance — belongs in `.superRefine()`: Zod 4 drops refinements from the generated schema instead of
+failing, and the SDK still applies them to every call. `npm test` fails on any new pattern that leaves
+the portable set, which is the point: the next engine that refuses an escape is the next outage.
+
 ## Why a CLI surface instead of "let the agent shell out"
 
 A CLI is text in and text out. That is a poor interface for an agent: exit codes get lost, secrets end

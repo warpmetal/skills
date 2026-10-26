@@ -92,6 +92,15 @@ jobs:
       - name: Verify the ChatGPT plugin
         run: npm run check:chatgpt-plugin
 
+      # The DeepSeek Harness bundle is generated for the same reason: it embeds
+      # the built MCP server and its production dependencies. The unit tests run
+      # in `npm test`; this gate is the artifact's own consistency check.
+      - name: Build the DeepSeek Harness plugin
+        run: npm run build:dsh-plugin
+
+      - name: Verify the DeepSeek Harness plugin
+        run: npm run check:dsh-plugin
+
       - name: Drift check
         run: git diff --exit-code
 

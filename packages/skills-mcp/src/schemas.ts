@@ -1,14 +1,23 @@
 /**
  * schemas.ts - shared Zod primitives for tool inputs.
  *
- * Two rules govern everything here:
+ * Three rules govern everything here:
  *
- *   1. Only constructs that Zod can convert to JSON Schema are used. `.refine()`
- *      and `.transform()` are unrepresentable and would make the SDK throw when
- *      it builds the tool list. Validation therefore leans on `.regex()`,
- *      `.min()` and `.max()`, which survive the conversion.
+ *   1. Only constructs that Zod can convert to JSON Schema are used for the
+ *      advertised shape. Validation therefore leans on `.regex()`, `.min()` and
+ *      `.max()`, which survive the conversion.
  *
- *   2. A path field is validated for *shape* only. The executor passes it to the
+ *   2. Every `pattern` emitted here is copied verbatim into a request to a model
+ *      provider, and providers compile it with engines narrower than ECMA-262.
+ *      `\0` is one of those escapes: it made DeepSeek refuse every turn with
+ *      `Invalid schema for function ...: '^[^\r\n\0]+$' is not a regex`, before
+ *      the model ran and before any tool was called. Patterns therefore stay
+ *      inside the escape set that `conformance.test.ts` checks ("advertises only
+ *      patterns a provider can compile"), and anything a pattern cannot express
+ *      portably belongs in a refinement - which Zod 4 drops from the generated
+ *      schema rather than throwing on, so the check still runs server-side.
+ *
+ *   3. A path field is validated for *shape* only. The executor passes it to the
  *      CLI as a string and never opens it. That is precisely what keeps private
  *      keys out of this process, so nothing here may resolve or read a path.
  */
@@ -48,23 +57,39 @@ export const planIdSchema = z
  * A filesystem path handed to the CLI. Single line, no NUL bytes. A path never
  * contains a line break, so this also rejects someone pasting inline key
  * material into a path field.
+ *
+ * The line-break half is the pattern: `[^\r\n]` is portable enough to be
+ * advertised. The NUL half is a refinement, deliberately outside the pattern,
+ * because `\0` is valid ECMA-262 and nothing else - it is what broke DeepSeek's
+ * schema validator. Refinements are dropped from the generated schema but still
+ * applied by the SDK on every call, so the value never reaches the CLI while the
+ * provider never sees the escape.
  */
 export const pathOnlySchema = z
   .string()
   .min(1)
   .max(4096)
-  .regex(/^[^\r\n\0]+$/, "must be a single-line filesystem path with no NUL bytes");
+  .regex(/^[^\r\n]+$/, "must be a single-line filesystem path")
+  .superRefine((value, ctx) => {
+    if (value.includes("\0")) {
+      ctx.addIssue({ code: "custom", message: "must be a filesystem path with no NUL bytes" });
+    }
+  });
 
 /**
  * The approval token returned by the matching `_plan` tool. Deliberately not
  * described as "a token from anywhere": it is only meaningful for the exact
  * effect the plan computed, and the server rejects it otherwise.
+ *
+ * The hyphen is last in the class so it needs no `\-` escape: a pattern is
+ * advertised to providers, and an escape that only some engines accept is a
+ * schema they can refuse before the model is ever asked anything.
  */
 export const approvalTokenSchema = z
   .string()
   .min(16)
   .max(4096)
-  .regex(/^[A-Za-z0-9_\-.]+$/, "malformed approval token");
+  .regex(/^[A-Za-z0-9_.-]+$/, "malformed approval token");
 
 /** A DNS label, as the CLI's hostname and name fields require. */
 export const dnsLabelSchema = z

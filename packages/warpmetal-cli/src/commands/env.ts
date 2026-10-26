@@ -1,10 +1,13 @@
-import { statSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
+import { dirname, join } from "node:path";
 
 import { knownFlags, parseArgs, requireConfirm, requireFlag } from "../args.js";
 import { CliError } from "../errors.js";
 import { jsonText, type Out } from "../output.js";
 import { PROVIDERS } from "../integration/registry.js";
 import type { CredentialStore } from "../env/store.js";
+import { checkWindowsAcl } from "../env/win-acl.js";
+import type { CommandRunner } from "../run.js";
 
 export interface EnvCommandDeps {
   readonly store: CredentialStore;
@@ -13,6 +16,8 @@ export interface EnvCommandDeps {
   readonly readStdin: () => Promise<string>;
   readonly isTTY: boolean;
   readonly platform: NodeJS.Platform;
+  /** Used by `doctor` on Windows, where the real ACL is read with PowerShell. */
+  readonly run: CommandRunner;
 }
 
 const USAGE = `warpmetal env - the credential store
@@ -28,6 +33,12 @@ const USAGE = `warpmetal env - the credential store
   env store rotate --confirm ROTATE Bump the generation without touching values.
   env store destroy --confirm DESTROY  Delete the vault and its local key material.
   env revoke --service <name> --confirm REVOKE  Remove a provider namespace.
+
+Key material: the file backend does not create vault.key unless
+WARPMETAL_ACCEPT_LOCAL_KEY=1. Prefer the OS keychain (@napi-rs/keyring), a
+WARPMETAL_VAULT_PASSPHRASE from an external secret manager, or the remote vault.
+"env status" reports which one is in use as keySource; "env doctor" fails when
+the key sits beside the vault.
 `;
 
 /**
@@ -115,15 +126,25 @@ async function status(args: ReturnType<typeof parseArgs>, deps: EnvCommandDeps):
     exists: current.exists,
     generation: current.generation,
     secretCount: current.secretCount,
+    // `keySource` is the field an operator can act on: `key-file` means the
+    // vault and its key share a directory, so reading one reads both.
+    keySource: current.keySource,
+    keyFilePresent: current.keyFilePresent,
   };
   if (args.flags.has("json")) {
     deps.out.stdout(jsonText(document));
   } else {
     deps.out.stdout(`backend     ${document.backend}\n`);
     deps.out.stdout(`location    ${document.location}\n`);
+    deps.out.stdout(`keySource   ${document.keySource}\n`);
     deps.out.stdout(`generation  ${document.generation}\n`);
     deps.out.stdout(`secrets     ${document.secretCount}\n`);
     deps.out.stdout(`note        ${document.detail}\n`);
+    if (document.keySource === "key-file") {
+      deps.out.stderr(
+        "warning: vault.key sits beside vault.enc. An attacker who can read this directory has both.\n",
+      );
+    }
   }
   return 0;
 }
@@ -189,6 +210,24 @@ async function doctor(args: ReturnType<typeof parseArgs>, deps: EnvCommandDeps):
   const current = await deps.store.status();
   checks.push({ name: "backend", status: "ok", detail: current.backend.kind });
 
+  // The one check this command exists for. A warn would be rounded down by
+  // every reader who skims; this is the exposure the ticket is about, so it is
+  // an error and `doctor` exits non-zero until it is resolved or accepted.
+  if (current.keySource === "key-file") {
+    checks.push({
+      name: "key-material",
+      status: "error",
+      detail:
+        "vault.key sits beside vault.enc: reading the config directory yields the ciphertext and its key. " +
+        "Use the OS keychain, WARPMETAL_VAULT_PASSPHRASE from a secret manager, or the remote vault.",
+    });
+    warnings.push(
+      "The vault key is in the same directory as the vault. Migrate with `env list` + `env secret NAME --stdout | env store set NAME --stdin`, then `env store destroy --confirm DESTROY`.",
+    );
+  } else {
+    checks.push({ name: "key-material", status: "ok", detail: current.keySource });
+  }
+
   try {
     await deps.store.assertReadable();
     checks.push({ name: "vault", status: "ok", detail: current.exists ? "decrypted successfully" : "not created yet" });
@@ -196,15 +235,49 @@ async function doctor(args: ReturnType<typeof parseArgs>, deps: EnvCommandDeps):
     checks.push({ name: "vault", status: "error", detail: (error as Error).message });
   }
 
-  if (deps.platform !== "win32" && current.backend.kind === "file") {
-    for (const path of [current.backend.location]) {
+  if (current.backend.kind === "file") {
+    const vaultDir = dirname(current.backend.location);
+    if (deps.platform === "win32") {
+      // `chmod` cannot express an ACL, so the POSIX branch below would prove
+      // nothing here. Ask Windows for the real descriptor instead.
+      if (!existsSync(vaultDir)) {
+        checks.push({ name: "permissions", status: "ok", detail: "vault not created yet" });
+      } else {
+        const verdicts = [];
+        for (const target of [vaultDir, current.backend.location, join(vaultDir, "vault.key")]) {
+          if (!existsSync(target)) continue;
+          verdicts.push(await checkWindowsAcl(deps.run, target, deps.platform));
+        }
+        const exposed = verdicts.filter((verdict) => verdict.status === "exposed");
+        const unknown = verdicts.filter((verdict) => verdict.status === "unknown");
+        if (exposed.length > 0) {
+          checks.push({
+            name: "permissions",
+            status: "warn",
+            detail: `broad-read ACL: ${exposed.map((verdict) => verdict.detail).join("; ")}`,
+          });
+          warnings.push(
+            "An explicit ACL entry gives other accounts read access to the vault. Narrow it with `icacls`.",
+          );
+        } else if (unknown.length > 0) {
+          // Never rounded up to `ok`: an unread descriptor is not a clean one.
+          checks.push({ name: "permissions", status: "warn", detail: unknown[0]!.detail });
+        } else {
+          checks.push({ name: "permissions", status: "ok", detail: "no broad-read ACE on the vault" });
+        }
+      }
+    } else {
       try {
-        const mode = statSync(path).mode & 0o777;
+        const mode = statSync(current.backend.location).mode & 0o777;
         if ((mode & 0o077) !== 0) {
-          checks.push({ name: "permissions", status: "warn", detail: `${path} is ${mode.toString(8)}; expected 600.` });
+          checks.push({
+            name: "permissions",
+            status: "warn",
+            detail: `${current.backend.location} is ${mode.toString(8)}; expected 600.`,
+          });
           warnings.push("The vault is readable by other users.");
         } else {
-          checks.push({ name: "permissions", status: "ok", detail: `${path} is 600.` });
+          checks.push({ name: "permissions", status: "ok", detail: `${current.backend.location} is 600.` });
         }
       } catch {
         checks.push({ name: "permissions", status: "ok", detail: "vault not created yet" });

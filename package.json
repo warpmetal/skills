@@ -19,9 +19,12 @@
     "validate:skills": "node scripts/validate-skills.mjs",
     "check:action-pins": "node scripts/check-action-pins.mjs",
     "test:scripts": "node --test \"scripts/**/*.test.mjs\"",
-    "test": "npm run test:scripts && npm --prefix packages/skills-mcp test",
+    "test": "npm run test:scripts && npm --prefix packages/skills-mcp test && npm run test:dsh-plugin",
     "build:chatgpt-plugin": "node scripts/build-chatgpt-plugin.mjs",
     "check:chatgpt-plugin": "node scripts/verify-chatgpt-plugin.mjs",
+    "build:dsh-plugin": "node scripts/build-dsh-plugin.mjs",
+    "check:dsh-plugin": "node scripts/verify-dsh-plugin.mjs",
+    "test:dsh-plugin": "node --test \"packages/dsh-plugin/test/*.test.mjs\"",
     "check": "npm run build && npm run build:internal && npm run verify && npm run verify:internal && npm test",
     "pages": "node scripts/build-pages.mjs",
     "docker:build": "docker build -t ghcr.io/warpmetal/skills-mcp:dev packages/skills-mcp"

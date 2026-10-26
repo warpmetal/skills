@@ -16,6 +16,7 @@ export type CliErrorCode =
   | "secret_missing"
   | "backend_unavailable"
   | "vault_corrupt"
+  | "key_required"
   | "provider_auth"
   | "provider_error"
   | "unsupported";
@@ -38,6 +39,9 @@ const EXIT_BY_CODE: Record<CliErrorCode, number> = {
   secret_missing: EXIT.NEEDS_HOST,
   backend_unavailable: EXIT.INTEGRITY,
   vault_corrupt: EXIT.INTEGRITY,
+  // Refusing to invent weak key material is a "you need a credential first"
+  // condition, not a corruption: the operator has three legitimate ways out.
+  key_required: EXIT.NEEDS_AUTH,
   provider_auth: EXIT.NEEDS_AUTH,
   provider_error: EXIT.APPLY_FAILED,
   unsupported: EXIT.INTEGRITY,

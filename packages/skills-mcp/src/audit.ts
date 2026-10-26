@@ -11,7 +11,7 @@
  *      back in `redacted[]` of the result, so a caller can tell the difference
  *      between "nothing sensitive here" and "we hid something".
  */
-import { appendFileSync, mkdirSync } from "node:fs";
+import { appendFileSync, chmodSync, mkdirSync } from "node:fs";
 import { homedir } from "node:os";
 import path from "node:path";
 
@@ -19,6 +19,8 @@ import type { WmStatus } from "./result.js";
 import { CONSEQUENCE_CLASSES } from "./schemas.js";
 
 const PLACEHOLDER = "[REDACTED]";
+/** Distinct from `PLACEHOLDER` on purpose: a path is not a credential, and the two must stay tellable apart. */
+const PATH_PLACEHOLDER = "[REDACTED:path]";
 
 /**
  * Field names that never carry a usable value into a client.
@@ -72,6 +74,38 @@ const DENY_KEY_SUBSTRING: readonly string[] = [
   "keystore",
 ];
 
+/**
+ * Absolute-path shapes, matched against the **whole** value.
+ *
+ * Key names alone are not a policy: a rename from `privateKeyPath` to
+ * `sshIdentityPath` would otherwise walk straight past the deny list above.
+ * A value is treated as a path only when the entire string is one, so a
+ * sentence that happens to mention a directory stays readable, and a URL is
+ * never a path even when its path component looks like one.
+ */
+const ABSOLUTE_PATH_PATTERNS: readonly RegExp[] = [
+  /^[A-Za-z]:[\\/](?:[^\\/\0]+[\\/])*[^\\/\0]*$/, // C:\dir\file
+  /^\\\\[^\\/\0]+[\\/][^\0]*$/, // \\host\share\file
+  /^~[\\/][^\0]*$/, // ~/dir/file
+  /^\/(?:[^/\0]+\/)*[^/\0]*$/, // /dir/file
+];
+
+const URL_PREFIX = /^[a-z][a-z0-9+.-]*:\/\//i;
+
+/**
+ * True when the whole string is an absolute filesystem path.
+ *
+ * Relative paths are deliberately not classified: `keys/id_ed25519` is
+ * indistinguishable from an ordinary identifier, and redacting it would make
+ * legitimate values unreadable without closing a real gap.
+ */
+export function isAbsolutePath(value: string): boolean {
+  const trimmed = value.trim();
+  if (trimmed.length === 0 || trimmed.length > 4096) return false;
+  if (URL_PREFIX.test(trimmed)) return false;
+  return ABSOLUTE_PATH_PATTERNS.some((pattern) => pattern.test(trimmed));
+}
+
 function normalizeKey(key: string): string {
   return key.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
@@ -97,6 +131,13 @@ interface ScrubPattern {
 }
 
 const SCRUB_PATTERNS: readonly ScrubPattern[] = [
+  {
+    // Home-rooted locations only. The point is the leak that matters - an
+    // identity or config path under a user's home - without turning every
+    // `/api/v1/...` route inside an error message into noise.
+    kind: "home-path",
+    pattern: /(?:[A-Za-z]:[\\/]Users[\\/]|\/(?:home|Users)\/|\/root[\\/])[^\s"',;:)\]]*/g,
+  },
   {
     kind: "private-key",
     pattern: /-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----/g,
@@ -141,6 +182,12 @@ function walk(value: unknown, pathLabel: string, sink: string[]): unknown {
     const scrubbed = scrubText(value);
     for (const kind of scrubbed.kinds) {
       sink.push(`${pathLabel} (${kind})`);
+    }
+    // A value that is *entirely* a filesystem path never reaches a client, even
+    // under a key name this file has never heard of.
+    if (isAbsolutePath(scrubbed.text)) {
+      sink.push(`${pathLabel} (path)`);
+      return PATH_PLACEHOLDER;
     }
     return scrubbed.text;
   }
@@ -265,7 +312,17 @@ export interface AuditOutcome {
 export function appendAudit(record: AuditRecord, dir: string): AuditOutcome {
   const file = path.join(dir, "audit.jsonl");
   try {
-    mkdirSync(dir, { recursive: true });
+    // `mode` only applies when the directory is created, so the chmod narrows
+    // one left at 0755 by an earlier version. Both steps are best-effort:
+    // Windows expresses permissions as ACLs, and a directory this process
+    // cannot chmod must still receive its audit line.
+    mkdirSync(dir, { recursive: true, mode: 0o700 });
+    try {
+      chmodSync(dir, 0o700);
+    } catch {
+      // A read-only or foreign-owned directory is reported by the caller's
+      // warning path, not by losing the log entry.
+    }
     appendFileSync(file, `${JSON.stringify(record)}\n`, { encoding: "utf8", mode: 0o600 });
     return { ok: true, path: file };
   } catch (error) {

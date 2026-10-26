@@ -1,6 +1,6 @@
 {
   "name": "@warpmetal/cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The warpmetal CLI: the env credential store and the integration layer, plus verbatim delegation of the VPS lifecycle to the published upstream CLI.",
   "type": "module",
   "license": "UNLICENSED",
@@ -59,6 +59,9 @@
   },
   "dependencies": {
     "warpmetal-upstream": "npm:warpmetal@0.8.12"
+  },
+  "optionalDependencies": {
+    "@napi-rs/keyring": "^2.1.2"
   },
   "devDependencies": {
     "@types/node": "24.13.6",

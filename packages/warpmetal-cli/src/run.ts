@@ -1,5 +1,7 @@
 import { spawn } from "node:child_process";
 
+import { childEnv } from "./child-env.js";
+
 /**
  * The only place the CLI starts a child process.
  *
@@ -26,8 +28,10 @@ export function createRunner(): CommandRunner {
     new Promise<RunResult>((resolve) => {
       let child;
       try {
-        const env = options?.env === undefined ? undefined : { ...process.env, ...options.env };
-        child = spawn(command, [...args], { shell: false, windowsHide: true, ...(env !== undefined ? { env } : {}) });
+        // Always explicit: an inherited environment would carry
+        // WARPMETAL_VAULT_PASSPHRASE into every provider CLI.
+        const env = childEnv(process.env, options?.env);
+        child = spawn(command, [...args], { shell: false, windowsHide: true, env });
       } catch (error) {
         resolve({ code: 127, stdout: "", stderr: (error as Error).message });
         return;
