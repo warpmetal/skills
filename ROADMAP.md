@@ -81,6 +81,16 @@ Repository scaffolding and registry:
       `release.yml` (npm provenance, multi-arch GHCR image, Pages catalog, GitHub release).
 - [x] DeepSeek Harness channel: skills roots and `dsh-mcp-client` snippet documented, `dsh` and
       `mcp` host metadata on the skill.
+- [x] DeepSeek Harness bundle (`packages/dsh-plugin`, generated into `plugins/warpmetal-dsh/`): one
+      installable package that mounts the 46-tool MCP surface through a `warpmetalLocal` service row,
+      registers the nine skills through a native rank-700 provider, and ships the compiled server.
+      Built and verified by `verify.yml`; unit tests run in `npm test`.
+- [x] DeepSeek Harness UI: a hand-written `window.__ModuleLoader__` client module that replaces the
+      generic tool row for eight read tools in the `tool.call.toolview` slot — envelope status,
+      projected `id · state` rows, warnings, `manual_review`, and the raw JSON behind a disclosure.
+      Session-derived, so no new host data path and no polling; the artifact verify loads it in a
+      sandbox and rejects forbidden patterns. A status panel (`shell.overlay`) stays open: it needs a
+      client-callable host data path that this release does not document.
 - [x] Dynamic registry resolution: `latest` by default over the catalog host, ETag revalidation,
       cache next, bundled snapshot last (marked stale); 19 tests including remote and cache paths.
 - [x] `releases.json` history generated at release time for update checks and version lookups.
