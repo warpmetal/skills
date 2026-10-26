@@ -1,0 +1,43 @@
+{
+  "name": "@warpmetal/dsh-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "WarpMetal plugin for DeepSeek Harness: the skills MCP server, the WarpMetal Agent Skills, and the tool-result row, as one installable bundle.",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/warpmetal/skills.git",
+    "directory": "packages/dsh-plugin"
+  },
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./skills": "./skills.js",
+    "./client": "./client.js"
+  },
+  "files": [
+    "index.js",
+    "skills.js",
+    "client.js",
+    "cordis.patch.yml",
+    "skills",
+    "server",
+    "registry.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22",
+    "dsh": ">=0.2.0-rc.2 <0.3.0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": ["@deepseek-ai/dsh-client-ui-conversation"]
+    }
+  }
+}

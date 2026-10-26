@@ -1,0 +1,32 @@
+# WarpMetal bundle patch.
+#
+# Rows are inserted in this order on purpose: the Loader interpolates an entry's
+# `config` only after that entry's declared injections activate, so `warpmetalLocal`
+# exists by the time the MCP row reads it (docs/cordis-primer.md). Values are
+# expressions, never literal paths: the artifact's location is only known at load
+# time, and a `!!js` tag is accepted inside `config` alone.
+- insert:
+    # 1. The service: where the bundled MCP server is and how to run it.
+    - id: warpmetal-local
+      name: '@warpmetal/dsh-plugin'
+    # 2. The native skill provider (user-invocable; see skills.js). Separate row:
+    #    a profile without the skill registry loses the catalog, not the tools.
+    - id: warpmetal-skills
+      name: '@warpmetal/dsh-plugin/skills'
+    # 3. The MCP server, over stdio, on the same 46-tool surface the ChatGPT
+    #    plugin serves: the `skill_*` content tools and the 43 `wm_*` CLI tools.
+    #    No provider tools, no socket, no payments.
+    - id: mcp-warpmetal
+      name: '@deepseek-ai/dsh-mcp-client'
+      inject: [warpmetalLocal]
+      config:
+        serverName: warpmetal
+        transport: stdio
+        command: !!js ctx.warpmetalLocal.command
+        args: !!js ctx.warpmetalLocal.args
+        cwd: !!js ctx.warpmetalLocal.root
+        # Empty on purpose: the vault is the only path a credential takes, and
+        # nothing secret should be reachable through this child's environment.
+        env: {}
+        toolCallTimeoutMs: 120000
+        failOnStartupError: false
