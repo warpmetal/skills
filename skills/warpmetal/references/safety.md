@@ -56,6 +56,14 @@
 - Never put a token, payment signature, payment artifact, wallet password,
   private key, or state-file content in a prompt, URL, log, screenshot, source
   file, or shell argument.
+- Never echo an identity's filesystem path into a prompt or a ticket. The MCP
+  tools return `keyName`, `sshFingerprint` and `hasLocalKey` and no path; keep
+  that property when reporting by hand, because a home directory is a location
+  even when the key itself stays unread.
+- Never set `WARPMETAL_ACCEPT_LOCAL_KEY=1` on someone else's machine. Accepting
+  that `vault.key` sits beside `vault.enc` is the operator's informed choice
+  after reading [`docs/security/threat-model.md`](https://github.com/warpmetal/skills/blob/main/docs/security/threat-model.md);
+  an agent that sets it silently has removed the only warning they would get.
 
 ## Interactive confirmations and autonomous payment authority
 
