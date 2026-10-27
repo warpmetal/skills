@@ -126,6 +126,11 @@ jobs:
     env:
       # The OS keychain is an optional dependency, so on this runner it is
       # actually installed. Pinning the backend keeps the suite deterministic.
+      # It disables the implicit native probe only: a test that injects a
+      # keychain factory is an explicit request and is still honoured.
+      # These steps run under PowerShell 7, so the ACL probe pins
+      # Windows PowerShell 5.1's own PSModulePath in its child environment
+      # (a pwsh-inherited path shadows the module that owns Get-Acl).
       WARPMETAL_DISABLE_KEYCHAIN: "1"
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
