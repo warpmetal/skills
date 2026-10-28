@@ -65,6 +65,12 @@ Out of scope, and stated rather than implied:
 8. **No vault secret in a child's environment.** Every spawn builds an explicit
    environment with `childEnv()`, which drops the vault passphrase, the vault
    token and the wallet password even when the caller asks for them back.
+9. **No silent ACL verdict on Windows.** `env doctor` reads the real security
+   descriptor through Windows PowerShell 5.1, whose `PSModulePath` is pinned for
+   that child so a caller launched from PowerShell 7 cannot make `Get-Acl` fail
+   to autoload. An unreadable descriptor is reported as `unknown` **with its
+   reason attached**, never rounded up to `ok`, and an ACE that only *denies*
+   access is not counted as exposure.
 
 ## Vault format
 

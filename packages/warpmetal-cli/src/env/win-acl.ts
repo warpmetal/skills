@@ -38,17 +38,29 @@ const WORLD_TRUSTEES: ReadonlySet<string> = new Set([
 ]);
 
 /**
+ * ACE types that grant access.
+ *
+ * `D` (and its object/conditional spellings) *denies* access, which is the
+ * opposite of exposure: hardened hosts carry `(D;CIID;DT;;;WD)` on directories
+ * they create, and counting that as "readable by Everyone" would warn on a
+ * machine that did the right thing. Audits and alarms grant nothing either.
+ */
+const ALLOW_ACE_TYPES: ReadonlySet<string> = new Set(["A", "OA", "XA"]);
+
+/**
  * Extracts the broad-read trustees from an SDDL string.
  *
  * An ACE looks like `(A;ID;FR;;;WD)`: type, flags, rights, two object GUIDs,
- * then the trustee. Only the trustee field is inspected, so a GUID that happens
- * to contain `WD` cannot be mistaken for one.
+ * then the trustee. Only allow ACEs are considered, and only the trustee field
+ * is inspected, so a GUID that happens to contain `WD` cannot be mistaken for
+ * one.
  */
 export function findWorldAces(sddl: string): readonly string[] {
   const found = new Set<string>();
   for (const ace of sddl.match(/\([^)]*\)/g) ?? []) {
     const fields = ace.slice(1, -1).split(";");
     if (fields.length < 6) continue;
+    if (!ALLOW_ACE_TYPES.has(fields[0]?.trim() ?? "")) continue;
     const trustee = fields[5]?.trim();
     if (trustee !== undefined && WORLD_TRUSTEES.has(trustee)) found.add(trustee);
   }
@@ -56,11 +68,33 @@ export function findWorldAces(sddl: string): readonly string[] {
 }
 
 /**
+ * The environment the ACL probe needs.
+ *
+ * Windows PowerShell 5.1 autoloads `Microsoft.PowerShell.Security` - the module
+ * that owns `Get-Acl` - from `PSModulePath`. A caller launched from PowerShell 7
+ * (a `pwsh` shell, a CI step, most modern Windows terminals) hands that path
+ * down with the PowerShell 7 module directories first, and 5.1 then fails the
+ * autoload and exits non-zero: a healthy host would be reported as `unknown`.
+ * The probe depends on 5.1 semantics and needs no other module, so pin 5.1's own
+ * module directories for this one child instead of inheriting the caller's.
+ */
+function powershellEnv(targetPath: string): Record<string, string> {
+  const systemRoot = process.env["SystemRoot"] ?? process.env["windir"] ?? "C:\\Windows";
+  const programFiles = process.env["ProgramFiles"] ?? "C:\\Program Files";
+  const modulePath = [
+    `${systemRoot}\\system32\\WindowsPowerShell\\v1.0\\Modules`,
+    `${programFiles}\\WindowsPowerShell\\Modules`,
+  ].join(";");
+  return { WARPMETAL_ACL_PATH: targetPath, PSModulePath: modulePath };
+}
+
+/**
  * Reads the security descriptor of one path.
  *
  * `unknown` is a first-class answer: a missing PowerShell, a refused call or an
  * unparsable answer must never be rounded up to `ok`, because that is exactly
- * the silence this check exists to remove.
+ * the silence this check exists to remove. It also has to say *why*: an
+ * unexplained `unknown` is indistinguishable from a flake in a CI log.
  */
 export async function checkWindowsAcl(
   run: CommandRunner,
@@ -79,18 +113,30 @@ export async function checkWindowsAcl(
       "-Command",
       "(Get-Acl -LiteralPath $env:WARPMETAL_ACL_PATH).Sddl",
     ],
-    { env: { WARPMETAL_ACL_PATH: targetPath } },
+    { env: powershellEnv(targetPath) },
   );
 
   if (result.code === 127) {
-    return { status: "unknown", trustees: [], detail: "PowerShell is not available" };
-  }
-  const sddl = result.stdout.trim();
-  if (result.code !== 0 || !sddl.includes("D:")) {
+    // Same rule as below: the verdict carries its reason, so a missing
+    // interpreter is not filed as an unexplained `unknown`.
+    const reason = result.stderr.replace(/\s+/g, " ").trim().slice(0, 200);
     return {
       status: "unknown",
       trustees: [],
-      detail: `the security descriptor could not be read (exit ${String(result.code)})`,
+      detail: `PowerShell is not available${reason.length > 0 ? `: ${reason}` : ""}`,
+    };
+  }
+  const sddl = result.stdout.trim();
+  if (result.code !== 0 || !sddl.includes("D:")) {
+    // Carry the reason with the verdict: a bare `unknown` in a CI log cannot be
+    // told apart from a transient failure, and it is usually one line of
+    // PowerShell that names the real problem (a shadowed module, a refused
+    // path). The text is bounded and holds no secret - a path and a diagnostic.
+    const reason = result.stderr.replace(/\s+/g, " ").trim().slice(0, 200);
+    return {
+      status: "unknown",
+      trustees: [],
+      detail: `the security descriptor could not be read (exit ${String(result.code)})${reason.length > 0 ? `: ${reason}` : ""}`,
     };
   }
 

@@ -165,4 +165,44 @@ describe("vault key material", () => {
       await temp.cleanup();
     }
   });
+
+  it("keeps an injected keychain when the environment disables the implicit probe", async () => {
+    const temp = await tempEnv();
+    try {
+      const keychain = new FakeKeychain();
+      const store = await CredentialStore.open({
+        // CI sets this for the whole job so the optional native module cannot
+        // make the suite nondeterministic. It must not reach past an explicit
+        // factory and swap the backend the test asked for.
+        env: { ...withoutAcceptance(temp.env), WARPMETAL_DISABLE_KEYCHAIN: "1" },
+        keychainFactory: async () => keychain,
+      });
+      await store.write("github.token", "gh-value");
+
+      assert.equal((await store.status()).keySource, "keychain");
+      assert.equal(keychain.payload?.secrets["github.token"], "gh-value");
+      assert.equal(existsSync(join(temp.dir, "env", "vault.enc")), false);
+      assert.equal(existsSync(join(temp.dir, "env", "vault.key")), false);
+    } finally {
+      await temp.cleanup();
+    }
+  });
+
+  it("still forces the file backend when the caller opts out of the keychain", async () => {
+    const temp = await tempEnv();
+    try {
+      const keychain = new FakeKeychain();
+      const store = await CredentialStore.open({
+        env: temp.env,
+        preferKeychain: false,
+        keychainFactory: async () => keychain,
+      });
+      await store.write("github.token", "gh-value");
+
+      assert.equal((await store.status()).keySource, "key-file");
+      assert.equal(keychain.payload, null, "the factory must not be consulted");
+    } finally {
+      await temp.cleanup();
+    }
+  });
 });

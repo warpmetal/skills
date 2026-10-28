@@ -17,11 +17,15 @@ const CLEAN_SDDL =
 const EXPOSED_SDDL =
   "O:S-1-5-21-1-2-3-1001G:S-1-5-21-1-2-3-513D:AI(A;ID;FR;;;WD)(A;ID;FA;;;SY)(A;ID;FA;;;BA)";
 
-function fakeRun(stdout: string, code = 0): { run: CommandRunner; calls: Array<{ command: string; args: readonly string[]; env?: Record<string, string> }> } {
+function fakeRun(
+  stdout: string,
+  code = 0,
+  stderr = "",
+): { run: CommandRunner; calls: Array<{ command: string; args: readonly string[]; env?: Record<string, string> }> } {
   const calls: Array<{ command: string; args: readonly string[]; env?: Record<string, string> }> = [];
   const run: CommandRunner = async (command, args, options) => {
     calls.push({ command, args, ...(options?.env !== undefined ? { env: { ...options.env } } : {}) });
-    return { code, stdout, stderr: "" };
+    return { code, stdout, stderr };
   };
   return { run, calls };
 }
@@ -35,6 +39,10 @@ describe("windows acl", () => {
     assert.deepEqual(findWorldAces("(A;;FR;;;BU)(A;;FR;;;AU)"), ["BU", "AU"]);
     // A GUID or rights string containing the letters WD is not a trustee.
     assert.deepEqual(findWorldAces("(A;;WD;;;SY)"), []);
+    // A deny ACE restricts access, so it is the opposite of exposure: hardened
+    // hosts put `(D;CIID;DT;;;WD)` on the directories they create.
+    assert.deepEqual(findWorldAces("(D;CIID;DT;;;WD)"), []);
+    assert.deepEqual(findWorldAces("(D;;FR;;;S-1-1-0)"), []);
     assert.deepEqual(findWorldAces("not a descriptor"), []);
   });
 
@@ -48,6 +56,12 @@ describe("windows acl", () => {
     assert.equal(call.command, "powershell.exe");
     assert.ok(!call.args.join(" ").includes("warpmetal"), "the path must not be interpolated into argv");
     assert.equal(call.env?.["WARPMETAL_ACL_PATH"], "C:\\Users\\op\\.config\\warpmetal\\env");
+    // A caller launched from PowerShell 7 would otherwise hand 5.1 a module
+    // path that shadows the module owning Get-Acl, and a healthy host would be
+    // reported as unknown.
+    const modulePath = call.env?.["PSModulePath"] ?? "";
+    assert.ok(modulePath.includes("WindowsPowerShell\\v1.0\\Modules"), modulePath);
+    assert.equal(modulePath.includes("PowerShell\\7"), false, modulePath);
   });
 
   it("reports exposed when a broad trustee is present", async () => {
@@ -63,6 +77,17 @@ describe("windows acl", () => {
 
     const garbage = fakeRun("Access is denied.");
     assert.equal((await checkWindowsAcl(garbage.run, "C:\\vault", "win32")).status, "unknown");
+
+    // The verdict must explain itself: an unexplained `unknown` in a CI log is
+    // indistinguishable from a flake.
+    const explained = fakeRun(
+      "",
+      1,
+      "The 'Get-Acl' command was found in the module 'Microsoft.PowerShell.Security', but the module could not be loaded.",
+    );
+    const explainedVerdict = await checkWindowsAcl(explained.run, "C:\\vault", "win32");
+    assert.equal(explainedVerdict.status, "unknown");
+    assert.match(explainedVerdict.detail, /could not be loaded/);
 
     const offWindows = fakeRun(CLEAN_SDDL);
     assert.equal((await checkWindowsAcl(offWindows.run, "/home/op", "linux")).status, "unknown");
@@ -151,19 +176,25 @@ describe("windows acl", () => {
       const store = await CredentialStore.open({ env: temp.env, preferKeychain: false });
       await store.write("demo.token", "value");
       const vaultDir = join(temp.dir, "env");
-      const clean = await checkWindowsAcl(run, vaultDir, "win32");
-      assert.equal(clean.status, "ok");
+
+      // A directory under %TEMP% inherits whatever ACL the host gives it, so the
+      // test cannot claim the baseline is clean. What it can prove is that the
+      // check reacts to a real ACL change: the descriptor is readable, the
+      // Everyone grant is detected, and removing it restores the baseline.
+      const before = await checkWindowsAcl(run, vaultDir, "win32");
+      assert.notEqual(before.status, "unknown", `descriptor unreadable on this host: ${before.detail}`);
 
       const grant = await run("icacls", [vaultDir, "/grant", "*S-1-1-0:(OI)(CI)R"]);
       assert.equal(grant.code, 0, grant.stderr);
 
       const exposed = await checkWindowsAcl(run, vaultDir, "win32");
-      assert.equal(exposed.status, "exposed");
-      assert.ok(exposed.trustees.includes("WD"));
+      assert.equal(exposed.status, "exposed", exposed.detail);
+      assert.ok(exposed.trustees.includes("WD"), exposed.detail);
 
-      await run("icacls", [vaultDir, "/remove:g", "*S-1-1-0"]);
+      const remove = await run("icacls", [vaultDir, "/remove:g", "*S-1-1-0"]);
+      assert.equal(remove.code, 0, remove.stderr);
       const restored = await checkWindowsAcl(run, vaultDir, "win32");
-      assert.notEqual(restored.status, "exposed");
+      assert.equal(restored.status, before.status, restored.detail);
     } finally {
       await temp.cleanup();
     }

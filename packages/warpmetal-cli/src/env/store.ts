@@ -30,6 +30,11 @@ export interface StoreOptions {
    *
    * Without it the keychain branch is unreachable in a test that has no native
    * module installed, which is how the backend went untested and unused.
+   *
+   * An injected factory is an explicit request and wins over
+   * `WARPMETAL_DISABLE_KEYCHAIN`: that variable exists to keep the *implicit*
+   * native probe deterministic, not to silently replace a keychain the caller
+   * handed over. `preferKeychain: false` still forces the file backend.
    */
   readonly keychainFactory?: (() => Promise<PayloadBackend | null>) | undefined;
   /**
@@ -110,12 +115,19 @@ export class CredentialStore {
       return new CredentialStore(new RemoteBackend(remote, options.vaultHttp ?? createHttp(fetch)));
     }
 
-    if (options.preferKeychain !== false && env["WARPMETAL_DISABLE_KEYCHAIN"] !== "1") {
-      const keychain =
-        options.keychainFactory !== undefined
-          ? await options.keychainFactory()
-          : await KeychainBackend.tryCreate();
-      if (keychain !== null) return new CredentialStore(new PayloadKeyAdapter(keychain));
+    // The factory is checked before the ambient switch on purpose: CI sets
+    // `WARPMETAL_DISABLE_KEYCHAIN=1` for the whole job so the optional native
+    // module cannot make the suite nondeterministic, and that must not turn an
+    // explicitly injected keychain into the file backend behind the caller's
+    // back.
+    if (options.preferKeychain !== false) {
+      if (options.keychainFactory !== undefined) {
+        const keychain = await options.keychainFactory();
+        if (keychain !== null) return new CredentialStore(new PayloadKeyAdapter(keychain));
+      } else if (env["WARPMETAL_DISABLE_KEYCHAIN"] !== "1") {
+        const keychain = await KeychainBackend.tryCreate();
+        if (keychain !== null) return new CredentialStore(new PayloadKeyAdapter(keychain));
+      }
     }
 
     return new CredentialStore(
